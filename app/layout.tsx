@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Space_Grotesk, Inter } from "next/font/google";
 import "./globals.css";
 import TanstackQueryProvider from "@/providers/TanstackQueryProvider";
+import { SessionProvider } from "next-auth/react";
 
 const spaceGrotesk = Space_Grotesk({
   variable: "--font-space-grotesk",
@@ -29,7 +30,9 @@ export default function RootLayout({
       <body
         className={`${spaceGrotesk.variable} ${inter.variable} antialiased`}
       >
-        <TanstackQueryProvider>{children}</TanstackQueryProvider>
+        <SessionProvider>
+          <TanstackQueryProvider>{children}</TanstackQueryProvider>
+        </SessionProvider>
       </body>
     </html>
   );

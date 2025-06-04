@@ -18,29 +18,48 @@ import {
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { useState } from "react";
-import { loginFormSchema } from "@/formSchemas";
 import InBoxLoader from "@/components/InBoxLoader";
-import { useLogin } from "@/hooks/useLogin";
 import useSocialSignIn from "@/hooks/useSocialSignIn";
+import { signUpFormSchema } from "@/formSchemas";
+import { useCredentialSignup } from "@/hooks/useCredentialSignup";
 
-function LoginPage() {
+function SignUpPage() {
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const { onSubmit, isLoading, error } = useLogin();
   const { mutate: signInWithProvider, isPending: isSocialSignInPending } =
     useSocialSignIn();
 
+  // Use the custom signup hook
+  const {
+    mutate: signUpWithCredentials,
+    isPending: isSignupPending,
+    error,
+    reset,
+  } = useCredentialSignup();
+
   // Initialize form
-  const form = useForm<z.infer<typeof loginFormSchema>>({
-    resolver: zodResolver(loginFormSchema),
+  const form = useForm<z.infer<typeof signUpFormSchema>>({
+    resolver: zodResolver(signUpFormSchema),
     defaultValues: {
+      name: "",
       email: "",
       password: "",
+      confirmPassword: "",
     },
   });
 
-  // Show loading state while checking session
-  if (isLoading || isSocialSignInPending) {
+  // Handle form submission
+  const onSubmit = (values: z.infer<typeof signUpFormSchema>) => {
+    // Reset any previous errors
+    reset();
+
+    // Trigger the signup mutation
+    signUpWithCredentials(values);
+  };
+
+  // Show loading state while processing
+  if (isSignupPending || isSocialSignInPending) {
     return <InBoxLoader />;
   }
 
@@ -49,17 +68,20 @@ function LoginPage() {
     setShowPassword(!showPassword);
   };
 
-  // Only show the login form if not authenticated
+  const toggleConfirmPasswordVisibility = () => {
+    setShowConfirmPassword(!showConfirmPassword);
+  };
+
   return (
     <div className="h-full rounded-lg bg-white flex items-center justify-center px-4">
       <div className="w-full max-w-md">
         {/* Header */}
         <div className="mb-12 text-center">
           <h1 className="mb-3 font-space-grotesk text-4xl font-bold text-black tracking-tight">
-            Welcome back
+            Create account
           </h1>
           <p className="font-inter text-base text-gray-600">
-            Sign in to your Invox account
+            Start creating professional invoices today
           </p>
         </div>
 
@@ -69,7 +91,7 @@ function LoginPage() {
             onClick={() => signInWithProvider("google")}
             disabled={isSocialSignInPending}
             variant="outline"
-            className="w-full h-12 font-inter font-medium border-gray-300 text-gray-700 hover:bg-gray-50 hover:border-gray-400"
+            className="w-full h-12 font-inter font-medium border-gray-300 text-gray-700 hover:bg-gray-50 hover:border-gray-400 cursor-pointer"
           >
             <FaGoogle className="mr-3 text-lg" />
             Continue with Google
@@ -78,7 +100,7 @@ function LoginPage() {
             onClick={() => signInWithProvider("github")}
             disabled={isSocialSignInPending}
             variant="outline"
-            className="w-full h-12 font-inter font-medium border-gray-300 text-gray-700 hover:bg-gray-50 hover:border-gray-400"
+            className="w-full h-12 font-inter font-medium border-gray-300 text-gray-700 hover:bg-gray-50 hover:border-gray-400 cursor-pointer"
           >
             <FaGithub className="mr-3 text-lg" />
             Continue with GitHub
@@ -94,14 +116,35 @@ function LoginPage() {
           <Separator className="flex-1 bg-gray-200" />
         </div>
 
-        {/* Login Form */}
+        {/* Sign-up Form */}
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             {error && (
-              <div className="rounded-lg border border-gray-300 bg-gray-50 px-4 py-3 font-inter text-sm text-gray-800">
+              <div className="rounded-lg border border-red-300 bg-red-50 px-4 py-3 font-inter text-sm text-red-800">
                 {error}
               </div>
             )}
+
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="font-inter font-medium text-black">
+                    Full name
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      type="text"
+                      placeholder="Enter your full name"
+                      {...field}
+                      className="h-12 font-inter border-gray-300 focus:border-black focus:ring-black"
+                    />
+                  </FormControl>
+                  <FormMessage className="font-inter" />
+                </FormItem>
+              )}
+            />
 
             <FormField
               control={form.control}
@@ -136,7 +179,7 @@ function LoginPage() {
                     <FormControl>
                       <Input
                         type={showPassword ? "text" : "password"}
-                        placeholder="Enter your password"
+                        placeholder="Create a password"
                         {...field}
                         className="h-12 font-inter border-gray-300 focus:border-black focus:ring-black pr-12"
                       />
@@ -144,7 +187,7 @@ function LoginPage() {
                     <button
                       type="button"
                       onClick={togglePasswordVisibility}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-black transition-colors"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-black transition-colors cursor-pointer"
                       tabIndex={-1}
                     >
                       {showPassword ? (
@@ -154,13 +197,40 @@ function LoginPage() {
                       )}
                     </button>
                   </div>
-                  <div className="mt-2 flex justify-end">
-                    <Link
-                      href="/forgot-password"
-                      className="font-inter text-sm text-gray-600 hover:text-black transition-colors"
+                  <FormMessage className="font-inter" />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="confirmPassword"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="font-inter font-medium text-black">
+                    Confirm password
+                  </FormLabel>
+                  <div className="relative">
+                    <FormControl>
+                      <Input
+                        type={showConfirmPassword ? "text" : "password"}
+                        placeholder="Confirm your password"
+                        {...field}
+                        className="h-12 font-inter border-gray-300 focus:border-black focus:ring-black pr-12"
+                      />
+                    </FormControl>
+                    <button
+                      type="button"
+                      onClick={toggleConfirmPasswordVisibility}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-black transition-colors cursor-pointer"
+                      tabIndex={-1}
                     >
-                      Forgot your password?
-                    </Link>
+                      {showConfirmPassword ? (
+                        <FiEyeOff className="h-5 w-5" />
+                      ) : (
+                        <FiEye className="h-5 w-5" />
+                      )}
+                    </button>
                   </div>
                   <FormMessage className="font-inter" />
                 </FormItem>
@@ -169,22 +239,22 @@ function LoginPage() {
 
             <Button
               type="submit"
-              disabled={isLoading}
-              className="w-full h-12 bg-black text-white font-inter font-medium hover:bg-gray-800 transition-colors"
+              disabled={isSignupPending}
+              className="w-full h-12 bg-black text-white font-inter font-medium hover:bg-gray-800 transition-colors cursor-pointer"
             >
-              {isLoading ? "Signing in..." : "Sign in"}
+              {isSignupPending ? "Creating account..." : "Create account"}
             </Button>
           </form>
         </Form>
 
-        {/* Sign up link */}
+        {/* Sign in link */}
         <p className="mt-8 text-center font-inter text-gray-600">
-          Don&apos;t have an account?{" "}
+          Already have an account?{" "}
           <Link
-            href="/signup"
-            className="font-medium text-black hover:text-gray-700 transition-colors"
+            href="/login"
+            className="font-medium text-black hover:text-gray-700 transition-colors cursor-pointer"
           >
-            Sign up
+            Sign in
           </Link>
         </p>
       </div>
@@ -192,4 +262,4 @@ function LoginPage() {
   );
 }
 
-export default LoginPage;
+export default SignUpPage;

@@ -1,3 +1,12 @@
+// remember to run `npx prisma generate` after modifying this file
+// then run prisma db push to apply changes to the database
+
+//npx prisma generate
+//npx prisma db push
+
+
+
+
 datasource db {
   provider = "mongodb"
   url      = env("DATABASE_URL")
@@ -11,12 +20,17 @@ model User {
   id            String          @id @default(auto()) @map("_id") @db.ObjectId
   name          String?
   email         String?         @unique
-  emailVerified DateTime?
+  emailVerified Boolean? @default(false)
+  hashedPassword String?
   image         String?
   accounts      Account[]
   sessions      Session[]
   // Optional for WebAuthn support
   Authenticator Authenticator[]
+  // Business relationships
+  businesses    Business[]
+  clients       Client[]
+  invoices      Invoice[]
  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -78,4 +92,70 @@ model Authenticator {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
  
   @@unique([userId, credentialID])
+}
+
+model Client {
+  id             String @id @default(auto()) @map("_id") @db.ObjectId
+  name           String
+  address        String
+  email          String
+  userId         String @db.ObjectId
+  
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  invoices Invoice[]
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Business {
+  id                 String @id @default(auto()) @map("_id") @db.ObjectId
+  businessName       String
+  address            String
+  email              String
+  userId             String @db.ObjectId
+  
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  invoices Invoice[]
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Invoice {
+  id                     String        @id @default(auto()) @map("_id") @db.ObjectId
+  invoiceNumber          String        @unique
+  invoiceDate            DateTime
+  paymentDueDate         DateTime
+  subtotal               Float
+  taxes                  Float
+  finalTotal             Float
+  paymentTerms           String
+  acceptedPaymentMethods String
+  
+  businessId String @db.ObjectId
+  clientId   String @db.ObjectId
+  userId     String @db.ObjectId
+  
+  business Business     @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  client   Client       @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  user     User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items    InvoiceItem[]
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model InvoiceItem {
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  description String
+  quantity    Int
+  unitPrice   Float
+  totalAmount Float
+  
+  invoiceId String @db.ObjectId
+  invoice   Invoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

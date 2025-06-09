@@ -1,8 +1,8 @@
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { z } from "zod";
-import { signUpFormSchema } from "@/formSchemas";
-import { createUser } from "@/actions";
+import { signUpFormSchema } from "@/dataSchemas";
+import { _createUserWithCredentials } from "@/actions";
 
 /**
  * Interface for the signup mutation result
@@ -47,7 +47,7 @@ export function useCredentialSignup() {
      * Mutation function that calls the createUser server action
      */
     mutationFn: async (values: z.infer<typeof signUpFormSchema>) => {
-      const result = await createUser(values);
+      const result = await _createUserWithCredentials(values);
 
       // If the server action returns success: false, throw an error
       // This will trigger the onError callback

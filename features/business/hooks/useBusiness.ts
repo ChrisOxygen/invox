@@ -21,26 +21,6 @@ interface GetBusinessResult {
   } | null;
 }
 
-/**
- * Custom hook for fetching user business data using TanStack Query
- *
- * @param {string} userId - The user ID to fetch business for
- * @param {boolean} enabled - Whether the query should be enabled (default: true)
- * @returns {Object} Query object with business data and states
- * @returns {GetBusinessResult|undefined} returns.data - Business query result
- * @returns {boolean} returns.isLoading - Loading state
- * @returns {boolean} returns.isError - Error state
- * @returns {Error|null} returns.error - Error object if query fails
- * @returns {boolean} returns.hasBusiness - Convenience property for business existence
- *
- * @example
- * ```typescript
- * const { data, isLoading, hasBusiness } = useBusiness(userId);
- *
- * if (isLoading) return <div>Loading...</div>;
- * if (hasBusiness) return <div>Business: {data?.business?.businessName}</div>;
- * ```
- */
 export function useBusiness() {
   const session = useSession();
 

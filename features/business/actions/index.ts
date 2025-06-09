@@ -1,133 +1,64 @@
 "use server";
 
-import { PrismaClient } from "@prisma/client";
+import { Business, PrismaClient } from "@prisma/client";
+import { auth } from "@/auth";
+import {
+  createBusinessSchema,
+  updateBusinessSchema,
+  type CreateBusinessInput,
+  type UpdateBusinessInput,
+} from "@/dataSchemas/business";
 
 const prisma = new PrismaClient();
 
-interface GetBusinessResult {
-  success: boolean;
-  hasBusiness: boolean;
-  message: string;
-  business?: {
-    id: string;
-    businessName: string;
-    address: string;
-    email: string;
-    createdAt: Date;
-    updatedAt: Date;
-  } | null;
-}
-
-interface CreateBusinessResult {
+// Types
+interface BusinessResult {
   success: boolean;
   message: string;
-  business?: {
-    id: string;
-    businessName: string;
-    address: string;
-    email: string;
-    createdAt: Date;
-    updatedAt: Date;
-  } | null;
+  business?: Business;
 }
 
-export async function getUserBusiness(
-  userId: string
-): Promise<GetBusinessResult> {
+// Create business for current user
+export async function _createBusiness(
+  data: CreateBusinessInput
+): Promise<BusinessResult> {
   try {
-    if (!userId) {
+    const session = await auth();
+    if (!session || !session.user?.id) {
       return {
         success: false,
-        hasBusiness: false,
-        message: "User ID is required",
-        business: null,
+        message: "User not authenticated",
       };
     }
 
-    const business = await prisma.business.findFirst({
-      where: {
-        userId: userId,
-      },
-      select: {
-        id: true,
-        businessName: true,
-        address: true,
-        email: true,
-        createdAt: true,
-        updatedAt: true,
-      },
-    });
-
-    if (business) {
-      return {
-        success: true,
-        hasBusiness: true,
-        message: "User has a business",
-        business,
-      };
-    }
-
-    return {
-      success: true,
-      hasBusiness: false,
-      message: "User does not have a business",
-      business: null,
-    };
-  } catch (error) {
-    console.error("Error checking user business:", error);
-    return {
-      success: false,
-      hasBusiness: false,
-      message: "Failed to check user business",
-      business: null,
-    };
-  } finally {
-    await prisma.$disconnect();
-  }
-}
-
-export async function createBusiness(
-  userId: string,
-  businessName: string,
-  address: string,
-  email: string
-): Promise<CreateBusinessResult> {
-  try {
-    if (!userId || !businessName || !address || !email) {
+    // Validate the input data
+    const validatedData = createBusinessSchema.safeParse(data);
+    if (!validatedData.success) {
       return {
         success: false,
-        message: "All fields are required",
-        business: null,
+        message: `Validation error: ${validatedData.error.errors
+          .map((e) => e.message)
+          .join(", ")}`,
       };
     }
 
     // Check if user already has a business
     const existingBusiness = await prisma.business.findFirst({
-      where: { userId },
+      where: { userId: session.user.id },
     });
 
     if (existingBusiness) {
       return {
         success: false,
         message: "User already has a business",
-        business: null,
       };
     }
 
+    // Create business
     const newBusiness = await prisma.business.create({
       data: {
-        userId,
-        businessName,
-        address,
-        email,
-      },
-      select: {
-        id: true,
-        businessName: true,
-        address: true,
-        email: true,
-        createdAt: true,
-        updatedAt: true,
+        userId: session.user.id,
+        ...validatedData.data,
       },
     });
 
@@ -141,9 +72,176 @@ export async function createBusiness(
     return {
       success: false,
       message: "Failed to create business",
-      business: null,
     };
   } finally {
     await prisma.$disconnect();
   }
 }
+
+// Update business for current user
+export async function _updateBusiness(
+  businessId: string,
+  data: UpdateBusinessInput
+): Promise<BusinessResult> {
+  try {
+    const session = await auth();
+    if (!session || !session.user?.id) {
+      return {
+        success: false,
+        message: "User not authenticated",
+      };
+    }
+
+    if (!businessId) {
+      return {
+        success: false,
+        message: "Business ID is required",
+      };
+    }
+
+    // Validate the update data
+    const validatedData = updateBusinessSchema.safeParse(data);
+    if (!validatedData.success) {
+      return {
+        success: false,
+        message: `Validation error: ${validatedData.error.errors
+          .map((e) => e.message)
+          .join(", ")}`,
+      };
+    }
+
+    // Verify business exists and belongs to current user
+    const existingBusiness = await prisma.business.findFirst({
+      where: {
+        id: businessId,
+        userId: session.user.id,
+      },
+    });
+
+    if (!existingBusiness) {
+      return {
+        success: false,
+        message: "Business not found or access denied",
+      };
+    }
+
+    // Update business
+    const updatedBusiness = await prisma.business.update({
+      where: { id: businessId },
+      data: {
+        ...validatedData.data,
+        updatedAt: new Date(),
+      },
+    });
+
+    return {
+      success: true,
+      message: "Business updated successfully",
+      business: updatedBusiness,
+    };
+  } catch (error) {
+    console.error("Error updating business:", error);
+    return {
+      success: false,
+      message: "Failed to update business",
+    };
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
+// Get current user's business
+export async function _getUserBusiness(): Promise<BusinessResult> {
+  try {
+    const session = await auth();
+    if (!session || !session.user?.id) {
+      return {
+        success: false,
+        message: "User not authenticated",
+      };
+    }
+
+    const business = await prisma.business.findFirst({
+      where: { userId: session.user.id },
+    });
+
+    if (!business) {
+      return {
+        success: false,
+        message: "Business not found",
+      };
+    }
+
+    return {
+      success: true,
+      message: "Business retrieved successfully",
+      business,
+    };
+  } catch (error) {
+    console.error("Error getting user business:", error);
+    return {
+      success: false,
+      message: "Failed to retrieve business",
+    };
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
+// Delete current user's business
+export async function _deleteBusiness(
+  businessId: string
+): Promise<{ success: boolean; message: string }> {
+  try {
+    const session = await auth();
+    if (!session || !session.user?.id) {
+      return {
+        success: false,
+        message: "User not authenticated",
+      };
+    }
+
+    if (!businessId) {
+      return {
+        success: false,
+        message: "Business ID is required",
+      };
+    }
+
+    // Verify business exists and belongs to current user
+    const existingBusiness = await prisma.business.findFirst({
+      where: {
+        id: businessId,
+        userId: session.user.id,
+      },
+    });
+
+    if (!existingBusiness) {
+      return {
+        success: false,
+        message: "Business not found or access denied",
+      };
+    }
+
+    // Delete business
+    await prisma.business.delete({
+      where: { id: businessId },
+    });
+
+    return {
+      success: true,
+      message: "Business deleted successfully",
+    };
+  } catch (error) {
+    console.error("Error deleting business:", error);
+    return {
+      success: false,
+      message: "Failed to delete business",
+    };
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
+// Export types
+export type { BusinessResult, CreateBusinessInput, UpdateBusinessInput };

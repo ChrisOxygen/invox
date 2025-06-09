@@ -20,7 +20,7 @@ import { Separator } from "@/components/ui/separator";
 import { useState } from "react";
 import InBoxLoader from "@/components/InBoxLoader";
 import useSocialSignIn from "@/hooks/useSocialSignIn";
-import { signUpFormSchema } from "@/formSchemas";
+import { signUpFormSchema } from "@/dataSchemas";
 import { useCredentialSignup } from "@/hooks/useCredentialSignup";
 
 function SignUpPage() {

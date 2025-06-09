@@ -18,7 +18,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { useState } from "react";
-import { loginFormSchema } from "@/formSchemas";
+import { loginFormSchema } from "@/dataSchemas";
 import InBoxLoader from "@/components/InBoxLoader";
 import { useLogin } from "@/hooks/useLogin";
 import useSocialSignIn from "@/hooks/useSocialSignIn";
@@ -26,7 +26,7 @@ import useSocialSignIn from "@/hooks/useSocialSignIn";
 function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
 
-  const { onSubmit, isLoading, error } = useLogin();
+  const { signInWithCredentials, isLoading, error } = useLogin();
   const { mutate: signInWithProvider, isPending: isSocialSignInPending } =
     useSocialSignIn();
 
@@ -40,7 +40,7 @@ function LoginPage() {
   });
 
   // Show loading state while checking session
-  if (isLoading || isSocialSignInPending) {
+  if (form.formState.isSubmitting || isSocialSignInPending) {
     return <InBoxLoader />;
   }
 
@@ -48,6 +48,18 @@ function LoginPage() {
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
+
+  // Handle form submission
+  const onSubmit = (values: z.infer<typeof loginFormSchema>) => {
+    // Trigger the login mutation
+    signInWithCredentials(values);
+  };
+
+  if (error) {
+    form.setError("root", {
+      message: error,
+    });
+  }
 
   // Only show the login form if not authenticated
   return (
@@ -98,7 +110,7 @@ function LoginPage() {
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             {error && (
-              <div className="rounded-lg border border-gray-300 bg-gray-50 px-4 py-3 font-inter text-sm text-gray-800">
+              <div className="rounded-lg font-inter text-sm text-red-600">
                 {error}
               </div>
             )}
@@ -169,10 +181,10 @@ function LoginPage() {
 
             <Button
               type="submit"
-              disabled={isLoading}
+              disabled={form.formState.isSubmitting || isLoading}
               className="w-full h-12 bg-black text-white font-inter font-medium hover:bg-gray-800 transition-colors"
             >
-              {isLoading ? "Signing in..." : "Sign in"}
+              {form.formState.isSubmitting ? "Signing in..." : "Sign in"}
             </Button>
           </form>
         </Form>

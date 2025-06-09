@@ -2,29 +2,38 @@
 
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
-import { signUpFormSchema } from "@/formSchemas";
+import {
+  changePasswordSchema,
+  signUpFormSchema,
+  updateUserSchema,
+} from "@/dataSchemas";
 import { z } from "zod";
 import { auth } from "@/auth";
+import { BusinessFormValues, CurrencyType } from "@/types";
+import { PaymentMethodDetails } from "@/features/onboarding/context/OnboardingProvider";
 
 const prisma = new PrismaClient();
 
-interface SignUpResult {
-  success: boolean;
-  message: string;
-  user?: {
-    id: string;
-    name: string;
-    email: string;
-  };
-}
+// Types
 
-export async function createUser(
+// User select fields for consistency
+const userSelectFields = {
+  id: true,
+  name: true,
+  email: true,
+  country: true,
+  currency: true,
+  signature: true,
+  onboardingCompleted: true,
+} as const;
+
+// Create user with credentials (registration)
+export async function _createUserWithCredentials(
   values: z.infer<typeof signUpFormSchema>
-): Promise<SignUpResult> {
+): Promise<UserResult> {
   try {
     // Validate the input data
     const validatedFields = signUpFormSchema.safeParse(values);
-
     if (!validatedFields.success) {
       return {
         success: false,
@@ -36,9 +45,7 @@ export async function createUser(
 
     // Check if user already exists
     const existingUser = await prisma.user.findUnique({
-      where: {
-        email: email,
-      },
+      where: { email },
     });
 
     if (existingUser) {
@@ -55,15 +62,12 @@ export async function createUser(
     // Create the user
     const newUser = await prisma.user.create({
       data: {
-        name: name,
-        email: email,
-        hashedPassword: hashedPassword,
+        name,
+        email,
+        hashedPassword,
+        onboardingCompleted: false,
       },
-      select: {
-        id: true,
-        name: true,
-        email: true,
-      },
+      select: userSelectFields,
     });
 
     return {
@@ -73,11 +77,14 @@ export async function createUser(
         id: newUser.id,
         name: newUser.name || "",
         email: newUser.email || "",
+        country: newUser.country,
+        currency: newUser.currency,
+        signature: newUser.signature,
+        onboardingCompleted: newUser.onboardingCompleted,
       },
     };
   } catch (error) {
-    console.error("Error creating user:", error);
-
+    console.error("Error creating user with credentials:", error);
     return {
       success: false,
       message: "Something went wrong. Please try again later.",
@@ -87,32 +94,23 @@ export async function createUser(
   }
 }
 
-export async function getUser(): Promise<SignUpResult> {
+// Get user from session
+export async function _getUser(): Promise<UserResult> {
   try {
     const session = await auth();
-    if (!session || !session.user) {
+
+    if (!session || !session.user?.id) {
       return {
         success: false,
         message: "User not authenticated.",
       };
     }
-    const id = session.user.id;
-    if (!id) {
-      return {
-        success: false,
-        message: "User ID not found in session.",
-      };
-    }
-    // Retrieve the user from the database
+
+    const userId = session.user.id;
+
     const user = await prisma.user.findUnique({
-      where: {
-        id: id,
-      },
-      select: {
-        id: true,
-        name: true,
-        email: true,
-      },
+      where: { id: userId },
+      select: userSelectFields,
     });
 
     if (!user) {
@@ -129,14 +127,300 @@ export async function getUser(): Promise<SignUpResult> {
         id: user.id,
         name: user.name || "",
         email: user.email || "",
+        country: user.country,
+        currency: user.currency,
+        signature: user.signature,
+        onboardingCompleted: user.onboardingCompleted,
       },
     };
   } catch (error) {
     console.error("Error retrieving user:", error);
-
     return {
       success: false,
       message: "Something went wrong. Please try again later.",
+    };
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
+// Update current user
+export async function _updateCurrentUser(
+  data: z.infer<typeof updateUserSchema>
+): Promise<UserResult> {
+  try {
+    const session = await auth();
+    if (!session || !session.user?.id) {
+      return {
+        success: false,
+        message: "User not authenticated",
+      };
+    }
+
+    // Validate the update data
+    const validatedData = updateUserSchema.safeParse(data);
+    if (!validatedData.success) {
+      return {
+        success: false,
+        message: `Validation error: ${validatedData.error.errors
+          .map((e) => e.message)
+          .join(", ")}`,
+      };
+    }
+
+    // Update user
+    const updatedUser = await prisma.user.update({
+      where: { id: session.user.id },
+      data: {
+        ...validatedData.data,
+        updatedAt: new Date(),
+      },
+      select: userSelectFields,
+    });
+
+    return {
+      success: true,
+      message: "User updated successfully",
+      user: {
+        id: updatedUser.id,
+        name: updatedUser.name || "",
+        email: updatedUser.email || "",
+        country: updatedUser.country,
+        currency: updatedUser.currency,
+        signature: updatedUser.signature,
+        onboardingCompleted: updatedUser.onboardingCompleted,
+      },
+    };
+  } catch (error) {
+    console.error("Error updating current user:", error);
+    return {
+      success: false,
+      message: "Failed to update user",
+    };
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
+// Complete onboarding for current user
+export async function _completeOnboarding(): Promise<UserResult> {
+  try {
+    const session = await auth();
+    if (!session || !session.user?.id) {
+      return {
+        success: false,
+        message: "User not authenticated",
+      };
+    }
+
+    // Update onboarding status
+    return await _updateCurrentUser({ onboardingCompleted: true });
+  } catch (error) {
+    console.error("Error completing onboarding:", error);
+    return {
+      success: false,
+      message: "Failed to complete onboarding",
+    };
+  }
+}
+
+// Change password for current user
+export async function _changePassword(
+  currentPassword: string,
+  newPassword: string
+): Promise<BasicResponse> {
+  try {
+    // Validate passwords
+    const validatedData = changePasswordSchema.safeParse({
+      currentPassword,
+      newPassword,
+      confirmPassword: newPassword,
+    });
+
+    if (!validatedData.success) {
+      return {
+        success: false,
+        message: `Validation error: ${validatedData.error.errors
+          .map((e) => e.message)
+          .join(", ")}`,
+      };
+    }
+
+    const session = await auth();
+    if (!session || !session.user?.id) {
+      return {
+        success: false,
+        message: "User not authenticated",
+      };
+    }
+
+    // Get current user with password
+    const user = await prisma.user.findUnique({
+      where: { id: session.user.id },
+      select: {
+        id: true,
+        hashedPassword: true,
+      },
+    });
+
+    if (!user || !user.hashedPassword) {
+      return {
+        success: false,
+        message: "User not found",
+      };
+    }
+
+    // Verify current password
+    const isCurrentPasswordValid = await bcrypt.compare(
+      currentPassword,
+      user.hashedPassword
+    );
+
+    if (!isCurrentPasswordValid) {
+      return {
+        success: false,
+        message: "Current password is incorrect",
+      };
+    }
+
+    // Hash new password
+    const saltRounds = 12;
+    const hashedNewPassword = await bcrypt.hash(newPassword, saltRounds);
+
+    // Update password
+    await prisma.user.update({
+      where: { id: session.user.id },
+      data: {
+        hashedPassword: hashedNewPassword,
+        updatedAt: new Date(),
+      },
+    });
+
+    return {
+      success: true,
+      message: "Password changed successfully",
+    };
+  } catch (error) {
+    console.error("Error changing password:", error);
+    return {
+      success: false,
+      message: "Failed to change password",
+    };
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
+// Complete onboarding with all data
+export async function _completeOnboardingWithData(data: {
+  currency: CurrencyType;
+  businessInfo: BusinessFormValues;
+  paymentMethods: string[];
+  paymentMethodDetails: PaymentMethodDetails;
+  paymentRules: {
+    paymentTerms: string;
+    lateFee: string;
+    invoiceNotes: string;
+  };
+}): Promise<BasicResponse> {
+  try {
+    const session = await auth();
+    if (!session || !session.user?.id) {
+      return {
+        success: false,
+        message: "User not authenticated",
+      };
+    }
+
+    const userId = session.user.id;
+
+    // Use transaction to ensure all operations succeed or all fail
+    await prisma.$transaction(async (tx) => {
+      // 1. Update user with currency and completion status (remove country)
+      await tx.user.update({
+        where: { id: userId },
+        data: {
+          currency: data.currency,
+          onboardingCompleted: true,
+          updatedAt: new Date(),
+        },
+      });
+
+      // 2. Create business profile
+      await tx.business.create({
+        data: {
+          userId: userId,
+          businessName: data.businessInfo.businessName,
+          businessType: data.businessInfo.businessType,
+          email: data.businessInfo.email,
+          addressLine1: data.businessInfo.addressLine1,
+          addressLine2: data.businessInfo.addressLine2,
+          city: data.businessInfo.city,
+          state: data.businessInfo.state,
+          zipCode: data.businessInfo.zipCode,
+          phone: data.businessInfo.phone,
+          defaultPaymentTerms: data.paymentRules.paymentTerms,
+          defaultLateFee: data.paymentRules.lateFee,
+          defaultInvoiceNotes: data.paymentRules.invoiceNotes,
+        },
+      });
+
+      // 3. Create payment accounts (unchanged)
+      for (const method of data.paymentMethods) {
+        let accountData = {};
+        let accountName = "";
+
+        // Map payment method details to account data
+        switch (method) {
+          case "nigerian-bank":
+            if (data.paymentMethodDetails.nigerianBank) {
+              accountData = data.paymentMethodDetails.nigerianBank;
+              accountName = `${data.paymentMethodDetails.nigerianBank.bankName} - ${data.paymentMethodDetails.nigerianBank.accountName}`;
+            }
+            break;
+          case "paypal":
+            if (data.paymentMethodDetails.paypal) {
+              accountData = data.paymentMethodDetails.paypal;
+              accountName = `PayPal - ${data.paymentMethodDetails.paypal.email}`;
+            }
+            break;
+          case "wise":
+            if (data.paymentMethodDetails.wise) {
+              accountData = data.paymentMethodDetails.wise;
+              accountName = `Wise - ${data.paymentMethodDetails.wise.email}`;
+            }
+            break;
+          case "bank-transfer":
+            if (data.paymentMethodDetails.bankTransfer) {
+              accountData = data.paymentMethodDetails.bankTransfer;
+              accountName = `${data.paymentMethodDetails.bankTransfer.bankName} - ${data.paymentMethodDetails.bankTransfer.accountHolderName}`;
+            }
+            break;
+        }
+
+        // Create payment account (set as default since it's from onboarding)
+        await tx.paymentAccount.create({
+          data: {
+            userId: userId,
+            gatewayType: method,
+            accountName: accountName,
+            accountData: accountData,
+            isActive: true,
+            isDefault: true, // Set as default since it's from onboarding
+          },
+        });
+      }
+    });
+
+    return {
+      success: true,
+      message: "Onboarding completed successfully",
+    };
+  } catch (error) {
+    console.error("Error completing onboarding:", error);
+    return {
+      success: false,
+      message: "Failed to complete onboarding. Please try again.",
     };
   } finally {
     await prisma.$disconnect();

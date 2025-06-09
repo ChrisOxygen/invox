@@ -4,9 +4,6 @@
 //npx prisma generate
 //npx prisma db push
 
-
-
-
 datasource db {
   provider = "mongodb"
   url      = env("DATABASE_URL")
@@ -17,9 +14,9 @@ generator client {
 }
  
 model User {
-  id            String          @id @default(auto()) @map("_id") @db.ObjectId
+  id            String         @id @default(auto()) @map("_id") @db.ObjectId
   name          String?
-  email         String?         @unique
+  email         String         @unique
   emailVerified Boolean? @default(false)
   hashedPassword String?
   image         String?
@@ -27,10 +24,19 @@ model User {
   sessions      Session[]
   // Optional for WebAuthn support
   Authenticator Authenticator[]
+  
+  // Onboarding & preferences
+ 
+  country            String?     // "NG", "US", etc.
+  currency           String?     // "NGN", "USD", etc. 
+  signature          String?     // URL/path to signature image
+  onboardingCompleted Boolean    @default(false)
+  
   // Business relationships
-  businesses    Business[]
-  clients       Client[]
-  invoices      Invoice[]
+  businesses      Business[]
+  clients         Client[]
+  invoices        Invoice[]
+  paymentAccounts PaymentAccount[]
  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -111,15 +117,48 @@ model Client {
 model Business {
   id                 String @id @default(auto()) @map("_id") @db.ObjectId
   businessName       String
-  address            String
+  businessType       String?     // "freelancer", "consultant", "service_provider", etc.
   email              String
   userId             String @db.ObjectId
+  
+  // Detailed address fields
+  addressLine1       String?
+  addressLine2       String?  
+  city              String?
+  state             String?
+  zipCode           String?
+  phone             String?
+  
+  // Branding & preferences
+  logo              String?     // URL/path to logo image
+  
+  // Payment defaults
+  defaultPaymentTerms String?   // "net_30", "net_15", "due_on_receipt"
+  defaultLateFee     String?    // "1.5_percent", "25_flat", "none"
+  defaultInvoiceNotes String?   // "Thank you for your business..."
   
   user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   invoices Invoice[]
   
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model PaymentAccount {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId       String   @db.ObjectId
+  gatewayType  String   // "paypal", "nigerian_bank", "ach", "wise"
+  accountName  String   // "Main PayPal", "GTBank Business"
+  accountData  Json     // Gateway-specific details
+  isActive     Boolean  @default(true)
+  isDefault    Boolean  @default(false)
+  
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  
+  @@unique([userId, gatewayType, isDefault]) // Only one default per gateway type per user
 }
 
 model Invoice {

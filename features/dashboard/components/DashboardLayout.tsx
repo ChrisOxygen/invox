@@ -10,18 +10,24 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import OnBoarding from "@/features/business/components/onBoarding/OnBoarding";
-import { useBusiness } from "@/features/business/hooks/useBusiness";
 import { useUser } from "@/hooks/useUser";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 function DashboardLayout({ children }: { children: React.ReactNode }) {
-  const { isPending: gettingUser } = useUser();
+  const { user, isPending: gettingUser, isError } = useUser();
+  const router = useRouter();
 
-  const { hasBusiness, isPending: gettingBusiness, isError } = useBusiness();
+  // Handle redirect in useEffect to avoid render-time navigation
+  useEffect(() => {
+    if (!user?.onboardingCompleted && !gettingUser) {
+      router.push("/app/welcome");
+    }
+  }, [user?.onboardingCompleted, gettingUser, router]);
 
-  if (gettingUser || gettingBusiness) {
+  if (gettingUser) {
     return (
-      <div className="w-full h-full grid place-items-center">
+      <div className="w-full h-screen grid place-items-center">
         <InBoxLoader />
       </div>
     );
@@ -30,36 +36,37 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
   if (isError) {
     return (
       <div className="flex h-screen items-center justify-center">
-        <p>Error loading business data</p>
+        <p>Error loading user data</p>
+      </div>
+    );
+  }
+
+  // Return null while redirecting to prevent flash of content
+  if (!user?.onboardingCompleted) {
+    return (
+      <div className="w-full h-screen grid place-items-center">
+        <InBoxLoader />
       </div>
     );
   }
 
   return (
-    <>
-      {hasBusiness ? (
-        <SidebarProvider>
-          <AppSidebar />
-          <SidebarInset>
-            <header className="flex h-16 shrink-0 items-center gap-2">
-              <div className="flex items-center gap-2 px-4">
-                <SidebarTrigger className="-ml-1" />
-                <Separator
-                  orientation="vertical"
-                  className="mr-2 data-[orientation=vertical]:h-4"
-                />
-                <DashboardBreadcrumb />
-              </div>
-            </header>
-            <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-              {children}
-            </div>
-          </SidebarInset>
-        </SidebarProvider>
-      ) : (
-        <OnBoarding />
-      )}
-    </>
+    <SidebarProvider>
+      <AppSidebar />
+      <SidebarInset>
+        <header className="flex h-16 shrink-0 items-center gap-2">
+          <div className="flex items-center gap-2 px-4">
+            <SidebarTrigger className="-ml-1" />
+            <Separator
+              orientation="vertical"
+              className="mr-2 data-[orientation=vertical]:h-4"
+            />
+            <DashboardBreadcrumb />
+          </div>
+        </header>
+        <div className="flex flex-1 flex-col gap-4 p-4 pt-0">{children}</div>
+      </SidebarInset>
+    </SidebarProvider>
   );
 }
 

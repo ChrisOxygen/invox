@@ -20,7 +20,7 @@ export function useCountdown(initialTime = 0, options: CountdownOptions = {}) {
       try {
         const savedCountdown = localStorage.getItem(persistKey);
         if (savedCountdown) {
-          const { value, expiry } = JSON.parse(savedCountdown);
+          const { expiry } = JSON.parse(savedCountdown);
           // Check if the saved countdown is still valid
           if (expiry > Date.now()) {
             // Calculate remaining time
@@ -54,14 +54,14 @@ export function useCountdown(initialTime = 0, options: CountdownOptions = {}) {
           const expiry = Date.now() + time * 1000;
           localStorage.setItem(
             persistKey,
-            JSON.stringify({ value: time, expiry }),
+            JSON.stringify({ value: time, expiry })
           );
         } catch (error) {
           console.error("Error saving countdown to storage:", error);
         }
       }
     },
-    [persist, persistKey],
+    [persist, persistKey]
   );
 
   // Reset the countdown
@@ -93,7 +93,7 @@ export function useCountdown(initialTime = 0, options: CountdownOptions = {}) {
               const expiry = Date.now() + newValue * 1000;
               localStorage.setItem(
                 persistKey,
-                JSON.stringify({ value: newValue, expiry }),
+                JSON.stringify({ value: newValue, expiry })
               );
             } catch (error) {
               // Silent fail for storage errors

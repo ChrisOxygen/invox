@@ -1,8 +1,8 @@
 // hooks/useLogin.ts
-import { loginFormSchema } from "@/formSchemas";
+import { loginFormSchema } from "@/dataSchemas";
 import { signIn } from "next-auth/react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { z } from "zod";
 
 // Type for the login form values
@@ -11,38 +11,15 @@ type LoginFormValues = z.infer<typeof loginFormSchema>;
 // Hook for login functionality
 export function useLogin() {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const [isLoading, setIsLoading] = useState(false);
+  const [signInPending, setSignInPending] = useState(false);
+
   const [error, setError] = useState<string | null>(null);
-  const [redirectPath, setRedirectPath] = useState("/dashboard");
 
-  useEffect(() => {
-    // Get and decode the callback URL from query parameters
-    const callbackUrl = searchParams.get("callbackUrl");
-
-    if (callbackUrl) {
-      // Validate if it's a path we want to redirect to
-      const decodedPath = decodeURIComponent(callbackUrl);
-
-      // Check if it's a valid internal path (starting with /)
-      if (decodedPath.startsWith("/")) {
-        // Check if it's one of our allowed paths
-        if (
-          decodedPath === "/dashboard" ||
-          decodedPath === "/invoices" ||
-          decodedPath === "/clients" ||
-          decodedPath === "/business" ||
-          decodedPath.startsWith("/profile")
-        ) {
-          setRedirectPath(decodedPath);
-        }
-      }
-    }
-  }, [searchParams]);
+  const isLoading = signInPending;
 
   // Submit handler to use with react-hook-form
-  const onSubmit = async (values: LoginFormValues) => {
-    setIsLoading(true);
+  const signInWithCredentials = async (values: LoginFormValues) => {
+    setSignInPending(true);
     setError(null);
 
     try {
@@ -56,24 +33,22 @@ export function useLogin() {
         setError("Invalid email or password");
         return;
       }
-
       if (result?.ok) {
-        // Redirect to the callback URL or default after successful login
-        router.push(redirectPath);
-        router.refresh(); // Refresh to update auth state in the UI
+        router.push("/app/dashboard");
       }
+
+      // Login successful - the useEffect will handle redirect
     } catch (err) {
       setError("An unexpected error occurred. Please try again.");
       console.error("Login failed:", err);
     } finally {
-      setIsLoading(false);
+      setSignInPending(false);
     }
   };
 
   return {
-    onSubmit,
+    signInWithCredentials,
     isLoading,
     error,
-    redirectPath,
   };
 }

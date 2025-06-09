@@ -3,6 +3,14 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@theme {
+  --font-space-grotesk: var(--font-space-grotesk);
+  --font-inter: var(--font-inter);
+  --font-bebas-neue: var(--font-bebas-neue);
+  --font-roboto-condensed: var(--font-roboto-condensed);
+  --font-jetbrains-mono: var(--font-jetbrains-mono);
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);

@@ -4,17 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { getUser } from "@/actions";
-
-interface UserResult {
-  success: boolean;
-  message: string;
-  user?: {
-    id: string;
-    name: string;
-    email: string;
-  };
-}
+import { _getUser } from "@/actions";
 
 export function useUser() {
   const { data: session, status } = useSession();
@@ -30,7 +20,7 @@ export function useUser() {
     queryKey: ["user", session?.user?.id],
 
     queryFn: async () => {
-      const result = await getUser();
+      const result = await _getUser();
 
       if (!result.success) {
         throw new Error(result.message);
@@ -52,6 +42,8 @@ export function useUser() {
     isError: query.isError,
     error: query.error?.message || null,
     isAuthenticated: status === "authenticated",
+    isSuccess:
+      query.isSuccess && status === "authenticated" && !!query.data?.user,
     refetch: query.refetch,
     isRefetching: query.isRefetching,
   };

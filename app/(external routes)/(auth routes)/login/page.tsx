@@ -4,7 +4,6 @@ import Link from "next/link";
 import { FaGoogle, FaGithub } from "react-icons/fa";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import * as z from "zod";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import { Button } from "@/components/ui/button";
 import {
@@ -19,6 +18,7 @@ import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { useState } from "react";
 import { loginFormSchema } from "@/dataSchemas";
+import { LoginFormInput } from "@/types/schemas/auth";
 import InBoxLoader from "@/components/InBoxLoader";
 import { useLogin } from "@/hooks/useLogin";
 import useSocialSignIn from "@/hooks/useSocialSignIn";
@@ -29,9 +29,8 @@ function LoginPage() {
   const { signInWithCredentials, isLoading, error } = useLogin();
   const { mutate: signInWithProvider, isPending: isSocialSignInPending } =
     useSocialSignIn();
-
   // Initialize form
-  const form = useForm<z.infer<typeof loginFormSchema>>({
+  const form = useForm<LoginFormInput>({
     resolver: zodResolver(loginFormSchema),
     defaultValues: {
       email: "",
@@ -48,9 +47,8 @@ function LoginPage() {
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
-
   // Handle form submission
-  const onSubmit = (values: z.infer<typeof loginFormSchema>) => {
+  const onSubmit = (values: LoginFormInput) => {
     // Trigger the login mutation
     signInWithCredentials(values);
   };

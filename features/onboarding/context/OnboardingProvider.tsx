@@ -1,6 +1,5 @@
 "use client";
 
-import { BusinessFormValues, CurrencyType } from "@/types";
 import React, {
   createContext,
   useContext,
@@ -12,26 +11,13 @@ import { useCompleteUserOnboarding } from "@/hooks/useCompleteUserOnboarding";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-// Payment Method Detail Types
-export interface PaymentMethodDetails {
-  nigerianBank?: {
-    accountNumber: string;
-    accountName: string;
-    bankName: string;
-  };
-  paypal?: {
-    email: string;
-  };
-  wise?: {
-    email: string;
-  };
-  bankTransfer?: {
-    accountNumber: string;
-    routingNumber: string;
-    bankName: string;
-    accountHolderName: string; // Changed from accountType to accountHolderName
-  };
-}
+// Import types from the new type structure
+import { BusinessFormValues } from "@/types/business";
+import {
+  PaymentMethodDetails,
+  PaymentRules,
+} from "@/types/business/onboarding";
+import { CurrencyType } from "@/types";
 
 // Types
 interface OnboardingState {
@@ -39,25 +25,11 @@ interface OnboardingState {
   totalSteps: number;
   isCompleted: boolean;
   businessType?: string;
-  // country?: string; // Remove this line
   currency?: CurrencyType;
-  businessInfo?: {
-    businessName: string;
-    addressLine1?: string;
-    addressLine2?: string;
-    city?: string;
-    state?: string;
-    zipCode?: string;
-    phone?: string;
-    email: string;
-  };
+  businessInfo?: BusinessFormValues;
   paymentMethods?: string[];
   paymentMethodDetails?: PaymentMethodDetails;
-  paymentRules?: {
-    paymentTerms: string;
-    lateFee: string;
-    invoiceNotes: string;
-  };
+  paymentRules?: PaymentRules;
 }
 
 interface StorageData {
@@ -74,14 +46,10 @@ type OnboardingAction =
   | { type: "LOAD_FROM_STORAGE"; payload: OnboardingState }
   | { type: "SET_BUSINESS_TYPE"; payload: string }
   | { type: "SET_CURRENCY"; payload: CurrencyType }
-  // Remove SET_LOCATION action
   | { type: "SET_BUSINESS_INFO"; payload: BusinessFormValues }
   | { type: "SET_PAYMENT_METHODS"; payload: string[] }
   | { type: "SET_PAYMENT_METHOD_DETAILS"; payload: PaymentMethodDetails }
-  | {
-      type: "SET_PAYMENT_RULES";
-      payload: { paymentTerms: string; lateFee: string; invoiceNotes: string };
-    };
+  | { type: "SET_PAYMENT_RULES"; payload: PaymentRules };
 
 interface OnboardingContextType {
   state: OnboardingState;
@@ -90,15 +58,10 @@ interface OnboardingContextType {
   goToStep: (step: number) => void;
   setBusinessType: (businessType: string) => void;
   setCurrency: (currency: CurrencyType) => void;
-  // Remove setLocation function
   setBusinessInfo: (businessInfo: BusinessFormValues) => void;
   setPaymentMethods: (methods: string[]) => void;
   setPaymentMethodDetails: (details: PaymentMethodDetails) => void;
-  setPaymentRules: (rules: {
-    paymentTerms: string;
-    lateFee: string;
-    invoiceNotes: string;
-  }) => void;
+  setPaymentRules: (rules: PaymentRules) => void;
   resetOnboarding: () => void;
   canGoToNextStep: boolean;
   canGoToPreviousStep: boolean;

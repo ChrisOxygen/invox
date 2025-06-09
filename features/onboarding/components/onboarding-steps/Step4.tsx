@@ -20,15 +20,15 @@ import { useOnboarding } from "../../context/OnboardingProvider";
 import { useUser } from "@/hooks/useUser";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { BusinessFormValues } from "@/types";
-import { businessFormSchema } from "@/dataSchemas";
+import { BusinessFormValues } from "@/types/business";
+import { createBusinessApiSchema } from "@/dataSchemas/business/creation";
 
 function Step4() {
   const { nextStep, state, previousStep, setBusinessInfo } = useOnboarding();
   const { user } = useUser();
 
   const form = useForm<BusinessFormValues>({
-    resolver: zodResolver(businessFormSchema),
+    resolver: zodResolver(createBusinessApiSchema),
     defaultValues: {
       businessName: "",
       addressLine1: "",

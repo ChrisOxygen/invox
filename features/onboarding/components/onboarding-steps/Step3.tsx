@@ -10,10 +10,10 @@ import {
 import { ArrowRight, ArrowLeft, Zap } from "lucide-react";
 import { useOnboarding } from "../../context/OnboardingProvider";
 import { CURRENCIES } from "@/constants";
-import { CurrencyType } from "@/types";
+import { CurrencyType } from "@/types/business/onboarding";
 
 function Step3() {
-  const { nextStep, state, previousStep, setLocation } = useOnboarding();
+  const { nextStep, state, previousStep, setCurrency } = useOnboarding();
   const [selectedCurrency, setSelectedCurrency] = useState<string>("");
 
   // Load saved currency from context on mount
@@ -26,7 +26,7 @@ function Step3() {
   const handleContinue = () => {
     if (selectedCurrency) {
       // Save currency to context first
-      setLocation("", selectedCurrency.toUpperCase() as CurrencyType);
+      setCurrency(selectedCurrency.toUpperCase() as CurrencyType);
       nextStep();
     }
   };

@@ -1,7 +1,6 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -13,23 +12,15 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Loader2, Trash2 } from "lucide-react";
-
-// Wise Form Schema - removed recipientType
-const wiseSchema = z.object({
-  email: z
-    .string()
-    .email("Please enter a valid email address")
-    .min(1, "Wise email is required"),
-});
-
-export type WiseDetails = z.infer<typeof wiseSchema>;
+import { wiseAccountSchema } from "@/dataSchemas/payments";
+import { WiseAccount } from "@/types/schemas/payments";
 
 interface WiseFormProps {
-  onSubmit: (data: WiseDetails) => void; // Removed Promise<void>
+  onSubmit: (data: WiseAccount) => void; // Removed Promise<void>
   onCancel: () => void;
   onRemove?: () => void;
   isLoading?: boolean;
-  defaultValues?: Partial<WiseDetails>;
+  defaultValues?: Partial<WiseAccount>;
 }
 
 const WiseForm: React.FC<WiseFormProps> = ({
@@ -39,14 +30,14 @@ const WiseForm: React.FC<WiseFormProps> = ({
   isLoading = false,
   defaultValues,
 }) => {
-  const form = useForm<WiseDetails>({
-    resolver: zodResolver(wiseSchema),
+  const form = useForm<WiseAccount>({
+    resolver: zodResolver(wiseAccountSchema),
     defaultValues: {
       email: defaultValues?.email || "",
     },
   });
 
-  const handleSubmit = (data: WiseDetails) => {
+  const handleSubmit = (data: WiseAccount) => {
     try {
       onSubmit(data); // Removed await
     } catch (error) {

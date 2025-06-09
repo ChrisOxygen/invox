@@ -1,7 +1,6 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -13,23 +12,15 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Loader2, Trash2 } from "lucide-react";
-
-// PayPal Form Schema
-const paypalSchema = z.object({
-  email: z
-    .string()
-    .email("Please enter a valid email address")
-    .min(1, "PayPal email is required"),
-});
-
-export type PayPalDetails = z.infer<typeof paypalSchema>;
+import { paypalAccountSchema } from "@/dataSchemas/payments";
+import { PaypalAccount } from "@/types/schemas/payments";
 
 interface PayPalFormProps {
-  onSubmit: (data: PayPalDetails) => void; // Removed Promise<void>
+  onSubmit: (data: PaypalAccount) => void; // Removed Promise<void>
   onCancel: () => void;
   onRemove?: () => void;
   isLoading?: boolean;
-  defaultValues?: Partial<PayPalDetails>;
+  defaultValues?: Partial<PaypalAccount>;
 }
 
 const PayPalForm: React.FC<PayPalFormProps> = ({
@@ -39,14 +30,14 @@ const PayPalForm: React.FC<PayPalFormProps> = ({
   isLoading = false,
   defaultValues,
 }) => {
-  const form = useForm<PayPalDetails>({
-    resolver: zodResolver(paypalSchema),
+  const form = useForm<PaypalAccount>({
+    resolver: zodResolver(paypalAccountSchema),
     defaultValues: {
       email: defaultValues?.email || "",
     },
   });
 
-  const handleSubmit = (data: PayPalDetails) => {
+  const handleSubmit = (data: PaypalAccount) => {
     try {
       onSubmit(data); // Removed await
     } catch (error) {

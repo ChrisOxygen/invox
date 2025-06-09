@@ -1,7 +1,6 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -13,37 +12,15 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Loader2, Trash2 } from "lucide-react";
-
-// ACH Form Schema - Updated to match OnboardingProvider interface
-const achSchema = z.object({
-  routingNumber: z
-    .string()
-    .min(9, "Routing number must be 9 digits")
-    .max(9, "Routing number must be 9 digits")
-    .regex(/^\d+$/, "Routing number must contain only digits"),
-  accountNumber: z
-    .string()
-    .min(4, "Account number must be at least 4 digits")
-    .max(20, "Account number must not exceed 20 digits")
-    .regex(/^\d+$/, "Account number must contain only digits"),
-  accountHolderName: z
-    .string()
-    .min(2, "Account holder name must be at least 2 characters")
-    .max(100, "Account holder name must not exceed 100 characters"),
-  bankName: z
-    .string()
-    .min(2, "Bank name is required")
-    .max(100, "Bank name must not exceed 100 characters"),
-});
-
-export type ACHDetails = z.infer<typeof achSchema>;
+import { achAccountSchema } from "@/dataSchemas/payments/gateways";
+import { AchAccount } from "@/types/schemas/payments";
 
 interface ACHFormProps {
-  onSubmit: (data: ACHDetails) => void; // Removed Promise<void> to match updated context
+  onSubmit: (data: AchAccount) => void;
   onCancel: () => void;
   onRemove?: () => void;
   isLoading?: boolean;
-  defaultValues?: Partial<ACHDetails>;
+  defaultValues?: Partial<AchAccount>;
 }
 
 const ACHForm: React.FC<ACHFormProps> = ({
@@ -53,19 +30,19 @@ const ACHForm: React.FC<ACHFormProps> = ({
   isLoading = false,
   defaultValues,
 }) => {
-  const form = useForm<ACHDetails>({
-    resolver: zodResolver(achSchema),
+  const form = useForm<AchAccount>({
+    resolver: zodResolver(achAccountSchema),
     defaultValues: {
       routingNumber: defaultValues?.routingNumber || "",
       accountNumber: defaultValues?.accountNumber || "",
-      accountHolderName: defaultValues?.accountHolderName || "",
+      accountType: defaultValues?.accountType || "checking",
       bankName: defaultValues?.bankName || "",
     },
   });
 
-  const handleSubmit = (data: ACHDetails) => {
+  const handleSubmit = (data: AchAccount) => {
     try {
-      onSubmit(data); // Removed await since it's now synchronous
+      onSubmit(data);
     } catch (error) {
       console.error("Error submitting ACH details:", error);
     }
@@ -110,7 +87,6 @@ const ACHForm: React.FC<ACHFormProps> = ({
                 </FormItem>
               )}
             />
-
             <FormField
               control={form.control}
               name="routingNumber"
@@ -131,8 +107,7 @@ const ACHForm: React.FC<ACHFormProps> = ({
                   <FormMessage className="font-inter text-xs" />
                 </FormItem>
               )}
-            />
-
+            />{" "}
             <FormField
               control={form.control}
               name="accountNumber"
@@ -147,35 +122,35 @@ const ACHForm: React.FC<ACHFormProps> = ({
                       placeholder="1234567890"
                       className="font-inter"
                       disabled={isLoading}
-                      maxLength={20}
+                      maxLength={17}
                     />
                   </FormControl>
                   <FormMessage className="font-inter text-xs" />
                 </FormItem>
               )}
             />
-
             <FormField
               control={form.control}
-              name="accountHolderName"
+              name="accountType"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="font-inter text-sm font-medium text-gray-700">
-                    Account Holder Name
+                    Account Type
                   </FormLabel>
                   <FormControl>
-                    <Input
+                    <select
                       {...field}
-                      placeholder="John Doe Business Account"
-                      className="font-inter"
+                      className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 font-inter"
                       disabled={isLoading}
-                    />
+                    >
+                      <option value="checking">Checking</option>
+                      <option value="savings">Savings</option>
+                    </select>
                   </FormControl>
                   <FormMessage className="font-inter text-xs" />
                 </FormItem>
               )}
             />
-
             <div className="bg-yellow-50 p-4 rounded-lg">
               <p className="font-inter text-sm text-yellow-800">
                 <span className="font-semibold">Note:</span> ACH transfers

@@ -5,43 +5,18 @@ import { auth } from "@/auth";
 import {
   createPaymentAccountSchema,
   updatePaymentAccountSchema,
-  type CreatePaymentAccountInput,
-  type UpdatePaymentAccountInput,
-  type NigerianBankAccount,
-  type PaypalAccount,
-  type WiseAccount,
-  type AchAccount,
 } from "@/dataSchemas/payments";
+import {
+  CreatePaymentAccountInput,
+  UpdatePaymentAccountInput,
+} from "@/types/schemas/payments";
+import { ApiResponse, BaseResponse } from "@/types/api";
 
 const prisma = new PrismaClient();
 
-// Types
-interface PaymentAccountResult {
-  success: boolean;
-  message: string;
-  paymentAccount?: PaymentAccount;
-}
-
-interface PaymentAccountsListResult {
-  success: boolean;
-  message: string;
-  paymentAccounts?: PaymentAccount[];
-}
-
-interface BasicResponse {
-  success: boolean;
-  message: string;
-}
-
-type GatewayAccountData =
-  | NigerianBankAccount
-  | PaypalAccount
-  | WiseAccount
-  | AchAccount;
-
 export async function _createPaymentAccount(
   data: CreatePaymentAccountInput
-): Promise<PaymentAccountResult> {
+): Promise<ApiResponse<PaymentAccount>> {
   try {
     const session = await auth();
     if (!session || !session.user?.id) {
@@ -91,7 +66,7 @@ export async function _createPaymentAccount(
     return {
       success: true,
       message: "Payment account created successfully",
-      paymentAccount: newPaymentAccount,
+      data: newPaymentAccount,
     };
   } catch (error) {
     console.error("Error creating payment account:", error);
@@ -107,7 +82,7 @@ export async function _createPaymentAccount(
 export async function _updatePaymentAccount(
   paymentAccountId: string,
   data: UpdatePaymentAccountInput
-): Promise<PaymentAccountResult> {
+): Promise<ApiResponse<PaymentAccount>> {
   try {
     const session = await auth();
     if (!session || !session.user?.id) {
@@ -179,7 +154,7 @@ export async function _updatePaymentAccount(
     return {
       success: true,
       message: "Payment account updated successfully",
-      paymentAccount: updatedPaymentAccount,
+      data: updatedPaymentAccount,
     };
   } catch (error) {
     console.error("Error updating payment account:", error);
@@ -192,7 +167,9 @@ export async function _updatePaymentAccount(
   }
 }
 
-export async function _getUserPaymentAccounts(): Promise<PaymentAccountsListResult> {
+export async function _getUserPaymentAccounts(): Promise<
+  ApiResponse<PaymentAccount[]>
+> {
   try {
     const session = await auth();
     if (!session || !session.user?.id) {
@@ -214,7 +191,7 @@ export async function _getUserPaymentAccounts(): Promise<PaymentAccountsListResu
     return {
       success: true,
       message: "Payment accounts retrieved successfully",
-      paymentAccounts,
+      data: paymentAccounts,
     };
   } catch (error) {
     console.error("Error getting user payment accounts:", error);
@@ -229,7 +206,7 @@ export async function _getUserPaymentAccounts(): Promise<PaymentAccountsListResu
 
 export async function _getPaymentAccountById(
   paymentAccountId: string
-): Promise<PaymentAccountResult> {
+): Promise<ApiResponse<PaymentAccount>> {
   try {
     const session = await auth();
     if (!session || !session.user?.id) {
@@ -263,7 +240,7 @@ export async function _getPaymentAccountById(
     return {
       success: true,
       message: "Payment account retrieved successfully",
-      paymentAccount,
+      data: paymentAccount,
     };
   } catch (error) {
     console.error("Error getting payment account by ID:", error);
@@ -278,7 +255,7 @@ export async function _getPaymentAccountById(
 
 export async function _deletePaymentAccount(
   paymentAccountId: string
-): Promise<BasicResponse> {
+): Promise<BaseResponse> {
   try {
     const session = await auth();
     if (!session || !session.user?.id) {
@@ -331,9 +308,9 @@ export async function _deletePaymentAccount(
 }
 
 // Export types
-export type {
-  PaymentAccountResult,
-  PaymentAccountsListResult,
-  BasicResponse,
-  GatewayAccountData,
-};
+// export type {
+//   PaymentAccountResult,
+//   PaymentAccountsListResult,
+//   BasicResponse,
+//   GatewayAccountData,
+// };

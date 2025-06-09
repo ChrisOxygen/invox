@@ -1,19 +1,9 @@
 import { useMutation } from "@tanstack/react-query";
 import { _completeOnboardingWithData } from "@/actions";
-import { BusinessFormValues, CurrencyType } from "@/types";
-import { PaymentMethodDetails } from "@/features/onboarding/context/OnboardingProvider";
+import { CompleteOnboardingRequest } from "@/types/business/onboarding";
 
-interface CompleteOnboardingData {
-  currency: CurrencyType;
-  businessInfo: BusinessFormValues;
-  paymentMethods: string[];
-  paymentMethodDetails: PaymentMethodDetails;
-  paymentRules: {
-    paymentTerms: string;
-    lateFee: string;
-    invoiceNotes: string;
-  };
-}
+// Use the CompleteOnboardingRequest type from the new type structure
+type CompleteOnboardingData = CompleteOnboardingRequest;
 
 interface UseCompleteUserOnboardingOptions {
   onSuccess?: () => void;

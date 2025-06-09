@@ -1,27 +1,21 @@
 "use server";
 
-import { Business, PrismaClient } from "@prisma/client";
+import { PrismaClient, Business } from "@prisma/client";
 import { auth } from "@/auth";
 import {
-  createBusinessSchema,
-  updateBusinessSchema,
-  type CreateBusinessInput,
-  type UpdateBusinessInput,
-} from "@/dataSchemas/business";
+  createBusinessApiSchema,
+  updateBusinessApiSchema,
+} from "@/dataSchemas/business/creation";
+import { CreateBusinessRequest } from "@/types/api/business";
+import { ApiResponse, BaseResponse } from "@/types/api";
+import { UpdateBusinessApiInput } from "@/types";
 
 const prisma = new PrismaClient();
 
-// Types
-interface BusinessResult {
-  success: boolean;
-  message: string;
-  business?: Business;
-}
-
 // Create business for current user
 export async function _createBusiness(
-  data: CreateBusinessInput
-): Promise<BusinessResult> {
+  data: CreateBusinessRequest
+): Promise<ApiResponse<Business>> {
   try {
     const session = await auth();
     if (!session || !session.user?.id) {
@@ -32,7 +26,7 @@ export async function _createBusiness(
     }
 
     // Validate the input data
-    const validatedData = createBusinessSchema.safeParse(data);
+    const validatedData = createBusinessApiSchema.safeParse(data);
     if (!validatedData.success) {
       return {
         success: false,
@@ -61,11 +55,10 @@ export async function _createBusiness(
         ...validatedData.data,
       },
     });
-
     return {
       success: true,
       message: "Business created successfully",
-      business: newBusiness,
+      data: newBusiness,
     };
   } catch (error) {
     console.error("Error creating business:", error);
@@ -81,8 +74,8 @@ export async function _createBusiness(
 // Update business for current user
 export async function _updateBusiness(
   businessId: string,
-  data: UpdateBusinessInput
-): Promise<BusinessResult> {
+  data: UpdateBusinessApiInput
+): Promise<ApiResponse<Business>> {
   try {
     const session = await auth();
     if (!session || !session.user?.id) {
@@ -100,7 +93,7 @@ export async function _updateBusiness(
     }
 
     // Validate the update data
-    const validatedData = updateBusinessSchema.safeParse(data);
+    const validatedData = updateBusinessApiSchema.safeParse(data);
     if (!validatedData.success) {
       return {
         success: false,
@@ -133,11 +126,10 @@ export async function _updateBusiness(
         updatedAt: new Date(),
       },
     });
-
     return {
       success: true,
       message: "Business updated successfully",
-      business: updatedBusiness,
+      data: updatedBusiness,
     };
   } catch (error) {
     console.error("Error updating business:", error);
@@ -151,7 +143,7 @@ export async function _updateBusiness(
 }
 
 // Get current user's business
-export async function _getUserBusiness(): Promise<BusinessResult> {
+export async function _getUserBusiness(): Promise<ApiResponse<Business>> {
   try {
     const session = await auth();
     if (!session || !session.user?.id) {
@@ -171,11 +163,10 @@ export async function _getUserBusiness(): Promise<BusinessResult> {
         message: "Business not found",
       };
     }
-
     return {
       success: true,
       message: "Business retrieved successfully",
-      business,
+      data: business,
     };
   } catch (error) {
     console.error("Error getting user business:", error);
@@ -191,7 +182,7 @@ export async function _getUserBusiness(): Promise<BusinessResult> {
 // Delete current user's business
 export async function _deleteBusiness(
   businessId: string
-): Promise<{ success: boolean; message: string }> {
+): Promise<BaseResponse> {
   try {
     const session = await auth();
     if (!session || !session.user?.id) {
@@ -242,6 +233,3 @@ export async function _deleteBusiness(
     await prisma.$disconnect();
   }
 }
-
-// Export types
-export type { BusinessResult, CreateBusinessInput, UpdateBusinessInput };

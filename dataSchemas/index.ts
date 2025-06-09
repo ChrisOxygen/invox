@@ -1,43 +1,17 @@
 import { z } from "zod";
 
-// Define the signup form schema
-export const signUpFormSchema = z
-  .object({
-    name: z.string().min(2, "Name must be at least 2 characters"),
-    email: z.string().email("Please enter a valid email address"),
-    password: z.string().min(8, "Password must be at least 8 characters"),
-    confirmPassword: z.string(),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords don't match",
-    path: ["confirmPassword"],
-  });
+// Re-export commonly used schemas for backward compatibility
+export { signupFormSchema } from "./auth/signup";
+export { loginFormSchema } from "./auth/login";
+export { businessFormSchema } from "./business/profile";
 
-export const loginFormSchema = z.object({
-  email: z.string().email({
-    message: "Please enter a valid email address.",
-  }),
-  password: z.string().min(1, {
-    message: "Password is required.",
-  }),
-});
+// Re-export new structured schemas
+export * from "./auth";
+export * from "./business";
+export * from "./payments";
+export * from "./base";
 
-export const businessFormSchema = z.object({
-  businessName: z.string().min(1, {
-    message: "Business name is required.",
-  }),
-  addressLine1: z.string().optional(),
-  addressLine2: z.string().optional(),
-  city: z.string().optional(),
-  state: z.string().optional(),
-  zipCode: z.string().optional(),
-  phone: z.string().optional(),
-  email: z.string().email({
-    message: "Please enter a valid email address.",
-  }),
-});
-
-// Zod schema for validating update user data
+// User management schemas
 export const updateUserSchema = z
   .object({
     name: z

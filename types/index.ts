@@ -1,8 +1,18 @@
-import { updateUserSchema } from "@/dataSchemas";
-import { createBusinessSchema } from "@/dataSchemas/business";
-import { z } from "zod";
+// Re-export commonly used types for backward compatibility
+export type { BusinessFormInput as BusinessFormValues } from "./schemas/business";
+export type { UpdateUserInput as UpdateUserData } from "./schemas/user";
 
-export type BusinessFormValues = z.infer<typeof createBusinessSchema>;
+// Re-export new organized types
+export * from "./schemas";
+export * from "./forms";
+export * from "./api";
+
+// Explicitly re-export business types to resolve naming conflicts
+export type { BusinessSettings, BusinessProfile } from "./business";
+export type { BusinessUpdateValues } from "./schemas/business";
+
+export * from "./shared";
+export * from "./database";
 
 export type CurrencyType =
   | "USD"
@@ -12,6 +22,3 @@ export type CurrencyType =
   | "JPY"
   | "CAD"
   | "AUD";
-
-// Type inference from the schema
-export type UpdateUserData = z.infer<typeof updateUserSchema>;

@@ -1,7 +1,6 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -13,32 +12,15 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Loader2 } from "lucide-react";
-
-// Nigerian Bank Transfer Form Schema
-const nigerianBankSchema = z.object({
-  accountNumber: z
-    .string()
-    .min(10, "Account number must be at least 10 digits")
-    .max(10, "Account number must be exactly 10 digits")
-    .regex(/^\d+$/, "Account number must contain only digits"),
-  accountName: z
-    .string()
-    .min(2, "Account name must be at least 2 characters")
-    .max(100, "Account name must not exceed 100 characters"),
-  bankName: z
-    .string()
-    .min(2, "Bank name is required")
-    .max(100, "Bank name must not exceed 100 characters"),
-});
-
-export type NigerianBankDetails = z.infer<typeof nigerianBankSchema>;
+import { nigerianBankAccountSchema } from "@/dataSchemas/payments";
+import { NigerianBankAccount } from "@/types/schemas/payments";
 
 interface NigerianBankFormProps {
-  onSubmit: (data: NigerianBankDetails) => void; // Removed Promise<void>
+  onSubmit: (data: NigerianBankAccount) => void; // Removed Promise<void>
   onCancel: () => void;
   onRemove?: () => void;
   isLoading?: boolean;
-  defaultValues?: Partial<NigerianBankDetails>;
+  defaultValues?: Partial<NigerianBankAccount>;
 }
 
 const NigerianBankForm: React.FC<NigerianBankFormProps> = ({
@@ -48,8 +30,8 @@ const NigerianBankForm: React.FC<NigerianBankFormProps> = ({
   isLoading = false,
   defaultValues,
 }) => {
-  const form = useForm<NigerianBankDetails>({
-    resolver: zodResolver(nigerianBankSchema),
+  const form = useForm<NigerianBankAccount>({
+    resolver: zodResolver(nigerianBankAccountSchema),
     defaultValues: {
       accountNumber: defaultValues?.accountNumber || "",
       accountName: defaultValues?.accountName || "",
@@ -57,7 +39,7 @@ const NigerianBankForm: React.FC<NigerianBankFormProps> = ({
     },
   });
 
-  const handleSubmit = (data: NigerianBankDetails) => {
+  const handleSubmit = (data: NigerianBankAccount) => {
     try {
       onSubmit(data); // Removed await
     } catch (error) {

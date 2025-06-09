@@ -1,12 +1,11 @@
 // hooks/useLogin.ts
-import { loginFormSchema } from "@/dataSchemas";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { z } from "zod";
+import { LoginRequest } from "@/types/api/auth";
 
-// Type for the login form values
-type LoginFormValues = z.infer<typeof loginFormSchema>;
+// Use the centralized LoginRequest type
+type LoginFormValues = LoginRequest;
 
 // Hook for login functionality
 export function useLogin() {

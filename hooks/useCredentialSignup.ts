@@ -1,53 +1,26 @@
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { z } from "zod";
-import { signUpFormSchema } from "@/dataSchemas";
+
+import { SignupRequest } from "@/types/api/auth";
 import { _createUserWithCredentials } from "@/actions";
+import { BaseResponse } from "@/types/api";
+import { SignupFormInput } from "@/types/schemas/auth";
 
-/**
- * Interface for the signup mutation result
- */
-interface SignUpResult {
-  success: boolean;
-  message: string;
-  user?: {
-    id: string;
-    name: string;
-    email: string;
-  };
-}
-
-/**
- * Custom hook for handling user signup using TanStack Query
- *
- * @returns {Object} Mutation object with signup functionality
- * @returns {Function} returns.mutate - Function to trigger signup
- * @returns {boolean} returns.isPending - Loading state
- * @returns {string|null} returns.error - Error message if signup fails
- * @returns {SignUpResult|undefined} returns.data - Signup result data
- *
- * @example
- * ```typescript
- * const { mutate: signUp, isPending, error } = useSignup();
- *
- * const handleSubmit = (formData) => {
- *   signUp(formData);
- * };
- * ```
- */
 export function useCredentialSignup() {
   const router = useRouter();
-
-  const mutation = useMutation<
-    SignUpResult,
-    Error,
-    z.infer<typeof signUpFormSchema>
-  >({
+  const mutation = useMutation<BaseResponse, Error, SignupFormInput>({
     /**
      * Mutation function that calls the createUser server action
      */
-    mutationFn: async (values: z.infer<typeof signUpFormSchema>) => {
-      const result = await _createUserWithCredentials(values);
+    mutationFn: async (values: SignupFormInput) => {
+      // Transform form data to SignupRequest (remove confirmPassword)
+      const signupData: SignupRequest = {
+        name: values.name,
+        email: values.email,
+        password: values.password,
+      };
+
+      const result = await _createUserWithCredentials(signupData);
 
       // If the server action returns success: false, throw an error
       // This will trigger the onError callback
@@ -61,9 +34,7 @@ export function useCredentialSignup() {
     /**
      * Success callback - navigates to login page
      */
-    onSuccess: (data) => {
-      console.log("User created successfully:", data.user);
-
+    onSuccess: () => {
       // Navigate to login page after successful signup
       router.push("/login");
     },

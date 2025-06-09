@@ -2,46 +2,33 @@
 
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
-import {
-  changePasswordSchema,
-  signUpFormSchema,
-  updateUserSchema,
-} from "@/dataSchemas";
-import { z } from "zod";
+import { changePasswordSchema, updateUserSchema } from "@/dataSchemas";
 import { auth } from "@/auth";
-import { BusinessFormValues, CurrencyType } from "@/types";
-import { PaymentMethodDetails } from "@/features/onboarding/context/OnboardingProvider";
+import { BusinessFormValues } from "@/types/business";
+import { AuthResponse, SignupRequest } from "@/types/api/auth";
+import { UpdateUserInput } from "@/types/schemas/user";
+import {
+  CurrencyType,
+  PaymentMethodDetails,
+} from "@/types/business/onboarding";
+import { BaseResponse } from "@/types/api";
 
 const prisma = new PrismaClient();
 
-// Types
-
-// User select fields for consistency
-const userSelectFields = {
-  id: true,
-  name: true,
-  email: true,
-  country: true,
-  currency: true,
-  signature: true,
-  onboardingCompleted: true,
-} as const;
-
 // Create user with credentials (registration)
 export async function _createUserWithCredentials(
-  values: z.infer<typeof signUpFormSchema>
-): Promise<UserResult> {
+  values: SignupRequest
+): Promise<BaseResponse> {
   try {
-    // Validate the input data
-    const validatedFields = signUpFormSchema.safeParse(values);
-    if (!validatedFields.success) {
+    // Validate the input data using SignupRequest structure
+    if (!values.email || !values.password || !values.name) {
       return {
         success: false,
         message: "Invalid form data. Please check your inputs.",
       };
     }
 
-    const { name, email, password } = validatedFields.data;
+    const { name, email, password } = values;
 
     // Check if user already exists
     const existingUser = await prisma.user.findUnique({
@@ -60,28 +47,18 @@ export async function _createUserWithCredentials(
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
     // Create the user
-    const newUser = await prisma.user.create({
+    await prisma.user.create({
       data: {
         name,
         email,
         hashedPassword,
         onboardingCompleted: false,
       },
-      select: userSelectFields,
     });
 
     return {
       success: true,
       message: "Account created successfully!",
-      user: {
-        id: newUser.id,
-        name: newUser.name || "",
-        email: newUser.email || "",
-        country: newUser.country,
-        currency: newUser.currency,
-        signature: newUser.signature,
-        onboardingCompleted: newUser.onboardingCompleted,
-      },
     };
   } catch (error) {
     console.error("Error creating user with credentials:", error);
@@ -95,7 +72,7 @@ export async function _createUserWithCredentials(
 }
 
 // Get user from session
-export async function _getUser(): Promise<UserResult> {
+export async function _getUser(): Promise<AuthResponse> {
   try {
     const session = await auth();
 
@@ -110,7 +87,6 @@ export async function _getUser(): Promise<UserResult> {
 
     const user = await prisma.user.findUnique({
       where: { id: userId },
-      select: userSelectFields,
     });
 
     if (!user) {
@@ -123,15 +99,7 @@ export async function _getUser(): Promise<UserResult> {
     return {
       success: true,
       message: "User retrieved successfully!",
-      user: {
-        id: user.id,
-        name: user.name || "",
-        email: user.email || "",
-        country: user.country,
-        currency: user.currency,
-        signature: user.signature,
-        onboardingCompleted: user.onboardingCompleted,
-      },
+      user,
     };
   } catch (error) {
     console.error("Error retrieving user:", error);
@@ -146,8 +114,8 @@ export async function _getUser(): Promise<UserResult> {
 
 // Update current user
 export async function _updateCurrentUser(
-  data: z.infer<typeof updateUserSchema>
-): Promise<UserResult> {
+  data: UpdateUserInput
+): Promise<AuthResponse> {
   try {
     const session = await auth();
     if (!session || !session.user?.id) {
@@ -175,21 +143,12 @@ export async function _updateCurrentUser(
         ...validatedData.data,
         updatedAt: new Date(),
       },
-      select: userSelectFields,
     });
 
     return {
       success: true,
       message: "User updated successfully",
-      user: {
-        id: updatedUser.id,
-        name: updatedUser.name || "",
-        email: updatedUser.email || "",
-        country: updatedUser.country,
-        currency: updatedUser.currency,
-        signature: updatedUser.signature,
-        onboardingCompleted: updatedUser.onboardingCompleted,
-      },
+      user: updatedUser,
     };
   } catch (error) {
     console.error("Error updating current user:", error);
@@ -203,7 +162,7 @@ export async function _updateCurrentUser(
 }
 
 // Complete onboarding for current user
-export async function _completeOnboarding(): Promise<UserResult> {
+export async function _completeOnboarding(): Promise<AuthResponse> {
   try {
     const session = await auth();
     if (!session || !session.user?.id) {

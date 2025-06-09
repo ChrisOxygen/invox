@@ -4,7 +4,6 @@ import Link from "next/link";
 import { FaGoogle, FaGithub } from "react-icons/fa";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import * as z from "zod";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import { Button } from "@/components/ui/button";
 import {
@@ -20,8 +19,9 @@ import { Separator } from "@/components/ui/separator";
 import { useState } from "react";
 import InBoxLoader from "@/components/InBoxLoader";
 import useSocialSignIn from "@/hooks/useSocialSignIn";
-import { signUpFormSchema } from "@/dataSchemas";
+import { signupFormSchema } from "@/dataSchemas";
 import { useCredentialSignup } from "@/hooks/useCredentialSignup";
+import { SignupFormInput } from "@/types/schemas/auth";
 
 function SignUpPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -36,11 +36,9 @@ function SignUpPage() {
     isPending: isSignupPending,
     error,
     reset,
-  } = useCredentialSignup();
-
-  // Initialize form
-  const form = useForm<z.infer<typeof signUpFormSchema>>({
-    resolver: zodResolver(signUpFormSchema),
+  } = useCredentialSignup(); // Initialize form
+  const form = useForm<SignupFormInput>({
+    resolver: zodResolver(signupFormSchema),
     defaultValues: {
       name: "",
       email: "",
@@ -50,7 +48,7 @@ function SignUpPage() {
   });
 
   // Handle form submission
-  const onSubmit = (values: z.infer<typeof signUpFormSchema>) => {
+  const onSubmit = (values: SignupFormInput) => {
     // Reset any previous errors
     reset();
 

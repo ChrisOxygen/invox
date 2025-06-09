@@ -120,6 +120,7 @@ model Business {
   businessType       String?     // "freelancer", "consultant", "service_provider", etc.
   email              String
   userId             String @db.ObjectId
+  isDefault          Boolean @default(false) // For users with multiple businesses
   
   // Detailed address fields
   addressLine1       String?

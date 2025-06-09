@@ -1,4 +1,4 @@
-import Template3 from "@/features/invoice/component/templates/Template3";
+import Template3 from "@/features/invoice/components/templates/Template3";
 import React from "react";
 
 function Dashboard() {

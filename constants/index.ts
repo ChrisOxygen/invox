@@ -14,34 +14,34 @@ export const DASHBOARD_MAIN_NAV = [
   },
   {
     title: "Customers",
-    url: "/customers",
+    url: "/app/customers",
     icon: TbUsers,
   },
   {
     title: "Items",
-    url: "/items",
+    url: "/app/items",
     icon: FiShoppingBag,
   },
   {
     title: "Invoices",
-    url: "/invoices",
+    url: "/app/invoices",
     icon: RxFileText,
   },
   {
     title: "Payments Received",
-    url: "/payments-received",
+    url: "/app/payments-received",
     icon: BiMoneyWithdraw,
   },
 ];
 export const DASHBOARD_SECONDARY_NAV = [
   {
     title: "Support",
-    url: "/support",
+    url: "/app/support",
     icon: PiLifebuoy,
   },
   {
     title: "Feedback",
-    url: "/feedback",
+    url: "/app/feedback",
     icon: VscFeedback,
   },
 ];

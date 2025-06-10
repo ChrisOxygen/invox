@@ -8,6 +8,8 @@ import React, {
   useEffect,
 } from "react";
 import { useParams } from "next/navigation";
+import { useUserAndBusinessForInvoice } from "../hooks/useInvoiceForm";
+import { UserWithBusiness } from "@/types/database";
 
 // Types
 export type FormMode = "create" | "edit";
@@ -16,6 +18,7 @@ export interface InvoiceFormState {
   formMode: FormMode;
   isLoading: boolean;
   invoiceId?: string;
+  userWithBusiness?: UserWithBusiness;
 }
 
 export type InvoiceFormAction =
@@ -24,8 +27,13 @@ export type InvoiceFormAction =
   | { type: "SET_INVOICE_ID"; payload: string | undefined }
   | {
       type: "INITIALIZE_FORM";
-      payload: { formMode: FormMode; invoiceId?: string };
+      payload: {
+        formMode: FormMode;
+        userWithBusiness: UserWithBusiness;
+        invoiceId?: string;
+      };
     }
+  | { type: "SET_USER_WITH_BUSINESS"; payload: UserWithBusiness }
   | { type: "RESET_STATE" };
 
 // Initial State
@@ -33,6 +41,7 @@ const initialState: InvoiceFormState = {
   formMode: "create",
   isLoading: true,
   invoiceId: undefined,
+  userWithBusiness: undefined,
 };
 
 // Reducer
@@ -61,8 +70,15 @@ function invoiceFormReducer(
         ...state,
         formMode: action.payload.formMode,
         invoiceId: action.payload.invoiceId,
+        userWithBusiness: action.payload.userWithBusiness,
         isLoading: false,
       };
+    case "SET_USER_WITH_BUSINESS":
+      return {
+        ...state,
+        userWithBusiness: action.payload,
+      };
+
     case "RESET_STATE":
       return initialState;
     default:
@@ -73,11 +89,7 @@ function invoiceFormReducer(
 // Context
 interface InvoiceFormContextType {
   state: InvoiceFormState;
-  dispatch: React.Dispatch<InvoiceFormAction>;
-  // Helper functions
-  setFormMode: (mode: FormMode) => void;
-  setLoading: (loading: boolean) => void;
-  setInvoiceId: (id: string | undefined) => void;
+
   resetState: () => void;
 }
 
@@ -98,6 +110,10 @@ export function InvoiceFormProvider({ children }: InvoiceFormProviderProps) {
 
   const params = useParams();
 
+  // Fetch user and business details
+  const { data: userBusinessData, isPending: isPendingUserBusiness } =
+    useUserAndBusinessForInvoice();
+
   // Helper functions
   const setFormMode = (mode: FormMode) => {
     dispatch({ type: "SET_FORM_MODE", payload: mode });
@@ -111,9 +127,20 @@ export function InvoiceFormProvider({ children }: InvoiceFormProviderProps) {
     dispatch({ type: "SET_INVOICE_ID", payload: id });
   };
 
+  const setUserWithBusiness = (data: UserWithBusiness) => {
+    dispatch({ type: "SET_USER_WITH_BUSINESS", payload: data });
+  };
+
   const resetState = () => {
     dispatch({ type: "RESET_STATE" });
-  };
+  }; // Data access helpers
+
+  // Populate user and business details when data is available
+  useEffect(() => {
+    if (userBusinessData && !isPendingUserBusiness) {
+      setUserWithBusiness(userBusinessData);
+    }
+  }, [userBusinessData, isPendingUserBusiness]);
 
   // Check URL parameters and set form mode
   useEffect(() => {
@@ -125,22 +152,12 @@ export function InvoiceFormProvider({ children }: InvoiceFormProviderProps) {
 
       if (invoiceId) {
         // If invoiceId exists, set to edit mode
-        dispatch({
-          type: "INITIALIZE_FORM",
-          payload: {
-            formMode: "edit",
-            invoiceId: invoiceId,
-          },
-        });
+        setFormMode("edit");
+        setInvoiceId(invoiceId);
       } else {
         // If no invoiceId, set to create mode
-        dispatch({
-          type: "INITIALIZE_FORM",
-          payload: {
-            formMode: "create",
-            invoiceId: undefined,
-          },
-        });
+        setFormMode("create");
+        setInvoiceId(undefined);
       }
     };
 
@@ -150,12 +167,23 @@ export function InvoiceFormProvider({ children }: InvoiceFormProviderProps) {
     return () => clearTimeout(timeoutId);
   }, [params]);
 
+  // Initialize form state
+  useEffect(() => {
+    if (userBusinessData && !isPendingUserBusiness) {
+      const formMode = state.invoiceId ? "edit" : "create";
+      dispatch({
+        type: "INITIALIZE_FORM",
+        payload: {
+          formMode,
+          userWithBusiness: userBusinessData,
+          invoiceId: state.invoiceId,
+        },
+      });
+    }
+  }, [userBusinessData, isPendingUserBusiness, state.invoiceId]);
+
   const contextValue: InvoiceFormContextType = {
     state,
-    dispatch,
-    setFormMode,
-    setLoading,
-    setInvoiceId,
     resetState,
   };
 

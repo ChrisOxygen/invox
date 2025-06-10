@@ -41,9 +41,3 @@ export interface LoadingState {
   isLoading: boolean;
   error?: string | null;
 }
-
-// Generic API call state
-export interface ApiCallState<T = any> extends LoadingState {
-  data?: T;
-  isSuccess: boolean;
-}

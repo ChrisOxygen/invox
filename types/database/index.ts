@@ -1,8 +1,8 @@
 import { Prisma } from "@prisma/client";
 
 // Utility types for Prisma model extensions
-export type UserWithBusinesses = Prisma.UserGetPayload<{
-  include: { businesses: true };
+export type UserWithBusiness = Prisma.UserGetPayload<{
+  include: { business: true };
 }>;
 
 export type UserWithPaymentAccounts = Prisma.UserGetPayload<{

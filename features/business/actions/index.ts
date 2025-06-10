@@ -36,18 +36,6 @@ export async function _createBusiness(
       };
     }
 
-    // Check if user already has a business
-    const existingBusiness = await prisma.business.findFirst({
-      where: { userId: session.user.id },
-    });
-
-    if (existingBusiness) {
-      return {
-        success: false,
-        message: "User already has a business",
-      };
-    }
-
     // Create business
     const newBusiness = await prisma.business.create({
       data: {

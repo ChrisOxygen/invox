@@ -32,8 +32,8 @@ model User {
   signature          String?     // URL/path to signature image
   onboardingCompleted Boolean    @default(false)
   
-  // Business relationships
-  businesses      Business[]
+  // Business relationship (one-to-one)
+  business        Business?
   clients         Client[]
   invoices        Invoice[]
   paymentAccounts PaymentAccount[]
@@ -119,8 +119,7 @@ model Business {
   businessName       String
   businessType       String?     // "freelancer", "consultant", "service_provider", etc.
   email              String
-  userId             String @db.ObjectId
-  isDefault          Boolean @default(false) // For users with multiple businesses
+  userId             String @unique @db.ObjectId  // One-to-one relationship
   
   // Detailed address fields
   addressLine1       String?

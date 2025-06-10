@@ -1,27 +1,6 @@
 import { ReactNode } from "react";
 
 // Shared form-related types
-export interface BaseFormProps {
-  isLoading?: boolean;
-  disabled?: boolean;
-}
-
-export interface FormWithActions extends BaseFormProps {
-  onCancel: () => void;
-  onSubmit: () => void;
-}
-
-export interface FormFieldError {
-  field: string;
-  message: string;
-}
-
-export interface FormState<T = any> {
-  data: T;
-  errors: FormFieldError[];
-  isValid: boolean;
-  isDirty: boolean;
-}
 
 export interface FormStepProps {
   isActive: boolean;

@@ -2,15 +2,9 @@
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { _createItem } from "@/actions/items";
-import { CreateItemInput } from "@/dataSchemas/item";
 import { ApiResponse } from "@/types";
 import { Item } from "@prisma/client";
-
-// Query keys for items creation
-const ITEMS_QUERY_KEYS = {
-  all: ["items"] as const,
-  lists: () => [...ITEMS_QUERY_KEYS.all, "list"] as const,
-};
+import { CreateItemInput } from "@/types/schemas/item";
 
 interface UseCreateItemOptions {
   onSuccess?: (data: ApiResponse<Item>) => void;
@@ -34,7 +28,7 @@ export function useCreateItem(options?: UseCreateItemOptions) {
 
     onSuccess: (data) => {
       // Invalidate and refetch items list
-      queryClient.invalidateQueries({ queryKey: ITEMS_QUERY_KEYS.lists() });
+      queryClient.invalidateQueries({ queryKey: ["items"] });
 
       // Call the optional onSuccess callback if provided
       if (options?.onSuccess) {

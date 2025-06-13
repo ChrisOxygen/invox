@@ -4,14 +4,6 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { _deleteItem } from "@/actions/items";
 import { BaseResponse } from "@/types/api";
 
-// Query keys for items deletion
-const ITEMS_QUERY_KEYS = {
-  all: ["items"] as const,
-  lists: () => [...ITEMS_QUERY_KEYS.all, "list"] as const,
-  details: () => [...ITEMS_QUERY_KEYS.all, "detail"] as const,
-  detail: (id: string) => [...ITEMS_QUERY_KEYS.details(), id] as const,
-};
-
 interface UseDeleteItemOptions {
   onSuccess?: (itemId: string) => void;
   onError?: (error: Error) => void;
@@ -34,9 +26,9 @@ export function useDeleteItem(options?: UseDeleteItemOptions) {
 
     onSuccess: (data, itemId) => {
       // Invalidate and refetch items list
-      queryClient.invalidateQueries({ queryKey: ITEMS_QUERY_KEYS.lists() });
+      queryClient.invalidateQueries({ queryKey: ["items"] });
       // Remove the specific item from cache
-      queryClient.removeQueries({ queryKey: ITEMS_QUERY_KEYS.detail(itemId) });
+      queryClient.removeQueries({ queryKey: ["items", itemId] });
 
       // Call the optional onSuccess callback if provided
       if (options?.onSuccess) {

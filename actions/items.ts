@@ -4,7 +4,7 @@ import { Item, PrismaClient } from "@prisma/client";
 import { auth } from "@/auth";
 import { ApiResponse, BaseResponse } from "@/types/api";
 import { createItemSchema, updateItemSchema } from "@/dataSchemas/item";
-import type { CreateItemInput, UpdateItemInput } from "@/dataSchemas/item";
+import { CreateItemInput, UpdateItemInput } from "@/types/schemas/item";
 
 const prisma = new PrismaClient();
 

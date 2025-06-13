@@ -8,7 +8,7 @@ import { UserWithBusiness } from "@/types/database";
 const prisma = new PrismaClient();
 
 // Get user and business details for invoice creation
-export async function _getUserAndBusinessForInvoice(): Promise<
+export async function _getUserAndBusiness(): Promise<
   ApiResponse<UserWithBusiness>
 > {
   try {

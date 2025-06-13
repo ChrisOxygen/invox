@@ -8,40 +8,59 @@ datasource db {
   provider = "mongodb"
   url      = env("DATABASE_URL")
 }
- 
+
 generator client {
   provider = "prisma-client-js"
 }
- 
+
+// Enums for better type safety
+enum InvoiceStatus {
+  DRAFT
+  SENT
+  PAID
+  OVERDUE
+  CANCELLED
+}
+
+enum PaymentTerms {
+  NET_15
+  NET_30
+  NET_45
+  NET_60
+  DUE_ON_RECEIPT
+  DUE_END_OF_MONTH
+  DUE_END_OF_NEXT_MONTH
+}
+
 model User {
-  id            String         @id @default(auto()) @map("_id") @db.ObjectId
-  name          String?
-  email         String         @unique
-  emailVerified Boolean? @default(false)
+  id             String          @id @default(auto()) @map("_id") @db.ObjectId
+  name           String?
+  email          String          @unique
+  emailVerified  Boolean?        @default(false)
   hashedPassword String?
-  image         String?
-  accounts      Account[]
-  sessions      Session[]
+  image          String?
+  accounts       Account[]
+  sessions       Session[]
   // Optional for WebAuthn support
-  Authenticator Authenticator[]
-  
+  Authenticator  Authenticator[]
+
   // Onboarding & preferences
- 
-  country            String?     // "NG", "US", etc.
-  currency           String?     // "NGN", "USD", etc. 
-  signature          String?     // URL/path to signature image
-  onboardingCompleted Boolean    @default(false)
-  
+
+  country             String? // "NG", "US", etc.
+  currency            String? // "NGN", "USD", etc. 
+  signature           String? // URL/path to signature image
+  onboardingCompleted Boolean @default(false)
+
   // Business relationship (one-to-one)
   business        Business?
   clients         Client[]
-  invoices        Invoice[]
+  items           Item[]
   paymentAccounts PaymentAccount[]
- 
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
- 
+
 model Account {
   id                String  @id @default(auto()) @map("_id") @db.ObjectId
   userId            String  @db.ObjectId
@@ -55,35 +74,35 @@ model Account {
   scope             String?
   id_token          String? @db.String
   session_state     String?
- 
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
- 
+
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
- 
+
   @@unique([provider, providerAccountId])
 }
- 
+
 model Session {
   id           String   @id @default(auto()) @map("_id") @db.ObjectId
   sessionToken String   @unique
   userId       String   @db.ObjectId
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
- 
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
- 
+
 model VerificationToken {
   id         String   @id @default(auto()) @map("_id") @db.ObjectId
   identifier String
   token      String
   expires    DateTime
- 
+
   @@unique([identifier, token])
 }
- 
+
 // Optional for WebAuthn support
 model Authenticator {
   credentialID         String  @id @map("_id")
@@ -94,71 +113,76 @@ model Authenticator {
   credentialDeviceType String
   credentialBackedUp   Boolean
   transports           String?
- 
+
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
- 
+
   @@unique([userId, credentialID])
 }
 
 model Client {
-  id             String @id @default(auto()) @map("_id") @db.ObjectId
-  name           String
-  address        String
-  email          String
-  userId         String @db.ObjectId
-  
+  id                String  @id @default(auto()) @map("_id") @db.ObjectId
+  BusinessName      String
+  contactPersonName String?
+  address           String?
+  email             String // Note: Add email validation at application level
+  userId            String  @db.ObjectId
+
   user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   invoices Invoice[]
-  
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([email]) // For client lookup
+  @@index([userId]) // For user's clients filtering
 }
 
 model Business {
-  id                 String @id @default(auto()) @map("_id") @db.ObjectId
-  businessName       String
-  businessType       String?     // "freelancer", "consultant", "service_provider", etc.
-  email              String
-  userId             String @unique @db.ObjectId  // One-to-one relationship
-  
+  id           String  @id @default(auto()) @map("_id") @db.ObjectId
+  businessName String
+  businessType String? // "freelancer", "consultant", "service_provider", etc.
+  email        String
+  userId       String  @unique @db.ObjectId // One-to-one relationship
+
   // Detailed address fields
-  addressLine1       String?
-  addressLine2       String?  
-  city              String?
-  state             String?
-  zipCode           String?
-  phone             String?
-  
+  addressLine1 String?
+  addressLine2 String?
+  city         String?
+  state        String?
+  zipCode      String?
+  phone        String?
+
   // Branding & preferences
-  logo              String?     // URL/path to logo image
-  
+  logo String? // URL/path to logo image
+
   // Payment defaults
-  defaultPaymentTerms String?   // "net_30", "net_15", "due_on_receipt"
-  defaultLateFee     String?    // "1.5_percent", "25_flat", "none"
-  defaultInvoiceNotes String?   // "Thank you for your business..."
-  
+  defaultPaymentTerms PaymentTerms? // Use enum instead of string
+  defaultLateFee      String? // "1.5_percent", "25_flat", "none"
+  defaultInvoiceNotes String? // "Thank you for your business..."
+
   user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   invoices Invoice[]
-  
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model PaymentAccount {
-  id           String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId       String   @db.ObjectId
-  gatewayType  String   // "paypal", "nigerian_bank", "ach", "wise"
-  accountName  String   // "Main PayPal", "GTBank Business"
-  accountData  Json     // Gateway-specific details
-  isActive     Boolean  @default(true)
-  isDefault    Boolean  @default(false)
-  
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-  
-  @@unique([userId, gatewayType, isDefault]) // Only one default per gateway type per user
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String  @db.ObjectId
+  gatewayType String // "paypal", "nigerian_bank", "ach", "wise"
+  accountName String // "Main PayPal", "GTBank Business"
+  accountData Json // Gateway-specific details
+  isActive    Boolean @default(true)
+  isDefault   Boolean @default(false) // Only one should be true per user
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  // Note: Application logic should ensure only one isDefault=true per userId
+
+  @@index([userId, isDefault]) // For querying user's default payment account
 }
 
 model Invoice {
@@ -166,35 +190,39 @@ model Invoice {
   invoiceNumber          String        @unique
   invoiceDate            DateTime
   paymentDueDate         DateTime
-  subtotal               Float
-  taxes                  Float
-  finalTotal             Float
-  paymentTerms           String
+  subtotal               Float // Note: Consider using cents/integer for financial precision
+  taxes                  Float // Note: Consider using cents/integer for financial precision
+  paymentTerms           PaymentTerms
   acceptedPaymentMethods String
-  
+  status                 InvoiceStatus @default(DRAFT)
+
   businessId String @db.ObjectId
   clientId   String @db.ObjectId
-  userId     String @db.ObjectId
-  
-  business Business     @relation(fields: [businessId], references: [id], onDelete: Cascade)
-  client   Client       @relation(fields: [clientId], references: [id], onDelete: Cascade)
-  user     User         @relation(fields: [userId], references: [id], onDelete: Cascade)
-  items    InvoiceItem[]
-  
+
+  business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  client   Client   @relation(fields: [clientId], references: [id], onDelete: Cascade)
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([businessId, status]) // For business invoice filtering
+  @@index([clientId]) // For client invoice history
+  @@index([status]) // For status-based queries
+  @@index([paymentDueDate]) // For overdue invoice tracking
 }
 
-model InvoiceItem {
+model Item {
   id          String  @id @default(auto()) @map("_id") @db.ObjectId
-  description String
-  quantity    Int
-  unitPrice   Float
-  totalAmount Float
-  
-  invoiceId String @db.ObjectId
-  invoice   Invoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
-  
+  name        String
+  description String?
+  unitPrice   Float? // Optional default price for quick selection
+
+  userId String @db.ObjectId
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@unique([name, userId]) // Prevent duplicate item names per user
+  @@index([userId, createdAt]) // For user's items sorting
 }

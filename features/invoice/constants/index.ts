@@ -1,3 +1,6 @@
+import { FiFileText, FiLayout } from "react-icons/fi";
+import { LuPalette } from "react-icons/lu";
+
 // Constants for the invoice feature
 export const INVOICE_STATUS = {
   DRAFT: "draft",
@@ -100,3 +103,87 @@ export const INVOICE_DUMMY_DATA = {
       "This invoice covers the complete digital transformation package as outlined in our project agreement dated May 15, 2024.",
   },
 };
+
+export const INVOICE_TABS = [
+  {
+    title: "Details",
+    icon: FiFileText,
+  },
+  {
+    title: "Layout",
+    icon: FiLayout,
+  },
+  {
+    title: "Theme",
+    icon: LuPalette,
+  },
+];
+
+export const DUMMY_CLIENTS = [
+  {
+    id: "670a1b2c3d4e5f6789012345",
+    BusinessName: "TechStart Solutions",
+    contactPersonName: "Sarah Johnson",
+    address: "789 Business Plaza, Suite 200, Manhattan, NY 10005",
+    email: "sarah@techstartsolutions.com",
+  },
+  {
+    id: "670a1b2c3d4e5f6789012346",
+    BusinessName: "Digital Marketing Pro",
+    contactPersonName: "Michael Chen",
+    address: "456 Innovation Drive, Austin, TX 78701",
+    email: "michael@digitalmarketingpro.com",
+  },
+  {
+    id: "670a1b2c3d4e5f6789012347",
+    BusinessName: "Creative Studios LLC",
+    contactPersonName: "Emma Rodriguez",
+    address: "123 Design Street, Los Angeles, CA 90210",
+    email: "emma@creativestudios.com",
+  },
+  {
+    id: "670a1b2c3d4e5f6789012348",
+    BusinessName: "E-Commerce Plus",
+    contactPersonName: "David Thompson",
+    address: "321 Commerce Avenue, Miami, FL 33101",
+    email: "david@ecommerceplus.com",
+  },
+  {
+    id: "670a1b2c3d4e5f6789012349",
+    BusinessName: "Consulting Partners",
+    contactPersonName: "Lisa Wang",
+    email: "lisa@consultingpartners.com",
+  },
+  {
+    id: "670a1b2c3d4e5f678901234a",
+    BusinessName: "Mobile App Innovations",
+    contactPersonName: "James Wilson",
+    email: "james@mobileappinnovations.com",
+  },
+  {
+    id: "670a1b2c3d4e5f678901234b",
+    BusinessName: "Healthcare Solutions Inc",
+    address: "234 Medical Center Drive, Boston, MA 02101",
+    email: "amanda@healthcaresolutions.com",
+  },
+  {
+    id: "670a1b2c3d4e5f678901234c",
+    BusinessName: "Green Energy Co",
+    contactPersonName: "Robert Martinez",
+    address: "678 Renewable Road, Denver, CO 80202",
+    email: "robert@greenergyco.com",
+  },
+  {
+    id: "670a1b2c3d4e5f678901234d",
+    BusinessName: "Food & Beverage Distributors",
+    contactPersonName: "Jennifer Lee",
+    address: "135 Distribution Way, Atlanta, GA 30303",
+    email: "jennifer@foodbevdist.com",
+  },
+  {
+    id: "670a1b2c3d4e5f678901234e",
+    BusinessName: "Real Estate Ventures",
+    address: "789 Property Plaza, Seattle, WA 98101",
+    email: "christopher@realestateventures.com",
+  },
+];

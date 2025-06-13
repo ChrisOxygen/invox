@@ -4,47 +4,109 @@ import React, {
   createContext,
   useContext,
   useReducer,
-  ReactNode,
   useEffect,
+  useRef,
 } from "react";
 import { useParams } from "next/navigation";
-import { useUserAndBusinessForInvoice } from "../hooks/useInvoiceForm";
-import { UserWithBusiness } from "@/types/database";
 
-// Types
-export type FormMode = "create" | "edit";
+type FormMode = "create" | "edit";
 
-export interface InvoiceFormState {
-  formMode: FormMode;
-  isLoading: boolean;
-  invoiceId?: string;
-  userWithBusiness?: UserWithBusiness;
+interface InvoiceItem {
+  id?: string;
+  description: string;
+  quantity: number;
+  unitPrice: number;
+  totalAmount: number;
 }
 
-export type InvoiceFormAction =
-  | { type: "SET_FORM_MODE"; payload: FormMode }
-  | { type: "SET_LOADING"; payload: boolean }
-  | { type: "SET_INVOICE_ID"; payload: string | undefined }
+interface ClientData {
+  id?: string;
+  name: string;
+  address: string;
+  email: string;
+}
+
+interface InvoiceData {
+  invoiceDate: Date;
+  paymentDueDate: Date;
+  subtotal: number;
+  taxes: number;
+  finalTotal: number;
+  paymentTerms: string;
+  acceptedPaymentMethods: string;
+}
+
+interface InvoiceFormState {
+  formMode: FormMode;
+  invoiceId?: string;
+  invoiceData: InvoiceData;
+  clientData: ClientData;
+  invoiceItems: InvoiceItem[];
+}
+
+type InvoiceFormAction =
   | {
-      type: "INITIALIZE_FORM";
+      type: "SET_FORM_MODE";
+      payload: FormMode;
+    }
+  | {
+      type: "SET_INVOICE_ID";
+      payload: string;
+    }
+  | {
+      type: "SET_INVOICE_DATA";
+      payload: Partial<InvoiceData>;
+    }
+  | {
+      type: "SET_CLIENT_DATA";
+      payload: Partial<ClientData>;
+    }
+  | {
+      type: "SET_INVOICE_ITEMS";
+      payload: InvoiceItem[];
+    }
+  | {
+      type: "ADD_INVOICE_ITEM";
+      payload: InvoiceItem;
+    }
+  | {
+      type: "UPDATE_INVOICE_ITEM";
       payload: {
-        formMode: FormMode;
-        userWithBusiness: UserWithBusiness;
-        invoiceId?: string;
+        index: number;
+        item: Partial<InvoiceItem>;
       };
     }
-  | { type: "SET_USER_WITH_BUSINESS"; payload: UserWithBusiness }
-  | { type: "RESET_STATE" };
+  | {
+      type: "REMOVE_INVOICE_ITEM";
+      payload: number; // index
+    }
+  | {
+      type: "CALCULATE_TOTALS";
+    }
+  | {
+      type: "RESET_FORM";
+    };
 
-// Initial State
 const initialState: InvoiceFormState = {
   formMode: "create",
-  isLoading: true,
   invoiceId: undefined,
-  userWithBusiness: undefined,
+  invoiceData: {
+    invoiceDate: new Date(),
+    paymentDueDate: new Date(),
+    subtotal: 0,
+    taxes: 0,
+    finalTotal: 0,
+    paymentTerms: "",
+    acceptedPaymentMethods: "",
+  },
+  clientData: {
+    name: "",
+    address: "",
+    email: "",
+  },
+  invoiceItems: [],
 };
 
-// Reducer
 function invoiceFormReducer(
   state: InvoiceFormState,
   action: InvoiceFormAction
@@ -55,157 +117,201 @@ function invoiceFormReducer(
         ...state,
         formMode: action.payload,
       };
-    case "SET_LOADING":
-      return {
-        ...state,
-        isLoading: action.payload,
-      };
     case "SET_INVOICE_ID":
       return {
         ...state,
         invoiceId: action.payload,
       };
-    case "INITIALIZE_FORM":
+    case "SET_INVOICE_DATA":
       return {
         ...state,
-        formMode: action.payload.formMode,
-        invoiceId: action.payload.invoiceId,
-        userWithBusiness: action.payload.userWithBusiness,
-        isLoading: false,
+        invoiceData: {
+          ...state.invoiceData,
+          ...action.payload,
+        },
       };
-    case "SET_USER_WITH_BUSINESS":
+    case "SET_CLIENT_DATA":
       return {
         ...state,
-        userWithBusiness: action.payload,
+        clientData: {
+          ...state.clientData,
+          ...action.payload,
+        },
       };
-
-    case "RESET_STATE":
-      return initialState;
+    case "SET_INVOICE_ITEMS":
+      return {
+        ...state,
+        invoiceItems: action.payload,
+      };
+    case "ADD_INVOICE_ITEM":
+      return {
+        ...state,
+        invoiceItems: [...state.invoiceItems, action.payload],
+      };
+    case "UPDATE_INVOICE_ITEM":
+      return {
+        ...state,
+        invoiceItems: state.invoiceItems.map((item, index) =>
+          index === action.payload.index
+            ? { ...item, ...action.payload.item }
+            : item
+        ),
+      };
+    case "REMOVE_INVOICE_ITEM":
+      return {
+        ...state,
+        invoiceItems: state.invoiceItems.filter(
+          (_, index) => index !== action.payload
+        ),
+      };
+    case "CALCULATE_TOTALS":
+      const subtotal = state.invoiceItems.reduce(
+        (sum, item) => sum + item.totalAmount,
+        0
+      );
+      const finalTotal = subtotal + state.invoiceData.taxes;
+      return {
+        ...state,
+        invoiceData: {
+          ...state.invoiceData,
+          subtotal,
+          finalTotal,
+        },
+      };
+    case "RESET_FORM":
+      return {
+        ...initialState,
+        formMode: state.formMode,
+        invoiceId: state.invoiceId,
+      };
     default:
       return state;
   }
 }
 
-// Context
 interface InvoiceFormContextType {
   state: InvoiceFormState;
-
-  resetState: () => void;
+  dispatch: React.Dispatch<InvoiceFormAction>;
+  // Helper functions
+  updateInvoiceData: (data: Partial<InvoiceData>) => void;
+  updateClientData: (data: Partial<ClientData>) => void;
+  addInvoiceItem: () => void;
+  updateInvoiceItem: (index: number, item: Partial<InvoiceItem>) => void;
+  removeInvoiceItem: (index: number) => void;
+  calculateTotals: () => void;
+  resetForm: () => void;
 }
 
 const InvoiceFormContext = createContext<InvoiceFormContextType | undefined>(
   undefined
 );
 
-// Provider Props
 interface InvoiceFormProviderProps {
-  children: ReactNode;
+  children: React.ReactNode;
 }
 
-// Provider Component
 export function InvoiceFormProvider({ children }: InvoiceFormProviderProps) {
-  const [state, dispatch] = useReducer(invoiceFormReducer, {
-    ...initialState,
-  });
-
+  const [state, dispatch] = useReducer(invoiceFormReducer, initialState);
   const params = useParams();
+  const hasInitialized = useRef(false);
 
-  // Fetch user and business details
-  const { data: userBusinessData, isPending: isPendingUserBusiness } =
-    useUserAndBusinessForInvoice();
-
-  // Helper functions
-  const setFormMode = (mode: FormMode) => {
-    dispatch({ type: "SET_FORM_MODE", payload: mode });
-  };
-
-  const setLoading = (loading: boolean) => {
-    dispatch({ type: "SET_LOADING", payload: loading });
-  };
-
-  const setInvoiceId = (id: string | undefined) => {
-    dispatch({ type: "SET_INVOICE_ID", payload: id });
-  };
-
-  const setUserWithBusiness = (data: UserWithBusiness) => {
-    dispatch({ type: "SET_USER_WITH_BUSINESS", payload: data });
-  };
-
-  const resetState = () => {
-    dispatch({ type: "RESET_STATE" });
-  }; // Data access helpers
-
-  // Populate user and business details when data is available
   useEffect(() => {
-    if (userBusinessData && !isPendingUserBusiness) {
-      setUserWithBusiness(userBusinessData);
-    }
-  }, [userBusinessData, isPendingUserBusiness]);
+    if (hasInitialized.current) return;
 
-  // Check URL parameters and set form mode
-  useEffect(() => {
-    const checkFormMode = () => {
-      setLoading(true);
+    const invoiceId = params?.invoiceId as string;
+    const formMode: FormMode = invoiceId ? "edit" : "create";
 
-      // Check if there's an invoiceId parameter in the URL
-      const invoiceId = params?.invoiceId as string | undefined;
+    dispatch({
+      type: "SET_FORM_MODE",
+      payload: formMode,
+    });
 
-      if (invoiceId) {
-        // If invoiceId exists, set to edit mode
-        setFormMode("edit");
-        setInvoiceId(invoiceId);
-      } else {
-        // If no invoiceId, set to create mode
-        setFormMode("create");
-        setInvoiceId(undefined);
-      }
-    };
-
-    // Small delay to simulate loading state
-    const timeoutId = setTimeout(checkFormMode, 100);
-
-    return () => clearTimeout(timeoutId);
-  }, [params]);
-
-  // Initialize form state
-  useEffect(() => {
-    if (userBusinessData && !isPendingUserBusiness) {
-      const formMode = state.invoiceId ? "edit" : "create";
+    if (invoiceId) {
       dispatch({
-        type: "INITIALIZE_FORM",
-        payload: {
-          formMode,
-          userWithBusiness: userBusinessData,
-          invoiceId: state.invoiceId,
-        },
+        type: "SET_INVOICE_ID",
+        payload: invoiceId,
       });
     }
-  }, [userBusinessData, isPendingUserBusiness, state.invoiceId]);
 
-  const contextValue: InvoiceFormContextType = {
-    state,
-    resetState,
+    hasInitialized.current = true;
+  }, [params]);
+
+  // Helper functions
+  const updateInvoiceData = (data: Partial<InvoiceData>) => {
+    dispatch({ type: "SET_INVOICE_DATA", payload: data });
+  };
+
+  const updateClientData = (data: Partial<ClientData>) => {
+    dispatch({ type: "SET_CLIENT_DATA", payload: data });
+  };
+
+  const addInvoiceItem = () => {
+    const newItem: InvoiceItem = {
+      description: "",
+      quantity: 1,
+      unitPrice: 0,
+      totalAmount: 0,
+    };
+    dispatch({ type: "ADD_INVOICE_ITEM", payload: newItem });
+  };
+
+  const updateInvoiceItem = (index: number, item: Partial<InvoiceItem>) => {
+    // Calculate totalAmount if quantity or unitPrice changes
+    const updatedItem = { ...item };
+    if (item.quantity !== undefined || item.unitPrice !== undefined) {
+      const currentItem = state.invoiceItems[index];
+      const quantity = item.quantity ?? currentItem.quantity;
+      const unitPrice = item.unitPrice ?? currentItem.unitPrice;
+      updatedItem.totalAmount = quantity * unitPrice;
+    }
+
+    dispatch({
+      type: "UPDATE_INVOICE_ITEM",
+      payload: { index, item: updatedItem },
+    });
+
+    // Recalculate totals after item update
+    setTimeout(() => calculateTotals(), 0);
+  };
+
+  const removeInvoiceItem = (index: number) => {
+    dispatch({ type: "REMOVE_INVOICE_ITEM", payload: index });
+    setTimeout(() => calculateTotals(), 0);
+  };
+
+  const calculateTotals = () => {
+    dispatch({ type: "CALCULATE_TOTALS" });
+  };
+
+  const resetForm = () => {
+    dispatch({ type: "RESET_FORM" });
   };
 
   return (
-    <InvoiceFormContext.Provider value={contextValue}>
+    <InvoiceFormContext.Provider
+      value={{
+        state,
+        dispatch,
+        updateInvoiceData,
+        updateClientData,
+        addInvoiceItem,
+        updateInvoiceItem,
+        removeInvoiceItem,
+        calculateTotals,
+        resetForm,
+      }}
+    >
       {children}
     </InvoiceFormContext.Provider>
   );
 }
 
-// Custom Hook
 export function useInvoiceForm() {
   const context = useContext(InvoiceFormContext);
-
-  if (context === undefined) {
+  if (!context) {
     throw new Error(
       "useInvoiceForm must be used within an InvoiceFormProvider"
     );
   }
-
   return context;
 }
-
-// Export types for external use
-export type { InvoiceFormContextType };

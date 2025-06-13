@@ -1,13 +1,13 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { _getUserAndBusinessForInvoice } from "../actions";
+import { _getUserAndBusiness } from "../actions";
 
-export function useUserAndBusinessForInvoice() {
+export function useUserAndBusiness() {
   return useQuery({
     queryKey: ["user-business-invoice"],
     queryFn: async () => {
-      const result = await _getUserAndBusinessForInvoice();
+      const result = await _getUserAndBusiness();
 
       if (!result.success) {
         throw new Error(result.message);

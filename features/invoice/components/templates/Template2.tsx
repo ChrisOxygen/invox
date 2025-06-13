@@ -6,7 +6,7 @@ function Template2() {
   const { invoice, agency, client, services, financial, terms } =
     INVOICE_DUMMY_DATA;
   return (
-    <div className=" max-w-[794px] w-full bg-white aspect-70/99 overflow-x-clip font-jetbrains-mono flex flex-col gap-5">
+    <div className=" max-w-[794px] w-full bg-white font-jetbrains-mono flex flex-col gap-5">
       <div className=" px-12 w-full items-center flex justify-between">
         <span className="text-4xl text-teal-700 py-10 uppercase font-bold font-inter">
           Invoice

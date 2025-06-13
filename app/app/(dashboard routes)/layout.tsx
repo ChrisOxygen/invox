@@ -12,7 +12,8 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
 
-  const isCreateInvoiceRoute = pathname.includes("/app/invoices/create");
+  const isInvoiceFormRoute =
+    pathname.includes("/app/invoices/create") || pathname.includes("/edit");
 
   // Handle redirect in useEffect to avoid render-time navigation
   useEffect(() => {
@@ -45,8 +46,8 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
       </div>
     );
   }
-  // If it's the create invoice route, we can return null to prevent rendering the layout
-  if (isCreateInvoiceRoute) {
+
+  if (isInvoiceFormRoute) {
     return <CreateInvoiceLayout>{children}</CreateInvoiceLayout>;
   }
 

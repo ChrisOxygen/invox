@@ -1,13 +1,13 @@
-import InvoiceFormDemo from "@/features/invoice/components/InvoiceFormDemo";
-import Template1 from "@/features/invoice/components/templates/Template1";
+"use client";
 
-function CreateInvoicePage() {
+import InvoiceFormDemo from "@/features/invoice/components/InvoiceFormDemo";
+
+function EditInvoicePage() {
   return (
     <div className=" grid grid-cols-[minmax(350px,550px)_1fr] grid-rows-1 overflow-clip h-full p-2 ">
       <InvoiceFormDemo />
-      <Template1 />
     </div>
   );
 }
 
-export default CreateInvoicePage;
+export default EditInvoicePage;

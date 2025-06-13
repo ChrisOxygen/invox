@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { _getUser } from "@/actions";
+import { AuthResponse } from "@/types";
 
 export function useUser() {
   const { data: session, status } = useSession();
@@ -16,7 +17,7 @@ export function useUser() {
     }
   }, [status, router]);
 
-  const query = useQuery<UserResult, Error>({
+  const query = useQuery<AuthResponse, Error>({
     queryKey: ["user", session?.user?.id],
 
     queryFn: async () => {

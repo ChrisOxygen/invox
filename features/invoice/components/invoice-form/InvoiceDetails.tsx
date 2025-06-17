@@ -6,6 +6,8 @@ import ItemsInput from "./ItemsInput";
 import CustomerNotesInput from "./CustomerNotesInput";
 import TaxInput from "./TaxInput";
 import PaymentDetailsSelect from "./PaymentDetailsSelect";
+import LatenessFeeInput from "./LatenessFeeInput";
+import DiscountInput from "./DiscountInput";
 
 function InvoiceDetails() {
   const { state, setClient, setPaymentDueDate, setCustomNote } =
@@ -49,7 +51,7 @@ function InvoiceDetails() {
             <label className="text-sm font-medium text-gray-900">
               Tax after discount
             </label>
-            <TaxInput />
+            <DiscountInput />
           </div>
         </div>
         <div className="flex flex-col gap-2 flex-grow">
@@ -58,6 +60,13 @@ function InvoiceDetails() {
           </label>
           <PaymentDetailsSelect />
         </div>
+        <div className="flex flex-col gap-2 flex-grow">
+          <label className="text-sm font-medium text-gray-900">
+            Late Fee Options
+          </label>
+          <LatenessFeeInput />
+        </div>
+
         <div className="flex flex-col gap-2">
           <CustomerNotesInput
             value={state.customNote}

@@ -16,7 +16,7 @@ import { useGetPaymentAccounts } from "@/hooks/payments/useGetPaymentAccounts";
 type FormMode = "create" | "edit";
 export type ViewMode = "invoice-details" | "layout" | "theme";
 
-interface InvoiceFormState {
+export interface InvoiceFormState {
   formMode: FormMode;
   viewMode?: ViewMode;
   invoiceId?: string;
@@ -34,6 +34,7 @@ interface InvoiceFormState {
   customNote: string;
   tax?: number; // Optional tax field
   discount?: number; // Optional discount field
+  lateFeeText?: string; // Optional late fee text field
 }
 
 type InvoiceFormAction =
@@ -107,6 +108,10 @@ type InvoiceFormAction =
       payload: string;
     }
   | {
+      type: "SET_LATE_FEE_TEXT";
+      payload: string;
+    }
+  | {
       type: "SET_TAX";
       payload: number;
     }
@@ -128,10 +133,17 @@ const initialState: InvoiceFormState = {
   invoiceNumber: undefined,
   invoiceDate: new Date(),
   paymentDueDate: null,
-  invoiceItems: [], // Initialize with an empty array
+  invoiceItems: [
+    {
+      description: "",
+      quantity: 1,
+      unitPrice: 0,
+    },
+  ], // Initialize with an empty array
   customNote: "Thank you for your trust in our services!",
   tax: 0,
   discount: 0,
+  lateFeeText: "", // Default late fee text
 };
 
 function invoiceFormReducer(
@@ -213,6 +225,11 @@ function invoiceFormReducer(
         ...state,
         customNote: action.payload,
       };
+    case "SET_LATE_FEE_TEXT":
+      return {
+        ...state,
+        lateFeeText: action.payload,
+      };
     case "SET_TAX":
       return {
         ...state,
@@ -244,6 +261,7 @@ interface InvoiceFormContextType {
   setClient: (client: Client | null) => void;
   setPaymentDueDate: (date: Date | null) => void;
   setCustomNote: (note: string) => void;
+  setLateFeeText: (text: string) => void;
   setTax: (tax: number) => void;
   setDiscount: (discount: number) => void;
   setPaymentAccount: (id: string) => void;
@@ -362,6 +380,10 @@ export function InvoiceFormProvider({ children }: InvoiceFormProviderProps) {
     dispatch({ type: "SET_PAYMENT_ACCOUNT", payload: paymentAccount });
   };
 
+  const setLateFeeText = (text: string) => {
+    dispatch({ type: "SET_LATE_FEE_TEXT", payload: text });
+  };
+
   const addInvoiceItem = (item: {
     description?: string;
     quantity?: number;
@@ -432,6 +454,7 @@ export function InvoiceFormProvider({ children }: InvoiceFormProviderProps) {
         setDiscount,
         formLoading,
         setPaymentAccount,
+        setLateFeeText,
       }}
     >
       {children}

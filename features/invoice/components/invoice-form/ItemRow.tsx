@@ -110,7 +110,7 @@ function ItemRow({ item, index }: ItemRowProps) {
         {popoverOpen && (
           <div
             ref={itemsPopoverRef}
-            className="w-full absolute top-[calc(100%+8px)] bg-white rounded-lg border shadow p-2 h-50"
+            className="w-full absolute top-[calc(100%+8px)] z-20 bg-white rounded-lg border shadow p-2 h-50"
           >
             <div className=" flex flex-col h-full">
               {isGettingItems ? (
@@ -186,12 +186,14 @@ function ItemRow({ item, index }: ItemRowProps) {
       </span>
 
       <span className="flex justify-self-center transition-all  items-center">
-        <button
-          className="text-black hover:text-red-700"
-          onClick={() => removeInvoiceItem(index)}
-        >
-          <FaRegTrashCan />
-        </button>
+        {index >= 1 && (
+          <button
+            className="text-black hover:text-red-700"
+            onClick={() => removeInvoiceItem(index)}
+          >
+            <FaRegTrashCan />
+          </button>
+        )}
       </span>
 
       {/* Client Form Dialog */}

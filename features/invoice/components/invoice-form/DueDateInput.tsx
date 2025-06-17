@@ -134,7 +134,7 @@ export function DueDateInput({
           disabled={disabled}
         >
           <SelectTrigger className="w-full border-gray-300 focus:border-black  focus:ring-black">
-            <SelectValue className="w-full py-3" placeholder={placeholder} />
+            <SelectValue className="" placeholder={placeholder} />
           </SelectTrigger>
           <SelectContent className="bg-white border-gray-200">
             {DUE_DATE_PRESETS.map((preset) => (

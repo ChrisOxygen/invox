@@ -6,6 +6,7 @@ import { useInvoiceForm } from "../../context/InvoiceFormProvider";
 import InvoiceDetails from "./InvoiceDetails";
 import InvoiceTemplate from "./InvoiceTemplate";
 import InvoiceTheme from "./InvoiceTheme";
+import InvoicePreview from "./InvoicePreview";
 
 function InvoiceEditor() {
   const { state } = useInvoiceForm();
@@ -19,7 +20,11 @@ function InvoiceEditor() {
           {viewMode === "theme" && <InvoiceTheme />}
         </ScrollArea>
       </div>
-      <div className=" w-full bg-gray-100 h-full"></div>
+      <div className=" w-full bg-gray-100 h-full">
+        <ScrollArea className="h-[calc(100vh-160px)] w-full pr-10">
+          <InvoicePreview />
+        </ScrollArea>
+      </div>
     </div>
   );
 }

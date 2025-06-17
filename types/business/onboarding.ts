@@ -48,7 +48,6 @@ export interface CompleteOnboardingRequest {
   businessInfo: BusinessFormValues;
   paymentMethods: string[];
   paymentMethodDetails: PaymentMethodDetails;
-  paymentRules: PaymentRules;
 }
 
 export interface OnboardingStep {

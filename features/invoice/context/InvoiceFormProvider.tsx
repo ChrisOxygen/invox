@@ -8,40 +8,32 @@ import React, {
   useRef,
 } from "react";
 import { useParams } from "next/navigation";
+import { Client, PaymentAccount } from "@prisma/client";
+import { UserWithBusiness } from "@/types";
+import { useUserAndBusiness } from "../hooks/useUserAndBusiness";
+import { useGetPaymentAccounts } from "@/hooks/payments/useGetPaymentAccounts";
 
 type FormMode = "create" | "edit";
-
-interface InvoiceItem {
-  id?: string;
-  description: string;
-  quantity: number;
-  unitPrice: number;
-  totalAmount: number;
-}
-
-interface ClientData {
-  id?: string;
-  name: string;
-  address: string;
-  email: string;
-}
-
-interface InvoiceData {
-  invoiceDate: Date;
-  paymentDueDate: Date;
-  subtotal: number;
-  taxes: number;
-  finalTotal: number;
-  paymentTerms: string;
-  acceptedPaymentMethods: string;
-}
+export type ViewMode = "invoice-details" | "layout" | "theme";
 
 interface InvoiceFormState {
   formMode: FormMode;
+  viewMode?: ViewMode;
   invoiceId?: string;
-  invoiceData: InvoiceData;
-  clientData: ClientData;
-  invoiceItems: InvoiceItem[];
+  businessDetails: UserWithBusiness | null; // User with business details
+  paymentAccount: PaymentAccount | null; // Optional payment account field
+  client?: Client | null;
+  invoiceNumber?: string;
+  invoiceDate?: Date;
+  paymentDueDate: Date | null;
+  invoiceItems?: {
+    description?: string;
+    quantity?: number;
+    unitPrice?: number;
+  }[];
+  customNote: string;
+  tax?: number; // Optional tax field
+  discount?: number; // Optional discount field
 }
 
 type InvoiceFormAction =
@@ -50,38 +42,77 @@ type InvoiceFormAction =
       payload: FormMode;
     }
   | {
+      type: "SET_VIEW_MODE";
+      payload: ViewMode;
+    }
+  | {
       type: "SET_INVOICE_ID";
       payload: string;
     }
   | {
-      type: "SET_INVOICE_DATA";
-      payload: Partial<InvoiceData>;
+      type: "SET_BUSINESS_DETAILS";
+      payload: UserWithBusiness;
     }
   | {
-      type: "SET_CLIENT_DATA";
-      payload: Partial<ClientData>;
+      type: "SET_PAYMENT_ACCOUNT";
+      payload: PaymentAccount;
+    }
+  | {
+      type: "SET_CLIENT";
+      payload: Client | null;
+    }
+  | {
+      type: "SET_INVOICE_NUMBER";
+      payload: string;
+    }
+  | {
+      type: "SET_INVOICE_DATE";
+      payload: Date;
+    }
+  | {
+      type: "SET_PAYMENT_DUE_DATE";
+      payload: Date | null;
     }
   | {
       type: "SET_INVOICE_ITEMS";
-      payload: InvoiceItem[];
+      payload: {
+        description?: string;
+        quantity?: number;
+        unitPrice?: number;
+      }[];
     }
   | {
       type: "ADD_INVOICE_ITEM";
-      payload: InvoiceItem;
+      payload: {
+        description?: string;
+        quantity?: number;
+        unitPrice?: number;
+      };
+    }
+  | {
+      type: "REMOVE_INVOICE_ITEM";
+      payload: number; // Index of the item to remove
     }
   | {
       type: "UPDATE_INVOICE_ITEM";
       payload: {
         index: number;
-        item: Partial<InvoiceItem>;
+        description?: string;
+        quantity?: number;
+        unitPrice?: number;
       };
     }
   | {
-      type: "REMOVE_INVOICE_ITEM";
-      payload: number; // index
+      type: "SET_CUSTOM_NOTE";
+      payload: string;
     }
   | {
-      type: "CALCULATE_TOTALS";
+      type: "SET_TAX";
+      payload: number;
+    }
+  | {
+      type: "SET_DISCOUNT";
+      payload: number;
     }
   | {
       type: "RESET_FORM";
@@ -89,22 +120,18 @@ type InvoiceFormAction =
 
 const initialState: InvoiceFormState = {
   formMode: "create",
+  viewMode: "invoice-details", // Default view mode
   invoiceId: undefined,
-  invoiceData: {
-    invoiceDate: new Date(),
-    paymentDueDate: new Date(),
-    subtotal: 0,
-    taxes: 0,
-    finalTotal: 0,
-    paymentTerms: "",
-    acceptedPaymentMethods: "",
-  },
-  clientData: {
-    name: "",
-    address: "",
-    email: "",
-  },
-  invoiceItems: [],
+  businessDetails: null,
+  paymentAccount: null, // Initialize with null
+  client: null,
+  invoiceNumber: undefined,
+  invoiceDate: new Date(),
+  paymentDueDate: null,
+  invoiceItems: [], // Initialize with an empty array
+  customNote: "Thank you for your trust in our services!",
+  tax: 0,
+  discount: 0,
 };
 
 function invoiceFormReducer(
@@ -117,26 +144,45 @@ function invoiceFormReducer(
         ...state,
         formMode: action.payload,
       };
+    case "SET_VIEW_MODE":
+      return {
+        ...state,
+        viewMode: action.payload,
+      };
     case "SET_INVOICE_ID":
       return {
         ...state,
         invoiceId: action.payload,
       };
-    case "SET_INVOICE_DATA":
+    case "SET_BUSINESS_DETAILS":
       return {
         ...state,
-        invoiceData: {
-          ...state.invoiceData,
-          ...action.payload,
-        },
+        businessDetails: action.payload,
       };
-    case "SET_CLIENT_DATA":
+    case "SET_PAYMENT_ACCOUNT":
       return {
         ...state,
-        clientData: {
-          ...state.clientData,
-          ...action.payload,
-        },
+        paymentAccount: action.payload,
+      };
+    case "SET_CLIENT":
+      return {
+        ...state,
+        client: action.payload,
+      };
+    case "SET_INVOICE_NUMBER":
+      return {
+        ...state,
+        invoiceNumber: action.payload,
+      };
+    case "SET_INVOICE_DATE":
+      return {
+        ...state,
+        invoiceDate: action.payload,
+      };
+    case "SET_PAYMENT_DUE_DATE":
+      return {
+        ...state,
+        paymentDueDate: action.payload,
       };
     case "SET_INVOICE_ITEMS":
       return {
@@ -146,43 +192,43 @@ function invoiceFormReducer(
     case "ADD_INVOICE_ITEM":
       return {
         ...state,
-        invoiceItems: [...state.invoiceItems, action.payload],
-      };
-    case "UPDATE_INVOICE_ITEM":
-      return {
-        ...state,
-        invoiceItems: state.invoiceItems.map((item, index) =>
-          index === action.payload.index
-            ? { ...item, ...action.payload.item }
-            : item
-        ),
+        invoiceItems: [...(state.invoiceItems || []), action.payload],
       };
     case "REMOVE_INVOICE_ITEM":
       return {
         ...state,
-        invoiceItems: state.invoiceItems.filter(
+        invoiceItems: state.invoiceItems?.filter(
           (_, index) => index !== action.payload
         ),
       };
-    case "CALCULATE_TOTALS":
-      const subtotal = state.invoiceItems.reduce(
-        (sum, item) => sum + item.totalAmount,
-        0
-      );
-      const finalTotal = subtotal + state.invoiceData.taxes;
+    case "UPDATE_INVOICE_ITEM":
       return {
         ...state,
-        invoiceData: {
-          ...state.invoiceData,
-          subtotal,
-          finalTotal,
-        },
+        invoiceItems: state.invoiceItems?.map((item, index) =>
+          index === action.payload.index ? { ...item, ...action.payload } : item
+        ),
+      };
+    case "SET_CUSTOM_NOTE":
+      return {
+        ...state,
+        customNote: action.payload,
+      };
+    case "SET_TAX":
+      return {
+        ...state,
+        tax: action.payload,
+      };
+    case "SET_DISCOUNT":
+      return {
+        ...state,
+        discount: action.payload,
       };
     case "RESET_FORM":
       return {
         ...initialState,
         formMode: state.formMode,
         invoiceId: state.invoiceId,
+        client: state.client,
       };
     default:
       return state;
@@ -192,14 +238,32 @@ function invoiceFormReducer(
 interface InvoiceFormContextType {
   state: InvoiceFormState;
   dispatch: React.Dispatch<InvoiceFormAction>;
-  // Helper functions
-  updateInvoiceData: (data: Partial<InvoiceData>) => void;
-  updateClientData: (data: Partial<ClientData>) => void;
-  addInvoiceItem: () => void;
-  updateInvoiceItem: (index: number, item: Partial<InvoiceItem>) => void;
-  removeInvoiceItem: (index: number) => void;
-  calculateTotals: () => void;
+  setViewMode: (viewMode: ViewMode) => void;
+
+  // Convenience methods for controlled components
+  setClient: (client: Client | null) => void;
+  setPaymentDueDate: (date: Date | null) => void;
+  setCustomNote: (note: string) => void;
+  setTax: (tax: number) => void;
+  setDiscount: (discount: number) => void;
+  setPaymentAccount: (id: string) => void;
   resetForm: () => void;
+  formLoading: boolean;
+
+  addInvoiceItem: (item: {
+    description?: string;
+    quantity?: number;
+    unitPrice?: number;
+  }) => void;
+  removeInvoiceItem: (index: number) => void;
+  updateInvoiceItem: (
+    index: number,
+    updatedItem: { description?: string; quantity?: number; unitPrice?: number }
+  ) => void;
+
+  // Validation methods
+  validateForm: () => boolean;
+  getValidationErrors: () => string[];
 }
 
 const InvoiceFormContext = createContext<InvoiceFormContextType | undefined>(
@@ -214,6 +278,43 @@ export function InvoiceFormProvider({ children }: InvoiceFormProviderProps) {
   const [state, dispatch] = useReducer(invoiceFormReducer, initialState);
   const params = useParams();
   const hasInitialized = useRef(false);
+
+  const { data, isPending: gettingBusinessDetails } = useUserAndBusiness();
+  const { paymentAccounts, isPending: gettingPaymentAccounts } =
+    useGetPaymentAccounts();
+
+  useEffect(() => {
+    console.log(
+      "usereffect fired...........",
+      data,
+      gettingBusinessDetails,
+      paymentAccounts,
+      gettingPaymentAccounts
+    );
+    if (
+      data &&
+      !gettingBusinessDetails &&
+      paymentAccounts &&
+      !gettingPaymentAccounts
+    ) {
+      const defaultPaymentAccount = paymentAccounts.find(
+        (account) => account.isDefault
+      );
+      dispatch({
+        type: "SET_BUSINESS_DETAILS",
+        payload: data,
+      });
+      console.log("Business Details:", data);
+      console.log("Payment Accounts:", paymentAccounts);
+
+      if (defaultPaymentAccount) {
+        dispatch({
+          type: "SET_PAYMENT_ACCOUNT",
+          payload: defaultPaymentAccount,
+        });
+      }
+    }
+  }, [data, gettingBusinessDetails, paymentAccounts, gettingPaymentAccounts]);
 
   useEffect(() => {
     if (hasInitialized.current) return;
@@ -235,70 +336,102 @@ export function InvoiceFormProvider({ children }: InvoiceFormProviderProps) {
 
     hasInitialized.current = true;
   }, [params]);
-
-  // Helper functions
-  const updateInvoiceData = (data: Partial<InvoiceData>) => {
-    dispatch({ type: "SET_INVOICE_DATA", payload: data });
+  const resetForm = () => {
+    dispatch({ type: "RESET_FORM" });
   };
 
-  const updateClientData = (data: Partial<ClientData>) => {
-    dispatch({ type: "SET_CLIENT_DATA", payload: data });
+  const setClient = (client: Client | null) => {
+    dispatch({ type: "SET_CLIENT", payload: client });
   };
 
-  const addInvoiceItem = () => {
-    const newItem: InvoiceItem = {
-      description: "",
-      quantity: 1,
-      unitPrice: 0,
-      totalAmount: 0,
-    };
-    dispatch({ type: "ADD_INVOICE_ITEM", payload: newItem });
+  const setPaymentDueDate = (date: Date | null) => {
+    dispatch({ type: "SET_PAYMENT_DUE_DATE", payload: date });
+  };
+  const setCustomNote = (note: string) => {
+    dispatch({ type: "SET_CUSTOM_NOTE", payload: note });
   };
 
-  const updateInvoiceItem = (index: number, item: Partial<InvoiceItem>) => {
-    // Calculate totalAmount if quantity or unitPrice changes
-    const updatedItem = { ...item };
-    if (item.quantity !== undefined || item.unitPrice !== undefined) {
-      const currentItem = state.invoiceItems[index];
-      const quantity = item.quantity ?? currentItem.quantity;
-      const unitPrice = item.unitPrice ?? currentItem.unitPrice;
-      updatedItem.totalAmount = quantity * unitPrice;
+  const setViewMode = (viewMode: ViewMode) => {
+    dispatch({ type: "SET_VIEW_MODE", payload: viewMode });
+  };
+  const setPaymentAccount = (id: string) => {
+    const paymentAccount = paymentAccounts.find((account) => account.id === id);
+    if (!paymentAccount) {
+      return;
     }
+    dispatch({ type: "SET_PAYMENT_ACCOUNT", payload: paymentAccount });
+  };
 
-    dispatch({
-      type: "UPDATE_INVOICE_ITEM",
-      payload: { index, item: updatedItem },
-    });
-
-    // Recalculate totals after item update
-    setTimeout(() => calculateTotals(), 0);
+  const addInvoiceItem = (item: {
+    description?: string;
+    quantity?: number;
+    price?: number;
+  }) => {
+    dispatch({ type: "ADD_INVOICE_ITEM", payload: item });
   };
 
   const removeInvoiceItem = (index: number) => {
     dispatch({ type: "REMOVE_INVOICE_ITEM", payload: index });
-    setTimeout(() => calculateTotals(), 0);
   };
 
-  const calculateTotals = () => {
-    dispatch({ type: "CALCULATE_TOTALS" });
+  const updateInvoiceItem = (
+    index: number,
+    updatedItem: { description?: string; quantity?: number; price?: number }
+  ) => {
+    dispatch({
+      type: "UPDATE_INVOICE_ITEM",
+      payload: { index, ...updatedItem },
+    });
   };
 
-  const resetForm = () => {
-    dispatch({ type: "RESET_FORM" });
+  const setTax = (tax: number) => {
+    dispatch({ type: "SET_TAX", payload: tax });
   };
+  const setDiscount = (discount: number) => {
+    dispatch({ type: "SET_DISCOUNT", payload: discount });
+  };
+
+  // Validation methods
+  const getValidationErrors = (): string[] => {
+    const errors: string[] = [];
+
+    if (!state.client) {
+      errors.push("Please select a client");
+    }
+
+    if (!state.paymentDueDate) {
+      errors.push("Please set a payment due date");
+    }
+
+    // Additional validation can be added here
+    return errors;
+  };
+
+  const validateForm = (): boolean => {
+    return getValidationErrors().length === 0;
+  };
+
+  const formLoading = gettingBusinessDetails || gettingPaymentAccounts;
 
   return (
     <InvoiceFormContext.Provider
       value={{
         state,
         dispatch,
-        updateInvoiceData,
-        updateClientData,
-        addInvoiceItem,
-        updateInvoiceItem,
-        removeInvoiceItem,
-        calculateTotals,
+        setClient,
+        setPaymentDueDate,
+        setCustomNote,
         resetForm,
+        validateForm,
+        getValidationErrors,
+        setViewMode,
+        addInvoiceItem,
+        removeInvoiceItem,
+        updateInvoiceItem,
+        setTax,
+        setDiscount,
+        formLoading,
+        setPaymentAccount,
       }}
     >
       {children}

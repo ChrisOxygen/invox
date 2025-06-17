@@ -87,7 +87,7 @@ export function InvoiceItemsForm({
             key={field.id}
             className=" flex flex-col gap-3 pb-6 border-b border-black/40 last:border-b-0"
           >
-            {/* Description - Full width */}
+            {/* Description - Full width */}{" "}
             <FormField
               control={control}
               name={`items.${index}.description`}
@@ -100,6 +100,7 @@ export function InvoiceItemsForm({
                       onChange={field.onChange}
                       disabled={disabled}
                       placeholder="Select or type description..."
+                      itemIndex={index}
                     />
                   </FormControl>
                   <FormMessage />
@@ -229,6 +230,7 @@ export function InvoiceItemsForm({
 
               {/* Description */}
               <div className="flex items-center">
+                {" "}
                 <FormField
                   control={control}
                   name={`items.${index}.description`}
@@ -240,6 +242,7 @@ export function InvoiceItemsForm({
                           onChange={field.onChange}
                           disabled={disabled}
                           placeholder="Select or type description..."
+                          itemIndex={index}
                         />
                       </FormControl>
                       <FormMessage />

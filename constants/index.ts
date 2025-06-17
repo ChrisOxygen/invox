@@ -99,3 +99,46 @@ export const PAYMENT_METHODS = [
     description: "Local bank transfers",
   },
 ];
+
+export const DUE_DATE_PRESETS = [
+  {
+    value: "net_15",
+    label: "Net 15",
+    description: "Payment due in 15 days",
+  },
+  {
+    value: "net_30",
+    label: "Net 30",
+    description: "Payment due in 30 days",
+  },
+  {
+    value: "net_45",
+    label: "Net 45",
+    description: "Payment due in 45 days",
+  },
+  {
+    value: "net_60",
+    label: "Net 60",
+    description: "Payment due in 60 days",
+  },
+  {
+    value: "due_on_receipt",
+    label: "Due on Receipt",
+    description: "Payment due immediately upon receipt",
+  },
+  {
+    value: "due_end_of_month",
+    label: "Due End of Month",
+    description: "Payment due at the end of current month",
+  },
+  {
+    value: "due_end_of_next_month",
+    label: "Due End of Next Month",
+    description: "Payment due at the end of next month",
+  },
+  {
+    value: "custom",
+    label: "Custom Date",
+    description: "Choose a specific due date",
+  },
+];

@@ -1,6 +1,7 @@
 "use client";
 
 import InBoxLoader from "@/components/InBoxLoader";
+import FinalStep from "@/features/onboarding/components/onboarding-steps/FinalStep";
 import Step1 from "@/features/onboarding/components/onboarding-steps/Step1";
 import Step2 from "@/features/onboarding/components/onboarding-steps/Step2";
 import Step3 from "@/features/onboarding/components/onboarding-steps/Step3";
@@ -62,6 +63,7 @@ function UserOnboardingPage() {
             {currentStep === 5 && <Step5 />}
             {currentStep === 6 && <Step6 />}
             {currentStep === 7 && <Step7 />}
+            {currentStep === 8 && <FinalStep />}
           </div>
         </div>
       </div>

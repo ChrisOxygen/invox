@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from "react";
 import { CalendarDays } from "lucide-react";
-import { format, addDays, endOfMonth, addMonths, startOfDay } from "date-fns";
+import { format } from "date-fns";
 
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -19,6 +19,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
+import { DUE_DATE_PRESETS } from "@/constants";
+import { calculateDueDate } from "@/utils";
 
 interface DueDateSelectorProps {
   value: Date | null;
@@ -26,55 +28,6 @@ interface DueDateSelectorProps {
   disabled?: boolean;
   placeholder?: string;
 }
-
-type DueDatePreset = {
-  value: string;
-  label: string;
-  description: string;
-};
-
-const DUE_DATE_PRESETS: DueDatePreset[] = [
-  {
-    value: "net_15",
-    label: "Net 15",
-    description: "Payment due in 15 days",
-  },
-  {
-    value: "net_30",
-    label: "Net 30",
-    description: "Payment due in 30 days",
-  },
-  {
-    value: "net_45",
-    label: "Net 45",
-    description: "Payment due in 45 days",
-  },
-  {
-    value: "net_60",
-    label: "Net 60",
-    description: "Payment due in 60 days",
-  },
-  {
-    value: "due_on_receipt",
-    label: "Due on Receipt",
-    description: "Payment due immediately upon receipt",
-  },
-  {
-    value: "due_end_of_month",
-    label: "Due End of Month",
-    description: "Payment due at the end of current month",
-  },
-  {
-    value: "due_end_of_next_month",
-    label: "Due End of Next Month",
-    description: "Payment due at the end of next month",
-  },
-  {
-    value: "custom",
-    label: "Custom Date",
-    description: "Choose a specific due date",
-  },
-];
 
 export function DueDateInput({
   value,
@@ -124,31 +77,7 @@ export function DueDateInput({
   }, [value, findMatchingPreset]);
 
   // Calculate due date based on preset selection
-  const calculateDueDate = (
-    preset: string,
-    baseDate: Date = new Date()
-  ): Date => {
-    const base = startOfDay(baseDate);
-
-    switch (preset) {
-      case "net_15":
-        return addDays(base, 15);
-      case "net_30":
-        return addDays(base, 30);
-      case "net_45":
-        return addDays(base, 45);
-      case "net_60":
-        return addDays(base, 60);
-      case "due_on_receipt":
-        return base;
-      case "due_end_of_month":
-        return endOfMonth(base);
-      case "due_end_of_next_month":
-        return endOfMonth(addMonths(base, 1));
-      default:
-        return base;
-    }
-  }; // Handle preset selection
+  // Handle preset selection
   const handlePresetChange = (presetValue: string) => {
     if (presetValue === "custom") {
       setMode("custom");
@@ -204,8 +133,8 @@ export function DueDateInput({
           onValueChange={handlePresetChange}
           disabled={disabled}
         >
-          <SelectTrigger className="w-full border-gray-300 focus:border-black focus:ring-black">
-            <SelectValue placeholder={placeholder} />
+          <SelectTrigger className="w-full border-gray-300 focus:border-black  focus:ring-black">
+            <SelectValue className="w-full py-3" placeholder={placeholder} />
           </SelectTrigger>
           <SelectContent className="bg-white border-gray-200">
             {DUE_DATE_PRESETS.map((preset) => (
@@ -214,7 +143,7 @@ export function DueDateInput({
                 value={preset.value}
                 className="hover:bg-gray-50 focus:bg-gray-50"
               >
-                <div className="flex flex-col">
+                <div className="flex flex-col items-start">
                   <span className="font-medium text-gray-900">
                     {preset.label}
                   </span>

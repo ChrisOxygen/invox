@@ -342,8 +342,7 @@ export function OnboardingProvider({ children }: OnboardingProviderProps) {
       !state.currency ||
       !state.businessInfo ||
       !state.paymentMethods ||
-      !state.paymentMethodDetails ||
-      !state.paymentRules
+      !state.paymentMethodDetails
     ) {
       console.error("Missing required onboarding data");
       toast.error("Please complete all required fields before proceeding.");
@@ -352,12 +351,10 @@ export function OnboardingProvider({ children }: OnboardingProviderProps) {
 
     // Call the mutation with all collected data
     completeOnboardingMutation({
-      // Remove country from here
       currency: state.currency,
       businessInfo: state.businessInfo,
       paymentMethods: state.paymentMethods,
       paymentMethodDetails: state.paymentMethodDetails,
-      paymentRules: state.paymentRules,
     });
   };
 

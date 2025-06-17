@@ -276,11 +276,6 @@ export async function _completeOnboardingWithData(data: {
   businessInfo: BusinessFormValues;
   paymentMethods: string[];
   paymentMethodDetails: PaymentMethodDetails;
-  paymentRules: {
-    paymentTerms: string;
-    lateFee: string;
-    invoiceNotes: string;
-  };
 }): Promise<BasicResponse> {
   try {
     const session = await auth();
@@ -318,9 +313,6 @@ export async function _completeOnboardingWithData(data: {
           state: data.businessInfo.state,
           zipCode: data.businessInfo.zipCode,
           phone: data.businessInfo.phone,
-          defaultPaymentTerms: data.paymentRules.paymentTerms,
-          defaultLateFee: data.paymentRules.lateFee,
-          defaultInvoiceNotes: data.paymentRules.invoiceNotes,
         },
       });
 

@@ -2,7 +2,7 @@
 
 import InBoxLoader from "@/components/InBoxLoader";
 import DashboardLayoutWI from "@/features/dashboard/components/DashboardLayoutWI";
-import CreateInvoiceLayout from "@/features/invoice/components/create-invoice/CreateInvoiceLayout";
+import InvoiceLayout from "@/features/invoice/components/InvoiceLayout";
 import { useUser } from "@/hooks/useUser";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -48,7 +48,7 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
   }
 
   if (isInvoiceFormRoute) {
-    return <CreateInvoiceLayout>{children}</CreateInvoiceLayout>;
+    return <InvoiceLayout>{children}</InvoiceLayout>;
   }
 
   // If it's not the create invoice route, we render the main dashboard layout

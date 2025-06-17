@@ -22,15 +22,7 @@ enum InvoiceStatus {
   CANCELLED
 }
 
-enum PaymentTerms {
-  NET_15
-  NET_30
-  NET_45
-  NET_60
-  DUE_ON_RECEIPT
-  DUE_END_OF_MONTH
-  DUE_END_OF_NEXT_MONTH
-}
+
 
 model User {
   id             String          @id @default(auto()) @map("_id") @db.ObjectId
@@ -155,10 +147,6 @@ model Business {
   // Branding & preferences
   logo String? // URL/path to logo image
 
-  // Payment defaults
-  defaultPaymentTerms PaymentTerms? // Use enum instead of string
-  defaultLateFee      String? // "1.5_percent", "25_flat", "none"
-  defaultInvoiceNotes String? // "Thank you for your business..."
 
   user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   invoices Invoice[]
@@ -192,7 +180,7 @@ model Invoice {
   paymentDueDate         DateTime
   subtotal               Float // Note: Consider using cents/integer for financial precision
   taxes                  Float // Note: Consider using cents/integer for financial precision
-  paymentTerms           PaymentTerms
+  
   acceptedPaymentMethods String
   status                 InvoiceStatus @default(DRAFT)
 

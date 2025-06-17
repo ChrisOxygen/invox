@@ -1,11 +1,17 @@
-import InvoiceFormDemo from "@/features/invoice/components/InvoiceFormDemo";
-import Template1 from "@/features/invoice/components/templates/Template1";
+import InvoiceEditor from "@/features/invoice/components/invoice-form/InvoiceEditor";
+import InvoiceFormHeader from "@/features/invoice/components/InvoiceFormHeader";
+import InvoiceFormSideBar from "@/features/invoice/components/InvoiceFormSideBar";
 
 function CreateInvoicePage() {
   return (
-    <div className=" grid grid-cols-[minmax(350px,550px)_1fr] grid-rows-1 overflow-clip h-full p-2 ">
-      <InvoiceFormDemo />
-      <Template1 />
+    <div className=" h-screen w-full grid grid-rows-[80px_1fr]">
+      <InvoiceFormHeader />
+      <div className=" w-full h-full grid grid-cols-[80px_1fr]">
+        <InvoiceFormSideBar />
+        <div className="w-full h-[calc(100vh-80px)]">
+          <InvoiceEditor />
+        </div>
+      </div>
     </div>
   );
 }

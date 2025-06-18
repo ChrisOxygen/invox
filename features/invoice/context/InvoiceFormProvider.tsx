@@ -12,6 +12,7 @@ import { Client, PaymentAccount } from "@prisma/client";
 import { UserWithBusiness } from "@/types";
 import { useUserAndBusiness } from "../hooks/useUserAndBusiness";
 import { useGetPaymentAccounts } from "@/hooks/payments/useGetPaymentAccounts";
+import { useDebounce } from "@/hooks/useDebounce";
 
 type FormMode = "create" | "edit";
 export type ViewMode = "invoice-details" | "layout" | "theme";
@@ -294,12 +295,18 @@ interface InvoiceFormProviderProps {
 
 export function InvoiceFormProvider({ children }: InvoiceFormProviderProps) {
   const [state, dispatch] = useReducer(invoiceFormReducer, initialState);
-  const params = useParams();
   const hasInitialized = useRef(false);
+
+  const params = useParams();
 
   const { data, isPending: gettingBusinessDetails } = useUserAndBusiness();
   const { paymentAccounts, isPending: gettingPaymentAccounts } =
     useGetPaymentAccounts();
+
+  // Auto-save functionality with 30-second debounce
+  const debouncedState = useDebounce(state, 30000); // 30 seconds
+
+  const formLoading = gettingBusinessDetails || gettingPaymentAccounts;
 
   useEffect(() => {
     console.log(
@@ -354,6 +361,23 @@ export function InvoiceFormProvider({ children }: InvoiceFormProviderProps) {
 
     hasInitialized.current = true;
   }, [params]);
+
+  // Auto-save effect that triggers when debounced state changes
+  useEffect(() => {
+    // Skip auto-save on initial load or if form is still loading
+    if (!hasInitialized.current || formLoading) {
+      return;
+    }
+
+    // Skip auto-save if no meaningful data to save
+    if (!debouncedState.client && !debouncedState.invoiceItems?.length) {
+      return;
+    }
+
+    // Trigger auto-save
+    saveInvoiceData(debouncedState);
+  }, [debouncedState, formLoading]);
+
   const resetForm = () => {
     dispatch({ type: "RESET_FORM" });
   };
@@ -433,7 +457,11 @@ export function InvoiceFormProvider({ children }: InvoiceFormProviderProps) {
     return getValidationErrors().length === 0;
   };
 
-  const formLoading = gettingBusinessDetails || gettingPaymentAccounts;
+  // Dummy save function (placeholder for actual save implementation)
+  const saveInvoiceData = (invoiceState: InvoiceFormState) => {
+    console.log("console saving data", invoiceState);
+    // TODO: Implement actual save logic here
+  };
 
   return (
     <InvoiceFormContext.Provider

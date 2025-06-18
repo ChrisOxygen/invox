@@ -21,7 +21,7 @@ function InvoiceEditor() {
         </ScrollArea>
       </div>
       <div className=" w-full bg-gray-100 h-full">
-        <ScrollArea className="h-[calc(100vh-160px)] w-full pr-10">
+        <ScrollArea className="h-[calc(100vh-160px)] w-fullpr-10">
           <InvoicePreview />
         </ScrollArea>
       </div>

@@ -13,8 +13,8 @@ export const DASHBOARD_MAIN_NAV = [
     icon: HiOutlineHome,
   },
   {
-    title: "Customers",
-    url: "/app/customers",
+    title: "Clients",
+    url: "/app/clients",
     icon: TbUsers,
   },
   {

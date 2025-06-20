@@ -77,8 +77,28 @@ export async function _createClient(
   }
 }
 
-// READ - Get all clients for current user
-export async function _getClients(): Promise<ApiResponse<Client[]>> {
+// READ - Get all clients for current user with pagination and search
+interface GetClientsParams {
+  page?: number;
+  limit?: number;
+  search?: string;
+}
+
+interface PaginationInfo {
+  currentPage: number;
+  totalPages: number;
+  totalItems: number;
+  itemsPerPage: number;
+}
+
+interface GetClientsResponse {
+  clients: Client[];
+  pagination: PaginationInfo;
+}
+
+export async function _getClients(
+  params: GetClientsParams = {}
+): Promise<ApiResponse<GetClientsResponse>> {
   try {
     const session = await auth();
     if (!session || !session.user?.id) {
@@ -88,13 +108,49 @@ export async function _getClients(): Promise<ApiResponse<Client[]>> {
       };
     }
 
+    const { page = 1, limit = 10, search = "" } = params;
+    const skip = (page - 1) * limit;
+
+    // Build the where clause
+    const whereClause = {
+      userId: session.user.id,
+      ...(search && {
+        OR: [
+          {
+            BusinessName: {
+              contains: search,
+              mode: "insensitive" as const,
+            },
+          },
+          {
+            email: {
+              contains: search,
+              mode: "insensitive" as const,
+            },
+          },
+          {
+            contactPersonName: {
+              contains: search,
+              mode: "insensitive" as const,
+            },
+          },
+        ],
+      }),
+    };
+
+    // Get total count for pagination
+    const totalItems = await prisma.client.count({
+      where: whereClause,
+    });
+
+    // Get clients with pagination
     const clients = await prisma.client.findMany({
-      where: {
-        userId: session.user.id,
-      },
+      where: whereClause,
       orderBy: {
         BusinessName: "asc",
       },
+      skip,
+      take: limit,
       include: {
         _count: {
           select: {
@@ -104,10 +160,22 @@ export async function _getClients(): Promise<ApiResponse<Client[]>> {
       },
     });
 
+    const totalPages = Math.ceil(totalItems / limit);
+
+    const pagination: PaginationInfo = {
+      currentPage: page,
+      totalPages,
+      totalItems,
+      itemsPerPage: limit,
+    };
+
     return {
       success: true,
       message: "Clients retrieved successfully",
-      data: clients,
+      data: {
+        clients,
+        pagination,
+      },
     };
   } catch (error) {
     console.error("Error fetching clients:", error);

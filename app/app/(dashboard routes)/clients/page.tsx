@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -32,27 +33,29 @@ import {
   FiEdit2,
   FiTrash2,
   FiMoreHorizontal,
+  FiUser,
+  FiMail,
+  FiEye,
 } from "react-icons/fi";
-import { useGetItems } from "@/features/items/hooks";
+import { useGetClients } from "@/features/clients/hooks";
+import { useDeleteClient } from "@/features/clients/hooks/useDeleteClient";
 import { useDebounce } from "@/hooks/useDebounce";
-import { Item } from "@prisma/client";
-import {
-  ItemForm,
-  ItemPreviewDialog,
-  DeleteConfirmationDialog,
-} from "@/features/items/components";
+import { Client } from "@prisma/client";
+import { ClientForm } from "@/features/clients/components/ClientForm";
+import AppDialog from "@/components/AppDialog";
 
-const ITEMS_PER_PAGE = 10;
+const CLIENTS_PER_PAGE = 10;
 
-type DialogState = "preview" | "form" | "delete" | null;
+type DialogState = "form" | "delete" | null;
 type FormMode = "create" | "edit";
 
-function ItemsPage() {
+function ClientsPage() {
+  const router = useRouter();
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [dialogState, setDialogState] = useState<DialogState>(null);
   const [formMode, setFormMode] = useState<FormMode>("create");
-  const [selectedItem, setSelectedItem] = useState<Item | null>(null);
+  const [selectedClient, setSelectedClient] = useState<Client | null>(null);
 
   // Debounce search term to avoid too many API calls
   const debouncedSearchTerm = useDebounce(searchTerm, 300);
@@ -61,84 +64,71 @@ function ItemsPage() {
   useEffect(() => {
     setCurrentPage(1);
   }, [debouncedSearchTerm]);
-  // Fetch items using the updated hook with pagination
+
+  // Fetch clients using the updated hook with pagination
   const {
-    items,
+    clients,
     pagination,
-    isPending: gettingItems,
+    isPending: gettingClients,
     isError,
     error,
-  } = useGetItems({
+  } = useGetClients({
     page: currentPage,
-    limit: ITEMS_PER_PAGE,
+    limit: CLIENTS_PER_PAGE,
     search: debouncedSearchTerm,
   });
+
+  // Delete client hook
+  const { deleteClient, isLoading: isDeleting } = useDeleteClient();
+
   // Handle search input changes
   const handleSearch = (value: string) => {
     setSearchTerm(value);
-    // The useDebounce hook and useEffect will handle the rest
   };
+
   // Dialog handlers
-  const handleAddItem = () => {
-    setSelectedItem(null);
+  const handleAddClient = () => {
+    setSelectedClient(null);
     setFormMode("create");
     setDialogState("form");
   };
-
-  const handleEditItem = (id: string) => {
-    const item = items.find((item) => item.id === id);
-    if (item) {
-      setSelectedItem(item);
+  const handleEditClient = (id: string) => {
+    const client = clients.find((c: Client) => c.id === id);
+    if (client) {
+      setSelectedClient(client);
       setFormMode("edit");
       setDialogState("form");
     }
   };
 
-  const handleDeleteItem = (id: string) => {
-    const item = items.find((item) => item.id === id);
-    if (item) {
-      setSelectedItem(item);
+  const handleDeleteClient = (id: string) => {
+    const client = clients.find((c: Client) => c.id === id);
+    if (client) {
+      setSelectedClient(client);
       setDialogState("delete");
     }
   };
 
-  const handleRowClick = (item: Item) => {
-    setSelectedItem(item);
-    setDialogState("preview");
-  };
-
-  const handleSaveItem = (item: Item) => {
-    console.log("Item saved:", item);
-    // The hooks handle the actual saving and updating the cache
-    setDialogState(null);
-    setSelectedItem(null);
+  const handleViewClient = (id: string) => {
+    router.push(`/app/clients/${id}`);
   };
 
   const handleDeleteConfirm = () => {
-    // The DeleteConfirmationDialog handles the actual deletion
-    setDialogState(null);
-    setSelectedItem(null);
+    if (selectedClient) {
+      deleteClient(selectedClient.id, {
+        onSuccess: () => {
+          setDialogState(null);
+          setSelectedClient(null);
+        },
+      });
+    }
   };
 
   const handleDialogClose = () => {
     setDialogState(null);
-    setSelectedItem(null);
+    setSelectedClient(null);
   };
 
-  const handleEditFromPreview = (item: Item) => {
-    setSelectedItem(item);
-    setFormMode("edit");
-    setDialogState("form");
-  };
-
-  // Format currency
-  const formatCurrency = (amount: number | null) => {
-    if (amount === null || amount === undefined) return "—";
-    return new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: "USD",
-    }).format(amount);
-  };
   // Generate pagination numbers
   const generatePaginationNumbers = () => {
     const pages = [];
@@ -175,53 +165,57 @@ function ItemsPage() {
     <div className="w-full h-full rounded p-6 bg-white flex flex-col space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-semibold text-black">All Items</h1>
+        <h1 className="text-2xl font-semibold text-black">All Clients</h1>
         <Button
-          onClick={handleAddItem}
+          onClick={handleAddClient}
           className="bg-black text-white hover:bg-gray-800 transition-colors duration-200"
         >
           <FiPlus className="mr-2 h-4 w-4" />
-          Add Item
+          Add Client
         </Button>
       </div>
+
       {/* Search */}
       <div className="relative max-w-md">
         <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
         <Input
-          placeholder="Search items by name or description..."
+          placeholder="Search clients by name or email..."
           value={searchTerm}
           onChange={(e) => handleSearch(e.target.value)}
           className="pl-10 border-gray-300 focus:border-black focus:ring-black"
         />
-        {gettingItems && debouncedSearchTerm && (
+        {gettingClients && debouncedSearchTerm && (
           <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
             <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-black"></div>
           </div>
         )}
       </div>
+
       {/* Content */}
       <div className="flex-1 flex flex-col">
         {isError ? (
           <div className="flex-1 flex items-center justify-center">
             <div className="text-center">
-              <p className="text-red-600 mb-2">Error loading items</p>
+              <p className="text-red-600 mb-2">Error loading clients</p>
               <p className="text-gray-500 text-sm">{error}</p>
             </div>
           </div>
-        ) : gettingItems ? (
+        ) : gettingClients ? (
           <div className="space-y-4">
             <div className="border rounded-lg">
               <div className="border-b p-4">
-                <div className="grid grid-cols-3 gap-4">
+                <div className="grid grid-cols-4 gap-4">
                   <Skeleton className="h-4 w-20" />
                   <Skeleton className="h-4 w-24" />
                   <Skeleton className="h-4 w-16" />
+                  <Skeleton className="h-4 w-12" />
                 </div>
               </div>
               {[...Array(5)].map((_, i) => (
                 <div key={i} className="p-4 border-b last:border-b-0">
-                  <div className="grid grid-cols-3 gap-4">
+                  <div className="grid grid-cols-4 gap-4">
                     <Skeleton className="h-4 w-32" />
+                    <Skeleton className="h-4 w-40" />
                     <Skeleton className="h-4 w-20" />
                     <Skeleton className="h-4 w-8" />
                   </div>
@@ -229,27 +223,27 @@ function ItemsPage() {
               ))}
             </div>
           </div>
-        ) : items.length === 0 ? (
+        ) : clients.length === 0 ? (
           <div className="flex-1 flex items-center justify-center">
             <div className="text-center">
               <div className="w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
-                <FiSearch className="h-8 w-8 text-gray-400" />
+                <FiUser className="h-8 w-8 text-gray-400" />
               </div>
               <h3 className="text-lg font-medium text-black mb-2">
-                {debouncedSearchTerm ? "No items found" : "No items yet"}
+                {debouncedSearchTerm ? "No clients found" : "No clients yet"}
               </h3>
               <p className="text-gray-500 mb-4">
                 {debouncedSearchTerm
-                  ? `No items match "${debouncedSearchTerm}"`
-                  : "Get started by adding your first item"}
+                  ? `No clients match "${debouncedSearchTerm}"`
+                  : "Get started by adding your first client"}
               </p>
               {!debouncedSearchTerm && (
                 <Button
-                  onClick={handleAddItem}
+                  onClick={handleAddClient}
                   className="bg-black text-white hover:bg-gray-800"
                 >
                   <FiPlus className="mr-2 h-4 w-4" />
-                  Add Your First Item
+                  Add Your First Client
                 </Button>
               )}
             </div>
@@ -262,37 +256,37 @@ function ItemsPage() {
                 <TableHeader>
                   <TableRow className="border-b border-gray-200">
                     <TableHead className="font-semibold text-black">
-                      Item Name
+                      Business Name
                     </TableHead>
                     <TableHead className="font-semibold text-black">
-                      Unit Price
+                      Email
+                    </TableHead>
+                    <TableHead className="font-semibold text-black">
+                      Contact Person
                     </TableHead>
                     <TableHead className="font-semibold text-black w-20">
                       Actions
                     </TableHead>
                   </TableRow>
                 </TableHeader>
+
                 <TableBody>
-                  {items.map((item: Item) => (
+                  {clients.map((client: Client) => (
                     <TableRow
-                      key={item.id}
+                      key={client.id}
                       className="hover:bg-gray-50 cursor-pointer"
-                      onClick={() => handleRowClick(item)}
+                      onClick={() => handleViewClient(client.id)}
                     >
                       <TableCell>
-                        <div>
-                          <div className="font-medium text-black">
-                            {item.name}
-                          </div>
-                          {item.description && (
-                            <div className="text-sm text-gray-500 mt-1">
-                              {item.description}
-                            </div>
-                          )}
+                        <div className="font-medium text-black">
+                          {client.BusinessName}
                         </div>
                       </TableCell>
-                      <TableCell className="font-medium">
-                        {formatCurrency(item.unitPrice)}
+                      <TableCell className="text-gray-600">
+                        {client.email}
+                      </TableCell>
+                      <TableCell className="text-gray-600">
+                        {client.contactPersonName || "—"}
                       </TableCell>
                       <TableCell>
                         <div className="flex items-center space-x-2">
@@ -301,7 +295,18 @@ function ItemsPage() {
                             size="sm"
                             onClick={(e) => {
                               e.stopPropagation();
-                              handleEditItem(item.id);
+                              handleViewClient(client.id);
+                            }}
+                            className="border-gray-300 hover:border-black hover:bg-gray-50"
+                          >
+                            <FiEye className="h-3 w-3" />
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleEditClient(client.id);
                             }}
                             className="border-gray-300 hover:border-black hover:bg-gray-50"
                           >
@@ -312,7 +317,7 @@ function ItemsPage() {
                             size="sm"
                             onClick={(e) => {
                               e.stopPropagation();
-                              handleDeleteItem(item.id);
+                              handleDeleteClient(client.id);
                             }}
                             className="border-gray-300 hover:border-red-500 hover:bg-red-50 hover:text-red-600"
                           >
@@ -325,21 +330,29 @@ function ItemsPage() {
                 </TableBody>
               </Table>
             </div>
+
             {/* Mobile Cards */}
             <div className="md:hidden space-y-4">
-              {items.map((item: Item) => (
+              {clients.map((client: Client) => (
                 <div
-                  key={item.id}
+                  key={client.id}
                   className="border rounded-lg p-4 bg-white cursor-pointer hover:bg-gray-50 transition-colors"
-                  onClick={() => handleRowClick(item)}
+                  onClick={() => handleViewClient(client.id)}
                 >
                   <div className="flex justify-between items-start mb-2">
                     <div className="flex-1">
-                      <h3 className="font-medium text-black">{item.name}</h3>
-                      {item.description && (
-                        <p className="text-sm text-gray-500 mt-1">
-                          {item.description}
-                        </p>
+                      <h3 className="font-medium text-black">
+                        {client.BusinessName}
+                      </h3>
+                      <div className="flex items-center mt-1 text-sm text-gray-500">
+                        <FiMail className="h-3 w-3 mr-1" />
+                        {client.email}
+                      </div>
+                      {client.contactPersonName && (
+                        <div className="flex items-center mt-1 text-sm text-gray-500">
+                          <FiUser className="h-3 w-3 mr-1" />
+                          {client.contactPersonName}
+                        </div>
                       )}
                     </div>
                     <Popover>
@@ -360,7 +373,19 @@ function ItemsPage() {
                             size="sm"
                             onClick={(e) => {
                               e.stopPropagation();
-                              handleEditItem(item.id);
+                              handleViewClient(client.id);
+                            }}
+                            className="w-full justify-start hover:bg-gray-100"
+                          >
+                            <FiEye className="mr-2 h-3 w-3" />
+                            View
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleEditClient(client.id);
                             }}
                             className="w-full justify-start hover:bg-gray-100"
                           >
@@ -372,7 +397,7 @@ function ItemsPage() {
                             size="sm"
                             onClick={(e) => {
                               e.stopPropagation();
-                              handleDeleteItem(item.id);
+                              handleDeleteClient(client.id);
                             }}
                             className="w-full justify-start hover:bg-red-50 hover:text-red-600"
                           >
@@ -384,14 +409,15 @@ function ItemsPage() {
                     </Popover>
                   </div>
                   <div className="flex justify-between items-center pt-2 border-t border-gray-100">
-                    <span className="text-sm text-gray-500">Unit Price:</span>
-                    <span className="font-medium text-black">
-                      {formatCurrency(item.unitPrice)}
+                    <span className="text-sm text-gray-500">Client since:</span>
+                    <span className="text-sm text-gray-600">
+                      {new Date(client.createdAt).toLocaleDateString()}
                     </span>
                   </div>
                 </div>
               ))}
             </div>
+
             {/* Pagination */}
             {pagination.totalPages > 1 && (
               <div className="mt-6 flex justify-center">
@@ -458,28 +484,67 @@ function ItemsPage() {
           </>
         )}
       </div>
+
       {/* Dialogs */}
-      <ItemPreviewDialog
-        open={dialogState === "preview"}
-        onOpenChange={handleDialogClose}
-        item={selectedItem}
-        onEdit={handleEditFromPreview}
-      />
-      <ItemForm
+      <ClientForm
         open={dialogState === "form"}
         onOpenChange={handleDialogClose}
-        item={selectedItem}
+        client={selectedClient}
         mode={formMode}
-        onSuccess={handleSaveItem}
+        onSuccess={() => {
+          setDialogState(null);
+          setSelectedClient(null);
+        }}
       />
-      <DeleteConfirmationDialog
+
+      {/* Delete Confirmation Dialog */}
+      <AppDialog
         open={dialogState === "delete"}
-        onOpenChange={handleDialogClose}
-        item={selectedItem}
-        onSuccess={handleDeleteConfirm}
-      />
+        onOpenChange={(open) => !open && handleDialogClose()}
+        title={`Delete ${selectedClient?.BusinessName}?`}
+      >
+        <div className="space-y-6">
+          <div className="text-center space-y-2">
+            <div className="mx-auto w-12 h-12 rounded-full bg-red-100 flex items-center justify-center">
+              <FiTrash2 className="h-6 w-6 text-red-600" />
+            </div>
+            <p className="text-sm text-gray-600">
+              This action cannot be undone. This will permanently delete the
+              client and remove all associated data from our servers.
+            </p>
+          </div>
+
+          <div className="flex flex-col sm:flex-row gap-3 justify-end">
+            <Button
+              variant="outline"
+              onClick={handleDialogClose}
+              disabled={isDeleting}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={handleDeleteConfirm}
+              disabled={isDeleting}
+              className="flex items-center gap-2"
+            >
+              {isDeleting ? (
+                <>
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                  Deleting...
+                </>
+              ) : (
+                <>
+                  <FiTrash2 className="h-4 w-4" />
+                  Delete Client
+                </>
+              )}
+            </Button>
+          </div>
+        </div>
+      </AppDialog>
     </div>
   );
 }
 
-export default ItemsPage;
+export default ClientsPage;

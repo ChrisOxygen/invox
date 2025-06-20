@@ -8,8 +8,24 @@ import { CreateItemInput, UpdateItemInput } from "@/types/schemas/item";
 
 const prisma = new PrismaClient();
 
-// Get all items for the current user
-export async function _getItems(): Promise<ApiResponse<Item[]>> {
+// Get all items for the current user with pagination
+export async function _getItems(
+  page: number = 1,
+  limit: number = 10,
+  search?: string
+): Promise<
+  ApiResponse<{
+    items: Item[];
+    pagination: {
+      page: number;
+      limit: number;
+      total: number;
+      totalPages: number;
+      hasNext: boolean;
+      hasPrev: boolean;
+    };
+  }>
+> {
   try {
     const session = await auth();
     if (!session || !session.user?.id) {
@@ -17,17 +33,65 @@ export async function _getItems(): Promise<ApiResponse<Item[]>> {
         success: false,
         message: "User not authenticated",
       };
+    } // Build where clause for search
+    const whereClause: {
+      userId: string;
+      OR?: Array<{
+        name?: { contains: string; mode: "insensitive" };
+        description?: { contains: string; mode: "insensitive" };
+      }>;
+    } = {
+      userId: session.user.id,
+    };
+
+    if (search && search.trim()) {
+      whereClause.OR = [
+        {
+          name: {
+            contains: search.trim(),
+            mode: "insensitive",
+          },
+        },
+        {
+          description: {
+            contains: search.trim(),
+            mode: "insensitive",
+          },
+        },
+      ];
     }
 
+    // Get total count for pagination
+    const total = await prisma.item.count({
+      where: whereClause,
+    });
+
+    // Calculate pagination values
+    const totalPages = Math.ceil(total / limit);
+    const skip = (page - 1) * limit;
+
+    // Get items with pagination
     const items = await prisma.item.findMany({
-      where: { userId: session.user.id },
+      where: whereClause,
       orderBy: { createdAt: "desc" },
+      skip,
+      take: limit,
     });
 
     return {
       success: true,
       message: "Items retrieved successfully",
-      data: items,
+      data: {
+        items,
+        pagination: {
+          page,
+          limit,
+          total,
+          totalPages,
+          hasNext: page < totalPages,
+          hasPrev: page > 1,
+        },
+      },
     };
   } catch (error) {
     console.error("Error retrieving items:", error);

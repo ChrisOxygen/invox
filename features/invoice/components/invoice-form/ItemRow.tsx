@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { useInvoiceForm } from "../../context/InvoiceFormProvider";
 import { toDollar } from "@/utils";
 
-import { useGetItems } from "@/hooks/items";
+import { useGetAllItems } from "@/features/items/hooks";
 import InBoxLoader from "@/components/InBoxLoader";
 import { Item } from "@prisma/client";
 import ItemsDropdownList from "./ItemsDropdownList";
@@ -28,7 +28,7 @@ function ItemRow({ item, index }: ItemRowProps) {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [hasSelectedItem, setHasSelectedItem] = useState(false);
   const { removeInvoiceItem, updateInvoiceItem } = useInvoiceForm();
-  const { items, isPending: isGettingItems } = useGetItems();
+  const { items, isPending: isGettingItems } = useGetAllItems();
 
   const descInputRef = useRef<HTMLInputElement | null>(null);
   const itemsPopoverRef = useRef<HTMLDivElement | null>(null);

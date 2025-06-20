@@ -19,9 +19,10 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 
-import { useCreateItem } from "@/hooks/items/useCreateItem";
-import { createItemSchema } from "@/dataSchemas/item";
-import { CreateItemInput } from "@/types/schemas/item";
+import { useCreateItem } from "@/features/items/hooks/useCreateItem";
+import { useUpdateItem } from "@/features/items/hooks/useUpdateItem";
+import { createItemSchema, updateItemSchema } from "@/dataSchemas/item";
+import { CreateItemInput, UpdateItemInput } from "@/types/schemas/item";
 
 interface ItemFormProps {
   open: boolean;
@@ -39,7 +40,6 @@ export function ItemForm({
   mode = "create",
 }: ItemFormProps) {
   const isEditing = mode === "edit" && item;
-
   // Hooks
   const createItem = useCreateItem({
     onSuccess: (data) => {
@@ -52,9 +52,20 @@ export function ItemForm({
     },
   });
 
-  // Form setup
-  const form = useForm<CreateItemInput>({
-    resolver: zodResolver(createItemSchema),
+  const updateItem = useUpdateItem({
+    onSuccess: (data) => {
+      toast.success("Item updated successfully!");
+      onSuccess?.(data.data!);
+      handleClose();
+    },
+    onError: (error) => {
+      toast.error(`Failed to update item: ${error.message}`);
+    },
+  });
+
+  // Form setup - use appropriate schema based on mode
+  const form = useForm<CreateItemInput | UpdateItemInput>({
+    resolver: zodResolver(isEditing ? updateItemSchema : createItemSchema),
     defaultValues: {
       name: item?.name || "",
       description: item?.description || "",
@@ -77,14 +88,17 @@ export function ItemForm({
     form.reset();
     onOpenChange(false);
   };
-
-  const onSubmit = async (data: CreateItemInput) => {
+  const onSubmit = async (data: CreateItemInput | UpdateItemInput) => {
     try {
       if (isEditing && item) {
-        // TODO: Implement updateItem when you create the hook
-        toast.info("Edit functionality not implemented yet");
+        // For editing, use updateItem
+        await updateItem.updateItemAsync({
+          itemId: item.id,
+          data: data as UpdateItemInput,
+        });
       } else {
-        await createItem.createItemAsync(data);
+        // For creating, use createItem
+        await createItem.createItemAsync(data as CreateItemInput);
       }
     } catch (error) {
       // Error handling is done in the hooks
@@ -92,7 +106,7 @@ export function ItemForm({
     }
   };
 
-  const isLoading = createItem.isPending;
+  const isLoading = createItem.isPending || updateItem.isPending;
 
   return (
     <AppDialog

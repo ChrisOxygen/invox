@@ -19,7 +19,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 
-import { useCreateItem, useUpdateItem } from "@/hooks/items";
+import { useCreateItem, useUpdateItem } from "@/features/items/hooks";
 import { createItemSchema, updateItemSchema } from "@/dataSchemas";
 import { CreateItemInput, UpdateItemInput } from "@/types/schemas/item";
 

@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -16,8 +17,24 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { VscCreditCard } from "react-icons/vsc";
-import { FiUser, FiEdit3, FiSave, FiX, FiLock } from "react-icons/fi";
+import {
+  FiUser,
+  FiEdit3,
+  FiSave,
+  FiX,
+  FiLock,
+  FiUpload,
+  FiImage,
+} from "react-icons/fi";
 import { HiOutlineOfficeBuilding } from "react-icons/hi";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -53,6 +70,7 @@ type EditablePaymentAccountData = z.infer<typeof editablePaymentAccountSchema>;
 function AccountPage() {
   const [isEditingBusiness, setIsEditingBusiness] = useState(false);
   const [isEditingPaymentAccount, setIsEditingPaymentAccount] = useState(false);
+  const [isLogoModalOpen, setIsLogoModalOpen] = useState(false);
 
   // Fetch user and business data
   const {
@@ -209,6 +227,21 @@ function AccountPage() {
     } catch (error) {
       console.error("Error updating payment account:", error);
     }
+  };
+
+  // Logo upload handlers
+  const handleLogoClick = () => {
+    setIsLogoModalOpen(true);
+  };
+
+  const handleLogoModalClose = () => {
+    setIsLogoModalOpen(false);
+  };
+
+  const handleLogoUpload = async (logoUrl: string) => {
+    // TODO: Implement logo upload functionality
+    console.log("Logo upload:", logoUrl);
+    setIsLogoModalOpen(false);
   };
 
   if (isLoading) {
@@ -627,50 +660,95 @@ function AccountPage() {
                   onSubmit={form.handleSubmit(handleSaveBusiness)}
                   className="space-y-6"
                 >
-                  {/* Read-only Business Fields */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="space-y-2">
-                      <Label className="text-sm font-medium text-gray-700 flex items-center gap-2">
-                        <FiLock className="h-3 w-3 text-gray-400" />
-                        Business Name
+                  {" "}
+                  {/* Read-only Business Fields with Logo */}
+                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    {/* Logo Column */}
+                    <div className="lg:col-span-1 space-y-4">
+                      <Label className="text-sm font-medium text-gray-700">
+                        Business Logo
                       </Label>
-                      <div className="px-3 py-2 bg-gray-50 rounded-md border border-gray-200">
-                        <p className="text-gray-600">{business.businessName}</p>
+
+                      {/* Logo Display Area */}
+                      <div className="aspect-video w-full max-w-32 mx-auto lg:mx-0">
+                        {business.logo ? (
+                          <div className="relative w-full h-full">
+                            <Image
+                              src={business.logo}
+                              alt={`${business.businessName} logo`}
+                              fill
+                              className="object-contain rounded-md border border-gray-200"
+                              priority
+                            />
+                          </div>
+                        ) : (
+                          <div className="w-full h-full bg-gray-50 border-2 border-dashed border-gray-200 rounded-md flex flex-col items-center justify-center">
+                            <FiImage className="h-8 w-8 text-gray-300 mb-2" />
+                            <p className="text-xs text-gray-400 text-center">
+                              No logo uploaded
+                            </p>
+                          </div>
+                        )}
                       </div>
-                      <p className="text-xs text-gray-400">
-                        Contact support to change business name
-                      </p>
+
+                      {/* Logo Action Button */}
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={handleLogoClick}
+                        className="w-full max-w-32 mx-auto lg:mx-0 flex items-center gap-2"
+                      >
+                        <FiUpload className="h-3 w-3" />
+                        {business.logo ? "Change Logo" : "Upload Logo"}
+                      </Button>
                     </div>
 
-                    <div className="space-y-2">
-                      <Label className="text-sm font-medium text-gray-700 flex items-center gap-2">
-                        <FiLock className="h-3 w-3 text-gray-400" />
-                        Business Email
-                      </Label>
-                      <div className="px-3 py-2 bg-gray-50 rounded-md border border-gray-200">
-                        <p className="text-gray-600">{business.email}</p>
-                      </div>
-                      <p className="text-xs text-gray-400">
-                        Primary business contact email
-                      </p>
-                    </div>
-
-                    {business.businessType && (
+                    {/* Business Info Columns */}
+                    <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div className="space-y-2">
-                        <Label className="text-sm font-medium text-gray-700">
-                          Business Type
+                        <Label className="text-sm font-medium text-gray-700 flex items-center gap-2">
+                          <FiLock className="h-3 w-3 text-gray-400" />
+                          Business Name
                         </Label>
                         <div className="px-3 py-2 bg-gray-50 rounded-md border border-gray-200">
                           <p className="text-gray-600">
-                            {business.businessType}
+                            {business.businessName}
                           </p>
                         </div>
+                        <p className="text-xs text-gray-400">
+                          Contact support to change business name
+                        </p>
                       </div>
-                    )}
+
+                      <div className="space-y-2">
+                        <Label className="text-sm font-medium text-gray-700 flex items-center gap-2">
+                          <FiLock className="h-3 w-3 text-gray-400" />
+                          Business Email
+                        </Label>
+                        <div className="px-3 py-2 bg-gray-50 rounded-md border border-gray-200">
+                          <p className="text-gray-600">{business.email}</p>
+                        </div>
+                        <p className="text-xs text-gray-400">
+                          Primary business contact email
+                        </p>
+                      </div>
+
+                      {business.businessType && (
+                        <div className="space-y-2 md:col-span-2">
+                          <Label className="text-sm font-medium text-gray-700">
+                            Business Type
+                          </Label>
+                          <div className="px-3 py-2 bg-gray-50 rounded-md border border-gray-200">
+                            <p className="text-gray-600">
+                              {business.businessType}
+                            </p>
+                          </div>
+                        </div>
+                      )}
+                    </div>
                   </div>
-
                   <Separator />
-
                   {/* Editable Business Fields */}
                   <div className="space-y-4">
                     <h3 className="text-lg font-medium text-gray-900">
@@ -817,7 +895,6 @@ function AccountPage() {
                       />
                     </div>
                   </div>
-
                   {/* Edit Actions */}
                   {isEditingBusiness && (
                     <div className="flex justify-end gap-3 pt-4 border-t">
@@ -852,9 +929,55 @@ function AccountPage() {
                 </form>
               </Form>
             )}
-          </CardContent>
+          </CardContent>{" "}
         </Card>
       </div>
+
+      {/* Logo Upload Modal */}
+      <Dialog open={isLogoModalOpen} onOpenChange={setIsLogoModalOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <FiImage className="h-5 w-5" />
+              {business?.logo ? "Change Business Logo" : "Upload Business Logo"}
+            </DialogTitle>
+            <DialogDescription>
+              {business?.logo
+                ? "Update your business logo that appears on invoices and documents."
+                : "Add your business logo that will appear on invoices and documents."}
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="py-6">
+            {/* Empty content area - ready for future file upload implementation */}
+            <div className="border-2 border-dashed border-gray-200 rounded-lg p-8 text-center">
+              <FiUpload className="h-12 w-12 text-gray-300 mx-auto mb-4" />
+              <p className="text-gray-500 mb-2">File upload functionality</p>
+              <p className="text-sm text-gray-400">
+                This feature will be implemented in the next phase
+              </p>
+            </div>
+          </div>
+
+          <DialogFooter className="flex flex-col sm:flex-row gap-2">
+            <Button
+              variant="outline"
+              onClick={handleLogoModalClose}
+              className="w-full sm:w-auto"
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={() => handleLogoUpload("")}
+              disabled
+              className="w-full sm:w-auto bg-gray-300 text-gray-500 cursor-not-allowed"
+            >
+              <FiUpload className="h-4 w-4 mr-2" />
+              Upload Logo
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

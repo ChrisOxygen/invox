@@ -8,7 +8,7 @@ import { _getUserPaymentAccounts } from "@/actions/payments";
 // Hook to fetch all payment accounts for the current user
 export function useGetPaymentAccounts() {
   const query = useQuery<ApiResponse<PaymentAccount[]>, Error>({
-    queryKey: ["paymentAccounts"],
+    queryKey: ["payment-accounts"],
     queryFn: async () => {
       const result = await _getUserPaymentAccounts();
 

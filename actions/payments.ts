@@ -35,14 +35,11 @@ export async function _createPaymentAccount(
           .map((e) => e.message)
           .join(", ")}`,
       };
-    }
-
-    // If this is set as default, unset other defaults for this gateway type
+    } // If this is set as default, unset other defaults for this user
     if (validatedData.data.isDefault) {
       await prisma.paymentAccount.updateMany({
         where: {
           userId: session.user.id,
-          gatewayType: validatedData.data.gatewayType,
           isDefault: true,
         },
         data: {
@@ -123,14 +120,11 @@ export async function _updatePaymentAccount(
         success: false,
         message: "Payment account not found or access denied",
       };
-    }
-
-    // If this is being set as default, unset other defaults for this gateway type
+    } // If this is being set as default, unset other defaults for this user
     if (validatedData.data.isDefault) {
       await prisma.paymentAccount.updateMany({
         where: {
           userId: session.user.id,
-          gatewayType: existingAccount.gatewayType,
           isDefault: true,
           id: {
             not: paymentAccountId,
@@ -301,6 +295,88 @@ export async function _deletePaymentAccount(
     return {
       success: false,
       message: "Failed to delete payment account",
+    };
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
+export async function _setPaymentAccountAsDefault(
+  paymentAccountId: string
+): Promise<ApiResponse<PaymentAccount>> {
+  try {
+    const session = await auth();
+    if (!session || !session.user?.id) {
+      return {
+        success: false,
+        message: "User not authenticated",
+      };
+    }
+
+    if (!paymentAccountId) {
+      return {
+        success: false,
+        message: "Payment account ID is required",
+      };
+    }
+
+    // Verify payment account exists and belongs to current user
+    const existingAccount = await prisma.paymentAccount.findFirst({
+      where: {
+        id: paymentAccountId,
+        userId: session.user.id,
+      },
+    });
+
+    if (!existingAccount) {
+      return {
+        success: false,
+        message: "Payment account not found or access denied",
+      };
+    }
+
+    // If account is already default, no need to do anything
+    if (existingAccount.isDefault) {
+      return {
+        success: true,
+        message: "Account is already set as default",
+        data: existingAccount,
+      };
+    }
+
+    // First, unset all other accounts as default for this user
+    await prisma.paymentAccount.updateMany({
+      where: {
+        userId: session.user.id,
+        isDefault: true,
+        id: {
+          not: paymentAccountId,
+        },
+      },
+      data: {
+        isDefault: false,
+      },
+    });
+
+    // Then set the target account as default
+    const updatedAccount = await prisma.paymentAccount.update({
+      where: { id: paymentAccountId },
+      data: {
+        isDefault: true,
+        updatedAt: new Date(),
+      },
+    });
+
+    return {
+      success: true,
+      message: "Payment account set as default successfully",
+      data: updatedAccount,
+    };
+  } catch (error) {
+    console.error("Error setting payment account as default:", error);
+    return {
+      success: false,
+      message: "Failed to set payment account as default",
     };
   } finally {
     await prisma.$disconnect();

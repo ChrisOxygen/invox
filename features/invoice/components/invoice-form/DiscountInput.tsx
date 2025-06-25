@@ -2,7 +2,7 @@
 
 import { Input } from "@/components/ui/input";
 import React from "react";
-import { useInvoiceForm } from "../../context/InvoiceFormProvider";
+import { useInvoiceForm } from "../../index";
 
 function DiscountInput() {
   const { state, setDiscount } = useInvoiceForm();

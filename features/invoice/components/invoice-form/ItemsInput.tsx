@@ -1,6 +1,6 @@
 "use client";
 
-import { useInvoiceForm } from "../../context/InvoiceFormProvider";
+import { useInvoiceForm } from "../../index";
 
 import ItemRow from "./ItemRow";
 import { Button } from "@/components/ui/button";

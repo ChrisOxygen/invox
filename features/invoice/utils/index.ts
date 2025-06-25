@@ -1,4 +1,4 @@
-import { InvoiceFormState } from "../context/InvoiceFormProvider";
+import { InvoiceFormState } from "../types/invoiceForm";
 import { InvoiceItem } from "@/types/invoice";
 
 // Calculate item total

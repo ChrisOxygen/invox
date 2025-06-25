@@ -1,7 +1,7 @@
 "use client";
 
 import Logo from "@/components/Logo";
-import { useInvoiceForm } from "../../context/InvoiceFormProvider";
+import { useInvoiceForm } from "../../index";
 
 import { formatInvoiceData } from "../../utils";
 

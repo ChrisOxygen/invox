@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/tooltip";
 import { Home, Edit, LayoutGrid, Palette, LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useInvoiceForm, ViewMode } from "../context/InvoiceFormProvider";
+import { useInvoiceForm, ViewMode } from "../index";
 
 /**
  * Navigation item configuration

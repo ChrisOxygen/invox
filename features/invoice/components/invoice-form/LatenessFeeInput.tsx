@@ -9,7 +9,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useState } from "react";
-import { useInvoiceForm } from "../../context/InvoiceFormProvider";
+import { useInvoiceForm } from "../../index";
 
 function LatenessFeeInput() {
   const [selectedLateFee, setSelectedLateFee] = useState<string>("");

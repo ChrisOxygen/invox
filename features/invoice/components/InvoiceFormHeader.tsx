@@ -6,7 +6,7 @@ import { ActionsDropdown } from "./ActionsDropdown";
 import { FavoriteButton } from "./FavoriteButton";
 import { DownloadPDFButton } from "./DownloadPDFButton";
 import { SendInvoiceButton } from "./SendInvoiceButton";
-import { useInvoiceForm } from "../context/InvoiceFormProvider";
+import { useInvoiceForm } from "../index";
 
 function InvoiceFormHeader() {
   // Demo state for save status

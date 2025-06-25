@@ -19,16 +19,20 @@ import { CalendarIcon, Plus, Trash2, ChevronDown } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
-import { useInvoiceForm } from "../../context/InvoiceFormProvider";
+import { useInvoiceForm } from "../../index";
 
 function InvoiceForm() {
   const {
     state,
-    updateInvoiceData,
-    updateClientData,
+    setInvoiceDate,
+    setPaymentDueDate,
+    setPaymentTerms,
+    setAcceptedPaymentMethods,
+    setClient,
     addInvoiceItem,
     updateInvoiceItem,
     removeInvoiceItem,
+    setTax,
     resetForm,
   } = useInvoiceForm();
 
@@ -39,6 +43,22 @@ function InvoiceForm() {
     totals: true,
     additionalDetails: false,
   });
+
+  const calculateSubtotal = () => {
+    if (!state.invoiceItems || state.invoiceItems.length === 0) return 0;
+    return state.invoiceItems.reduce((sum, item) => {
+      const quantity = item.quantity || 0;
+      const unitPrice = item.unitPrice || 0;
+      return sum + quantity * unitPrice;
+    }, 0);
+  };
+
+  const calculateFinalTotal = () => {
+    const subtotal = calculateSubtotal();
+    const tax = state.tax || 0;
+    const discount = state.discount || 0;
+    return subtotal + tax - discount;
+  };
 
   const toggleSection = (section: keyof typeof openSections) => {
     setOpenSections((prev) => ({
@@ -58,7 +78,11 @@ function InvoiceForm() {
     field: "invoiceDate" | "paymentDueDate"
   ) => {
     if (date) {
-      updateInvoiceData({ [field]: date });
+      if (field === "invoiceDate") {
+        setInvoiceDate(date);
+      } else {
+        setPaymentDueDate(date);
+      }
     }
   };
 
@@ -105,12 +129,11 @@ function InvoiceForm() {
                         variant="outline"
                         className={cn(
                           "w-full pl-3 text-left font-normal h-9 rounded-md mt-2",
-                          !state.invoiceData.invoiceDate &&
-                            "text-muted-foreground"
+                          !state.invoiceDate && "text-muted-foreground"
                         )}
                       >
-                        {state.invoiceData.invoiceDate ? (
-                          format(state.invoiceData.invoiceDate, "PPP")
+                        {state.invoiceDate ? (
+                          format(state.invoiceDate, "PPP")
                         ) : (
                           <span>Pick a date</span>
                         )}
@@ -120,7 +143,7 @@ function InvoiceForm() {
                     <PopoverContent className="w-auto p-0" align="start">
                       <Calendar
                         mode="single"
-                        selected={state.invoiceData.invoiceDate}
+                        selected={state.invoiceDate}
                         onSelect={(date) =>
                           handleDateChange(date, "invoiceDate")
                         }
@@ -143,12 +166,11 @@ function InvoiceForm() {
                         variant="outline"
                         className={cn(
                           "w-full pl-3 text-left font-normal h-9 rounded-md mt-2",
-                          !state.invoiceData.paymentDueDate &&
-                            "text-muted-foreground"
+                          !state.paymentDueDate && "text-muted-foreground"
                         )}
                       >
-                        {state.invoiceData.paymentDueDate ? (
-                          format(state.invoiceData.paymentDueDate, "PPP")
+                        {state.paymentDueDate ? (
+                          format(state.paymentDueDate, "PPP")
                         ) : (
                           <span>Pick a date</span>
                         )}
@@ -158,7 +180,7 @@ function InvoiceForm() {
                     <PopoverContent className="w-auto p-0" align="start">
                       <Calendar
                         mode="single"
-                        selected={state.invoiceData.paymentDueDate}
+                        selected={state.paymentDueDate || undefined}
                         onSelect={(date) =>
                           handleDateChange(date, "paymentDueDate")
                         }
@@ -173,10 +195,8 @@ function InvoiceForm() {
                   <label className="text-sm font-medium">Payment Terms</label>
                   <Input
                     placeholder="Net 30"
-                    value={state.invoiceData.paymentTerms}
-                    onChange={(e) =>
-                      updateInvoiceData({ paymentTerms: e.target.value })
-                    }
+                    value={state.paymentTerms || ""}
+                    onChange={(e) => setPaymentTerms(e.target.value)}
                     className="h-9 rounded-md mt-2"
                   />
                 </div>
@@ -187,12 +207,8 @@ function InvoiceForm() {
                   </label>
                   <Input
                     placeholder="Bank Transfer, Credit Card"
-                    value={state.invoiceData.acceptedPaymentMethods}
-                    onChange={(e) =>
-                      updateInvoiceData({
-                        acceptedPaymentMethods: e.target.value,
-                      })
-                    }
+                    value={state.acceptedPaymentMethods || ""}
+                    onChange={(e) => setAcceptedPaymentMethods(e.target.value)}
                     className="h-9 rounded-md mt-2"
                   />
                 </div>
@@ -228,8 +244,27 @@ function InvoiceForm() {
                   <label className="text-sm font-medium">Client Name</label>
                   <Input
                     placeholder="Client Name"
-                    value={state.clientData.name}
-                    onChange={(e) => updateClientData({ name: e.target.value })}
+                    value={state.client?.BusinessName || ""}
+                    onChange={(e) => {
+                      if (state.client) {
+                        setClient({
+                          ...state.client,
+                          BusinessName: e.target.value,
+                        });
+                      } else {
+                        // If no client exists, create a new one
+                        setClient({
+                          id: "",
+                          BusinessName: e.target.value,
+                          email: "",
+                          contactPersonName: "",
+                          address: "",
+                          userId: "",
+                          createdAt: new Date(),
+                          updatedAt: new Date(),
+                        });
+                      }
+                    }}
                     className="h-9 rounded-md mt-2"
                   />
                 </div>
@@ -239,10 +274,27 @@ function InvoiceForm() {
                   <Input
                     placeholder="client@example.com"
                     type="email"
-                    value={state.clientData.email}
-                    onChange={(e) =>
-                      updateClientData({ email: e.target.value })
-                    }
+                    value={state.client?.email || ""}
+                    onChange={(e) => {
+                      if (state.client) {
+                        setClient({
+                          ...state.client,
+                          email: e.target.value,
+                        });
+                      } else {
+                        // If no client exists, create a new one
+                        setClient({
+                          id: "",
+                          BusinessName: "",
+                          email: e.target.value,
+                          contactPersonName: "",
+                          address: "",
+                          userId: "",
+                          createdAt: new Date(),
+                          updatedAt: new Date(),
+                        });
+                      }
+                    }}
                     className="h-9 rounded-md mt-2"
                   />
                 </div>
@@ -251,10 +303,27 @@ function InvoiceForm() {
                   <label className="text-sm font-medium">Client Address</label>
                   <Textarea
                     placeholder="Client address"
-                    value={state.clientData.address}
-                    onChange={(e) =>
-                      updateClientData({ address: e.target.value })
-                    }
+                    value={state.client?.address || ""}
+                    onChange={(e) => {
+                      if (state.client) {
+                        setClient({
+                          ...state.client,
+                          address: e.target.value,
+                        });
+                      } else {
+                        // If no client exists, create a new one
+                        setClient({
+                          id: "",
+                          BusinessName: "",
+                          email: "",
+                          contactPersonName: "",
+                          address: e.target.value,
+                          userId: "",
+                          createdAt: new Date(),
+                          updatedAt: new Date(),
+                        });
+                      }
+                    }}
                     className="min-h-[80px] mt-2"
                   />
                 </div>
@@ -276,13 +345,18 @@ function InvoiceForm() {
                     Invoice Items
                   </CardTitle>
                   <div className="flex items-center gap-2">
+                    {" "}
                     <Button
                       type="button"
                       variant="outline"
                       size="sm"
                       onClick={(e) => {
                         e.stopPropagation();
-                        addInvoiceItem();
+                        addInvoiceItem({
+                          description: "",
+                          quantity: 1,
+                          unitPrice: 0,
+                        });
                       }}
                       className="h-7 px-2 text-xs"
                     >
@@ -301,7 +375,7 @@ function InvoiceForm() {
             </CollapsibleTrigger>
             <CollapsibleContent>
               <CardContent className="space-y-3 sm:space-y-4 pt-0 pb-6">
-                {state.invoiceItems.map((item, index) => (
+                {state.invoiceItems?.map((item, index) => (
                   <div
                     key={index}
                     className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-4 p-3 sm:p-4 border border-gray-200 rounded-lg bg-white"
@@ -355,18 +429,18 @@ function InvoiceForm() {
                       <div className="flex-1">
                         <label className="text-sm font-medium">
                           Total Amount
-                        </label>
+                        </label>{" "}
                         <Input
                           type="number"
                           step="0.01"
                           placeholder="0.00"
-                          value={item.totalAmount}
+                          value={(item.quantity || 0) * (item.unitPrice || 0)}
                           readOnly
                           className="bg-muted h-9 rounded-md mt-2"
                         />
                       </div>
 
-                      {state.invoiceItems.length > 1 && (
+                      {(state.invoiceItems?.length || 0) > 1 && (
                         <Button
                           type="button"
                           variant="outline"
@@ -381,13 +455,19 @@ function InvoiceForm() {
                   </div>
                 ))}
 
-                {state.invoiceItems.length === 0 && (
+                {(state.invoiceItems?.length || 0) === 0 && (
                   <div className="text-center py-8 text-muted-foreground">
                     <p>No items added yet.</p>
                     <Button
                       type="button"
                       variant="outline"
-                      onClick={addInvoiceItem}
+                      onClick={() =>
+                        addInvoiceItem({
+                          description: "",
+                          quantity: 1,
+                          unitPrice: 0,
+                        })
+                      }
                       className="mt-2"
                     >
                       <Plus className="h-4 w-4 mr-2" />
@@ -426,7 +506,7 @@ function InvoiceForm() {
                   <Input
                     type="number"
                     step="0.01"
-                    value={state.invoiceData.subtotal}
+                    value={calculateSubtotal()}
                     readOnly
                     className="bg-muted h-9 rounded-md mt-2"
                   />
@@ -437,12 +517,8 @@ function InvoiceForm() {
                   <Input
                     type="number"
                     step="0.01"
-                    value={state.invoiceData.taxes}
-                    onChange={(e) =>
-                      updateInvoiceData({
-                        taxes: parseFloat(e.target.value) || 0,
-                      })
-                    }
+                    value={state.tax || 0}
+                    onChange={(e) => setTax(parseFloat(e.target.value) || 0)}
                     className="h-9 rounded-md mt-2"
                   />
                 </div>
@@ -452,7 +528,7 @@ function InvoiceForm() {
                   <Input
                     type="number"
                     step="0.01"
-                    value={state.invoiceData.finalTotal}
+                    value={calculateFinalTotal()}
                     readOnly
                     className="bg-muted font-bold h-9 rounded-md mt-2"
                   />

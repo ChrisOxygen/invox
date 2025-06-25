@@ -3,7 +3,7 @@ import { IoIosCloseCircleOutline } from "react-icons/io";
 import { MdAddCircleOutline } from "react-icons/md";
 
 import { Input } from "@/components/ui/input";
-import { useInvoiceForm } from "../../context/InvoiceFormProvider";
+import { useInvoiceForm } from "../../index";
 import { toDollar } from "@/utils";
 
 import { useGetAllItems } from "@/features/items/hooks";

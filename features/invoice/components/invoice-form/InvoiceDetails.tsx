@@ -1,6 +1,6 @@
 "use client";
 import { ClientSelect } from "./ClientSelect";
-import { useInvoiceForm } from "../../context/InvoiceFormProvider";
+import { useInvoiceForm } from "../../index";
 import DueDateInput from "./DueDateInput";
 import ItemsInput from "./ItemsInput";
 import CustomerNotesInput from "./CustomerNotesInput";

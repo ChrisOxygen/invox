@@ -1,7 +1,7 @@
 "use client";
 
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { useInvoiceForm } from "../../context/InvoiceFormProvider";
+import { useInvoiceForm } from "../../index";
 
 import InvoiceDetails from "./InvoiceDetails";
 import InvoiceTemplate from "./InvoiceTemplate";

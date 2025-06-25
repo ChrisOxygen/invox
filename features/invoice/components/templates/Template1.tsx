@@ -1,7 +1,7 @@
 import Logo from "@/components/Logo";
 import React from "react";
 
-import { useInvoiceForm } from "../../context/InvoiceFormProvider";
+import { useInvoiceForm } from "../../index";
 import { formatInvoiceData } from "../../utils";
 
 function Template1() {

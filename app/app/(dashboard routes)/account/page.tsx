@@ -47,6 +47,7 @@ import {
   useUpdatePaymentAccount,
 } from "@/hooks/payments";
 import InBoxLoader from "@/components/InBoxLoader";
+import LogoDropZone from "@/components/LogoDropZone";
 
 // Schema for editable business fields
 const editableBusinessSchema = z.object({
@@ -228,7 +229,6 @@ function AccountPage() {
       console.error("Error updating payment account:", error);
     }
   };
-
   // Logo upload handlers
   const handleLogoClick = () => {
     setIsLogoModalOpen(true);
@@ -237,11 +237,15 @@ function AccountPage() {
   const handleLogoModalClose = () => {
     setIsLogoModalOpen(false);
   };
-
-  const handleLogoUpload = async (logoUrl: string) => {
-    // TODO: Implement logo upload functionality
-    console.log("Logo upload:", logoUrl);
+  const handleLogoUploadSuccess = async () => {
+    // Refetch business data to update the UI with new logo
+    await refetch();
     setIsLogoModalOpen(false);
+    toast.success("Business logo updated successfully!");
+  };
+
+  const handleLogoUploadError = (error: string) => {
+    toast.error(error);
   };
 
   if (isLoading) {
@@ -946,19 +950,13 @@ function AccountPage() {
                 ? "Update your business logo that appears on invoices and documents."
                 : "Add your business logo that will appear on invoices and documents."}
             </DialogDescription>
-          </DialogHeader>
-
+          </DialogHeader>{" "}
           <div className="py-6">
-            {/* Empty content area - ready for future file upload implementation */}
-            <div className="border-2 border-dashed border-gray-200 rounded-lg p-8 text-center">
-              <FiUpload className="h-12 w-12 text-gray-300 mx-auto mb-4" />
-              <p className="text-gray-500 mb-2">File upload functionality</p>
-              <p className="text-sm text-gray-400">
-                This feature will be implemented in the next phase
-              </p>
-            </div>
+            <LogoDropZone
+              onUploadSuccess={handleLogoUploadSuccess}
+              onUploadError={handleLogoUploadError}
+            />
           </div>
-
           <DialogFooter className="flex flex-col sm:flex-row gap-2">
             <Button
               variant="outline"
@@ -966,14 +964,6 @@ function AccountPage() {
               className="w-full sm:w-auto"
             >
               Cancel
-            </Button>
-            <Button
-              onClick={() => handleLogoUpload("")}
-              disabled
-              className="w-full sm:w-auto bg-gray-300 text-gray-500 cursor-not-allowed"
-            >
-              <FiUpload className="h-4 w-4 mr-2" />
-              Upload Logo
             </Button>
           </DialogFooter>
         </DialogContent>

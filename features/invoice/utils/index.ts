@@ -1,4 +1,113 @@
 import { InvoiceFormState } from "../context/InvoiceFormProvider";
+import { InvoiceItem } from "@/types/invoice";
+
+// Calculate item total
+export const calculateItemTotal = (
+  quantity: number,
+  unitPrice: number
+): number => {
+  return Math.round(quantity * unitPrice * 100) / 100; // Round to 2 decimal places
+};
+
+// Calculate subtotal from items
+export const calculateSubtotal = (items: InvoiceItem[]): number => {
+  return items.reduce((sum, item) => sum + item.total, 0);
+};
+
+// Calculate total with tax and discount
+export const calculateTotal = (
+  subtotal: number,
+  taxRate: number = 0,
+  discount: number = 0
+): number => {
+  const taxAmount = subtotal * (taxRate / 100);
+  const total = subtotal + taxAmount - discount;
+  return Math.max(0, Math.round(total * 100) / 100); // Ensure non-negative and round to 2 decimal places
+};
+
+// Validate invoice items
+export const validateInvoiceItems = (items: InvoiceItem[]): boolean => {
+  if (!Array.isArray(items) || items.length === 0) {
+    return false;
+  }
+
+  return items.every(
+    (item) =>
+      item.description?.trim() &&
+      item.quantity > 0 &&
+      item.unitPrice >= 0 &&
+      item.total >= 0
+  );
+};
+
+// Check if invoice is editable based on status
+export const isInvoiceEditable = (status: string): boolean => {
+  return status === "DRAFT" || status === "SENT";
+};
+
+// Check if invoice can be deleted
+export const isInvoiceDeletable = (status: string): boolean => {
+  return status !== "PAID";
+};
+
+// Format invoice status for display
+export const formatInvoiceStatus = (status: string): string => {
+  switch (status) {
+    case "DRAFT":
+      return "Draft";
+    case "SENT":
+      return "Sent";
+    case "PAID":
+      return "Paid";
+    case "OVERDUE":
+      return "Overdue";
+    case "CANCELLED":
+      return "Cancelled";
+    default:
+      return status;
+  }
+};
+
+// Get status color for UI
+export const getStatusColor = (status: string): string => {
+  switch (status) {
+    case "DRAFT":
+      return "gray";
+    case "SENT":
+      return "blue";
+    case "PAID":
+      return "green";
+    case "OVERDUE":
+      return "red";
+    case "CANCELLED":
+      return "yellow";
+    default:
+      return "gray";
+  }
+};
+
+// Check if invoice is overdue
+export const isInvoiceOverdue = (
+  paymentDueDate: Date,
+  status: string
+): boolean => {
+  if (status === "PAID" || status === "CANCELLED") {
+    return false;
+  }
+  return new Date() > new Date(paymentDueDate);
+};
+
+// Format currency
+export const formatCurrency = (
+  amount: number,
+  currency: string = "USD",
+  locale: string = "en-US"
+): string => {
+  return new Intl.NumberFormat(locale, {
+    style: "currency",
+    currency: currency,
+  }).format(amount);
+};
 
 /**
  * Generates a unique invoice number with format INV-XXXXXX

@@ -6,6 +6,7 @@ export type { UpdateUserInput as UpdateUserData } from "./schemas/user";
 export * from "./schemas";
 export * from "./forms";
 export * from "./api";
+export * from "./invoice";
 
 // Explicitly re-export business types to resolve naming conflicts
 export type { BusinessSettings, BusinessProfile } from "./business";

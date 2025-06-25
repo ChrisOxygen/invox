@@ -411,7 +411,7 @@ export function InvoiceFormProvider({ children }: InvoiceFormProviderProps) {
   const addInvoiceItem = (item: {
     description?: string;
     quantity?: number;
-    price?: number;
+    unitPrice?: number;
   }) => {
     dispatch({ type: "ADD_INVOICE_ITEM", payload: item });
   };
@@ -422,7 +422,7 @@ export function InvoiceFormProvider({ children }: InvoiceFormProviderProps) {
 
   const updateInvoiceItem = (
     index: number,
-    updatedItem: { description?: string; quantity?: number; price?: number }
+    updatedItem: { description?: string; quantity?: number; unitPrice?: number }
   ) => {
     dispatch({
       type: "UPDATE_INVOICE_ITEM",

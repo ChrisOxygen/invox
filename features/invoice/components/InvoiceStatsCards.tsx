@@ -4,6 +4,7 @@ import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useGetInvoiceStats } from "@/features/invoice/hooks";
 import { FiFileText, FiSend, FiCheckCircle } from "react-icons/fi";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface StatsCardProps {
   title: string;
@@ -32,7 +33,10 @@ function StatsCard({
       </CardHeader>
       <CardContent>
         {isLoading ? (
-          <div className="h-8 w-24 bg-gray-200 animate-pulse rounded"></div>
+          <div className="space-y-2">
+            <Skeleton className="h-8 w-24" />
+            {description && <Skeleton className="h-4 w-32" />}
+          </div>
         ) : (
           <>
             <div className="text-2xl font-bold text-gray-900">{value}</div>
@@ -61,10 +65,10 @@ export function InvoiceStatsCards() {
   if (isError) {
     return (
       <div className="grid gap-4 grid-cols-1 md:grid-cols-3 mb-6">
-        <Card className="bg-gray-50">
+        <Card className="bg-gray-50 border-red-100 col-span-1 md:col-span-3">
           <CardContent className="pt-6">
-            <p className="text-center text-gray-500">
-              Failed to load invoice statistics.
+            <p className="text-center text-red-500">
+              Failed to load invoice statistics. Please try again later.
             </p>
           </CardContent>
         </Card>

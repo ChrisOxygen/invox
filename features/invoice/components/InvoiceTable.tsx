@@ -14,6 +14,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Select,
   SelectContent,
@@ -262,11 +263,37 @@ export function InvoiceTable() {
           </TableHeader>
           <TableBody>
             {isLoading ? (
-              <TableRow>
-                <TableCell colSpan={7} className="text-center py-10">
-                  Loading invoices...
-                </TableCell>
-              </TableRow>
+              Array(5)
+                .fill(0)
+                .map((_, index) => (
+                  <TableRow key={`skeleton-${index}`}>
+                    <TableCell>
+                      <Skeleton className="h-6 w-20" />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton className="h-6 w-32" />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton className="h-6 w-20" />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton className="h-6 w-20" />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton className="h-6 w-24" />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton className="h-6 w-24" />
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <div className="flex justify-end space-x-1">
+                        <Skeleton className="h-8 w-8 rounded-md" />
+                        <Skeleton className="h-8 w-8 rounded-md" />
+                        <Skeleton className="h-8 w-8 rounded-md" />
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))
             ) : isError ? (
               <TableRow>
                 <TableCell
@@ -288,7 +315,7 @@ export function InvoiceTable() {
                   <TableCell className="font-medium">
                     <Button
                       variant="link"
-                      className="p-0 h-auto font-medium text-gray-900 hover:text-gray-700"
+                      className="p-0 h-auto font-medium text-gray-900 hover:text-gray-700 cursor-pointer"
                       onClick={() => handleViewInvoice(invoice.id)}
                     >
                       {invoice.invoiceNumber || `INV-${invoice.id.slice(0, 8)}`}
@@ -322,7 +349,7 @@ export function InvoiceTable() {
                         variant="ghost"
                         size="icon"
                         onClick={() => handleViewInvoice(invoice.id)}
-                        className="h-8 w-8 text-gray-500 hover:text-gray-900"
+                        className="h-8 w-8 text-gray-500 hover:text-gray-900 cursor-pointer"
                       >
                         <FiEye className="h-4 w-4" />
                         <span className="sr-only">View</span>
@@ -331,7 +358,7 @@ export function InvoiceTable() {
                         variant="ghost"
                         size="icon"
                         onClick={() => handleEditInvoice(invoice.id)}
-                        className="h-8 w-8 text-gray-500 hover:text-gray-900"
+                        className="h-8 w-8 text-gray-500 hover:text-gray-900 cursor-pointer"
                       >
                         <FiEdit2 className="h-4 w-4" />
                         <span className="sr-only">Edit</span>
@@ -340,7 +367,7 @@ export function InvoiceTable() {
                         variant="ghost"
                         size="icon"
                         onClick={() => handleDeleteInvoice(invoice.id)}
-                        className="h-8 w-8 text-gray-500 hover:text-gray-900"
+                        className="h-8 w-8 text-gray-500 hover:text-gray-900 cursor-pointer"
                         disabled={isDeleting}
                       >
                         <FiTrash2 className="h-4 w-4" />
@@ -355,7 +382,7 @@ export function InvoiceTable() {
                           <Button
                             variant="ghost"
                             size="icon"
-                            className="h-8 w-8"
+                            className="h-8 w-8 cursor-pointer"
                           >
                             <FiMoreVertical className="h-4 w-4" />
                             <span className="sr-only">Open menu</span>
@@ -428,7 +455,8 @@ export function InvoiceTable() {
                       setCurrentPage((prev) => Math.max(prev - 1, 1))
                     }
                     className={cn(
-                      currentPage === 1 && "pointer-events-none opacity-50"
+                      currentPage === 1 && "pointer-events-none opacity-50",
+                      "cursor-pointer"
                     )}
                   />
                 </PaginationItem>
@@ -441,6 +469,7 @@ export function InvoiceTable() {
                       <PaginationLink
                         isActive={currentPage === pageNumber}
                         onClick={() => setCurrentPage(pageNumber as number)}
+                        className="cursor-pointer"
                       >
                         {pageNumber}
                       </PaginationLink>
@@ -455,7 +484,8 @@ export function InvoiceTable() {
                     }
                     className={cn(
                       currentPage === totalPages &&
-                        "pointer-events-none opacity-50"
+                        "pointer-events-none opacity-50",
+                      "cursor-pointer"
                     )}
                   />
                 </PaginationItem>

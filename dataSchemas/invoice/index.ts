@@ -124,6 +124,7 @@ export const invoiceFiltersSchema = z
     dateTo: z.date().optional(),
     dueDateFrom: z.date().optional(),
     dueDateTo: z.date().optional(),
+    searchQuery: z.string().optional(), // For searching client name or invoice number
   })
   .refine(
     (data) => {

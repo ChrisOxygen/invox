@@ -61,6 +61,7 @@ export interface InvoiceFilters {
   dateTo?: Date;
   dueDateFrom?: Date;
   dueDateTo?: Date;
+  searchQuery?: string; // For searching client name or invoice number
 }
 
 // Pagination

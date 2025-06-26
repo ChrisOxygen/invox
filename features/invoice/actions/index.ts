@@ -527,6 +527,10 @@ export async function _getInvoices(
         gte?: Date;
         lte?: Date;
       };
+      OR?: Array<{
+        client?: { BusinessName?: { contains: string; mode: "insensitive" } };
+        invoiceNumber?: { contains: string; mode: "insensitive" };
+      }>;
     } = {
       businessId: user.business.id,
     };
@@ -555,6 +559,26 @@ export async function _getInvoices(
         if (validatedFilters.dueDateTo) {
           whereClause.paymentDueDate.lte = validatedFilters.dueDateTo;
         }
+      }
+
+      // Handle search query for client name and invoice number
+      if (validatedFilters.searchQuery) {
+        whereClause.OR = [
+          {
+            client: {
+              BusinessName: {
+                contains: validatedFilters.searchQuery,
+                mode: "insensitive",
+              },
+            },
+          },
+          {
+            invoiceNumber: {
+              contains: validatedFilters.searchQuery,
+              mode: "insensitive",
+            },
+          },
+        ];
       }
     }
 

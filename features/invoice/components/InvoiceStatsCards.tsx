@@ -117,18 +117,21 @@ function StatsCard({
         <div className="flex flex-col items-center mt-3">
           <h3 className="text-sm font-medium text-gray-600 mb-2">{title}</h3>
 
-          {growthPercentage !== undefined &&
-            (isLoading ? (
-              <Skeleton className="h-5 w-32" />
-            ) : (
-              <div className="flex items-center space-x-1">
-                <TrendIcon className={`h-4 w-4 ${trendColorClass}`} />
-                <span className={`text-sm font-medium ${trendColorClass}`}>
-                  {Math.abs(growthPercentage)}%
-                </span>
-                <span className="text-sm text-gray-500">than last month</span>
-              </div>
-            ))}
+          {isLoading ? (
+            <Skeleton className="h-5 w-32" />
+          ) : growthPercentage !== undefined ? (
+            <div className="flex items-center space-x-1">
+              <TrendIcon className={`h-4 w-4 ${trendColorClass}`} />
+              <span className={`text-sm font-medium ${trendColorClass}`}>
+                {Math.abs(growthPercentage)}%
+              </span>
+              <span className="text-sm text-gray-500">than last month</span>
+            </div>
+          ) : (
+            <div className="text-xs text-gray-400 italic">
+              No trend data available
+            </div>
+          )}
         </div>
       </CardContent>
     </Card>
@@ -145,10 +148,42 @@ export function InvoiceStatsCards() {
     isError,
   } = useGetInvoiceStats();
 
-  // Sample growth percentages (in a real app, these would come from the API)
-  // These are just for demonstration purposes
-  const revenueGrowth = 15;
-  const paidGrowth = 22;
+  // Calculate growth percentages based on current and previous period data
+  const calculateGrowthPercentage = (
+    current: number,
+    previous: number
+  ): number | undefined => {
+    // Return undefined if there's no previous data or current data
+    if (previous === 0 || previous === undefined || current === undefined) {
+      return undefined;
+    }
+
+    // Calculate the percentage growth
+    return Math.round(((current - previous) / previous) * 100);
+  };
+
+  // SIMULATION: In a real implementation, you would fetch previous period data from your API
+  // This is just to demonstrate how you would calculate growth if you had the data
+
+  // For demonstration only - in production, these values would come from the API
+  const hasPreviousPeriodData = false; // Set to true when your API provides this data
+
+  // Previous period values (this is where you'd use data from your API)
+  const previousTotalRevenue = hasPreviousPeriodData ? totalRevenue * 0.85 : 0; // Example value
+  const previousPaidAmount = hasPreviousPeriodData
+    ? totalRevenue * 0.7 * 0.75
+    : 0; // Example value
+
+  // Calculate the growth percentages (will be undefined if hasPreviousPeriodData is false)
+  const revenueGrowth = hasPreviousPeriodData
+    ? calculateGrowthPercentage(totalRevenue, previousTotalRevenue)
+    : undefined;
+
+  // For the paid amount (would use actual paid amount from API in production)
+  const paidAmount = totalRevenue * 0.7; // Placeholder calculation
+  const paidGrowth = hasPreviousPeriodData
+    ? calculateGrowthPercentage(paidAmount, previousPaidAmount)
+    : undefined;
 
   if (isError) {
     return (

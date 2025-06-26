@@ -9,10 +9,7 @@ import { SendInvoiceButton } from "./SendInvoiceButton";
 import { useInvoiceForm } from "../index";
 
 function InvoiceFormHeader() {
-  // Demo state for save status
-  const [saveStatus, setSaveStatus] = useState<SaveStatus>("unsaved");
-
-  const { state } = useInvoiceForm();
+  const { state, isSaving } = useInvoiceForm();
 
   const { formMode, invoiceNumber } = state;
 
@@ -28,7 +25,7 @@ function InvoiceFormHeader() {
     console.log("Resetting form...");
     // Simulate form reset
     await new Promise((resolve) => setTimeout(resolve, 500));
-    setSaveStatus("unsaved");
+
     console.log("Form reset!");
   };
 
@@ -49,7 +46,7 @@ function InvoiceFormHeader() {
     console.log("Sending invoice...");
     // Simulate sending
     await new Promise((resolve) => setTimeout(resolve, 1500));
-    setSaveStatus("saved");
+
     console.log("Invoice sent successfully!");
   };
 
@@ -64,7 +61,7 @@ function InvoiceFormHeader() {
       <div className="flex items-center gap-2">
         {/* Component 1: Save Status Indicator */}
 
-        <SaveStatusIndicator status={saveStatus} />
+        <SaveStatusIndicator />
         {/* Component 2: Actions Dropdown */}
         <ActionsDropdown onDelete={handleDelete} onReset={handleReset} />
 

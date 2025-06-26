@@ -1,13 +1,14 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { Check, Clock, Save, AlertCircle } from "lucide-react";
+import { useInvoiceForm } from "../context/InvoiceFormProvider";
+import { createFingerprint } from "../utils";
 
 export type SaveStatus = "unsaved" | "saved" | "saved_to_draft" | "saving";
 
 interface SaveStatusIndicatorProps {
-  status: SaveStatus;
   className?: string;
 }
 
@@ -34,10 +35,39 @@ const statusConfig = {
   },
 };
 
-export function SaveStatusIndicator({
-  status,
-  className,
-}: SaveStatusIndicatorProps) {
+export function SaveStatusIndicator({ className }: SaveStatusIndicatorProps) {
+  const { state, isSaving } = useInvoiceForm();
+  const [status, setStatus] = useState<SaveStatus>("unsaved");
+
+  // Initialize form state fingerprint
+  const [formFingerprint, setFormFingerprint] = useState("");
+
+  // Generate a fingerprint of key form state values that should trigger "unsaved" status
+  useEffect(() => {
+    const newFingerprint = createFingerprint(state);
+
+    // If there's a previous fingerprint and it's different, form has changed
+    if (formFingerprint && formFingerprint !== newFingerprint && !isSaving) {
+      setStatus("unsaved");
+    }
+
+    setFormFingerprint(newFingerprint);
+  }, [state, formFingerprint, isSaving]);
+
+  // Track saving state
+  useEffect(() => {
+    if (isSaving) {
+      setStatus("saving");
+    } else if (status === "saving") {
+      // Just finished saving
+      if (state.invoiceStatus === "DRAFT") {
+        setStatus("saved_to_draft");
+      } else {
+        setStatus("saved");
+      }
+    }
+  }, [isSaving, state.invoiceStatus, status]);
+
   const config = statusConfig[status];
   const Icon = config.icon;
 

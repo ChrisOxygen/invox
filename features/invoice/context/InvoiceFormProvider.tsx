@@ -26,7 +26,7 @@ export function InvoiceFormProvider({ children }: InvoiceFormProviderProps) {
   const [state, dispatch] = useReducer(invoiceFormReducer, initialState);
   const hasInitialized = useRef(false);
 
-  const { formLoading, isAutoSaving, actionHandlers, validationMethods } =
+  const { formLoading, isSaving, actionHandlers, validationMethods } =
     useInvoiceFormLogic({
       state,
       dispatch,
@@ -38,18 +38,11 @@ export function InvoiceFormProvider({ children }: InvoiceFormProviderProps) {
       state,
       dispatch,
       formLoading,
-      isAutoSaving,
+      isSaving,
       ...actionHandlers,
       ...validationMethods,
     }),
-    [
-      state,
-      dispatch,
-      formLoading,
-      actionHandlers,
-      validationMethods,
-      isAutoSaving,
-    ]
+    [state, dispatch, formLoading, actionHandlers, validationMethods, isSaving]
   );
 
   return (

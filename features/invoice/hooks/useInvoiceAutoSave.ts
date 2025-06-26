@@ -1,27 +1,37 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useDebounce } from "@/hooks/useDebounce";
-import { InvoiceFormState } from "../types/invoiceForm";
+import { InvoiceFormAction, InvoiceFormState } from "../types/invoiceForm";
 import { useCreateInvoice, useUpdateInvoice } from "../hooks";
 import { CreateInvoiceInput, UpdateInvoiceInput } from "@/dataSchemas/invoice";
+import { createFingerprint, hasFormChanged } from "../utils";
 
 interface UseInvoiceAutoSaveProps {
   state: InvoiceFormState;
   hasInitialized: React.RefObject<boolean>;
   formLoading: boolean;
+  dispatch: React.Dispatch<InvoiceFormAction>;
 }
 
 export function useInvoiceAutoSave({
   state,
   hasInitialized,
   formLoading,
+  dispatch,
 }: UseInvoiceAutoSaveProps) {
-  // Auto-save functionality with 30-second debounce
-  const debouncedState = useDebounce(state, 30000);
+  // Auto-save functionality with 5-second debounce
+  const debouncedState = useDebounce(state, 5000);
+
+  // Store the last saved form fingerprint to prevent unnecessary saves
+  const lastSavedFingerprint = useRef<string | null>(null);
 
   const { mutate: createInvoice, isPending: creatingInvoice } =
     useCreateInvoice({
-      onSuccess: (data) => {
-        console.log("Invoice created successfully:", data);
+      onSuccess: () => {
+        // Update fingerprint after successful save
+        lastSavedFingerprint.current = createFingerprint(state);
+
+        dispatch({ type: "SET_UNSAVED_CHANGES", payload: false });
+        dispatch({ type: "SET_INVOICE_STATUS", payload: "DRAFT" });
       },
       onError: (error) => {
         console.error("Failed to create invoice:", error);
@@ -30,8 +40,11 @@ export function useInvoiceAutoSave({
 
   const { mutate: updateInvoice, isPending: updatingInvoice } =
     useUpdateInvoice({
-      onSuccess: (data) => {
-        console.log("Invoice updated successfully:", data);
+      onSuccess: () => {
+        // Update fingerprint after successful save
+        lastSavedFingerprint.current = createFingerprint(state);
+
+        dispatch({ type: "SET_UNSAVED_CHANGES", payload: false });
       },
       onError: (error) => {
         console.error("Failed to update invoice:", error);
@@ -52,6 +65,11 @@ export function useInvoiceAutoSave({
 
     // Skip if required fields are missing
     if (!debouncedState.businessDetails || !debouncedState.paymentDueDate) {
+      return;
+    }
+
+    // Skip if no meaningful changes since last save
+    if (!hasFormChanged(debouncedState, lastSavedFingerprint.current)) {
       return;
     }
 
@@ -117,9 +135,10 @@ export function useInvoiceAutoSave({
     hasInitialized,
     createInvoice,
     updateInvoice,
+    dispatch,
   ]);
 
-  return {
-    isAutoSaving: creatingInvoice || updatingInvoice,
-  };
+  const isAutoSaving = creatingInvoice || updatingInvoice;
+
+  return { isAutoSaving };
 }

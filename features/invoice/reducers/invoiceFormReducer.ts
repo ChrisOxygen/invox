@@ -23,6 +23,8 @@ export const initialState: InvoiceFormState = {
   tax: 0,
   discount: 0,
   lateFeeText: "",
+  invoiceStatus: "DRAFT",
+  hasUnsavedChanges: false,
 };
 
 export function invoiceFormReducer(
@@ -59,41 +61,49 @@ export function invoiceFormReducer(
       return {
         ...state,
         client: action.payload,
+        hasUnsavedChanges: true,
       };
     case "SET_INVOICE_NUMBER":
       return {
         ...state,
         invoiceNumber: action.payload,
+        hasUnsavedChanges: true,
       };
     case "SET_INVOICE_DATE":
       return {
         ...state,
         invoiceDate: action.payload,
+        hasUnsavedChanges: true,
       };
     case "SET_PAYMENT_DUE_DATE":
       return {
         ...state,
         paymentDueDate: action.payload,
+        hasUnsavedChanges: true,
       };
     case "SET_PAYMENT_TERMS":
       return {
         ...state,
         paymentTerms: action.payload,
+        hasUnsavedChanges: true,
       };
     case "SET_ACCEPTED_PAYMENT_METHODS":
       return {
         ...state,
         acceptedPaymentMethods: action.payload,
+        hasUnsavedChanges: true,
       };
     case "SET_INVOICE_ITEMS":
       return {
         ...state,
         invoiceItems: action.payload,
+        hasUnsavedChanges: true,
       };
     case "ADD_INVOICE_ITEM":
       return {
         ...state,
         invoiceItems: [...(state.invoiceItems || []), action.payload],
+        hasUnsavedChanges: true,
       };
     case "REMOVE_INVOICE_ITEM":
       return {
@@ -101,6 +111,7 @@ export function invoiceFormReducer(
         invoiceItems: state.invoiceItems?.filter(
           (_, index) => index !== action.payload
         ),
+        hasUnsavedChanges: true,
       };
     case "UPDATE_INVOICE_ITEM":
       return {
@@ -108,26 +119,42 @@ export function invoiceFormReducer(
         invoiceItems: state.invoiceItems?.map((item, index) =>
           index === action.payload.index ? { ...item, ...action.payload } : item
         ),
+        hasUnsavedChanges: true,
       };
     case "SET_CUSTOM_NOTE":
       return {
         ...state,
         customNote: action.payload,
+        hasUnsavedChanges: true,
       };
     case "SET_LATE_FEE_TEXT":
       return {
         ...state,
         lateFeeText: action.payload,
+        hasUnsavedChanges: true,
       };
     case "SET_TAX":
       return {
         ...state,
         tax: action.payload,
+        hasUnsavedChanges: true,
       };
     case "SET_DISCOUNT":
       return {
         ...state,
         discount: action.payload,
+        hasUnsavedChanges: true,
+      };
+    case "SET_INVOICE_STATUS":
+      return {
+        ...state,
+        invoiceStatus: action.payload,
+        hasUnsavedChanges: false, // Reset unsaved changes when status changes
+      };
+    case "SET_UNSAVED_CHANGES":
+      return {
+        ...state,
+        hasUnsavedChanges: action.payload,
       };
     case "RESET_FORM":
       return {

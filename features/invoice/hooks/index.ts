@@ -10,6 +10,10 @@ export { useUpdateInvoice } from "./useUpdateInvoice";
 export { useUpdateInvoiceStatus } from "./useUpdateInvoiceStatus";
 export { useDeleteInvoice } from "./useDeleteInvoice";
 
+// Form logic hooks
+export { useInvoiceFormLogic } from "./useInvoiceFormLogic";
+export { useInvoiceAutoSave } from "./useInvoiceAutoSave";
+
 // Re-export types for convenience
 export type { UseGetInvoicesParams } from "./useGetInvoices";
 export type { UseGetInvoiceParams } from "./useGetInvoice";

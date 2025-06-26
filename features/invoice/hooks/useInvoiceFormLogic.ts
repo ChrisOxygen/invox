@@ -43,14 +43,17 @@ export function useInvoiceFormLogic({
     }
   );
 
+  const isLoadingInvoice = state.invoiceId ? loadingInvoice : false;
+
   const formLoading =
-    gettingBusinessDetails || gettingPaymentAccounts || loadingInvoice;
+    gettingBusinessDetails || gettingPaymentAccounts || isLoadingInvoice;
 
   // Auto-save functionality
   const { isAutoSaving } = useInvoiceAutoSave({
     state,
     hasInitialized,
     formLoading,
+    dispatch,
   });
 
   // Initialize business details and payment accounts
@@ -216,6 +219,16 @@ export function useInvoiceFormLogic({
       setDiscount: (discount: number) => {
         dispatch({ type: "SET_DISCOUNT", payload: discount });
       },
+
+      setInvoiceStatus: (
+        status: "DRAFT" | "SENT" | "PAID" | "OVERDUE" | "CANCELLED"
+      ) => {
+        dispatch({ type: "SET_INVOICE_STATUS", payload: status });
+      },
+
+      setUnsavedChanges: (hasChanges: boolean) => {
+        dispatch({ type: "SET_UNSAVED_CHANGES", payload: hasChanges });
+      },
     }),
     [dispatch, paymentAccounts]
   );
@@ -229,10 +242,12 @@ export function useInvoiceFormLogic({
     [state]
   );
 
+  const isSaving = isAutoSaving;
+
   return {
     formLoading,
     actionHandlers,
     validationMethods,
-    isAutoSaving,
+    isSaving,
   };
 }

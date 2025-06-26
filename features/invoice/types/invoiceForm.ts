@@ -25,6 +25,8 @@ export interface InvoiceFormState {
   tax?: number;
   discount?: number;
   lateFeeText?: string;
+  invoiceStatus?: "DRAFT" | "SENT" | "PAID" | "OVERDUE" | "CANCELLED";
+  hasUnsavedChanges: boolean;
 }
 
 export type InvoiceFormAction =
@@ -118,6 +120,14 @@ export type InvoiceFormAction =
       payload: number;
     }
   | {
+      type: "SET_INVOICE_STATUS";
+      payload: "DRAFT" | "SENT" | "PAID" | "OVERDUE" | "CANCELLED";
+    }
+  | {
+      type: "SET_UNSAVED_CHANGES";
+      payload: boolean;
+    }
+  | {
       type: "RESET_FORM";
     };
 
@@ -138,8 +148,13 @@ export interface InvoiceFormContextType {
   setTax: (tax: number) => void;
   setDiscount: (discount: number) => void;
   setPaymentAccount: (id: string) => void;
+  setInvoiceStatus: (
+    status: "DRAFT" | "SENT" | "PAID" | "OVERDUE" | "CANCELLED"
+  ) => void;
+  setUnsavedChanges: (hasChanges: boolean) => void;
   resetForm: () => void;
   formLoading: boolean;
+  isSaving: boolean;
 
   addInvoiceItem: (item: {
     description?: string;

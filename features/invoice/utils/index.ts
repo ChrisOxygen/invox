@@ -9,6 +9,12 @@ export const calculateItemTotal = (
   return Math.round(quantity * unitPrice * 100) / 100; // Round to 2 decimal places
 };
 
+// Re-export validation utilities
+export * from "./invoiceFormValidation";
+
+// Re-export fingerprinting utilities
+export * from "./invoiceFormUtils";
+
 // Calculate subtotal from items
 export const calculateSubtotal = (items: InvoiceItem[]): number => {
   return items.reduce((sum, item) => sum + item.total, 0);

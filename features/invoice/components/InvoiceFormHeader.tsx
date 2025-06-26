@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
-import { SaveStatusIndicator, SaveStatus } from "./SaveStatusIndicator";
+import React from "react";
+import { SaveStatusIndicator } from "./SaveStatusIndicator";
 import { ActionsDropdown } from "./ActionsDropdown";
 import { FavoriteButton } from "./FavoriteButton";
 import { DownloadPDFButton } from "./DownloadPDFButton";
@@ -9,7 +9,7 @@ import { SendInvoiceButton } from "./SendInvoiceButton";
 import { useInvoiceForm } from "../index";
 
 function InvoiceFormHeader() {
-  const { state, isSaving } = useInvoiceForm();
+  const { state } = useInvoiceForm();
 
   const { formMode, invoiceNumber } = state;
 
@@ -42,14 +42,6 @@ function InvoiceFormHeader() {
     console.log("PDF downloaded!");
   };
 
-  const handleSendInvoice = async () => {
-    console.log("Sending invoice...");
-    // Simulate sending
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-
-    console.log("Invoice sent successfully!");
-  };
-
   return (
     <div className="border-b flex p-4 justify-between items-center bg-white">
       <div className="flex items-center gap-4">
@@ -75,10 +67,7 @@ function InvoiceFormHeader() {
         />
 
         {/* Component 5: Send Invoice Button */}
-        <SendInvoiceButton
-          onSend={handleSendInvoice}
-          recipientEmail="client@example.com"
-        />
+        <SendInvoiceButton />
       </div>
     </div>
   );

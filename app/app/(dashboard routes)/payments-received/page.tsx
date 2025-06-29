@@ -1,5 +1,7 @@
-function PaymentsReceivedPage() {
+import React from "react";
+
+function page() {
   return <div>Payments Received</div>;
 }
 
-export default PaymentsReceivedPage;
+export default page;

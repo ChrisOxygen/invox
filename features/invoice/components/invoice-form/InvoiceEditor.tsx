@@ -6,7 +6,7 @@ import { useInvoiceForm } from "../../index";
 import InvoiceDetails from "./InvoiceDetails";
 import InvoiceTemplate from "./InvoiceTemplate";
 import InvoiceTheme from "./InvoiceTheme";
-import InvoicePreview from "./InvoicePreview";
+import MainTemplate from "../templates/MainTemplate";
 
 function InvoiceEditor() {
   const { state } = useInvoiceForm();
@@ -21,8 +21,10 @@ function InvoiceEditor() {
         </ScrollArea>
       </div>
       <div className=" w-full bg-gray-100 h-full">
-        <ScrollArea className="h-[calc(100vh-160px)] w-fullpr-10">
-          <InvoicePreview />
+        <ScrollArea className="h-[calc(100vh-160px)] w-full pl-5 pr-10">
+          <div className="scale-[90%]">
+            <MainTemplate />
+          </div>
         </ScrollArea>
       </div>
     </div>

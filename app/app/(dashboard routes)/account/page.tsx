@@ -48,6 +48,7 @@ import {
 } from "@/hooks/payments";
 import InBoxLoader from "@/components/InBoxLoader";
 import LogoDropZone from "@/components/LogoDropZone";
+import SignatureDropZone from "@/components/SignatureDropZone";
 
 // Schema for editable business fields
 const editableBusinessSchema = z.object({
@@ -72,6 +73,7 @@ function AccountPage() {
   const [isEditingBusiness, setIsEditingBusiness] = useState(false);
   const [isEditingPaymentAccount, setIsEditingPaymentAccount] = useState(false);
   const [isLogoModalOpen, setIsLogoModalOpen] = useState(false);
+  const [isSignatureModalOpen, setIsSignatureModalOpen] = useState(false);
 
   // Fetch user and business data
   const {
@@ -248,6 +250,26 @@ function AccountPage() {
     toast.error(error);
   };
 
+  // Signature upload handlers
+  const handleSignatureClick = () => {
+    setIsSignatureModalOpen(true);
+  };
+
+  const handleSignatureModalClose = () => {
+    setIsSignatureModalOpen(false);
+  };
+
+  const handleSignatureUploadSuccess = async () => {
+    // Refetch user data to update the UI with new signature
+    await refetch();
+    setIsSignatureModalOpen(false);
+    toast.success("Signature updated successfully!");
+  };
+
+  const handleSignatureUploadError = (error: string) => {
+    toast.error(error);
+  };
+
   if (isLoading) {
     return (
       <div className="w-full h-full grid place-items-center">
@@ -294,68 +316,123 @@ function AccountPage() {
         {/* Personal Information Section */}
         <Card className=" border-none shadow-none">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <FiUser className="h-5 w-5" />
-              Personal Information
-            </CardTitle>
-            <p className="text-sm text-gray-500">
-              Your personal account details (read-only)
-            </p>
+            <div className="flex items-center justify-between">
+              <div>
+                <CardTitle className="flex items-center gap-2">
+                  <FiUser className="h-5 w-5" />
+                  Personal Information
+                </CardTitle>
+                <p className="text-sm text-gray-500">
+                  Your personal account details
+                </p>
+              </div>
+            </div>
           </CardHeader>
           <CardContent className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-2">
-                <Label className="text-sm font-medium text-gray-700 flex items-center gap-2">
-                  <FiLock className="h-3 w-3 text-gray-400" />
-                  Full Name
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              {/* Signature Column */}
+              <div className="lg:col-span-1 space-y-4">
+                <Label className="text-sm font-medium text-gray-700">
+                  Your Signature
                 </Label>
-                <div className="px-3 py-2 bg-gray-50 rounded-md border border-gray-200">
-                  <p className="text-gray-600">{user.name || "Not provided"}</p>
+
+                {/* Signature Display Area */}
+                <div className="aspect-video w-full max-w-32 mx-auto lg:mx-0">
+                  {user.signature ? (
+                    <div className="relative w-full h-full">
+                      <Image
+                        src={user.signature}
+                        alt="Your signature"
+                        fill
+                        className="object-contain rounded-md border border-gray-200"
+                        priority
+                      />
+                    </div>
+                  ) : (
+                    <div className="w-full h-full bg-gray-50 border-2 border-dashed border-gray-200 rounded-md flex flex-col items-center justify-center">
+                      <FiEdit3 className="h-8 w-8 text-gray-300 mb-2" />
+                      <p className="text-xs text-gray-400 text-center">
+                        No signature uploaded
+                      </p>
+                    </div>
+                  )}
                 </div>
-                <p className="text-xs text-gray-400">
-                  Contact support to change your name
+
+                {/* Signature Action Button */}
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={handleSignatureClick}
+                  className="w-full max-w-32 mx-auto lg:mx-0 flex items-center gap-2"
+                >
+                  <FiUpload className="h-3 w-3" />
+                  {user.signature ? "Change Signature" : "Upload Signature"}
+                </Button>
+                <p className="text-xs text-gray-500 text-center max-w-32 mx-auto lg:mx-0">
+                  Your signature will be used on invoices
                 </p>
               </div>
 
-              <div className="space-y-2">
-                <Label className="text-sm font-medium text-gray-700 flex items-center gap-2">
-                  <FiLock className="h-3 w-3 text-gray-400" />
-                  Email Address
-                </Label>
-                <div className="px-3 py-2 bg-gray-50 rounded-md border border-gray-200">
-                  <p className="text-gray-600">{user.email}</p>
-                </div>
-                <p className="text-xs text-gray-400">
-                  This is your login email and cannot be changed
-                </p>
-              </div>
-
-              <div className="space-y-2">
-                <Label className="text-sm font-medium text-gray-700">
-                  Account Status
-                </Label>
-                <div>
-                  <Badge
-                    variant={user.onboardingCompleted ? "default" : "secondary"}
-                    className={
-                      user.onboardingCompleted
-                        ? "bg-green-100 text-green-800"
-                        : "bg-yellow-100 text-yellow-800"
-                    }
-                  >
-                    {user.onboardingCompleted ? "Active" : "Setup Required"}
-                  </Badge>
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <Label className="text-sm font-medium text-gray-700">
-                  Currency
-                </Label>
-                <div className="px-3 py-2 bg-gray-50 rounded-md border border-gray-200">
-                  <p className="text-gray-600">
-                    {user.currency?.toUpperCase() || "Not set"}
+              {/* User Info Columns */}
+              <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <Label className="text-sm font-medium text-gray-700 flex items-center gap-2">
+                    <FiLock className="h-3 w-3 text-gray-400" />
+                    Full Name
+                  </Label>
+                  <div className="px-3 py-2 bg-gray-50 rounded-md border border-gray-200">
+                    <p className="text-gray-600">
+                      {user.name || "Not provided"}
+                    </p>
+                  </div>
+                  <p className="text-xs text-gray-400">
+                    Contact support to change your name
                   </p>
+                </div>
+
+                <div className="space-y-2">
+                  <Label className="text-sm font-medium text-gray-700 flex items-center gap-2">
+                    <FiLock className="h-3 w-3 text-gray-400" />
+                    Email Address
+                  </Label>
+                  <div className="px-3 py-2 bg-gray-50 rounded-md border border-gray-200">
+                    <p className="text-gray-600">{user.email}</p>
+                  </div>
+                  <p className="text-xs text-gray-400">
+                    This is your login email and cannot be changed
+                  </p>
+                </div>
+
+                <div className="space-y-2">
+                  <Label className="text-sm font-medium text-gray-700">
+                    Account Status
+                  </Label>
+                  <div>
+                    <Badge
+                      variant={
+                        user.onboardingCompleted ? "default" : "secondary"
+                      }
+                      className={
+                        user.onboardingCompleted
+                          ? "bg-green-100 text-green-800"
+                          : "bg-yellow-100 text-yellow-800"
+                      }
+                    >
+                      {user.onboardingCompleted ? "Active" : "Setup Required"}
+                    </Badge>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label className="text-sm font-medium text-gray-700">
+                    Currency
+                  </Label>
+                  <div className="px-3 py-2 bg-gray-50 rounded-md border border-gray-200">
+                    <p className="text-gray-600">
+                      {user.currency?.toUpperCase() || "Not set"}
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -961,6 +1038,43 @@ function AccountPage() {
             <Button
               variant="outline"
               onClick={handleLogoModalClose}
+              className="w-full sm:w-auto"
+            >
+              Cancel
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Signature Upload Modal */}
+      <Dialog
+        open={isSignatureModalOpen}
+        onOpenChange={setIsSignatureModalOpen}
+      >
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <FiEdit3 className="h-5 w-5" />
+              {user.signature
+                ? "Change Your Signature"
+                : "Upload Your Signature"}
+            </DialogTitle>
+            <DialogDescription>
+              {user.signature
+                ? "Update your signature that appears on invoices and documents."
+                : "Add your signature that will appear on invoices and documents."}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="py-6">
+            <SignatureDropZone
+              onUploadSuccess={handleSignatureUploadSuccess}
+              onUploadError={handleSignatureUploadError}
+            />
+          </div>
+          <DialogFooter className="flex flex-col sm:flex-row gap-2">
+            <Button
+              variant="outline"
+              onClick={handleSignatureModalClose}
               className="w-full sm:w-auto"
             >
               Cancel

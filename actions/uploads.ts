@@ -135,11 +135,46 @@ export async function _uploadFile(
       };
     }
 
-    // Handle user signature upload (placeholder for future implementation)
+    // Handle user signature upload
     if (type === "userSignature") {
+      // Create filename from user id to make it unique
+      const filename = `signature-${session.user.id}`;
+      const publicId = `user-signatures/${filename}`;
+
+      // Get current user to check if they already have a signature
+      const user = await prisma.user.findUnique({
+        where: { id: session.user.id },
+      });
+
+      // Delete existing signature if it exists
+      if (user?.signature) {
+        await _deleteExistingFile(publicId);
+      }
+
+      // Convert file to buffer for Cloudinary upload
+      const bytes = await file.arrayBuffer();
+      const buffer = Buffer.from(bytes);
+
+      // create image path
+      const imagePath = `data:${file.type};base64,${buffer.toString("base64")}`;
+
+      // Upload to Cloudinary
+      const uploadResult = await cloudinary.uploader.upload(imagePath, {
+        resource_type: "image",
+        public_id: publicId,
+        folder: "user-signatures",
+      });
+
+      // Update user signature in database
+      await prisma.user.update({
+        where: { id: session.user.id },
+        data: { signature: uploadResult.secure_url },
+      });
+
       return {
-        success: false,
-        message: "User signature upload not yet implemented",
+        success: true,
+        message: "Signature uploaded successfully",
+        data: uploadResult.secure_url,
       };
     }
 

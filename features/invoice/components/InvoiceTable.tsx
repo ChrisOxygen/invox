@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { useDebounce } from "@/hooks/useDebounce";
 import {
   Table,
@@ -32,23 +32,24 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import AppDialog from "@/components/AppDialog";
 import { cn } from "@/lib/utils";
 import {
   FiEdit2,
   FiEye,
   FiTrash2,
-  FiMoreVertical,
+  FiMoreHorizontal,
   FiSearch,
 } from "react-icons/fi";
 import { useGetInvoices } from "@/features/invoice/hooks";
 import { useDeleteInvoice } from "@/features/invoice/hooks";
 import { formatCurrency } from "@/utils";
 import { InvoiceStatus } from "@prisma/client";
+import { InvoiceWithRelations } from "@/types/invoice";
 
 // Status badge color map
 const statusColorMap = {
@@ -71,8 +72,6 @@ const sortOptions = [
 const itemsPerPageOptions = [10, 25, 50, 100];
 
 export function InvoiceTable() {
-  const router = useRouter();
-
   // State for filters and pagination
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOrder, setSortOrder] = useState("created_desc");
@@ -81,6 +80,11 @@ export function InvoiceTable() {
   );
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
+
+  // Delete modal state
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [selectedInvoice, setSelectedInvoice] =
+    useState<InvoiceWithRelations | null>(null);
 
   // Debounce the search input to avoid excessive API calls
   const debouncedSearchQuery = useDebounce(searchQuery, 500);
@@ -142,20 +146,22 @@ export function InvoiceTable() {
   });
 
   // Handle invoice deletion
-  const handleDeleteInvoice = (invoiceId: string) => {
-    if (window.confirm("Are you sure you want to delete this invoice?")) {
-      deleteInvoice({ invoiceId });
+  const handleDeleteInvoice = (invoice: InvoiceWithRelations) => {
+    setSelectedInvoice(invoice);
+    setDeleteModalOpen(true);
+  };
+
+  const handleDeleteConfirm = () => {
+    if (selectedInvoice) {
+      deleteInvoice({ invoiceId: selectedInvoice.id });
+      setDeleteModalOpen(false);
+      setSelectedInvoice(null);
     }
   };
 
-  // Handle edit invoice
-  const handleEditInvoice = (invoiceId: string) => {
-    router.push(`/app/invoices/edit/${invoiceId}`);
-  };
-
-  // Handle view invoice
-  const handleViewInvoice = (invoiceId: string) => {
-    router.push(`/app/invoices/view/${invoiceId}`);
+  const handleDeleteCancel = () => {
+    setDeleteModalOpen(false);
+    setSelectedInvoice(null);
   };
 
   // Calculate the range of items being displayed
@@ -249,175 +255,276 @@ export function InvoiceTable() {
 
       {/* Table Section */}
       <div className="rounded-md border border-gray-200">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="w-[120px]">Invoice #</TableHead>
-              <TableHead className="w-[200px]">Client</TableHead>
-              <TableHead className="w-[120px]">Amount</TableHead>
-              <TableHead className="w-[100px]">Status</TableHead>
-              <TableHead className="w-[120px]">Due Date</TableHead>
-              <TableHead className="w-[120px]">Created</TableHead>
-              <TableHead className="w-[100px] text-right">Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {isLoading ? (
-              Array(5)
-                .fill(0)
-                .map((_, index) => (
-                  <TableRow key={`skeleton-${index}`}>
-                    <TableCell>
-                      <Skeleton className="h-6 w-20" />
+        {/* Desktop Table */}
+        <div className="hidden md:block">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="w-[120px]">Invoice #</TableHead>
+                <TableHead className="w-[200px]">Client</TableHead>
+                <TableHead className="w-[120px]">Amount</TableHead>
+                <TableHead className="w-[100px]">Status</TableHead>
+                <TableHead className="w-[120px]">Due Date</TableHead>
+                <TableHead className="w-[120px]">Created</TableHead>
+                <TableHead className="w-[100px] text-right">Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {isLoading ? (
+                Array(5)
+                  .fill(0)
+                  .map((_, index) => (
+                    <TableRow key={`skeleton-${index}`}>
+                      <TableCell>
+                        <Skeleton className="h-6 w-20" />
+                      </TableCell>
+                      <TableCell>
+                        <Skeleton className="h-6 w-32" />
+                      </TableCell>
+                      <TableCell>
+                        <Skeleton className="h-6 w-20" />
+                      </TableCell>
+                      <TableCell>
+                        <Skeleton className="h-6 w-20" />
+                      </TableCell>
+                      <TableCell>
+                        <Skeleton className="h-6 w-24" />
+                      </TableCell>
+                      <TableCell>
+                        <Skeleton className="h-6 w-24" />
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <div className="flex justify-end space-x-1">
+                          <Skeleton className="h-8 w-8 rounded-md" />
+                          <Skeleton className="h-8 w-8 rounded-md" />
+                          <Skeleton className="h-8 w-8 rounded-md" />
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))
+              ) : isError ? (
+                <TableRow>
+                  <TableCell
+                    colSpan={7}
+                    className="text-center py-10 text-red-500"
+                  >
+                    Error: {error}
+                  </TableCell>
+                </TableRow>
+              ) : invoices.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={7} className="text-center py-10">
+                    No invoices found. Try adjusting your filters.
+                  </TableCell>
+                </TableRow>
+              ) : (
+                invoices.map((invoice) => (
+                  <TableRow key={invoice.id} className="hover:bg-gray-50">
+                    <TableCell className="font-medium">
+                      <Link
+                        href={`/app/invoices/${invoice.id}`}
+                        className="font-medium text-gray-900 hover:text-gray-700 cursor-pointer"
+                      >
+                        {invoice.invoiceNumber ||
+                          `INV-${invoice.id.slice(0, 8)}`}
+                      </Link>
                     </TableCell>
                     <TableCell>
-                      <Skeleton className="h-6 w-32" />
+                      {invoice.client?.BusinessName || "N/A"}
                     </TableCell>
                     <TableCell>
-                      <Skeleton className="h-6 w-20" />
+                      {formatCurrency(invoice.subtotal || 0)}
                     </TableCell>
                     <TableCell>
-                      <Skeleton className="h-6 w-20" />
+                      <Badge
+                        className={cn(
+                          statusColorMap[invoice.status] || statusColorMap.DRAFT
+                        )}
+                      >
+                        {invoice.status}
+                      </Badge>
                     </TableCell>
                     <TableCell>
-                      <Skeleton className="h-6 w-24" />
+                      {invoice.paymentDueDate
+                        ? new Date(invoice.paymentDueDate).toLocaleDateString()
+                        : "N/A"}
                     </TableCell>
                     <TableCell>
-                      <Skeleton className="h-6 w-24" />
+                      {invoice.createdAt
+                        ? new Date(invoice.createdAt).toLocaleDateString()
+                        : "N/A"}
                     </TableCell>
                     <TableCell className="text-right">
-                      <div className="flex justify-end space-x-1">
-                        <Skeleton className="h-8 w-8 rounded-md" />
-                        <Skeleton className="h-8 w-8 rounded-md" />
-                        <Skeleton className="h-8 w-8 rounded-md" />
+                      <div className="flex items-center space-x-2">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          asChild
+                          className="border-gray-300 hover:border-black hover:bg-gray-50"
+                        >
+                          <Link href={`/app/invoices/${invoice.id}`}>
+                            <FiEye className="h-3 w-3" />
+                          </Link>
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          asChild
+                          className="border-gray-300 hover:border-black hover:bg-gray-50"
+                        >
+                          <Link href={`/app/invoices/edit/${invoice.id}`}>
+                            <FiEdit2 className="h-3 w-3" />
+                          </Link>
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDeleteInvoice(invoice);
+                          }}
+                          className="border-gray-300 hover:border-red-500 hover:bg-red-50 hover:text-red-600"
+                        >
+                          <FiTrash2 className="h-3 w-3" />
+                        </Button>
                       </div>
                     </TableCell>
                   </TableRow>
                 ))
-            ) : isError ? (
-              <TableRow>
-                <TableCell
-                  colSpan={7}
-                  className="text-center py-10 text-red-500"
-                >
-                  Error: {error}
-                </TableCell>
-              </TableRow>
-            ) : invoices.length === 0 ? (
-              <TableRow>
-                <TableCell colSpan={7} className="text-center py-10">
-                  No invoices found. Try adjusting your filters.
-                </TableCell>
-              </TableRow>
-            ) : (
-              invoices.map((invoice) => (
-                <TableRow key={invoice.id} className="hover:bg-gray-50">
-                  <TableCell className="font-medium">
-                    <Button
-                      variant="link"
-                      className="p-0 h-auto font-medium text-gray-900 hover:text-gray-700 cursor-pointer"
-                      onClick={() => handleViewInvoice(invoice.id)}
-                    >
-                      {invoice.invoiceNumber || `INV-${invoice.id.slice(0, 8)}`}
-                    </Button>
-                  </TableCell>
-                  <TableCell>{invoice.client?.BusinessName || "N/A"}</TableCell>
-                  <TableCell>{formatCurrency(invoice.subtotal || 0)}</TableCell>
-                  <TableCell>
-                    <Badge
-                      className={cn(
-                        statusColorMap[invoice.status] || statusColorMap.DRAFT
-                      )}
-                    >
-                      {invoice.status}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>
-                    {invoice.paymentDueDate
-                      ? new Date(invoice.paymentDueDate).toLocaleDateString()
-                      : "N/A"}
-                  </TableCell>
-                  <TableCell>
-                    {invoice.createdAt
-                      ? new Date(invoice.createdAt).toLocaleDateString()
-                      : "N/A"}
-                  </TableCell>
-                  <TableCell className="text-right">
-                    {/* Desktop Actions */}
-                    <div className="hidden md:flex justify-end space-x-1">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => handleViewInvoice(invoice.id)}
-                        className="h-8 w-8 text-gray-500 hover:text-gray-900 cursor-pointer"
-                      >
-                        <FiEye className="h-4 w-4" />
-                        <span className="sr-only">View</span>
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => handleEditInvoice(invoice.id)}
-                        className="h-8 w-8 text-gray-500 hover:text-gray-900 cursor-pointer"
-                      >
-                        <FiEdit2 className="h-4 w-4" />
-                        <span className="sr-only">Edit</span>
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => handleDeleteInvoice(invoice.id)}
-                        className="h-8 w-8 text-gray-500 hover:text-gray-900 cursor-pointer"
-                        disabled={isDeleting}
-                      >
-                        <FiTrash2 className="h-4 w-4" />
-                        <span className="sr-only">Delete</span>
-                      </Button>
-                    </div>
+              )}
+            </TableBody>
+          </Table>
+        </div>
 
-                    {/* Mobile Actions */}
-                    <div className="md:hidden">
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
+        {/* Mobile Cards */}
+        <div className="md:hidden">
+          {isLoading ? (
+            <div className="space-y-4 p-4">
+              {[...Array(5)].map((_, i) => (
+                <div key={i} className="border rounded-lg p-4">
+                  <div className="space-y-3">
+                    <div className="flex justify-between items-start">
+                      <Skeleton className="h-5 w-24" />
+                      <Skeleton className="h-6 w-16" />
+                    </div>
+                    <Skeleton className="h-4 w-32" />
+                    <Skeleton className="h-4 w-20" />
+                    <div className="flex justify-between items-center pt-2">
+                      <Skeleton className="h-4 w-16" />
+                      <Skeleton className="h-4 w-20" />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : isError ? (
+            <div className="text-center py-10 text-red-500 p-4">
+              Error: {error}
+            </div>
+          ) : invoices.length === 0 ? (
+            <div className="text-center py-10 p-4">
+              No invoices found. Try adjusting your filters.
+            </div>
+          ) : (
+            <div className="space-y-4 p-4">
+              {invoices.map((invoice) => (
+                <div
+                  key={invoice.id}
+                  className="border rounded-lg p-4 bg-white hover:bg-gray-50 transition-colors"
+                >
+                  <div className="flex justify-between items-start mb-3">
+                    <div className="flex-1">
+                      <Link
+                        href={`/app/invoices/${invoice.id}`}
+                        className="font-medium text-black hover:text-gray-700"
+                      >
+                        {invoice.invoiceNumber ||
+                          `INV-${invoice.id.slice(0, 8)}`}
+                      </Link>
+                      <div className="text-sm text-gray-500 mt-1">
+                        {invoice.client?.BusinessName || "N/A"}
+                      </div>
+                      <div className="flex items-center gap-2 mt-2">
+                        <Badge
+                          className={cn(
+                            statusColorMap[invoice.status] ||
+                              statusColorMap.DRAFT,
+                            "text-xs"
+                          )}
+                        >
+                          {invoice.status}
+                        </Badge>
+                        <span className="text-sm font-medium text-black">
+                          {formatCurrency(invoice.subtotal || 0)}
+                        </span>
+                      </div>
+                    </div>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="border-gray-300 hover:border-black"
+                        >
+                          <FiMoreHorizontal className="h-4 w-4" />
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent align="end" className="w-40 p-2">
+                        <div className="space-y-1">
                           <Button
                             variant="ghost"
-                            size="icon"
-                            className="h-8 w-8 cursor-pointer"
+                            size="sm"
+                            asChild
+                            className="w-full justify-start hover:bg-gray-100"
                           >
-                            <FiMoreVertical className="h-4 w-4" />
-                            <span className="sr-only">Open menu</span>
+                            <Link href={`/app/invoices/${invoice.id}`}>
+                              <FiEye className="mr-2 h-3 w-3" />
+                              View
+                            </Link>
                           </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuItem
-                            onClick={() => handleViewInvoice(invoice.id)}
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            asChild
+                            className="w-full justify-start hover:bg-gray-100"
                           >
-                            <FiEye className="mr-2 h-4 w-4" />
-                            <span>View</span>
-                          </DropdownMenuItem>
-                          <DropdownMenuItem
-                            onClick={() => handleEditInvoice(invoice.id)}
+                            <Link href={`/app/invoices/edit/${invoice.id}`}>
+                              <FiEdit2 className="mr-2 h-3 w-3" />
+                              Edit
+                            </Link>
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleDeleteInvoice(invoice)}
+                            className="w-full justify-start hover:bg-red-50 hover:text-red-600"
                           >
-                            <FiEdit2 className="mr-2 h-4 w-4" />
-                            <span>Edit</span>
-                          </DropdownMenuItem>
-                          <DropdownMenuItem
-                            onClick={() => handleDeleteInvoice(invoice.id)}
-                            disabled={isDeleting}
-                            className="text-red-600"
-                          >
-                            <FiTrash2 className="mr-2 h-4 w-4" />
-                            <span>Delete</span>
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
+                            <FiTrash2 className="mr-2 h-3 w-3" />
+                            Delete
+                          </Button>
+                        </div>
+                      </PopoverContent>
+                    </Popover>
+                  </div>
+                  <div className="flex justify-between items-center pt-2 border-t border-gray-100 text-xs text-gray-500">
+                    <span>
+                      Due:{" "}
+                      {invoice.paymentDueDate
+                        ? new Date(invoice.paymentDueDate).toLocaleDateString()
+                        : "N/A"}
+                    </span>
+                    <span>
+                      Created:{" "}
+                      {invoice.createdAt
+                        ? new Date(invoice.createdAt).toLocaleDateString()
+                        : "N/A"}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Pagination Section */}
@@ -494,6 +601,55 @@ export function InvoiceTable() {
           </div>
         </div>
       )}
+
+      {/* Delete Confirmation Modal */}
+      <AppDialog
+        open={deleteModalOpen}
+        onOpenChange={(open) => !open && handleDeleteCancel()}
+        title={`Delete Invoice ${
+          selectedInvoice?.invoiceNumber || selectedInvoice?.id.slice(0, 8)
+        }?`}
+      >
+        <div className="space-y-6">
+          <div className="text-center space-y-2">
+            <div className="mx-auto w-12 h-12 rounded-full bg-red-100 flex items-center justify-center">
+              <FiTrash2 className="h-6 w-6 text-red-600" />
+            </div>
+            <p className="text-sm text-gray-600">
+              This action cannot be undone. This will permanently delete the
+              invoice and remove all associated data from our servers.
+            </p>
+          </div>
+
+          <div className="flex flex-col sm:flex-row gap-3 justify-end">
+            <Button
+              variant="outline"
+              onClick={handleDeleteCancel}
+              disabled={isDeleting}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={handleDeleteConfirm}
+              disabled={isDeleting}
+              className="flex items-center gap-2"
+            >
+              {isDeleting ? (
+                <>
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                  Deleting...
+                </>
+              ) : (
+                <>
+                  <FiTrash2 className="h-4 w-4" />
+                  Delete Invoice
+                </>
+              )}
+            </Button>
+          </div>
+        </div>
+      </AppDialog>
     </div>
   );
 }

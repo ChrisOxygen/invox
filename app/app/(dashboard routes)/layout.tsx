@@ -13,7 +13,8 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
 
   const isInvoiceFormRoute =
-    pathname.includes("/app/invoices/create") || pathname.includes("/edit");
+    pathname.includes("/app/invoices/create") ||
+    pathname.includes("/app/invoices/edit");
 
   // Handle redirect in useEffect to avoid render-time navigation
   useEffect(() => {

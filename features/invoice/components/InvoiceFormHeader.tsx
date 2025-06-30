@@ -4,8 +4,7 @@ import React from "react";
 import { SaveStatusIndicator } from "./SaveStatusIndicator";
 import { ActionsDropdown } from "./ActionsDropdown";
 import { FavoriteButton } from "./FavoriteButton";
-import { DownloadPDFButton } from "./DownloadPDFButton";
-import { SendInvoiceButton } from "./SendInvoiceButton";
+import { InvoiceSaveActions } from "./InvoiceSaveActions";
 import { useInvoiceForm } from "../index";
 
 function InvoiceFormHeader() {
@@ -35,13 +34,6 @@ function InvoiceFormHeader() {
     );
   };
 
-  const handleDownloadPDF = async () => {
-    console.log("Generating PDF...");
-    // Simulate PDF generation
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    console.log("PDF downloaded!");
-  };
-
   return (
     <div className="border-b flex p-4 justify-between items-center bg-white">
       <div className="flex items-center gap-4">
@@ -60,14 +52,8 @@ function InvoiceFormHeader() {
         {/* Component 3: Favorite Button */}
         <FavoriteButton onToggle={handleFavoriteToggle} />
 
-        {/* Component 4: Download PDF Button */}
-        <DownloadPDFButton
-          onDownload={handleDownloadPDF}
-          fileName="invoice-2024-001.pdf"
-        />
-
-        {/* Component 5: Send Invoice Button */}
-        <SendInvoiceButton />
+        {/* Component 4 & 5: Save Actions (replaces Download PDF and Send Invoice buttons) */}
+        <InvoiceSaveActions />
       </div>
     </div>
   );

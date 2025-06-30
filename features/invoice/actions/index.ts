@@ -1,6 +1,6 @@
 "use server";
 
-import { PrismaClient, InvoiceStatus } from "@prisma/client";
+import { PrismaClient, InvoiceStatus, Client, Business } from "@prisma/client";
 import { auth } from "@/auth";
 import { ApiResponse } from "@/types/api";
 import { UserWithBusiness } from "@/types/database";
@@ -27,6 +27,32 @@ import {
 } from "@/dataSchemas/invoice";
 
 const prisma = new PrismaClient();
+
+// Helper function to transform Prisma invoice result to InvoiceWithRelations
+function transformInvoiceToWithRelations(invoice: {
+  id: string;
+  invoiceNumber: string;
+  invoiceDate: Date;
+  paymentDueDate: Date;
+  subtotal: number;
+  taxes: number;
+  invoiceItems: unknown;
+  acceptedPaymentMethods: string;
+  status: InvoiceStatus;
+  businessId: string;
+  clientId: string;
+  createdAt: Date;
+  updatedAt: Date;
+  client: Client;
+  business: Business;
+}): InvoiceWithRelations {
+  return {
+    ...invoice,
+    invoiceItems: Array.isArray(invoice.invoiceItems)
+      ? invoice.invoiceItems
+      : undefined,
+  };
+}
 
 // Get user and business details for invoice creation
 export async function _getUserAndBusiness(): Promise<
@@ -125,6 +151,33 @@ export async function _createInvoice(
       };
     }
 
+    // Validate and sanitize invoice items
+    const invoiceItems = validatedData.data.items || [];
+
+    if (!invoiceItems || invoiceItems.length === 0) {
+      return {
+        success: false,
+        message: "At least one invoice item is required",
+      };
+    }
+
+    // Sanitize and validate each item
+    const sanitizedItems = invoiceItems.map((item, index) => {
+      const sanitizedItem = {
+        description: item.description?.trim() || `Item ${index + 1}`,
+        quantity: Math.max(1, Math.round(item.quantity || 1)),
+        unitPrice: Math.max(0.01, Number((item.unitPrice || 0).toFixed(2))),
+      };
+
+      // Calculate total for this item
+      const itemTotal = sanitizedItem.quantity * sanitizedItem.unitPrice;
+
+      return {
+        ...sanitizedItem,
+        total: Number(itemTotal.toFixed(2)),
+      };
+    });
+
     // Get user's business
     const user = await prisma.user.findUnique({
       where: { id: session.user.id },
@@ -181,6 +234,7 @@ export async function _createInvoice(
         paymentDueDate: validatedData.data.paymentDueDate,
         subtotal: validatedData.data.subtotal,
         taxes: validatedData.data.taxes,
+        invoiceItems: sanitizedItems, // Store the sanitized invoice items
         acceptedPaymentMethods: validatedData.data.acceptedPaymentMethods,
         status: InvoiceStatus.DRAFT,
         businessId: user.business.id,
@@ -195,7 +249,7 @@ export async function _createInvoice(
     return {
       success: true,
       message: "Invoice created successfully",
-      data: newInvoice as InvoiceWithRelations,
+      data: transformInvoiceToWithRelations(newInvoice),
     };
   } catch (error) {
     console.error("Error creating invoice:", error);
@@ -278,6 +332,35 @@ export async function _updateInvoice(
       }
     }
 
+    // Validate and sanitize invoice items if provided
+    let sanitizedItems = undefined;
+    if (validatedData.data.items) {
+      const invoiceItems = validatedData.data.items;
+
+      if (invoiceItems.length === 0) {
+        return {
+          success: false,
+          message: "At least one invoice item is required",
+        };
+      }
+
+      sanitizedItems = invoiceItems.map((item, index) => {
+        const sanitizedItem = {
+          description: item.description?.trim() || `Item ${index + 1}`,
+          quantity: Math.max(1, Math.round(item.quantity || 1)),
+          unitPrice: Math.max(0.01, Number((item.unitPrice || 0).toFixed(2))),
+        };
+
+        // Calculate total for this item
+        const itemTotal = sanitizedItem.quantity * sanitizedItem.unitPrice;
+
+        return {
+          ...sanitizedItem,
+          total: Number(itemTotal.toFixed(2)),
+        };
+      });
+    }
+
     // Update the invoice
     const updatedInvoice = await prisma.invoice.update({
       where: { id: validatedData.data.invoiceId },
@@ -297,6 +380,9 @@ export async function _updateInvoice(
         ...(validatedData.data.taxes !== undefined && {
           taxes: validatedData.data.taxes,
         }),
+        ...(sanitizedItems && {
+          invoiceItems: sanitizedItems,
+        }),
         ...(validatedData.data.acceptedPaymentMethods && {
           acceptedPaymentMethods: validatedData.data.acceptedPaymentMethods,
         }),
@@ -311,7 +397,7 @@ export async function _updateInvoice(
     return {
       success: true,
       message: "Invoice updated successfully",
-      data: updatedInvoice,
+      data: transformInvoiceToWithRelations(updatedInvoice),
     };
   } catch (error) {
     console.error("Error updating invoice:", error);
@@ -396,7 +482,7 @@ export async function _updateInvoiceStatus(
     return {
       success: true,
       message: "Invoice status updated successfully",
-      data: updatedInvoice,
+      data: transformInvoiceToWithRelations(updatedInvoice),
     };
   } catch (error) {
     console.error("Error updating invoice status:", error);
@@ -443,7 +529,7 @@ export async function _getInvoice(invoiceId: string): Promise<InvoiceResponse> {
     return {
       success: true,
       message: "Invoice retrieved successfully",
-      data: invoice,
+      data: transformInvoiceToWithRelations(invoice),
     };
   } catch (error) {
     console.error("Error getting invoice:", error);
@@ -607,7 +693,7 @@ export async function _getInvoices(
       success: true,
       message: "Invoices retrieved successfully",
       data: {
-        invoices,
+        invoices: invoices.map(transformInvoiceToWithRelations),
         totalCount,
         totalPages,
         currentPage: page,

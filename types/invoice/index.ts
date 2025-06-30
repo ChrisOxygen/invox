@@ -1,9 +1,18 @@
 import { Invoice, InvoiceStatus, Client, Business } from "@prisma/client";
 
-// Invoice with related data
-export interface InvoiceWithRelations extends Invoice {
+// Raw invoice item type (from JSON storage)
+export interface RawInvoiceItem {
+  description?: string;
+  quantity?: number;
+  unitPrice?: number;
+  total?: number;
+}
+
+// Invoice with related data (extends Prisma's Invoice but overrides invoiceItems type)
+export interface InvoiceWithRelations extends Omit<Invoice, "invoiceItems"> {
   client: Client;
   business: Business;
+  invoiceItems?: RawInvoiceItem[]; // Override the JsonValue type
 }
 
 // Invoice item type (for form handling)

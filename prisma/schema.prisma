@@ -180,6 +180,7 @@ model Invoice {
   paymentDueDate         DateTime
   subtotal               Float // Note: Consider using cents/integer for financial precision
   taxes                  Float // Note: Consider using cents/integer for financial precision
+  invoiceItems           Json // Array of invoice items with description, quantity, unitPrice
   
   acceptedPaymentMethods String
   status                 InvoiceStatus @default(DRAFT)

@@ -128,8 +128,50 @@ export function useInvoiceFormLogic({
       });
       dispatch({ type: "SET_TAX", payload: existingInvoice.taxes || 0 });
 
-      // Note: You'll need to extract items from somewhere, as they're not in the current schema
-      // This might require updating your invoice model to include items
+      // Load invoice items from the existing invoice
+      if (
+        existingInvoice.invoiceItems &&
+        Array.isArray(existingInvoice.invoiceItems) &&
+        existingInvoice.invoiceItems.length > 0
+      ) {
+        const loadedItems = existingInvoice.invoiceItems.map(
+          (item: {
+            description?: string;
+            quantity?: number;
+            unitPrice?: number;
+            total?: number;
+          }) => ({
+            description: item.description || "",
+            quantity: Number(item.quantity) || 1,
+            unitPrice: Number(item.unitPrice) || 0,
+          })
+        );
+
+        dispatch({
+          type: "SET_INVOICE_ITEMS",
+          payload: loadedItems,
+        });
+      } else {
+        // Ensure at least one empty item exists if no items are loaded from the database
+        dispatch({
+          type: "SET_INVOICE_ITEMS",
+          payload: [
+            {
+              description: "",
+              quantity: 1,
+              unitPrice: 0,
+            },
+          ],
+        });
+      }
+
+      // Set other fields if they exist
+      if (existingInvoice.acceptedPaymentMethods) {
+        dispatch({
+          type: "SET_ACCEPTED_PAYMENT_METHODS",
+          payload: existingInvoice.acceptedPaymentMethods,
+        });
+      }
     }
   }, [existingInvoice, state.formMode, dispatch]);
 

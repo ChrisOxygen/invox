@@ -12,7 +12,7 @@ function TaxInput() {
     <div className="">
       <Input
         type="number"
-        placeholder="Tax"
+        placeholder="Tax Amount"
         value={tax}
         onChange={(e) => setTax(Number(e.target.value))}
       />

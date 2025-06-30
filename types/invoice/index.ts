@@ -13,6 +13,7 @@ export interface InvoiceWithRelations extends Omit<Invoice, "invoiceItems"> {
   client: Client;
   business: Business;
   invoiceItems?: RawInvoiceItem[]; // Override the JsonValue type
+  discount: number; // Ensure discount is included
 }
 
 // Invoice item type (for form handling)

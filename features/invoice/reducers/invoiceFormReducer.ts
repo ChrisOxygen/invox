@@ -163,6 +163,19 @@ export function invoiceFormReducer(
         invoiceId: state.invoiceId,
         client: state.client,
       };
+    case "LOAD_EXISTING_INVOICE":
+      return {
+        ...state,
+        client: action.payload.client,
+        invoiceNumber: action.payload.invoiceNumber,
+        invoiceDate: action.payload.invoiceDate,
+        paymentDueDate: action.payload.paymentDueDate,
+        tax: action.payload.taxes,
+        discount: action.payload.discount || 0,
+        invoiceItems: action.payload.invoiceItems,
+        acceptedPaymentMethods: action.payload.acceptedPaymentMethods || "",
+        // Don't set hasUnsavedChanges when loading existing data
+      };
     default:
       return state;
   }

@@ -19,8 +19,8 @@ export function createFingerprint(state: InvoiceFormState): string {
 
     // Invoice details
     invoiceNumber: state.invoiceNumber,
-    invoiceDate: state.invoiceDate,
-    paymentDueDate: state.paymentDueDate,
+    invoiceDate: state.invoiceDate?.getTime(), // Use timestamp for stable comparison
+    paymentDueDate: state.paymentDueDate?.getTime(), // Use timestamp for stable comparison
     paymentTerms: state.paymentTerms,
     acceptedPaymentMethods: state.acceptedPaymentMethods,
 
@@ -46,7 +46,12 @@ export function createFingerprint(state: InvoiceFormState): string {
 
   // Convert to string for fingerprinting
   // Using JSON.stringify with stable key ordering to ensure consistent hashing
-  return JSON.stringify(relevantData, Object.keys(relevantData).sort());
+  const fingerprint = JSON.stringify(
+    relevantData,
+    Object.keys(relevantData).sort()
+  );
+
+  return fingerprint;
 }
 
 /**

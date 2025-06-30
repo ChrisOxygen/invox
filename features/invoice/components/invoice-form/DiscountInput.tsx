@@ -12,7 +12,7 @@ function DiscountInput() {
     <div className="">
       <Input
         type="number"
-        placeholder="Discount"
+        placeholder="Discount Amount"
         value={discount}
         onChange={(e) => setDiscount(Number(e.target.value))}
       />

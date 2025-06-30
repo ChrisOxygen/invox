@@ -36,6 +36,7 @@ function transformInvoiceToWithRelations(invoice: {
   paymentDueDate: Date;
   subtotal: number;
   taxes: number;
+  discount?: number;
   invoiceItems: unknown;
   acceptedPaymentMethods: string;
   status: InvoiceStatus;
@@ -48,6 +49,7 @@ function transformInvoiceToWithRelations(invoice: {
 }): InvoiceWithRelations {
   return {
     ...invoice,
+    discount: invoice.discount || 0, // Default to 0 if not present
     invoiceItems: Array.isArray(invoice.invoiceItems)
       ? invoice.invoiceItems
       : undefined,
@@ -234,6 +236,7 @@ export async function _createInvoice(
         paymentDueDate: validatedData.data.paymentDueDate,
         subtotal: validatedData.data.subtotal,
         taxes: validatedData.data.taxes,
+        discount: validatedData.data.discount || 0,
         invoiceItems: sanitizedItems, // Store the sanitized invoice items
         acceptedPaymentMethods: validatedData.data.acceptedPaymentMethods,
         status: InvoiceStatus.DRAFT,

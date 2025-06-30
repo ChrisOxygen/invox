@@ -24,11 +24,24 @@ export function useInvoiceAutoSave({
   // Store the last saved form fingerprint to prevent unnecessary saves
   const lastSavedFingerprint = useRef<string | null>(null);
 
+  // Update fingerprint immediately when form data is loaded to prevent auto-save
+  useEffect(() => {
+    if (
+      state.formMode === "edit" &&
+      state.invoiceId &&
+      !state.hasUnsavedChanges &&
+      state.client
+    ) {
+      // Update the fingerprint to current state when form is loaded without unsaved changes
+      lastSavedFingerprint.current = createFingerprint(state);
+    }
+  }, [state]);
+
   const { mutate: createInvoice, isPending: creatingInvoice } =
     useCreateInvoice({
       onSuccess: (response) => {
         // Update fingerprint after successful save
-        lastSavedFingerprint.current = createFingerprint(state);
+        lastSavedFingerprint.current = createFingerprint(debouncedState);
 
         // Store the new invoice ID and switch to edit mode
         if (response.data?.id) {
@@ -48,7 +61,7 @@ export function useInvoiceAutoSave({
     useUpdateInvoice({
       onSuccess: () => {
         // Update fingerprint after successful save
-        lastSavedFingerprint.current = createFingerprint(state);
+        lastSavedFingerprint.current = createFingerprint(debouncedState);
 
         dispatch({ type: "SET_UNSAVED_CHANGES", payload: false });
       },
@@ -61,6 +74,11 @@ export function useInvoiceAutoSave({
   useEffect(() => {
     // Skip auto-save on initial load or if form is still loading
     if (!hasInitialized.current || formLoading) {
+      return;
+    }
+
+    // Skip auto-save if form doesn't have unsaved changes
+    if (!state.hasUnsavedChanges) {
       return;
     }
 
@@ -79,6 +97,8 @@ export function useInvoiceAutoSave({
       return;
     }
 
+    console.log("🚀 Auto-save triggered");
+
     // Prepare invoice data
     const invoiceItems = debouncedState.invoiceItems.map((item) => ({
       description: item.description || "",
@@ -88,8 +108,9 @@ export function useInvoiceAutoSave({
     }));
 
     const subtotal = invoiceItems.reduce((sum, item) => sum + item.total, 0);
-    const taxes = subtotal * ((debouncedState.tax || 0) / 100);
-    const total = subtotal + taxes - (debouncedState.discount || 0);
+    const taxAmount = debouncedState.tax || 0; // Tax as absolute amount
+    const discountAmount = debouncedState.discount || 0; // Discount as absolute amount
+    const total = Math.max(0, subtotal - taxAmount - discountAmount); // Subtract both tax and discount, ensure non-negative
 
     try {
       if (debouncedState.formMode === "create") {
@@ -101,7 +122,8 @@ export function useInvoiceAutoSave({
           paymentDueDate: debouncedState.paymentDueDate,
           items: invoiceItems,
           subtotal,
-          taxes,
+          taxes: taxAmount,
+          discount: discountAmount,
           total,
           acceptedPaymentMethods:
             debouncedState.paymentAccount?.gatewayType || "bank-transfer",
@@ -122,7 +144,8 @@ export function useInvoiceAutoSave({
           paymentDueDate: debouncedState.paymentDueDate,
           items: invoiceItems,
           subtotal,
-          taxes,
+          taxes: taxAmount,
+          discount: discountAmount,
           total,
           acceptedPaymentMethods:
             debouncedState.paymentAccount?.gatewayType || "bank-transfer",
@@ -137,6 +160,7 @@ export function useInvoiceAutoSave({
     }
   }, [
     debouncedState,
+    state.hasUnsavedChanges,
     formLoading,
     hasInitialized,
     createInvoice,

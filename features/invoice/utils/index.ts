@@ -20,14 +20,14 @@ export const calculateSubtotal = (items: InvoiceItem[]): number => {
   return items.reduce((sum, item) => sum + item.total, 0);
 };
 
-// Calculate total with tax and discount
+// Calculate total with tax and discount (both as absolute amounts)
 export const calculateTotal = (
   subtotal: number,
-  taxRate: number = 0,
-  discount: number = 0
+  taxAmount: number = 0,
+  discountAmount: number = 0
 ): number => {
-  const taxAmount = subtotal * (taxRate / 100);
-  const total = subtotal + taxAmount - discount;
+  // Tax and discount are both subtracted from subtotal as absolute amounts
+  const total = subtotal - taxAmount - discountAmount;
   return Math.max(0, Math.round(total * 100) / 100); // Ensure non-negative and round to 2 decimal places
 };
 
@@ -250,18 +250,17 @@ export function formatInvoiceData(state: InvoiceFormState) {
         (sum, item) => sum + item.total,
         0
       ),
-      taxAmount: 0, // Will be calculated based on subtotal and tax percentage
-      discountAmount: 0, // Will be calculated based on subtotal and discount
+      taxAmount: 0, // Will be calculated as absolute amount
+      discountAmount: 0, // Will be calculated as absolute amount
       finalTotal: 0, // Will be calculated after tax and discount
     },
   };
 
-  // Calculate financial totals
+  // Calculate financial totals with absolute amounts
   const subtotal = formattedData.calculations.subtotal;
-  const discountAmount = (subtotal * formattedData.discount) / 100;
-  const subtotalAfterDiscount = subtotal - discountAmount;
-  const taxAmount = (subtotalAfterDiscount * formattedData.tax) / 100;
-  const finalTotal = subtotalAfterDiscount + taxAmount;
+  const taxAmount = formattedData.tax; // Tax as absolute amount
+  const discountAmount = formattedData.discount; // Discount as absolute amount
+  const finalTotal = Math.max(0, subtotal - taxAmount - discountAmount); // Subtract both tax and discount
 
   // Update calculations
   formattedData.calculations.taxAmount = taxAmount;

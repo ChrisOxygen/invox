@@ -43,13 +43,13 @@ function InvoiceDetails() {
         <div className="flex gap-3 w-full">
           <div className="flex flex-col gap-2 flex-grow">
             <label className="text-sm font-medium text-gray-900">
-              Discount
+              Tax Amount
             </label>
             <TaxInput />
           </div>
           <div className="flex flex-col gap-2 flex-grow">
             <label className="text-sm font-medium text-gray-900">
-              Tax after discount
+              Discount Amount
             </label>
             <DiscountInput />
           </div>

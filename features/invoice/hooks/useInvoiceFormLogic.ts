@@ -113,28 +113,19 @@ export function useInvoiceFormLogic({
   // Load existing invoice data when in edit mode
   useEffect(() => {
     if (existingInvoice && state.formMode === "edit") {
-      dispatch({ type: "SET_CLIENT", payload: existingInvoice.client });
-      dispatch({
-        type: "SET_INVOICE_NUMBER",
-        payload: existingInvoice.invoiceNumber || "",
-      });
-      dispatch({
-        type: "SET_INVOICE_DATE",
-        payload: existingInvoice.invoiceDate,
-      });
-      dispatch({
-        type: "SET_PAYMENT_DUE_DATE",
-        payload: existingInvoice.paymentDueDate,
-      });
-      dispatch({ type: "SET_TAX", payload: existingInvoice.taxes || 0 });
-
       // Load invoice items from the existing invoice
+      let loadedItems: {
+        description?: string;
+        quantity?: number;
+        unitPrice?: number;
+      }[] = [];
+
       if (
         existingInvoice.invoiceItems &&
         Array.isArray(existingInvoice.invoiceItems) &&
         existingInvoice.invoiceItems.length > 0
       ) {
-        const loadedItems = existingInvoice.invoiceItems.map(
+        loadedItems = existingInvoice.invoiceItems.map(
           (item: {
             description?: string;
             quantity?: number;
@@ -146,32 +137,34 @@ export function useInvoiceFormLogic({
             unitPrice: Number(item.unitPrice) || 0,
           })
         );
-
-        dispatch({
-          type: "SET_INVOICE_ITEMS",
-          payload: loadedItems,
-        });
       } else {
         // Ensure at least one empty item exists if no items are loaded from the database
-        dispatch({
-          type: "SET_INVOICE_ITEMS",
-          payload: [
-            {
-              description: "",
-              quantity: 1,
-              unitPrice: 0,
-            },
-          ],
-        });
+        loadedItems = [
+          {
+            description: "",
+            quantity: 1,
+            unitPrice: 0,
+          },
+        ];
       }
 
-      // Set other fields if they exist
-      if (existingInvoice.acceptedPaymentMethods) {
-        dispatch({
-          type: "SET_ACCEPTED_PAYMENT_METHODS",
-          payload: existingInvoice.acceptedPaymentMethods,
-        });
-      }
+      // Use the new action to load all data at once without triggering unsaved changes
+      dispatch({
+        type: "LOAD_EXISTING_INVOICE",
+        payload: {
+          client: existingInvoice.client,
+          invoiceNumber: existingInvoice.invoiceNumber || "",
+          invoiceDate: existingInvoice.invoiceDate,
+          paymentDueDate: existingInvoice.paymentDueDate,
+          taxes: existingInvoice.taxes || 0,
+          discount: existingInvoice.discount,
+          invoiceItems: loadedItems,
+          acceptedPaymentMethods: existingInvoice.acceptedPaymentMethods,
+        },
+      });
+
+      // Set the form as clean after loading
+      dispatch({ type: "SET_UNSAVED_CHANGES", payload: false });
     }
   }, [existingInvoice, state.formMode, dispatch]);
 

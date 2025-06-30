@@ -129,6 +129,23 @@ export type InvoiceFormAction =
     }
   | {
       type: "RESET_FORM";
+    }
+  | {
+      type: "LOAD_EXISTING_INVOICE";
+      payload: {
+        client: Client;
+        invoiceNumber: string;
+        invoiceDate: Date;
+        paymentDueDate: Date;
+        taxes: number;
+        discount?: number;
+        invoiceItems: {
+          description?: string;
+          quantity?: number;
+          unitPrice?: number;
+        }[];
+        acceptedPaymentMethods?: string;
+      };
     };
 
 export interface InvoiceFormContextType {

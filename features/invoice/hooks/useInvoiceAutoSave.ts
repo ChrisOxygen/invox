@@ -26,9 +26,15 @@ export function useInvoiceAutoSave({
 
   const { mutate: createInvoice, isPending: creatingInvoice } =
     useCreateInvoice({
-      onSuccess: () => {
+      onSuccess: (response) => {
         // Update fingerprint after successful save
         lastSavedFingerprint.current = createFingerprint(state);
+
+        // Store the new invoice ID and switch to edit mode
+        if (response.data?.id) {
+          dispatch({ type: "SET_INVOICE_ID", payload: response.data.id });
+          dispatch({ type: "SET_FORM_MODE", payload: "edit" });
+        }
 
         dispatch({ type: "SET_UNSAVED_CHANGES", payload: false });
         dispatch({ type: "SET_INVOICE_STATUS", payload: "DRAFT" });

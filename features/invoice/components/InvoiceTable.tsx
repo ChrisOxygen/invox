@@ -45,6 +45,7 @@ import {
   FiMoreHorizontal,
   FiSearch,
 } from "react-icons/fi";
+import { IoStar } from "react-icons/io5";
 import { useGetInvoices } from "@/features/invoice/hooks";
 import { useDeleteInvoice } from "@/features/invoice/hooks";
 import { formatCurrency } from "@/utils";
@@ -261,13 +262,15 @@ export function InvoiceTable() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead className="w-[50px]"></TableHead>
                 <TableHead className="w-[120px]">Invoice #</TableHead>
                 <TableHead className="w-[200px]">Client</TableHead>
                 <TableHead className="w-[120px]">Amount</TableHead>
                 <TableHead className="w-[100px]">Status</TableHead>
                 <TableHead className="w-[120px]">Due Date</TableHead>
                 <TableHead className="w-[120px]">Created</TableHead>
+                <TableHead className="w-[50px]">
+                  <IoStar className="h-4 w-4 text-black" />
+                </TableHead>
                 <TableHead className="w-[100px] text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
@@ -277,9 +280,6 @@ export function InvoiceTable() {
                   .fill(0)
                   .map((_, index) => (
                     <TableRow key={`skeleton-${index}`}>
-                      <TableCell>
-                        <Skeleton className="h-6 w-6" />
-                      </TableCell>
                       <TableCell>
                         <Skeleton className="h-6 w-20" />
                       </TableCell>
@@ -297,6 +297,9 @@ export function InvoiceTable() {
                       </TableCell>
                       <TableCell>
                         <Skeleton className="h-6 w-24" />
+                      </TableCell>
+                      <TableCell>
+                        <Skeleton className="h-6 w-6" />
                       </TableCell>
                       <TableCell className="text-right">
                         <div className="flex justify-end space-x-1">
@@ -325,9 +328,6 @@ export function InvoiceTable() {
               ) : (
                 invoices.map((invoice) => (
                   <TableRow key={invoice.id} className="hover:bg-gray-50">
-                    <TableCell>
-                      <FavoriteIcon isFavorite={invoice.isFavorite} />
-                    </TableCell>
                     <TableCell className="font-medium">
                       <Link
                         href={`/app/invoices/${invoice.id}`}
@@ -362,8 +362,11 @@ export function InvoiceTable() {
                         ? new Date(invoice.createdAt).toLocaleDateString()
                         : "N/A"}
                     </TableCell>
+                    <TableCell>
+                      <FavoriteIcon isFavorite={invoice.isFavorite} />
+                    </TableCell>
                     <TableCell className="text-right">
-                      <div className="flex items-center space-x-2">
+                      <div className="flex items-center justify-end space-x-2">
                         <Button
                           variant="outline"
                           size="sm"

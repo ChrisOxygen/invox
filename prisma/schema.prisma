@@ -182,6 +182,7 @@ model Invoice {
   taxes                  Float // Note: Consider using cents/integer for financial precision
   discount               Float         @default(0) // Discount amount
   invoiceItems           Json // Array of invoice items with description, quantity, unitPrice
+  isFavorite             Boolean       @default(false) // Whether invoice is marked as favorite
   
   acceptedPaymentMethods String
   status                 InvoiceStatus @default(DRAFT)

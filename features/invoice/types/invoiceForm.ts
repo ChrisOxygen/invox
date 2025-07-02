@@ -26,6 +26,7 @@ export interface InvoiceFormState {
   discount?: number;
   lateFeeText?: string;
   invoiceStatus?: "DRAFT" | "SENT" | "PAID" | "OVERDUE" | "CANCELLED";
+  isFavorite: boolean;
   hasUnsavedChanges: boolean;
 }
 
@@ -120,6 +121,9 @@ export type InvoiceFormAction =
       payload: number;
     }
   | {
+      type: "SET_IS_FAVORITE";
+    }
+  | {
       type: "SET_INVOICE_STATUS";
       payload: "DRAFT" | "SENT" | "PAID" | "OVERDUE" | "CANCELLED";
     }
@@ -139,6 +143,7 @@ export type InvoiceFormAction =
         paymentDueDate: Date;
         taxes: number;
         discount?: number;
+        isFavorite?: boolean;
         invoiceItems: {
           description?: string;
           quantity?: number;
@@ -164,6 +169,7 @@ export interface InvoiceFormContextType {
   setLateFeeText: (text: string) => void;
   setTax: (tax: number) => void;
   setDiscount: (discount: number) => void;
+  toggleIsFavorite: () => void;
   setPaymentAccount: (id: string) => void;
   setInvoiceStatus: (
     status: "DRAFT" | "SENT" | "PAID" | "OVERDUE" | "CANCELLED"

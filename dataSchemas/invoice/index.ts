@@ -44,6 +44,7 @@ export const createInvoiceSchema = z
     discount: z.number().min(0, "Discount must be positive").optional(),
     total: z.number().min(0, "Total must be positive"),
     acceptedPaymentMethods: z.string().min(1, "Payment methods are required"),
+    isFavorite: z.boolean().optional(),
     customNote: z.string().optional(),
     lateFeeText: z.string().optional(),
   })
@@ -89,6 +90,7 @@ export const updateInvoiceSchema = z
       .string()
       .min(1, "Payment methods are required")
       .optional(),
+    isFavorite: z.boolean().optional(),
     customNote: z.string().optional(),
     lateFeeText: z.string().optional(),
   })

@@ -40,6 +40,7 @@ function transformInvoiceToWithRelations(invoice: {
   invoiceItems: unknown;
   acceptedPaymentMethods: string;
   status: InvoiceStatus;
+  isFavorite: boolean;
   businessId: string;
   clientId: string;
   createdAt: Date;
@@ -240,6 +241,7 @@ export async function _createInvoice(
         invoiceItems: sanitizedItems, // Store the sanitized invoice items
         acceptedPaymentMethods: validatedData.data.acceptedPaymentMethods,
         status: InvoiceStatus.DRAFT,
+        isFavorite: validatedData.data.isFavorite || false,
         businessId: user.business.id,
         clientId: validatedData.data.clientId,
       },
@@ -269,6 +271,7 @@ export async function _createInvoice(
 export async function _updateInvoice(
   data: UpdateInvoiceInput
 ): Promise<InvoiceResponse> {
+  console.log("Updating invoice with data:", data);
   try {
     const session = await auth();
     if (!session || !session.user?.id) {
@@ -383,11 +386,17 @@ export async function _updateInvoice(
         ...(validatedData.data.taxes !== undefined && {
           taxes: validatedData.data.taxes,
         }),
+        ...(validatedData.data.discount !== undefined && {
+          discount: validatedData.data.discount,
+        }),
         ...(sanitizedItems && {
           invoiceItems: sanitizedItems,
         }),
         ...(validatedData.data.acceptedPaymentMethods && {
           acceptedPaymentMethods: validatedData.data.acceptedPaymentMethods,
+        }),
+        ...(validatedData.data.isFavorite !== undefined && {
+          isFavorite: validatedData.data.isFavorite,
         }),
         updatedAt: new Date(),
       },

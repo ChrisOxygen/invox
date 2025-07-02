@@ -158,6 +158,7 @@ export function useInvoiceFormLogic({
           paymentDueDate: existingInvoice.paymentDueDate,
           taxes: existingInvoice.taxes || 0,
           discount: existingInvoice.discount,
+          isFavorite: existingInvoice.isFavorite,
           invoiceItems: loadedItems,
           acceptedPaymentMethods: existingInvoice.acceptedPaymentMethods,
         },
@@ -253,6 +254,10 @@ export function useInvoiceFormLogic({
 
       setDiscount: (discount: number) => {
         dispatch({ type: "SET_DISCOUNT", payload: discount });
+      },
+
+      toggleIsFavorite: () => {
+        dispatch({ type: "SET_IS_FAVORITE" });
       },
 
       setInvoiceStatus: (

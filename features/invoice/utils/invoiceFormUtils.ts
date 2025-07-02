@@ -39,6 +39,7 @@ export function createFingerprint(state: InvoiceFormState): string {
     // Additional information
     customNote: state.customNote,
     lateFeeText: state.lateFeeText,
+    isFavorite: state.isFavorite,
 
     // Payment details
     paymentAccountId: state.paymentAccount?.id,

@@ -50,6 +50,7 @@ import { useDeleteInvoice } from "@/features/invoice/hooks";
 import { formatCurrency } from "@/utils";
 import { InvoiceStatus } from "@prisma/client";
 import { InvoiceWithRelations } from "@/types/invoice";
+import { FavoriteIcon } from "./FavoriteIcon";
 
 // Status badge color map
 const statusColorMap = {
@@ -260,6 +261,7 @@ export function InvoiceTable() {
           <Table>
             <TableHeader>
               <TableRow>
+                <TableHead className="w-[50px]"></TableHead>
                 <TableHead className="w-[120px]">Invoice #</TableHead>
                 <TableHead className="w-[200px]">Client</TableHead>
                 <TableHead className="w-[120px]">Amount</TableHead>
@@ -275,6 +277,9 @@ export function InvoiceTable() {
                   .fill(0)
                   .map((_, index) => (
                     <TableRow key={`skeleton-${index}`}>
+                      <TableCell>
+                        <Skeleton className="h-6 w-6" />
+                      </TableCell>
                       <TableCell>
                         <Skeleton className="h-6 w-20" />
                       </TableCell>
@@ -305,7 +310,7 @@ export function InvoiceTable() {
               ) : isError ? (
                 <TableRow>
                   <TableCell
-                    colSpan={7}
+                    colSpan={8}
                     className="text-center py-10 text-red-500"
                   >
                     Error: {error}
@@ -313,13 +318,16 @@ export function InvoiceTable() {
                 </TableRow>
               ) : invoices.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={7} className="text-center py-10">
+                  <TableCell colSpan={8} className="text-center py-10">
                     No invoices found. Try adjusting your filters.
                   </TableCell>
                 </TableRow>
               ) : (
                 invoices.map((invoice) => (
                   <TableRow key={invoice.id} className="hover:bg-gray-50">
+                    <TableCell>
+                      <FavoriteIcon isFavorite={invoice.isFavorite} />
+                    </TableCell>
                     <TableCell className="font-medium">
                       <Link
                         href={`/app/invoices/${invoice.id}`}
@@ -434,13 +442,16 @@ export function InvoiceTable() {
                 >
                   <div className="flex justify-between items-start mb-3">
                     <div className="flex-1">
-                      <Link
-                        href={`/app/invoices/${invoice.id}`}
-                        className="font-medium text-black hover:text-gray-700"
-                      >
-                        {invoice.invoiceNumber ||
-                          `INV-${invoice.id.slice(0, 8)}`}
-                      </Link>
+                      <div className="flex items-center gap-2">
+                        <FavoriteIcon isFavorite={invoice.isFavorite} />
+                        <Link
+                          href={`/app/invoices/${invoice.id}`}
+                          className="font-medium text-black hover:text-gray-700"
+                        >
+                          {invoice.invoiceNumber ||
+                            `INV-${invoice.id.slice(0, 8)}`}
+                        </Link>
+                      </div>
                       <div className="text-sm text-gray-500 mt-1">
                         {invoice.client?.BusinessName || "N/A"}
                       </div>

@@ -37,6 +37,7 @@ export interface CreateInvoiceInput {
   discount?: number;
   total: number;
   acceptedPaymentMethods: string;
+  isFavorite?: boolean;
   customNote?: string;
   lateFeeText?: string;
 }
@@ -53,6 +54,7 @@ export interface UpdateInvoiceInput {
   discount?: number;
   total?: number;
   acceptedPaymentMethods?: string;
+  isFavorite?: boolean;
   customNote?: string;
   lateFeeText?: string;
 }

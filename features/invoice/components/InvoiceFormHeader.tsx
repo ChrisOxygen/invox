@@ -8,9 +8,9 @@ import { InvoiceSaveActions } from "./InvoiceSaveActions";
 import { useInvoiceForm } from "../index";
 
 function InvoiceFormHeader() {
-  const { state } = useInvoiceForm();
+  const { state, toggleIsFavorite } = useInvoiceForm();
 
-  const { formMode, invoiceNumber } = state;
+  const { formMode, invoiceNumber, isFavorite } = state;
 
   // Demo handlers
   const handleDelete = async () => {
@@ -28,10 +28,8 @@ function InvoiceFormHeader() {
     console.log("Form reset!");
   };
 
-  const handleFavoriteToggle = (isFavorite: boolean) => {
-    console.log(
-      `Invoice ${isFavorite ? "added to" : "removed from"} favorites`
-    );
+  const handleFavoriteToggle = () => {
+    toggleIsFavorite();
   };
 
   return (
@@ -50,7 +48,10 @@ function InvoiceFormHeader() {
         <ActionsDropdown onDelete={handleDelete} onReset={handleReset} />
 
         {/* Component 3: Favorite Button */}
-        <FavoriteButton onToggle={handleFavoriteToggle} />
+        <FavoriteButton
+          isFavorite={isFavorite}
+          onToggle={handleFavoriteToggle}
+        />
 
         {/* Component 4 & 5: Save Actions (replaces Download PDF and Send Invoice buttons) */}
         <InvoiceSaveActions />

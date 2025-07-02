@@ -22,6 +22,7 @@ export const initialState: InvoiceFormState = {
   customNote: "Thank you for your trust in our services!",
   tax: 0,
   discount: 0,
+  isFavorite: false,
   lateFeeText: "",
   invoiceStatus: "DRAFT",
   hasUnsavedChanges: false,
@@ -145,6 +146,12 @@ export function invoiceFormReducer(
         discount: action.payload,
         hasUnsavedChanges: true,
       };
+    case "SET_IS_FAVORITE":
+      return {
+        ...state,
+        isFavorite: !state.isFavorite,
+        hasUnsavedChanges: true,
+      };
     case "SET_INVOICE_STATUS":
       return {
         ...state,
@@ -172,6 +179,7 @@ export function invoiceFormReducer(
         paymentDueDate: action.payload.paymentDueDate,
         tax: action.payload.taxes,
         discount: action.payload.discount || 0,
+        isFavorite: action.payload.isFavorite || false,
         invoiceItems: action.payload.invoiceItems,
         acceptedPaymentMethods: action.payload.acceptedPaymentMethods || "",
         // Don't set hasUnsavedChanges when loading existing data

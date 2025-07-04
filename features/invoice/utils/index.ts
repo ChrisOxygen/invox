@@ -1,5 +1,5 @@
 import { InvoiceFormState } from "../types/invoiceForm";
-import { InvoiceItem } from "@/types/invoice";
+import { InvoiceItem, InvoiceWithRelations } from "@/types/invoice";
 
 // Calculate item total
 export const calculateItemTotal = (
@@ -133,11 +133,26 @@ export function generateInvoiceNumber(): string {
 }
 
 /**
- * Formats invoice provider state into a structured object for invoice templates
- * @param {InvoiceFormState} state - The invoice form state
+ * Formats invoice data from either InvoiceFormState or InvoiceWithRelations
+ * @param {InvoiceFormState | InvoiceWithRelations} data - The invoice data
  * @returns {FormattedInvoiceData} Formatted invoice data object
  */
-export function formatInvoiceData(state: InvoiceFormState) {
+export function formatInvoiceData(
+  data: InvoiceFormState | InvoiceWithRelations
+): FormattedInvoiceData {
+  // Type guards to determine which type we're working with
+  const isInvoiceFormState = (
+    item: InvoiceFormState | InvoiceWithRelations
+  ): item is InvoiceFormState => {
+    return "formMode" in item && "businessDetails" in item;
+  };
+
+  const isInvoiceWithRelations = (
+    item: InvoiceFormState | InvoiceWithRelations
+  ): item is InvoiceWithRelations => {
+    return "client" in item && "business" in item && "id" in item;
+  };
+
   // Helper function to safely get string values with fallback
   const safeString = (value: string | null | undefined): string => {
     return value || "";
@@ -149,9 +164,11 @@ export function formatInvoiceData(state: InvoiceFormState) {
   };
 
   // Format date to readable string
-  const formatDate = (date: Date | null | undefined): string => {
-    if (!date || !(date instanceof Date)) return "";
-    return date.toLocaleDateString("en-US", {
+  const formatDate = (date: Date | string | null | undefined): string => {
+    if (!date) return "";
+    const dateObj = typeof date === "string" ? new Date(date) : date;
+    if (!(dateObj instanceof Date) || isNaN(dateObj.getTime())) return "";
+    return dateObj.toLocaleDateString("en-US", {
       year: "numeric",
       month: "long",
       day: "numeric",
@@ -159,7 +176,12 @@ export function formatInvoiceData(state: InvoiceFormState) {
   };
 
   // Format items array with calculations
-  const formatItems = (items: typeof state.invoiceItems) => {
+  const formatItems = (
+    items:
+      | Array<{ description?: string; quantity?: number; unitPrice?: number }>
+      | undefined
+      | null
+  ) => {
     if (!items || !Array.isArray(items)) return [];
 
     return items.map((item, index) => {
@@ -169,7 +191,7 @@ export function formatInvoiceData(state: InvoiceFormState) {
       const total = quantity * unitPrice;
 
       return {
-        id: index + 1, // Add ID for template use
+        id: index + 1,
         description,
         quantity,
         unitPrice,
@@ -178,94 +200,168 @@ export function formatInvoiceData(state: InvoiceFormState) {
     });
   };
 
-  // Build client address from available fields
-  const buildClientAddress = (client: typeof state.client): string => {
-    if (!client) return "";
+  // Handle different data types
+  let formattedData: FormattedInvoiceData;
 
-    const addressParts = [client.address].filter(Boolean); // Remove empty/null values
+  if (isInvoiceFormState(data)) {
+    // Handle InvoiceFormState
+    const buildClientAddress = (client: typeof data.client): string => {
+      if (!client) return "";
+      const addressParts = [client.address].filter(Boolean);
+      return addressParts.join(", ");
+    };
 
-    return addressParts.join(", ");
-  };
+    formattedData = {
+      // Invoice metadata
+      invoiceId: safeString(data.invoiceId),
+      invoiceNumber: safeString(data.invoiceNumber),
+      invoiceDate: formatDate(data.invoiceDate),
+      invoiceDueDate: formatDate(data.paymentDueDate),
 
-  // Format the complete invoice data
-  const formattedData = {
-    // Invoice metadata
-    invoiceId: safeString(state.invoiceId),
-    invoiceNumber: safeString(state.invoiceNumber),
-    invoiceDate: formatDate(state.invoiceDate),
-    invoiceDueDate: formatDate(state.paymentDueDate),
-
-    // Client information
-    clientName: safeString(
-      state.client?.contactPersonName || state.client?.BusinessName
-    ),
-    clientBusinessName: safeString(state.client?.BusinessName),
-    clientAddress: buildClientAddress(state.client),
-    clientEmail: safeString(state.client?.email),
-
-    // Items and calculations
-    items: formatItems(state.invoiceItems),
-
-    // Financial data
-    tax: safeNumber(state.tax),
-    discount: safeNumber(state.discount),
-
-    // Additional notes
-    customNotes: safeString(state.customNote),
-    lateFeeText: safeString(state.lateFeeText),
-
-    // Business information (if needed for templates)
-    businessDetails: state.businessDetails
-      ? {
-          businessName: safeString(
-            state.businessDetails.business?.businessName
-          ),
-          email: safeString(state.businessDetails.business?.email),
-          phone: safeString(state.businessDetails.business?.phone),
-          address: [
-            state.businessDetails.business?.addressLine1,
-            state.businessDetails.business?.addressLine2,
-            state.businessDetails.business?.city,
-            state.businessDetails.business?.state,
-            state.businessDetails.business?.zipCode,
-          ]
-            .filter(Boolean)
-            .join(", "),
-        }
-      : null,
-
-    // Payment account information
-    paymentAccount: state.paymentAccount
-      ? {
-          accountName: safeString(state.paymentAccount.accountName),
-          gatewayType: safeString(state.paymentAccount.gatewayType),
-          accountData: state.paymentAccount.accountData, // Keep as is for template use
-          // Note: accountData is Json type, handle carefully in templates
-        }
-      : null,
-
-    // Calculated totals
-    calculations: {
-      subtotal: formatItems(state.invoiceItems).reduce(
-        (sum, item) => sum + item.total,
-        0
+      // Client information
+      clientName: safeString(
+        data.client?.contactPersonName || data.client?.BusinessName
       ),
-      taxAmount: 0, // Will be calculated as absolute amount
-      discountAmount: 0, // Will be calculated as absolute amount
-      finalTotal: 0, // Will be calculated after tax and discount
-    },
-  };
+      clientBusinessName: safeString(data.client?.BusinessName),
+      clientAddress: buildClientAddress(data.client),
+      clientEmail: safeString(data.client?.email),
+
+      // Items and calculations
+      items: formatItems(data.invoiceItems),
+
+      // Financial data
+      tax: safeNumber(data.tax),
+      discount: safeNumber(data.discount),
+
+      // Additional notes
+      customNotes: safeString(data.customNote),
+      lateFeeText: safeString(data.lateFeeText),
+
+      // Business information
+      businessDetails: data.businessDetails
+        ? {
+            businessName: safeString(
+              data.businessDetails.business?.businessName
+            ),
+            email: safeString(data.businessDetails.business?.email),
+            phone: safeString(data.businessDetails.business?.phone),
+            address: [
+              data.businessDetails.business?.addressLine1,
+              data.businessDetails.business?.addressLine2,
+              data.businessDetails.business?.city,
+              data.businessDetails.business?.state,
+              data.businessDetails.business?.zipCode,
+            ]
+              .filter(Boolean)
+              .join(", "),
+            logo: safeString(data.businessDetails.business?.logo),
+            signature: safeString(data.businessDetails.signature),
+          }
+        : null,
+
+      // Payment account information
+      paymentAccount: data.paymentAccount
+        ? {
+            accountName: safeString(data.paymentAccount.accountName),
+            gatewayType: safeString(data.paymentAccount.gatewayType),
+            accountData: data.paymentAccount.accountData,
+          }
+        : null,
+
+      // Calculated totals (will be updated below)
+      calculations: {
+        subtotal: 0,
+        taxAmount: 0,
+        discountAmount: 0,
+        finalTotal: 0,
+      },
+    };
+  } else if (isInvoiceWithRelations(data)) {
+    // Handle InvoiceWithRelations
+    const buildClientAddress = (client: typeof data.client): string => {
+      if (!client) return "";
+      const addressParts = [client.address].filter(Boolean);
+      return addressParts.join(", ");
+    };
+
+    formattedData = {
+      // Invoice metadata
+      invoiceId: safeString(data.id),
+      invoiceNumber: safeString(data.invoiceNumber),
+      invoiceDate: formatDate(data.invoiceDate),
+      invoiceDueDate: formatDate(data.paymentDueDate),
+
+      // Client information
+      clientName: safeString(
+        data.client?.contactPersonName || data.client?.BusinessName
+      ),
+      clientBusinessName: safeString(data.client?.BusinessName),
+      clientAddress: buildClientAddress(data.client),
+      clientEmail: safeString(data.client?.email),
+
+      // Items and calculations
+      items: formatItems(data.invoiceItems),
+
+      // Financial data
+      tax: safeNumber(data.taxes),
+      discount: safeNumber(data.discount),
+
+      // Additional notes - InvoiceWithRelations doesn't have customNote/lateFeeText in the base model
+      customNotes: "", // Default empty for InvoiceWithRelations
+      lateFeeText: "", // Default empty for InvoiceWithRelations
+
+      // Business information
+      businessDetails: data.business
+        ? {
+            businessName: safeString(data.business.businessName),
+            email: safeString(data.business.email),
+            phone: safeString(data.business.phone),
+            address: [
+              data.business.addressLine1,
+              data.business.addressLine2,
+              data.business.city,
+              data.business.state,
+              data.business.zipCode,
+            ]
+              .filter(Boolean)
+              .join(", "),
+            logo: safeString(data.business.logo),
+            signature: "", // InvoiceWithRelations doesn't have user signature directly
+          }
+        : null,
+
+      // Payment account information (InvoiceWithRelations doesn't have payment account directly)
+      paymentAccount: null,
+
+      // Calculated totals (will be updated below)
+      calculations: {
+        subtotal: 0,
+        taxAmount: 0,
+        discountAmount: 0,
+        finalTotal: 0,
+      },
+    };
+  } else {
+    // Fallback for unknown type
+    throw new Error("Invalid data type provided to formatInvoiceData");
+  }
 
   // Calculate financial totals with absolute amounts
-  const subtotal = formattedData.calculations.subtotal;
-  const taxAmount = formattedData.tax; // Tax as absolute amount
-  const discountAmount = formattedData.discount; // Discount as absolute amount
-  const finalTotal = Math.max(0, subtotal - taxAmount - discountAmount); // Subtract both tax and discount
+  const subtotal = formattedData.items.reduce(
+    (sum, item) => sum + item.total,
+    0
+  );
+  const taxAmount = formattedData.tax;
+  const discountAmount = formattedData.discount;
+  const finalTotal = Math.max(0, subtotal - taxAmount - discountAmount);
 
   // Update calculations
-  formattedData.calculations.taxAmount = taxAmount;
-  formattedData.calculations.discountAmount = discountAmount;
-  formattedData.calculations.finalTotal = finalTotal;
+  formattedData.calculations = {
+    subtotal,
+    taxAmount,
+    discountAmount,
+    finalTotal,
+  };
 
   return formattedData;
 }
@@ -273,6 +369,7 @@ export function formatInvoiceData(state: InvoiceFormState) {
 // Type definition for the formatted invoice data
 export interface FormattedInvoiceData {
   invoiceId: string;
+  invoiceNumber: string;
   invoiceDate: string;
   invoiceDueDate: string;
   clientName: string;
@@ -295,11 +392,13 @@ export interface FormattedInvoiceData {
     email: string;
     phone: string;
     address: string;
+    logo?: string;
+    signature?: string;
   } | null;
   paymentAccount: {
     accountName: string;
     gatewayType: string;
-    accountData: JSON; // Keep as is for template use
+    accountData: unknown; // JsonValue type from Prisma
   } | null;
   calculations: {
     subtotal: number;

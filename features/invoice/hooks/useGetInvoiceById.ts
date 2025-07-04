@@ -4,15 +4,8 @@ import { useQuery } from "@tanstack/react-query";
 import { InvoiceResponse } from "@/types/api/invoice";
 import { _getInvoice } from "../actions";
 
-interface UseGetInvoiceParams {
-  invoiceId: string;
-  enabled?: boolean;
-}
-
 // Hook to fetch a single invoice by ID
-export function useGetInvoice(params: UseGetInvoiceParams) {
-  const { invoiceId, enabled = true } = params;
-
+export function useGetInvoiceById(invoiceId: string) {
   const query = useQuery<InvoiceResponse, Error>({
     queryKey: ["invoice", invoiceId],
     queryFn: async () => {
@@ -24,7 +17,7 @@ export function useGetInvoice(params: UseGetInvoiceParams) {
 
       return result;
     },
-    enabled: enabled && !!invoiceId,
+    enabled: !!invoiceId,
     staleTime: 5 * 60 * 1000, // 5 minutes
     gcTime: 10 * 60 * 1000, // 10 minutes
   });
@@ -40,6 +33,3 @@ export function useGetInvoice(params: UseGetInvoiceParams) {
     isRefetching: query.isRefetching,
   };
 }
-
-// Export types for convenience
-export type { UseGetInvoiceParams };

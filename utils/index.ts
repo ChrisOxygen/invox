@@ -50,3 +50,20 @@ export const formatCurrency = (
     maximumFractionDigits: 2,
   }).format(amount);
 };
+
+// Advanced greeting function with time-based greetings
+export function generateTimeBasedGreeting(): string {
+  const currentHour = new Date().getHours();
+
+  let timeGreeting: string;
+
+  if (currentHour < 12) {
+    timeGreeting = "Good morning";
+  } else if (currentHour < 17) {
+    timeGreeting = "Good afternoon";
+  } else {
+    timeGreeting = "Good evening";
+  }
+
+  return `${timeGreeting}`;
+}

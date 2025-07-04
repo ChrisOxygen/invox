@@ -9,7 +9,7 @@ import {
 } from "../types/invoiceForm";
 import { useUserAndBusiness } from "./useUserAndBusiness";
 import { useGetPaymentAccounts } from "@/hooks/payments/useGetPaymentAccounts";
-import { useGetInvoice } from "./useGetInvoice";
+import { useGetInvoiceById } from "./useGetInvoiceById";
 import { useInvoiceAutoSave } from "./useInvoiceAutoSave";
 import {
   getValidationErrors,
@@ -36,12 +36,8 @@ export function useInvoiceFormLogic({
     useGetPaymentAccounts();
 
   // Load existing invoice if in edit mode
-  const { invoice: existingInvoice, isPending: loadingInvoice } = useGetInvoice(
-    {
-      invoiceId: state.invoiceId || "",
-      enabled: state.formMode === "edit" && !!state.invoiceId,
-    }
-  );
+  const { invoice: existingInvoice, isPending: loadingInvoice } =
+    useGetInvoiceById(params.invoiceId as string);
 
   const isLoadingInvoice = state.invoiceId ? loadingInvoice : false;
 

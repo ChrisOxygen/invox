@@ -1,6 +1,6 @@
 // hooks/useLogin.ts
 import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { LoginRequest } from "@/types/api/auth";
 
@@ -9,6 +9,7 @@ type LoginFormValues = LoginRequest;
 
 // Hook for login functionality
 export function useLogin() {
+  const searchParams = useSearchParams();
   const router = useRouter();
   const [signInPending, setSignInPending] = useState(false);
 
@@ -22,7 +23,10 @@ export function useLogin() {
     setError(null);
 
     try {
+      // Check if there's a callback URL in the current URL parameters
+      const callbackUrl = searchParams?.get("callbackUrl") || "/";
       const result = await signIn("credentials", {
+        callbackUrl,
         redirect: false,
         email: values.email,
         password: values.password,
@@ -33,7 +37,7 @@ export function useLogin() {
         return;
       }
       if (result?.ok) {
-        router.push("/app/dashboard");
+        router.push("/app");
       }
 
       // Login successful - the useEffect will handle redirect

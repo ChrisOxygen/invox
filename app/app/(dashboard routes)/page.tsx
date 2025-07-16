@@ -9,6 +9,12 @@ import { generateTimeBasedGreeting } from "@/utils";
 import { useUser } from "@/hooks/useUser";
 import InBoxLoader from "@/components/InBoxLoader";
 
+import { FaArrowTrendUp } from "react-icons/fa6";
+import InvoicesBarChart from "@/features/dashboard/components/InvoicesBarChart";
+import InvoiceRadialChart from "@/features/dashboard/components/InvoiceRadialChart";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { InvoiceTable } from "@/features/invoice/components/InvoiceTable";
+
 function Dashboard() {
   const [showClientForm, setShowClientForm] = useState(false);
 
@@ -31,7 +37,7 @@ function Dashboard() {
   }
 
   return (
-    <div className="h-full grid grid-rows-[100px_200px_1fr]">
+    <div className="h-full grid gap-6 grid-rows-[60px_170px_360px_1fr]">
       <div className=" flex items-end justify-between w-full">
         <h3 className="text-2xl sm:text-3xl font-bold text-black">{`${generateTimeBasedGreeting()}, ${
           user?.name?.split(" ")[0] || "Guest"
@@ -59,6 +65,73 @@ function Dashboard() {
             </Link>
           </Button>
         </div>
+      </div>
+      <div className="border w-full h-full flex items-center rounded-xl justify-center">
+        <div className=" flex  pl-8 flex-col gap-3 flex-1 after:content-[''] last:after:hidden  relative after:absolute after:h-[93%] after:w-[1px] after:bg-gray-200 after:right-0 after:top-1/2 after:-translate-y-1/2 ">
+          <div className="flex items-center gap-1">
+            <div className=" flex items-center gap-1">
+              <span className="">
+                <FaArrowTrendUp />
+              </span>
+              <span className="">+17%</span>
+            </div>
+            <span className="">/month</span>
+          </div>
+          <span className=" font-semibold text-3xl">$19,897</span>
+          <span className="">Total Invoice</span>
+        </div>
+        <div className=" flex flex-col gap-3 flex-1 after:content-[''] last:after:hidden relative after:absolute after:h-[93%] after:w-[1px] after:bg-gray-200 after:right-0 pl-8 after:top-1/2 after:-translate-y-1/2 ">
+          <div className="flex items-center gap-1">
+            <div className=" flex items-center gap-1">
+              <span className="">
+                <FaArrowTrendUp />
+              </span>
+              <span className="">+17%</span>
+            </div>
+            <span className="">/month</span>
+          </div>
+          <span className=" font-semibold text-3xl">$19,897</span>
+          <span className="">Total Invoice</span>
+        </div>
+        <div className=" flex flex-col gap-3 flex-1 after:content-[''] last:after:hidden relative after:absolute after:h-[93%] after:w-[1px] after:bg-gray-200 after:right-0 pl-8 after:top-1/2 after:-translate-y-1/2 ">
+          <div className="flex items-center gap-1">
+            <div className=" flex items-center gap-1">
+              <span className="">
+                <FaArrowTrendUp />
+              </span>
+              <span className="">+17%</span>
+            </div>
+            <span className="">/month</span>
+          </div>
+          <span className=" font-semibold text-3xl">$19,897</span>
+          <span className="">Total Invoice</span>
+        </div>
+        <div className=" flex flex-col gap-3 flex-1 after:content-[''] last:after:hidden relative after:absolute after:h-[93%] after:w-[1px] after:bg-gray-200 after:right-0 pl-8 after:top-1/2 after:-translate-y-1/2 ">
+          <div className="flex items-center gap-1">
+            <div className=" flex items-center gap-1">
+              <span className="">
+                <FaArrowTrendUp />
+              </span>
+              <span className="">+17%</span>
+            </div>
+            <span className="">/month</span>
+          </div>
+          <span className=" font-semibold text-3xl">$19,897</span>
+          <span className="">Total Invoice</span>
+        </div>
+      </div>
+      <div className=" w-full h-full flex gap-5">
+        <div className="flex-2/3 flex">
+          <InvoicesBarChart />
+        </div>
+        <div className="flex-1/3">
+          <InvoiceRadialChart />
+        </div>
+      </div>
+      <div className=" flex w-full ">
+        <ScrollArea className="w-full">
+          <InvoiceTable />
+        </ScrollArea>
       </div>
 
       {/* Client Form Dialog */}

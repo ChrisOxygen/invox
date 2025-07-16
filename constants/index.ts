@@ -142,3 +142,37 @@ export const DUE_DATE_PRESETS = [
     description: "Choose a specific due date",
   },
 ];
+
+export const INVOICES_CHART_DATA = {
+  months: [
+    { month: "January", sent: 186, paid: 80 },
+    { month: "February", sent: 142, paid: 95 },
+    { month: "March", sent: 168, paid: 120 },
+    { month: "April", sent: 195, paid: 140 },
+    { month: "May", sent: 220, paid: 165 },
+    { month: "June", sent: 205, paid: 185 },
+    { month: "July", sent: 240, paid: 200 },
+    { month: "August", sent: 215, paid: 175 },
+    { month: "September", sent: 185, paid: 160 },
+    { month: "October", sent: 225, paid: 190 },
+    { month: "November", sent: 210, paid: 180 },
+    { month: "December", sent: 195, paid: 170 },
+  ],
+
+  weeks: [
+    { week: "Week 1", sent: 52, paid: 35 },
+    { week: "Week 2", sent: 48, paid: 28 },
+    { week: "Week 3", sent: 55, paid: 42 },
+    { week: "Week 4", sent: 61, paid: 38 },
+  ],
+
+  days: [
+    { day: "Monday", sent: 15, paid: 8 },
+    { day: "Tuesday", sent: 12, paid: 9 },
+    { day: "Wednesday", sent: 18, paid: 11 },
+    { day: "Thursday", sent: 14, paid: 7 },
+    { day: "Friday", sent: 16, paid: 12 },
+    { day: "Saturday", sent: 8, paid: 5 },
+    { day: "Sunday", sent: 6, paid: 3 },
+  ],
+};

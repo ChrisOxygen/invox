@@ -9,6 +9,8 @@
   --font-bebas-neue: var(--font-bebas-neue);
   --font-roboto-condensed: var(--font-roboto-condensed);
   --font-jetbrains-mono: var(--font-jetbrains-mono);
+  --font-poppins: var(--font-poppins);
+  --font-plus-jakarta-sans: var(--font-plus-jakarta-sans);
 }
 
 @theme inline {
@@ -126,6 +128,21 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-plus-jakarta-sans;
+  }
+  p,
+  span,
+  a,
+  label,
+  button {
+    @apply font-poppins;
   }
 }
 

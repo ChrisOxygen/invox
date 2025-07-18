@@ -26,7 +26,11 @@ function InvoicesPage() {
 
       {/* Table Row */}
       <div className="bg-white  ">
-        <InvoiceTable />
+        <InvoiceTable
+          showFilters={false}
+          showPagination={false}
+          showSearch={false}
+        />
       </div>
     </div>
   );

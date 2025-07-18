@@ -6,6 +6,8 @@ import {
   JetBrains_Mono,
   Oswald,
   Roboto_Condensed,
+  Poppins,
+  Plus_Jakarta_Sans,
 } from "next/font/google";
 import "./globals.css";
 import TanstackQueryProvider from "@/providers/TanstackQueryProvider";
@@ -43,6 +45,18 @@ const robotoCondensed = Roboto_Condensed({
   subsets: ["latin"],
 });
 
+const poppins = Poppins({
+  variable: "--font-poppins",
+  subsets: ["latin"],
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+});
+
+const plusJakartaSans = Plus_Jakarta_Sans({
+  variable: "--font-plus-jakarta-sans",
+  subsets: ["latin"],
+  weight: ["200", "300", "400", "500", "600", "700", "800"],
+});
+
 export const metadata: Metadata = {
   title: "InvoX",
   description:
@@ -58,7 +72,7 @@ export default function RootLayout({
     <html suppressHydrationWarning lang="en">
       <body
         suppressHydrationWarning
-        className={`${spaceGrotesk.variable} ${inter.variable} ${bebasNeue.variable} ${jetbrainsMono.variable} ${oswald.variable} ${robotoCondensed.variable} antialiased`}
+        className={`${spaceGrotesk.variable} ${inter.variable} ${bebasNeue.variable} ${jetbrainsMono.variable} ${oswald.variable} ${robotoCondensed.variable} ${poppins.variable} ${plusJakartaSans.variable} antialiased`}
       >
         <SessionProvider>
           <TanstackQueryProvider>{children}</TanstackQueryProvider>

@@ -127,6 +127,15 @@ export function InvoiceTable({
     setSelectedInvoice(null);
   };
 
+  console.log(
+    "settings",
+    showSearch,
+    showFilters,
+    showPagination,
+    showActions,
+    showFavorites
+  );
+
   return (
     <div className={className}>
       {/* Search and Filters Section */}

@@ -130,7 +130,11 @@ function Dashboard() {
       </div>
       <div className=" flex w-full ">
         <ScrollArea className="w-full">
-          <InvoiceTable />
+          <InvoiceTable
+            showFilters={false}
+            showPagination={false}
+            showSearch={false}
+          />
         </ScrollArea>
       </div>
 

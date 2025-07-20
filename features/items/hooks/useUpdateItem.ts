@@ -2,7 +2,7 @@
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { _updateItem } from "@/actions/items";
-import { UpdateItemInput } from "@/dataSchemas/item";
+import { ZUpdateItemInput } from "../validation";
 import { ApiResponse } from "@/types";
 import { Item } from "@prisma/client";
 
@@ -21,7 +21,7 @@ interface UseUpdateItemOptions {
 
 interface UpdateItemMutationInput {
   itemId: string;
-  data: UpdateItemInput;
+  data: ZUpdateItemInput;
 }
 
 // Hook to update an existing item

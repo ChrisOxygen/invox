@@ -1,66 +1,53 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { useState } from "react";
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { Skeleton } from "@/components/ui/skeleton";
-import {
-  FiPlus,
-  FiSearch,
-  FiEdit2,
-  FiTrash2,
-  FiMoreHorizontal,
-} from "react-icons/fi";
-import { useGetItems } from "@/features/items/hooks";
-import { useDebounce } from "@/hooks/useDebounce";
-import { Item } from "@prisma/client";
+  useGetItems,
+  useItemsSearch,
+  useItemsDialog,
+  useItemsPagination,
+  useItemsActions,
+} from "@/features/items/hooks";
 import {
   ItemForm,
   ItemPreviewDialog,
   DeleteConfirmationDialog,
+  ItemsHeader,
+  ItemsSearchAndFilters,
+  ItemsLoadingState,
+  ItemsErrorState,
+  ItemsEmptyState,
+  ItemsTable,
+  ItemsGrid,
+  ItemsPagination,
 } from "@/features/items/components";
 
 const ITEMS_PER_PAGE = 10;
 
-type DialogState = "preview" | "form" | "delete" | null;
-type FormMode = "create" | "edit";
-
 function ItemsPage() {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
-  const [dialogState, setDialogState] = useState<DialogState>(null);
-  const [formMode, setFormMode] = useState<FormMode>("create");
-  const [selectedItem, setSelectedItem] = useState<Item | null>(null);
+  // Additional state for filters
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
+  const [dateFilter, setDateFilter] = useState("all");
 
-  // Debounce search term to avoid too many API calls
-  const debouncedSearchTerm = useDebounce(searchTerm, 300);
+  // Custom hooks for managing state and logic
+  const {
+    searchTerm,
+    debouncedSearchTerm,
+    currentPage,
+    setCurrentPage,
+    handleSearch,
+  } = useItemsSearch();
 
-  // Reset to first page when search changes
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [debouncedSearchTerm]);
+  const {
+    dialogState,
+    formMode,
+    selectedItem,
+    closeDialog,
+    openPreview,
+    openForm,
+    openDelete,
+  } = useItemsDialog();
+
   // Fetch items using the updated hook with pagination
   const {
     items,
@@ -73,382 +60,111 @@ function ItemsPage() {
     limit: ITEMS_PER_PAGE,
     search: debouncedSearchTerm,
   });
-  // Handle search input changes
-  const handleSearch = (value: string) => {
-    setSearchTerm(value);
-    // The useDebounce hook and useEffect will handle the rest
-  };
-  // Dialog handlers
-  const handleAddItem = () => {
-    setSelectedItem(null);
-    setFormMode("create");
-    setDialogState("form");
-  };
 
-  const handleEditItem = (id: string) => {
-    const item = items.find((item) => item.id === id);
-    if (item) {
-      setSelectedItem(item);
-      setFormMode("edit");
-      setDialogState("form");
-    }
-  };
+  // Pagination logic
+  const {
+    paginationNumbers,
+    goToPrevious,
+    goToNext,
+    goToPage,
+    canGoPrevious,
+    canGoNext,
+  } = useItemsPagination({
+    currentPage,
+    totalPages: pagination.totalPages,
+    setCurrentPage,
+  });
 
-  const handleDeleteItem = (id: string) => {
-    const item = items.find((item) => item.id === id);
-    if (item) {
-      setSelectedItem(item);
-      setDialogState("delete");
-    }
-  };
+  // Item actions
+  const {
+    handleAddItem,
+    handleEditItem,
+    handleDeleteItem,
+    handleRowClick,
+    handleSaveItem,
+    handleDeleteConfirm,
+    handleEditFromPreview,
+  } = useItemsActions({
+    items,
+    openForm,
+    openDelete,
+    openPreview,
+    closeDialog,
+  });
 
-  const handleRowClick = (item: Item) => {
-    setSelectedItem(item);
-    setDialogState("preview");
-  };
-
-  const handleSaveItem = (item: Item) => {
-    console.log("Item saved:", item);
-    // The hooks handle the actual saving and updating the cache
-    setDialogState(null);
-    setSelectedItem(null);
+  // Handle sort toggle
+  const handleSortToggle = () => {
+    setSortOrder((prev) => (prev === "asc" ? "desc" : "asc"));
   };
 
-  const handleDeleteConfirm = () => {
-    // The DeleteConfirmationDialog handles the actual deletion
-    setDialogState(null);
-    setSelectedItem(null);
-  };
-
-  const handleDialogClose = () => {
-    setDialogState(null);
-    setSelectedItem(null);
-  };
-
-  const handleEditFromPreview = (item: Item) => {
-    setSelectedItem(item);
-    setFormMode("edit");
-    setDialogState("form");
-  };
-
-  // Format currency
-  const formatCurrency = (amount: number | null) => {
-    if (amount === null || amount === undefined) return "—";
-    return new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: "USD",
-    }).format(amount);
-  };
-  // Generate pagination numbers
-  const generatePaginationNumbers = () => {
-    const pages = [];
-    const maxVisiblePages = 5;
-    const totalPages = pagination.totalPages;
-
-    if (totalPages <= maxVisiblePages) {
-      for (let i = 1; i <= totalPages; i++) {
-        pages.push(i);
-      }
-    } else {
-      const leftSide = Math.max(1, currentPage - 2);
-      const rightSide = Math.min(totalPages, currentPage + 2);
-
-      if (leftSide > 1) {
-        pages.push(1);
-        if (leftSide > 2) pages.push("ellipsis-left");
-      }
-
-      for (let i = leftSide; i <= rightSide; i++) {
-        pages.push(i);
-      }
-
-      if (rightSide < totalPages) {
-        if (rightSide < totalPages - 1) pages.push("ellipsis-right");
-        pages.push(totalPages);
-      }
-    }
-
-    return pages;
+  // Handle date filter change
+  const handleDateFilterChange = (value: string) => {
+    setDateFilter(value);
   };
 
   return (
-    <div className="container mx-auto py-6">
+    <div className="container mx-auto py-6 px-4 lg:px-6">
       <div className="space-y-6">
-        {/* Header */}
-        <div className="flex flex-col space-y-4 md:flex-row md:items-center md:justify-between md:space-y-0">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900">Items</h1>
-            <p className="text-gray-600">Manage your inventory items</p>
-          </div>
-          <Button
-            onClick={handleAddItem}
-            className="bg-black hover:bg-gray-800 text-white"
-          >
-            <FiPlus className="mr-2 h-4 w-4" />
-            Add Item
-          </Button>
+        {/* Row 1 - Header Section */}
+        <div className="w-full">
+          <ItemsHeader onAddItem={handleAddItem} />
         </div>
 
-        {/* Search */}
-        <div className="relative max-w-md">
-          <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-          <Input
-            placeholder="Search items..."
-            value={searchTerm}
-            onChange={(e) => handleSearch(e.target.value)}
-            className="pl-10"
+        {/* Row 2 - Search and Filter Bar */}
+        <div className="w-full">
+          <ItemsSearchAndFilters
+            searchTerm={searchTerm}
+            onSearch={handleSearch}
+            sortOrder={sortOrder}
+            onSortToggle={handleSortToggle}
+            dateFilter={dateFilter}
+            onDateFilterChange={handleDateFilterChange}
+            isLoading={gettingItems}
+            debouncedSearchTerm={debouncedSearchTerm}
           />
-          {gettingItems && debouncedSearchTerm && (
-            <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-gray-900"></div>
-            </div>
-          )}
         </div>
 
-        {/* Content */}
+        {/* Row 3 - Data Table Container */}
         <div className="w-full">
           {isError ? (
-            <div className="text-center py-12">
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                Error loading items
-              </h3>
-              <p className="text-gray-600">{error}</p>
-            </div>
+            <ItemsErrorState error={error || "Unknown error"} />
           ) : gettingItems ? (
-            <div className="space-y-4">
-              <div className="bg-white rounded-lg border">
-                <div className="border-b p-6">
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <Skeleton className="h-4 w-20" />
-                    <Skeleton className="h-4 w-24" />
-                    <Skeleton className="h-4 w-16" />
-                  </div>
-                </div>
-                {[...Array(5)].map((_, i) => (
-                  <div key={i} className="p-6 border-b last:border-b-0">
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      <Skeleton className="h-4 w-32" />
-                      <Skeleton className="h-4 w-20" />
-                      <Skeleton className="h-4 w-8" />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
+            <ItemsLoadingState />
           ) : items.length === 0 ? (
-            <div className="text-center py-12">
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                {debouncedSearchTerm ? "No items found" : "No items yet"}
-              </h3>
-              <p className="text-gray-600 mb-6">
-                {debouncedSearchTerm
-                  ? `No items match "${debouncedSearchTerm}".`
-                  : "Get started by adding your first item."}
-              </p>
-              {!debouncedSearchTerm && (
-                <Button
-                  onClick={handleAddItem}
-                  className="bg-black hover:bg-gray-800 text-white"
-                >
-                  <FiPlus className="mr-2 h-4 w-4" />
-                  Add Your First Item
-                </Button>
-              )}
-            </div>
+            <ItemsEmptyState
+              hasSearchTerm={!!debouncedSearchTerm}
+              searchTerm={debouncedSearchTerm}
+              onAddItem={handleAddItem}
+            />
           ) : (
             <>
               {/* Desktop Table */}
-              <div className="hidden md:block bg-white rounded-lg border">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Item Details</TableHead>
-                      <TableHead>Unit Price</TableHead>
-                      <TableHead className="w-24">Actions</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {items.map((item: Item) => (
-                      <TableRow
-                        key={item.id}
-                        className="hover:bg-gray-50 cursor-pointer"
-                        onClick={() => handleRowClick(item)}
-                      >
-                        <TableCell>
-                          <div>
-                            <div className="font-medium text-gray-900">
-                              {item.name}
-                            </div>
-                            {item.description && (
-                              <div className="text-sm text-gray-500 line-clamp-2">
-                                {item.description}
-                              </div>
-                            )}
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <span className="font-medium">
-                            {formatCurrency(item.unitPrice)}
-                          </span>
-                        </TableCell>
-                        <TableCell>
-                          <div className="flex items-center space-x-2">
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleEditItem(item.id);
-                              }}
-                            >
-                              <FiEdit2 className="h-4 w-4" />
-                            </Button>
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleDeleteItem(item.id);
-                              }}
-                            >
-                              <FiTrash2 className="h-4 w-4" />
-                            </Button>
-                          </div>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
+              <ItemsTable
+                items={items}
+                onRowClick={handleRowClick}
+                onEdit={handleEditItem}
+                onDelete={handleDeleteItem}
+              />
 
               {/* Mobile Cards */}
-              <div className="md:hidden space-y-4">
-                {items.map((item: Item) => (
-                  <div
-                    key={item.id}
-                    className="bg-white rounded-lg border p-6 cursor-pointer hover:bg-gray-50"
-                    onClick={() => handleRowClick(item)}
-                  >
-                    <div className="flex justify-between items-start mb-4">
-                      <div className="flex-1">
-                        <h3 className="font-medium text-gray-900">
-                          {item.name}
-                        </h3>
-                        {item.description && (
-                          <p className="text-sm text-gray-500 mt-1 line-clamp-2">
-                            {item.description}
-                          </p>
-                        )}
-                      </div>
-                      <Popover>
-                        <PopoverTrigger asChild>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={(e) => e.stopPropagation()}
-                          >
-                            <FiMoreHorizontal className="h-4 w-4" />
-                          </Button>
-                        </PopoverTrigger>
-                        <PopoverContent align="end" className="w-40">
-                          <div className="space-y-2">
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleEditItem(item.id);
-                              }}
-                              className="w-full justify-start"
-                            >
-                              <FiEdit2 className="mr-2 h-4 w-4" />
-                              Edit
-                            </Button>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleDeleteItem(item.id);
-                              }}
-                              className="w-full justify-start text-red-600 hover:text-red-700 hover:bg-red-50"
-                            >
-                              <FiTrash2 className="mr-2 h-4 w-4" />
-                              Delete
-                            </Button>
-                          </div>
-                        </PopoverContent>
-                      </Popover>
-                    </div>
-                    <div className="flex justify-between items-center pt-4 border-t">
-                      <span className="text-sm text-gray-500">Unit Price</span>
-                      <span className="font-medium">
-                        {formatCurrency(item.unitPrice)}
-                      </span>
-                    </div>
-                  </div>
-                ))}
-              </div>
+              <ItemsGrid
+                items={items}
+                onRowClick={handleRowClick}
+                onEdit={handleEditItem}
+                onDelete={handleDeleteItem}
+              />
 
               {/* Pagination */}
-              {pagination.totalPages > 1 && (
-                <div className="mt-6 flex justify-center">
-                  <Pagination>
-                    <PaginationContent>
-                      <PaginationItem>
-                        <PaginationPrevious
-                          href="#"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            if (currentPage > 1)
-                              setCurrentPage(currentPage - 1);
-                          }}
-                          className={
-                            currentPage === 1
-                              ? "pointer-events-none opacity-50"
-                              : ""
-                          }
-                        />
-                      </PaginationItem>
-
-                      {generatePaginationNumbers().map((page, index) => (
-                        <PaginationItem key={index}>
-                          {typeof page === "number" ? (
-                            <PaginationLink
-                              href="#"
-                              onClick={(e) => {
-                                e.preventDefault();
-                                setCurrentPage(page);
-                              }}
-                              isActive={currentPage === page}
-                            >
-                              {page}
-                            </PaginationLink>
-                          ) : (
-                            <PaginationEllipsis />
-                          )}
-                        </PaginationItem>
-                      ))}
-
-                      <PaginationItem>
-                        <PaginationNext
-                          href="#"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            if (currentPage < pagination.totalPages)
-                              setCurrentPage(currentPage + 1);
-                          }}
-                          className={
-                            currentPage === pagination.totalPages
-                              ? "pointer-events-none opacity-50"
-                              : ""
-                          }
-                        />
-                      </PaginationItem>
-                    </PaginationContent>
-                  </Pagination>
-                </div>
-              )}
+              <ItemsPagination
+                currentPage={currentPage}
+                totalPages={pagination.totalPages}
+                paginationNumbers={paginationNumbers}
+                onPageChange={goToPage}
+                onPrevious={goToPrevious}
+                onNext={goToNext}
+                canGoPrevious={canGoPrevious}
+                canGoNext={canGoNext}
+              />
             </>
           )}
         </div>
@@ -457,20 +173,20 @@ function ItemsPage() {
       {/* Dialogs */}
       <ItemPreviewDialog
         open={dialogState === "preview"}
-        onOpenChange={handleDialogClose}
+        onOpenChange={closeDialog}
         item={selectedItem}
         onEdit={handleEditFromPreview}
       />
       <ItemForm
         open={dialogState === "form"}
-        onOpenChange={handleDialogClose}
+        onOpenChange={closeDialog}
         item={selectedItem}
         mode={formMode}
         onSuccess={handleSaveItem}
       />
       <DeleteConfirmationDialog
         open={dialogState === "delete"}
-        onOpenChange={handleDialogClose}
+        onOpenChange={closeDialog}
         item={selectedItem}
         onSuccess={handleDeleteConfirm}
       />

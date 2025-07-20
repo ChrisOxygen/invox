@@ -46,14 +46,14 @@ export function ItemPreviewDialog({
             type="button"
             variant="outline"
             onClick={() => onOpenChange(false)}
-            className="border-gray-300 text-gray-700 hover:bg-gray-50"
+            className="border-blue-200 text-blue-700 hover:bg-blue-50 hover:border-blue-300 transition-all duration-200"
           >
             Close
           </Button>
           <Button
             type="button"
             onClick={handleEdit}
-            className="bg-black text-white hover:bg-gray-800"
+            className="bg-gradient-to-r from-blue-600 to-cyan-400 hover:from-blue-700 hover:to-cyan-500 text-white shadow-lg shadow-blue-200/50 hover:shadow-xl hover:shadow-blue-300/50 transition-all duration-300"
           >
             <FiEdit2 className="mr-2 h-4 w-4" />
             Edit
@@ -67,7 +67,7 @@ export function ItemPreviewDialog({
           <label className="text-sm font-medium text-gray-900 block mb-2">
             Item Name
           </label>
-          <div className="p-3 bg-gray-50 rounded-md border border-gray-200">
+          <div className="p-3 bg-gradient-to-r from-blue-50/30 to-cyan-50/30 rounded-lg border border-blue-100">
             <p className="text-gray-900 font-medium">{item.name}</p>
           </div>
         </div>
@@ -77,7 +77,7 @@ export function ItemPreviewDialog({
           <label className="text-sm font-medium text-gray-900 block mb-2">
             Description
           </label>
-          <div className="p-3 bg-gray-50 rounded-md border border-gray-200 min-h-[80px]">
+          <div className="p-3 bg-gradient-to-r from-blue-50/30 to-cyan-50/30 rounded-lg border border-blue-100 min-h-[80px]">
             <p className="text-gray-700">
               {item.description || (
                 <span className="italic text-gray-400">
@@ -93,24 +93,26 @@ export function ItemPreviewDialog({
           <label className="text-sm font-medium text-gray-900 block mb-2">
             Unit Price
           </label>
-          <div className="p-3 bg-gray-50 rounded-md border border-gray-200">
-            <p className="text-gray-900 font-medium text-lg">
+          <div className="p-3 bg-gradient-to-r from-blue-50/30 to-cyan-50/30 rounded-lg border border-blue-100">
+            <p className="text-blue-600 font-semibold text-lg">
               {formatCurrency(item.unitPrice)}
             </p>
           </div>
         </div>
 
         {/* Metadata */}
-        <div className="pt-4 border-t border-gray-200">
+        <div className="pt-4 border-t border-blue-100">
           <div className="grid grid-cols-2 gap-4 text-sm">
             <div>
-              <label className="text-gray-500 block">Created</label>
+              <label className="text-blue-600 font-medium block">Created</label>
               <p className="text-gray-900">
                 {new Date(item.createdAt).toLocaleDateString()}
               </p>
             </div>
             <div>
-              <label className="text-gray-500 block">Last Updated</label>
+              <label className="text-blue-600 font-medium block">
+                Last Updated
+              </label>
               <p className="text-gray-900">
                 {new Date(item.updatedAt).toLocaleDateString()}
               </p>

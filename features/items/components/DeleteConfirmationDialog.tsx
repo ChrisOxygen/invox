@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import AppDialog from "@/components/AppDialog";
 import { FiTrash2, FiAlertTriangle } from "react-icons/fi";
 import { useDeleteItem } from "@/features/items/hooks";
-import { toast } from "sonner";
+import { showSuccessToast, showErrorToast } from "@/components/toast-templates";
 
 interface DeleteConfirmationDialogProps {
   open: boolean;
@@ -23,12 +23,15 @@ export function DeleteConfirmationDialog({
 }: DeleteConfirmationDialogProps) {
   const deleteItem = useDeleteItem({
     onSuccess: () => {
-      toast.success("Item deleted successfully!");
+      showSuccessToast(
+        "Item deleted successfully!",
+        "The item has been permanently removed from your inventory."
+      );
       onSuccess?.();
       onOpenChange(false);
     },
     onError: (error) => {
-      toast.error(`Failed to delete item: ${error.message}`);
+      showErrorToast("Failed to delete item", error.message);
     },
   });
 
@@ -59,7 +62,7 @@ export function DeleteConfirmationDialog({
             variant="outline"
             onClick={() => onOpenChange(false)}
             disabled={isLoading}
-            className="border-gray-300 text-gray-700 hover:bg-gray-50"
+            className="border-blue-200 text-blue-700 hover:bg-blue-50 hover:border-blue-300 transition-all duration-200"
           >
             Cancel
           </Button>
@@ -67,7 +70,7 @@ export function DeleteConfirmationDialog({
             type="button"
             onClick={handleDelete}
             disabled={isLoading}
-            className="bg-red-600 text-white hover:bg-red-700 focus:ring-red-500"
+            className="bg-gradient-to-r from-red-600 to-red-500 text-white hover:from-red-700 hover:to-red-600 shadow-lg shadow-red-200/50 hover:shadow-xl hover:shadow-red-300/50 transition-all duration-300"
           >
             <FiTrash2 className="mr-2 h-4 w-4" />
             {isLoading ? "Deleting..." : "Delete"}
@@ -77,7 +80,7 @@ export function DeleteConfirmationDialog({
     >
       <div className="space-y-4">
         {/* Warning Icon */}
-        <div className="flex items-center justify-center w-12 h-12 mx-auto bg-red-100 rounded-full">
+        <div className="flex items-center justify-center w-12 h-12 mx-auto bg-gradient-to-br from-red-50 to-red-100 border-2 border-red-200 rounded-full shadow-lg shadow-red-100/50">
           <FiAlertTriangle className="h-6 w-6 text-red-600" />
         </div>
 
@@ -95,17 +98,19 @@ export function DeleteConfirmationDialog({
         </div>
 
         {/* Item Info */}
-        <div className="bg-gray-50 rounded-lg p-3 border border-gray-200">
+        <div className="bg-gradient-to-r from-blue-50/30 to-cyan-50/30 rounded-lg p-3 border border-blue-100">
           <div className="space-y-1">
             <div className="flex justify-between">
-              <span className="text-sm text-gray-500">Item:</span>
+              <span className="text-sm text-blue-600 font-medium">Item:</span>
               <span className="text-sm font-medium text-gray-900">
                 {item.name}
               </span>
             </div>
             {item.description && (
               <div className="flex justify-between">
-                <span className="text-sm text-gray-500">Description:</span>
+                <span className="text-sm text-blue-600 font-medium">
+                  Description:
+                </span>
                 <span className="text-sm text-gray-700 text-right max-w-[200px] truncate">
                   {item.description}
                 </span>
@@ -113,8 +118,10 @@ export function DeleteConfirmationDialog({
             )}
             {item.unitPrice !== null && (
               <div className="flex justify-between">
-                <span className="text-sm text-gray-500">Price:</span>
-                <span className="text-sm font-medium text-gray-900">
+                <span className="text-sm text-blue-600 font-medium">
+                  Price:
+                </span>
+                <span className="text-sm font-semibold text-blue-600">
                   {new Intl.NumberFormat("en-US", {
                     style: "currency",
                     currency: "USD",

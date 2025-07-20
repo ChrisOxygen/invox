@@ -4,7 +4,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Item } from "@prisma/client";
-import { toast } from "sonner";
+import { showSuccessToast, showErrorToast } from "@/components/toast-templates";
 
 import AppDialog from "@/components/AppDialog";
 import { Button } from "@/components/ui/button";
@@ -21,8 +21,12 @@ import {
 
 import { useCreateItem } from "@/features/items/hooks/useCreateItem";
 import { useUpdateItem } from "@/features/items/hooks/useUpdateItem";
-import { createItemSchema, updateItemSchema } from "@/dataSchemas/item";
-import { CreateItemInput, UpdateItemInput } from "@/types/schemas/item";
+import {
+  createItemSchema,
+  updateItemSchema,
+  ZCreateItemInput,
+  ZUpdateItemInput,
+} from "../validation";
 
 interface ItemFormProps {
   open: boolean;
@@ -43,28 +47,34 @@ export function ItemForm({
   // Hooks
   const createItem = useCreateItem({
     onSuccess: (data) => {
-      toast.success("Item created successfully!");
+      showSuccessToast(
+        "Item created successfully!",
+        "Your new item has been added to the inventory."
+      );
       onSuccess?.(data.data!);
       handleClose();
     },
     onError: (error) => {
-      toast.error(`Failed to create item: ${error.message}`);
+      showErrorToast("Failed to create item", error.message);
     },
   });
 
   const updateItem = useUpdateItem({
     onSuccess: (data) => {
-      toast.success("Item updated successfully!");
+      showSuccessToast(
+        "Item updated successfully!",
+        "Your item changes have been saved."
+      );
       onSuccess?.(data.data!);
       handleClose();
     },
     onError: (error) => {
-      toast.error(`Failed to update item: ${error.message}`);
+      showErrorToast("Failed to update item", error.message);
     },
   });
 
   // Form setup - use appropriate schema based on mode
-  const form = useForm<CreateItemInput | UpdateItemInput>({
+  const form = useForm<ZCreateItemInput | ZUpdateItemInput>({
     resolver: zodResolver(isEditing ? updateItemSchema : createItemSchema),
     defaultValues: {
       name: item?.name || "",
@@ -88,17 +98,17 @@ export function ItemForm({
     form.reset();
     onOpenChange(false);
   };
-  const onSubmit = async (data: CreateItemInput | UpdateItemInput) => {
+  const onSubmit = async (data: ZCreateItemInput | ZUpdateItemInput) => {
     try {
       if (isEditing && item) {
         // For editing, use updateItem
         await updateItem.updateItemAsync({
           itemId: item.id,
-          data: data as UpdateItemInput,
+          data: data as ZUpdateItemInput,
         });
       } else {
         // For creating, use createItem
-        await createItem.createItemAsync(data as CreateItemInput);
+        await createItem.createItemAsync(data as ZCreateItemInput);
       }
     } catch (error) {
       // Error handling is done in the hooks
@@ -127,7 +137,7 @@ export function ItemForm({
             variant="outline"
             onClick={handleClose}
             disabled={isLoading}
-            className="border-gray-300 text-gray-700 hover:bg-gray-50"
+            className="border-blue-200 text-blue-700 hover:bg-blue-50 hover:border-blue-300 transition-all duration-200"
           >
             Cancel
           </Button>
@@ -135,7 +145,7 @@ export function ItemForm({
             type="submit"
             form="item-form"
             disabled={isLoading}
-            className="bg-black text-white hover:bg-gray-800"
+            className="bg-gradient-to-r from-blue-600 to-cyan-400 hover:from-blue-700 hover:to-cyan-500 text-white shadow-lg shadow-blue-200/50 hover:shadow-xl hover:shadow-blue-300/50 transition-all duration-300"
           >
             {isLoading
               ? "Saving..."
@@ -166,10 +176,10 @@ export function ItemForm({
                     {...field}
                     placeholder="Enter item name"
                     disabled={isLoading}
-                    className="border-gray-300 focus:border-black focus:ring-black"
+                    className="border-blue-200 focus-visible:border-blue-400 focus-visible:ring-blue-200 transition-all duration-200"
                   />
                 </FormControl>
-                <FormMessage className="text-xs text-gray-600" />
+                <FormMessage className="text-xs text-red-600" />
               </FormItem>
             )}
           />
@@ -190,10 +200,10 @@ export function ItemForm({
                     placeholder="Enter item description"
                     disabled={isLoading}
                     rows={3}
-                    className="border-gray-300 focus:border-black focus:ring-black resize-none"
+                    className="border-blue-200 focus-visible:border-blue-400 focus-visible:ring-blue-200 resize-none transition-all duration-200"
                   />
                 </FormControl>
-                <FormMessage className="text-xs text-gray-600" />
+                <FormMessage className="text-xs text-red-600" />
               </FormItem>
             )}
           />
@@ -216,13 +226,13 @@ export function ItemForm({
                     min="0"
                     placeholder="Enter unit price"
                     disabled={isLoading}
-                    className="border-gray-300 focus:border-black focus:ring-black"
+                    className="border-blue-200 focus-visible:border-blue-400 focus-visible:ring-blue-200 transition-all duration-200"
                     onChange={(e) =>
                       field.onChange(parseFloat(e.target.value) || 0)
                     }
                   />
                 </FormControl>
-                <FormMessage className="text-xs text-gray-600" />
+                <FormMessage className="text-xs text-red-600" />
               </FormItem>
             )}
           />

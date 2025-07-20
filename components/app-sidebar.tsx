@@ -26,20 +26,20 @@ const data = {
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar
-      className="bg-blue-50"
+      className="bg-blue-50 shadow-none"
       collapsible="icon"
       variant="inset"
       {...props}
     >
-      <SidebarHeader>
+      <SidebarHeader className="rounded-2xl bg-white shadow-none border-none">
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
               <a
                 href="/app"
-                className="group hover:bg-gradient-to-r hover:from-blue-50 hover:to-cyan-50 hover:border-blue-200 transition-all duration-200"
+                className="group hover:bg-gradient-to-r  hover:from-blue-50 hover:to-cyan-50 hover:border-blue-200 transition-all duration-200"
               >
-                <div className="bg-gradient-to-br from-blue-600 to-cyan-400 text-white flex aspect-square size-8 items-center justify-center rounded-lg shadow-lg shadow-blue-200/50 group-hover:shadow-xl group-hover:shadow-blue-300/50 transition-all duration-300">
+                <div className="bg-gradient-to-br from-blue-600 to-cyan-400 text-white flex aspect-square size-8 items-center justify-center rounded-lg  transition-all duration-300">
                   <Image
                     src="/assets/logo-white-icon.webp"
                     alt="Invoice Icon"

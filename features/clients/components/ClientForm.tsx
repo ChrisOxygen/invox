@@ -4,7 +4,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Client } from "@prisma/client";
-import { toast } from "sonner";
+import { showSuccessToast, showErrorToast } from "@/components/toast-templates";
 
 import AppDialog from "@/components/AppDialog";
 import { Button } from "@/components/ui/button";
@@ -22,6 +22,7 @@ import {
 import { useCreateClient, useUpdateClient } from "@/features/clients/hooks";
 import { createClientSchema, updateClientSchema } from "@/dataSchemas/client";
 import { CreateClientInput, UpdateClientInput } from "@/types/schemas/client";
+import { Building2, Mail, User, MapPin, Loader2 } from "lucide-react";
 
 interface ClientFormProps {
   open: boolean;
@@ -43,23 +44,29 @@ export function ClientForm({
   // Hooks
   const createClient = useCreateClient({
     onSuccess: (data) => {
-      toast.success("Client created successfully!");
+      showSuccessToast(
+        "Client Created",
+        "Client has been created successfully!"
+      );
       onSuccess?.(data);
       handleClose();
     },
     onError: (error) => {
-      toast.error(`Failed to create client: ${error.message}`);
+      showErrorToast("Creation Failed", error.message);
     },
   });
 
   const updateClient = useUpdateClient({
     onSuccess: (data) => {
-      toast.success("Client updated successfully!");
+      showSuccessToast(
+        "Client Updated",
+        "Client information has been updated successfully!"
+      );
       onSuccess?.(data);
       handleClose();
     },
     onError: (error) => {
-      toast.error(`Failed to update client: ${error.message}`);
+      showErrorToast("Update Failed", error.message);
     },
   });
 
@@ -128,7 +135,7 @@ export function ClientForm({
             variant="outline"
             onClick={handleClose}
             disabled={isLoading}
-            className="border-gray-300 text-gray-700 hover:bg-gray-50"
+            className="border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors"
           >
             Cancel
           </Button>
@@ -136,13 +143,18 @@ export function ClientForm({
             type="submit"
             form="client-form"
             disabled={isLoading}
-            className="bg-black text-white hover:bg-gray-800"
+            className="bg-gradient-to-r from-blue-600 to-cyan-400 hover:from-blue-700 hover:to-cyan-500 text-white border-0 shadow-md transition-all duration-300 hover:shadow-lg disabled:opacity-50"
           >
-            {isLoading
-              ? "Saving..."
-              : isEditing
-              ? "Update Client"
-              : "Create Client"}
+            {isLoading ? (
+              <>
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                Saving...
+              </>
+            ) : isEditing ? (
+              "Update Client"
+            ) : (
+              "Create Client"
+            )}
           </Button>
         </div>
       }
@@ -159,7 +171,8 @@ export function ClientForm({
             name="BusinessName"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-sm font-medium text-gray-900">
+                <FormLabel className="text-sm font-medium text-gray-900 flex items-center gap-2">
+                  <Building2 className="w-4 h-4 text-blue-600" />
                   Business Name *
                 </FormLabel>
                 <FormControl>
@@ -167,10 +180,10 @@ export function ClientForm({
                     {...field}
                     placeholder="Enter business name"
                     disabled={isLoading}
-                    className="border-gray-300 focus:border-black focus:ring-black"
+                    className="border-gray-300 focus:border-blue-500 focus:ring-blue-500 transition-colors"
                   />
                 </FormControl>
-                <FormMessage className="text-xs text-gray-600" />
+                <FormMessage className="text-xs text-red-600" />
               </FormItem>
             )}
           />
@@ -181,7 +194,8 @@ export function ClientForm({
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-sm font-medium text-gray-900">
+                <FormLabel className="text-sm font-medium text-gray-900 flex items-center gap-2">
+                  <Mail className="w-4 h-4 text-blue-600" />
                   Email Address *
                 </FormLabel>
                 <FormControl>
@@ -190,10 +204,10 @@ export function ClientForm({
                     type="email"
                     placeholder="Enter email address"
                     disabled={isLoading}
-                    className="border-gray-300 focus:border-black focus:ring-black"
+                    className="border-gray-300 focus:border-blue-500 focus:ring-blue-500 transition-colors"
                   />
                 </FormControl>
-                <FormMessage className="text-xs text-gray-600" />
+                <FormMessage className="text-xs text-red-600" />
               </FormItem>
             )}
           />
@@ -204,7 +218,8 @@ export function ClientForm({
             name="contactPersonName"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-sm font-medium text-gray-900">
+                <FormLabel className="text-sm font-medium text-gray-900 flex items-center gap-2">
+                  <User className="w-4 h-4 text-blue-600" />
                   Contact Person Name
                 </FormLabel>
                 <FormControl>
@@ -212,10 +227,10 @@ export function ClientForm({
                     {...field}
                     placeholder="Enter contact person name"
                     disabled={isLoading}
-                    className="border-gray-300 focus:border-black focus:ring-black"
+                    className="border-gray-300 focus:border-blue-500 focus:ring-blue-500 transition-colors"
                   />
                 </FormControl>
-                <FormMessage className="text-xs text-gray-600" />
+                <FormMessage className="text-xs text-red-600" />
               </FormItem>
             )}
           />
@@ -226,7 +241,8 @@ export function ClientForm({
             name="address"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-sm font-medium text-gray-900">
+                <FormLabel className="text-sm font-medium text-gray-900 flex items-center gap-2">
+                  <MapPin className="w-4 h-4 text-blue-600" />
                   Address
                 </FormLabel>
                 <FormControl>
@@ -235,10 +251,10 @@ export function ClientForm({
                     placeholder="Enter business address"
                     disabled={isLoading}
                     rows={3}
-                    className="border-gray-300 focus:border-black focus:ring-black resize-none"
+                    className="border-gray-300 focus:border-blue-500 focus:ring-blue-500 resize-none transition-colors"
                   />
                 </FormControl>
-                <FormMessage className="text-xs text-gray-600" />
+                <FormMessage className="text-xs text-red-600" />
               </FormItem>
             )}
           />

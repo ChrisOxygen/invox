@@ -7,16 +7,21 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { ArrowRight, ArrowLeft, CreditCard } from "lucide-react";
-import { useOnboarding } from "../../context/OnboardingProvider";
+import { useOnboardingState } from "../../context/OnboardingStateContext";
+import { useOnboardingActions as useOnboardingActionsContext } from "../../context/OnboardingActionsContext";
 import { PAYMENT_METHODS } from "@/constants";
 import PayMethodCard from "../PayMethodCard";
 import AppDialog from "@/components/AppDialog";
-import NigerianBankForm, {
-  type NigerianBankDetails,
-} from "../payment-forms/NigerianBankForm";
-import PayPalForm, { type PayPalDetails } from "../payment-forms/PayPalForm";
-import WiseForm, { type WiseDetails } from "../payment-forms/WiseForm";
-import ACHForm, { type ACHDetails } from "../payment-forms/ACHForm";
+import NigerianBankForm from "../payment-forms/NigerianBankForm";
+import PayPalForm from "../payment-forms/PayPalForm";
+import WiseForm from "../payment-forms/WiseForm";
+import ACHForm from "../payment-forms/ACHForm";
+import {
+  AchAccount,
+  PaypalAccount,
+  WiseAccount,
+  NigerianBankAccount,
+} from "@/types/schemas/payments";
 
 interface PaymentMethod {
   id: string;
@@ -25,21 +30,17 @@ interface PaymentMethod {
   available: boolean;
 }
 
-// Type for payment method form data
+// Type for payment method form data - using the actual schema types
 type PaymentMethodFormData =
-  | NigerianBankDetails
-  | PayPalDetails
-  | WiseDetails
-  | ACHDetails;
+  | NigerianBankAccount
+  | PaypalAccount
+  | WiseAccount
+  | AchAccount;
 
 function Step5() {
-  const {
-    nextStep,
-    state,
-    previousStep,
-    setPaymentMethods,
-    setPaymentMethodDetails,
-  } = useOnboarding();
+  const state = useOnboardingState();
+  const { nextStep, previousStep, setPaymentMethods, setPaymentMethodDetails } =
+    useOnboardingActionsContext();
 
   const [selectedPaymentMethods, setSelectedPaymentMethods] = useState<
     string[]
@@ -115,19 +116,26 @@ function Step5() {
         case "nigerian-bank":
           updatedDetails = {
             ...currentDetails,
-            nigerianBank: data as NigerianBankDetails,
+            nigerianBank: data as NigerianBankAccount,
           };
           break;
         case "paypal":
-          updatedDetails = { ...currentDetails, paypal: data as PayPalDetails };
+          updatedDetails = { ...currentDetails, paypal: data as PaypalAccount };
           break;
         case "wise":
-          updatedDetails = { ...currentDetails, wise: data as WiseDetails };
+          updatedDetails = { ...currentDetails, wise: data as WiseAccount };
           break;
         case "bank-transfer":
+          // Map AchAccount to PaymentMethodDetails.bankTransfer format
+          const achData = data as AchAccount;
           updatedDetails = {
             ...currentDetails,
-            bankTransfer: data as ACHDetails,
+            bankTransfer: {
+              accountNumber: achData.accountNumber,
+              routingNumber: achData.routingNumber,
+              bankName: achData.bankName,
+              accountHolderName: "Account Holder", // Default value - should be collected from user in future
+            },
           };
           break;
         default:
@@ -213,15 +221,22 @@ function Step5() {
   // Guard clause to prevent rendering if required data is missing
   if (!state.currency) {
     return (
-      <div className="flex w-full max-w-[90vw] sm:max-w-[600px] flex-col items-center justify-center px-4 py-6">
-        <div className="text-center">
-          <p className="font-inter text-lg text-gray-600">
-            Please complete the previous steps first.
+      <div className="flex w-full max-w-4xl flex-col items-center justify-center px-4 py-6">
+        <div className="text-center bg-gradient-to-r from-blue-50 to-cyan-50 border border-blue-100 rounded-xl p-6 sm:p-8">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-50 to-cyan-50 border-2 border-blue-100 rounded-full mb-4 shadow-lg shadow-blue-100/50">
+            <CreditCard className="w-8 h-8 text-blue-600" />
+          </div>
+          <p className="text-lg font-medium text-gray-800 mb-2">
+            Previous Steps Required
+          </p>
+          <p className="text-sm text-gray-600 mb-4">
+            Please complete the previous steps first to continue with payment
+            setup.
           </p>
           <Button
             onClick={previousStep}
             variant="outline"
-            className="mt-4 cursor-pointer"
+            className="border-2 border-blue-300 text-blue-600 hover:bg-blue-50 transition-all duration-200"
           >
             <ArrowLeft className="mr-2 w-4 h-4" />
             Go Back
@@ -232,31 +247,31 @@ function Step5() {
   }
 
   return (
-    <div className="flex w-full max-w-[90vw] sm:max-w-[600px] flex-col items-center justify-center px-4 py-6 sm:px-6 md:px-8">
-      <div className="max-w-2xl w-full text-center space-y-6 sm:space-y-8">
-        {/* Header */}
+    <div className="flex w-full max-w-4xl flex-col items-center justify-center px-4 py-4 sm:px-6 sm:py-6 md:px-8 md:py-8">
+      <div className="w-full text-center space-y-4 sm:space-y-5">
+        {/* Header with enhanced icon */}
         <div className="space-y-3 sm:space-y-4">
-          <div className="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 bg-gray-100 rounded-full mb-4 sm:mb-6">
-            <CreditCard className="w-8 h-8 sm:w-10 sm:h-10 text-gray-900" />
+          <div className="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 bg-gradient-to-br from-blue-50 to-cyan-50 border-2 border-blue-100 rounded-full mb-3 sm:mb-4 shadow-lg shadow-blue-100/50">
+            <CreditCard className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 text-blue-600" />
           </div>
 
-          <h1 className="font-space-grotesk text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 leading-tight px-2">
-            How Do You Want
-            <br />
-            to Get Paid?
-          </h1>
+          <div className="space-y-2 sm:space-y-3">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-blue-600 to-cyan-400 bg-clip-text text-transparent leading-tight">
+              How Do You Want to Get Paid?
+            </h1>
 
-          <p className="font-inter text-base sm:text-lg text-gray-600 leading-relaxed max-w-xl mx-auto px-4 sm:px-2">
-            The easier you make it for clients to pay, the faster you&apos;ll
-            get paid.
-          </p>
+            <p className="text-sm sm:text-base md:text-lg text-gray-600 leading-relaxed max-w-2xl mx-auto">
+              The easier you make it for clients to pay, the faster you&apos;ll
+              get paid.
+            </p>
+          </div>
         </div>
 
-        {/* Main content */}
-        <div className="space-y-4 sm:space-y-6">
+        {/* Main content with enhanced styling */}
+        <div className="space-y-4 sm:space-y-5">
           {/* Payment Method Cards */}
           <TooltipProvider>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 max-w-lg mx-auto px-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 max-w-2xl mx-auto">
               {paymentMethods.map((method) => {
                 const isSelected = selectedPaymentMethods.includes(method.id);
                 const isDisabled = !method.available;
@@ -278,8 +293,8 @@ function Step5() {
                   return (
                     <Tooltip key={method.id}>
                       <TooltipTrigger asChild>{CardComponent}</TooltipTrigger>
-                      <TooltipContent>
-                        <p className="font-inter text-sm">
+                      <TooltipContent className="bg-white border-2 border-blue-100 shadow-xl rounded-lg">
+                        <p className="text-sm text-gray-600">
                           This payment method is not available for your selected
                           currency ({state.currency}).
                         </p>
@@ -292,16 +307,27 @@ function Step5() {
               })}
             </div>
           </TooltipProvider>
+
+          {/* Info card */}
+          {selectedPaymentMethods.length > 0 && (
+            <div className="bg-gradient-to-r from-cyan-50 to-blue-50 border border-cyan-100 rounded-lg p-3 sm:p-4 max-w-2xl mx-auto">
+              <p className="text-xs sm:text-sm text-gray-600">
+                💳 {selectedPaymentMethods.length} payment method
+                {selectedPaymentMethods.length > 1 ? "s" : ""} configured. You
+                can add more later in settings.
+              </p>
+            </div>
+          )}
         </div>
 
-        {/* Action Buttons */}
-        <div className="space-y-3 pt-2 sm:pt-4">
-          <div className="flex flex-col sm:flex-row gap-3">
+        {/* Action Buttons with enhanced styling */}
+        <div className="space-y-3 pt-2 sm:pt-3">
+          <div className="flex flex-col sm:flex-row gap-3 max-w-lg mx-auto">
             <Button
               onClick={handleSetupLater}
               variant="outline"
               size="lg"
-              className="flex-1 min-h-[52px] h-auto py-4 px-6 sm:h-14 sm:py-3 font-inter font-medium border-gray-300 text-gray-600 hover:bg-gray-50 cursor-pointer text-sm sm:text-base"
+              className="flex-1 min-h-[48px] sm:min-h-[52px] h-auto py-3 px-6 font-medium border-2 border-gray-300 text-gray-600 hover:bg-gradient-to-r hover:from-gray-50 hover:to-gray-100 hover:border-gray-400 group transition-all duration-300 text-sm sm:text-base rounded-xl"
             >
               Set Up Later
             </Button>
@@ -310,13 +336,13 @@ function Step5() {
               onClick={handleContinue}
               disabled={selectedPaymentMethods.length === 0}
               size="lg"
-              className="flex-1 min-h-[52px] h-auto py-4 px-6 sm:h-14 sm:py-3 bg-gray-900 hover:bg-gray-800 disabled:bg-gray-300 disabled:text-gray-500 text-white font-inter font-medium transition-all duration-200 group cursor-pointer text-sm sm:text-base"
+              className="flex-1 min-h-[48px] sm:min-h-[52px] h-auto py-3 px-6 bg-gradient-to-r from-blue-600 to-cyan-400 hover:from-blue-700 hover:to-cyan-500 disabled:from-gray-300 disabled:to-gray-400 disabled:text-gray-500 text-white font-semibold transition-all duration-300 group text-sm sm:text-base rounded-xl shadow-lg shadow-blue-200/50 hover:shadow-xl hover:shadow-blue-300/50 hover:scale-105 disabled:hover:scale-100 disabled:hover:shadow-lg"
             >
               {selectedPaymentMethods.length === 0
                 ? "Select Payment Method"
                 : "Save Payment Details"}
               {selectedPaymentMethods.length > 0 && (
-                <ArrowRight className="ml-2 w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform duration-200" />
+                <ArrowRight className="ml-2 w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform duration-300" />
               )}
             </Button>
           </div>
@@ -326,7 +352,7 @@ function Step5() {
             onClick={previousStep}
             variant="ghost"
             size="sm"
-            className="min-h-[44px] h-auto py-3 px-4 font-inter text-gray-500 hover:text-gray-700 cursor-pointer text-xs sm:text-sm"
+            className="min-h-[40px] h-auto py-2 px-4 text-gray-500 hover:text-gray-700 hover:bg-gray-100 transition-all duration-200 text-xs sm:text-sm rounded-lg"
           >
             <ArrowLeft className="mr-2 w-3 h-3 sm:w-4 sm:h-4" />
             Back

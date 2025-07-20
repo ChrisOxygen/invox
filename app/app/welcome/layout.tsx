@@ -7,21 +7,21 @@ import { useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
 
 function OnboardingLayout({ children }: { children: React.ReactNode }) {
-  const hasBeenOnboarded = useRef<boolean | null>(null);
+  const hasRedirected = useRef(false);
   const router = useRouter();
-
   const { user, isPending: gettingUser } = useUser();
-  useEffect(() => {
-    if (hasBeenOnboarded.current !== null) return;
-    if (user && !gettingUser && user.onboardingCompleted) {
-      router.push("/app/dashboard");
-      return;
-    }
-    if (user && !gettingUser && !user.onboardingCompleted) {
-      hasBeenOnboarded.current = false;
-    }
-  }, [user, gettingUser, router]);
 
+  useEffect(() => {
+    if (hasRedirected.current || gettingUser) return;
+
+    if (user?.onboardingCompleted) {
+      hasRedirected.current = true;
+      // Add a small delay to prevent redirect loops
+      setTimeout(() => {
+        router.push("/app");
+      }, 100);
+    }
+  }, [user?.onboardingCompleted, gettingUser, router]);
   if (gettingUser) {
     return (
       <div className="w-full h-screen grid place-items-center">
@@ -30,7 +30,8 @@ function OnboardingLayout({ children }: { children: React.ReactNode }) {
     );
   }
 
-  if (user && user.onboardingCompleted) {
+  // Show loader while redirecting completed users
+  if (user?.onboardingCompleted) {
     return (
       <div className="w-full h-screen grid place-items-center">
         <InBoxLoader />
@@ -38,6 +39,7 @@ function OnboardingLayout({ children }: { children: React.ReactNode }) {
     );
   }
 
+  // User exists and needs onboarding
   return <OnboardingProvider>{children}</OnboardingProvider>;
 }
 

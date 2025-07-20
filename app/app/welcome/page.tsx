@@ -10,12 +10,12 @@ import Step5 from "@/features/onboarding/components/onboarding-steps/Step5";
 import Step6 from "@/features/onboarding/components/onboarding-steps/Step6";
 import Step7 from "@/features/onboarding/components/onboarding-steps/Step7";
 import OnboardingProgressIndicator from "@/features/onboarding/components/OnboardingProgressIndicator";
-import { useOnboarding } from "@/features/onboarding/context/OnboardingProvider";
+import { useOnboardingState } from "@/features/onboarding/context/OnboardingStateContext";
 import { useUser } from "@/hooks/useUser";
 
 function UserOnboardingPage() {
   const { isPending: gettingUser, isError } = useUser();
-  const { state } = useOnboarding();
+  const state = useOnboardingState();
 
   const currentStep = state.currentStep;
 
@@ -49,7 +49,7 @@ function UserOnboardingPage() {
         {/* Progress indicator - fixed height on mobile, responsive spacing */}
         <div className="flex-shrink-0 px-4 pt-4 pb-2 sm:px-6 sm:pt-6 sm:pb-4 md:px-8 md:pt-8 md:pb-6 lg:px-12 lg:pt-12 lg:pb-8">
           <div className="flex justify-center">
-            <OnboardingProgressIndicator state={state} />
+            <OnboardingProgressIndicator />
           </div>
         </div>
 

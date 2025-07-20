@@ -50,26 +50,29 @@ const PayPalForm: React.FC<PayPalFormProps> = ({
   const showRemoveButton = hasExistingData && onRemove;
 
   return (
-    <div className="space-y-6">
-      {/* Form Header */}
+    <div className="space-y-4 sm:space-y-5">
+      {/* Form Header with design system styling */}
       <div className="text-center space-y-2">
-        <h3 className="font-space-grotesk text-xl font-semibold text-gray-900">
+        <h3 className="text-lg sm:text-xl font-semibold bg-gradient-to-r from-blue-600 to-cyan-400 bg-clip-text text-transparent">
           PayPal Details
         </h3>
-        <p className="font-inter text-sm text-gray-600">
+        <p className="text-xs sm:text-sm text-gray-600">
           Connect your PayPal account for easy payments
         </p>
       </div>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
-          <div className="space-y-4">
+        <form
+          onSubmit={form.handleSubmit(handleSubmit)}
+          className="space-y-4 sm:space-y-5"
+        >
+          <div className="space-y-3 sm:space-y-4">
             <FormField
               control={form.control}
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="font-inter text-sm font-medium text-gray-700">
+                  <FormLabel className="text-xs sm:text-sm font-medium text-gray-700">
                     PayPal Email Address
                   </FormLabel>
                   <FormControl>
@@ -77,17 +80,17 @@ const PayPalForm: React.FC<PayPalFormProps> = ({
                       {...field}
                       type="email"
                       placeholder="your-paypal@email.com"
-                      className="font-inter"
+                      className="h-10 sm:h-11 text-sm border-gray-200 focus:border-blue-400 focus:ring-blue-400/20 transition-all duration-200"
                       disabled={isLoading}
                     />
                   </FormControl>
-                  <FormMessage className="font-inter text-xs" />
+                  <FormMessage className="text-xs" />
                 </FormItem>
               )}
             />
 
-            <div className="bg-blue-50 p-4 rounded-lg">
-              <p className="font-inter text-sm text-blue-800">
+            <div className="bg-gradient-to-r from-blue-50 to-cyan-50 border border-blue-100 p-3 sm:p-4 rounded-lg">
+              <p className="text-xs sm:text-sm text-blue-800">
                 <span className="font-semibold">Note:</span> This should be the
                 email address associated with your PayPal business account. Your
                 clients will use this email to send payments.
@@ -95,12 +98,12 @@ const PayPalForm: React.FC<PayPalFormProps> = ({
             </div>
           </div>
 
-          <div className="flex flex-col-reverse sm:flex-row gap-3 pt-4">
+          <div className="flex flex-col-reverse sm:flex-row gap-2 sm:gap-3 pt-3 sm:pt-4">
             <Button
               type="button"
               onClick={onCancel}
               variant="outline"
-              className="flex-1 font-inter font-medium border-gray-300 text-gray-600 hover:bg-gray-50"
+              className="flex-1 h-10 sm:h-11 text-xs sm:text-sm border-gray-200 hover:border-gray-300 hover:bg-gray-50 transition-all duration-200"
               disabled={isLoading}
             >
               Cancel
@@ -111,22 +114,22 @@ const PayPalForm: React.FC<PayPalFormProps> = ({
                 type="button"
                 onClick={onRemove}
                 variant="destructive"
-                className="flex-1 font-inter font-medium"
+                className="flex-1 h-10 sm:h-11 text-xs sm:text-sm bg-red-600 hover:bg-red-700 transition-all duration-200"
                 disabled={isLoading}
               >
-                <Trash2 className="mr-2 w-4 h-4" />
+                <Trash2 className="mr-2 w-3 h-3 sm:w-4 sm:h-4" />
                 Remove Payment Method
               </Button>
             )}
 
             <Button
               type="submit"
-              className="flex-1 bg-gray-900 hover:bg-gray-800 text-white font-inter font-medium"
+              className="flex-1 h-10 sm:h-11 text-xs sm:text-sm bg-gradient-to-r from-blue-600 to-cyan-400 hover:from-blue-700 hover:to-cyan-500 text-white transition-all duration-200 shadow-lg shadow-blue-200/50 hover:shadow-xl hover:shadow-blue-300/50"
               disabled={isLoading}
             >
               {isLoading ? (
                 <>
-                  <Loader2 className="mr-2 w-4 h-4 animate-spin" />
+                  <Loader2 className="mr-2 w-3 h-3 sm:w-4 sm:h-4 animate-spin" />
                   Saving...
                 </>
               ) : hasExistingData ? (

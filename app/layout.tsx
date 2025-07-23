@@ -8,6 +8,7 @@ import {
   Roboto_Condensed,
   Poppins,
   Plus_Jakarta_Sans,
+  Great_Vibes,
 } from "next/font/google";
 import "./globals.css";
 import TanstackQueryProvider from "@/providers/TanstackQueryProvider";
@@ -57,6 +58,12 @@ const plusJakartaSans = Plus_Jakarta_Sans({
   weight: ["200", "300", "400", "500", "600", "700", "800"],
 });
 
+const greatVibes = Great_Vibes({
+  variable: "--font-great-vibes",
+  subsets: ["latin"],
+  weight: "400",
+});
+
 export const metadata: Metadata = {
   title: "InvoX",
   description:
@@ -72,7 +79,7 @@ export default function RootLayout({
     <html suppressHydrationWarning lang="en">
       <body
         suppressHydrationWarning
-        className={`${spaceGrotesk.variable} ${inter.variable} ${bebasNeue.variable} ${jetbrainsMono.variable} ${oswald.variable} ${robotoCondensed.variable} ${poppins.variable} ${plusJakartaSans.variable} antialiased`}
+        className={`${spaceGrotesk.variable} ${inter.variable} ${bebasNeue.variable} ${jetbrainsMono.variable} ${oswald.variable} ${robotoCondensed.variable} ${poppins.variable} ${plusJakartaSans.variable} ${greatVibes.variable} antialiased`}
       >
         <SessionProvider>
           <TanstackQueryProvider>{children}</TanstackQueryProvider>

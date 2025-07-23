@@ -129,7 +129,7 @@ function LogoDropZone({ onUploadSuccess, onUploadError }: LogoDropZoneProps) {
         <Button
           onClick={handleUpload}
           disabled={uploadImage.isPending}
-          className="w-full bg-black text-white hover:bg-gray-800"
+          className="w-full bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-200"
         >
           {uploadImage.isPending ? (
             <>

@@ -11,20 +11,16 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { ArrowRight, ArrowLeft, Building2, InfoIcon } from "lucide-react";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { ArrowRight, ArrowLeft, Building2 } from "lucide-react";
 import { useOnboardingState } from "../../context/OnboardingStateContext";
 import { useOnboardingActions as useOnboardingActionsContext } from "../../context/OnboardingActionsContext";
 import { useUser } from "@/hooks/useUser";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { BusinessFormValues } from "@/types/business";
-import { createBusinessApiSchema } from "@/dataSchemas/business/creation";
+import { useForm, UseFormReturn } from "react-hook-form";
+import { createBusinessSchema } from "@/shared/validators";
+import { BusinessFormData, BusinessAddressFormData } from "@/shared/types";
+import { BusinessAddressForm } from "@/shared/components";
 
 function Step4() {
   const state = useOnboardingState();
@@ -32,12 +28,12 @@ function Step4() {
     useOnboardingActionsContext();
   const { user } = useUser();
   const initializedRef = useRef(false);
-  const initialBusinessInfoRef = useRef<BusinessFormValues | undefined>(
+  const initialBusinessInfoRef = useRef<BusinessFormData | undefined>(
     undefined
   );
 
-  const form = useForm<BusinessFormValues>({
-    resolver: zodResolver(createBusinessApiSchema),
+  const form = useForm<BusinessFormData>({
+    resolver: zodResolver(createBusinessSchema),
     defaultValues: {
       businessName: "",
       addressLine1: "",
@@ -66,8 +62,8 @@ function Step4() {
       if (initialBusinessInfoRef.current) {
         Object.keys(initialBusinessInfoRef.current).forEach((key) => {
           form.setValue(
-            key as keyof BusinessFormValues,
-            initialBusinessInfoRef.current![key as keyof BusinessFormValues]
+            key as keyof BusinessFormData,
+            initialBusinessInfoRef.current![key as keyof BusinessFormData]
           );
         });
       }
@@ -75,7 +71,7 @@ function Step4() {
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const handleContinue = (values: BusinessFormValues) => {
+  const handleContinue = (values: BusinessFormData) => {
     setBusinessInfo(values);
     nextStep();
   };
@@ -135,167 +131,39 @@ function Step4() {
                   )}
                 />
 
-                {/* Address Line 1 */}
-                <FormField
-                  control={form.control}
-                  name="addressLine1"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-sm font-medium text-gray-700">
-                        Address Line 1
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="Street address"
-                          {...field}
-                          className="h-10 sm:h-12 text-sm sm:text-base border-2 border-gray-200 focus-visible:border-cyan-400 focus-visible:ring-2 focus-visible:ring-cyan-100 focus-visible:shadow-lg focus-visible:shadow-cyan-200/50 rounded-lg bg-gradient-to-r from-gray-50 to-white shadow-sm hover:shadow-md transition-all duration-200"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                {/* Address Line 2 */}
-                <FormField
-                  control={form.control}
-                  name="addressLine2"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-sm font-medium text-gray-700">
-                        Address Line 2
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="Apartment, suite, etc."
-                          {...field}
-                          className="h-10 sm:h-12 text-sm sm:text-base border-2 border-gray-200 focus-visible:border-cyan-400 focus-visible:ring-2 focus-visible:ring-cyan-100 focus-visible:shadow-lg focus-visible:shadow-cyan-200/50 rounded-lg bg-gradient-to-r from-gray-50 to-white shadow-sm hover:shadow-md transition-all duration-200"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                {/* City and State Row */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-                  <FormField
-                    control={form.control}
-                    name="city"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-sm font-medium text-gray-700">
-                          City
-                        </FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder="City"
-                            {...field}
-                            className="h-10 sm:h-12 text-sm sm:text-base border-2 border-gray-200 focus-visible:border-blue-400 focus-visible:ring-2 focus-visible:ring-blue-100 focus-visible:shadow-lg focus-visible:shadow-blue-200/50 rounded-lg bg-gradient-to-r from-gray-50 to-white shadow-sm hover:shadow-md transition-all duration-200"
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="state"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-sm font-medium text-gray-700">
-                          State/Province
-                        </FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder="State"
-                            {...field}
-                            className="h-10 sm:h-12 text-sm sm:text-base border-2 border-gray-200 focus-visible:border-blue-400 focus-visible:ring-2 focus-visible:ring-blue-100 focus-visible:shadow-lg focus-visible:shadow-blue-200/50 rounded-lg bg-gradient-to-r from-gray-50 to-white shadow-sm hover:shadow-md transition-all duration-200"
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-
-                {/* ZIP and Phone Row */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-                  <FormField
-                    control={form.control}
-                    name="zipCode"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-sm font-medium text-gray-700">
-                          ZIP/Postal Code
-                        </FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder="ZIP or postal code"
-                            {...field}
-                            className="h-10 sm:h-12 text-sm sm:text-base border-2 border-gray-200 focus-visible:border-cyan-400 focus-visible:ring-2 focus-visible:ring-cyan-100 focus-visible:shadow-lg focus-visible:shadow-cyan-200/50 rounded-lg bg-gradient-to-r from-gray-50 to-white shadow-sm hover:shadow-md transition-all duration-200"
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="phone"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-sm font-medium text-gray-700">
-                          Phone
-                        </FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder="Phone number"
-                            {...field}
-                            className="h-10 sm:h-12 text-sm sm:text-base border-2 border-gray-200 focus-visible:border-cyan-400 focus-visible:ring-2 focus-visible:ring-cyan-100 focus-visible:shadow-lg focus-visible:shadow-cyan-200/50 rounded-lg bg-gradient-to-r from-gray-50 to-white shadow-sm hover:shadow-md transition-all duration-200"
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-
-                {/* Email */}
+                {/* Email Field */}
                 <FormField
                   control={form.control}
                   name="email"
                   render={({ field }) => (
                     <FormItem>
-                      <div className="flex items-center gap-2">
-                        <FormLabel className="text-sm font-medium text-gray-700">
-                          Email
-                        </FormLabel>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <InfoIcon className="h-4 w-4 text-blue-500 hover:text-blue-600 cursor-help" />
-                          </TooltipTrigger>
-                          <TooltipContent className="max-w-xs bg-white border-2 border-blue-100 shadow-xl rounded-lg">
-                            <p className="text-sm text-gray-600">
-                              This is your account email and cannot be changed.
-                            </p>
-                          </TooltipContent>
-                        </Tooltip>
-                      </div>
+                      <FormLabel className="text-sm font-medium text-gray-700">
+                        Email Address *
+                      </FormLabel>
                       <FormControl>
                         <Input
-                          placeholder="Your account email"
+                          type="email"
+                          placeholder="Enter your email address"
                           {...field}
-                          disabled={true}
-                          className="h-10 sm:h-12 text-sm sm:text-base bg-gradient-to-r from-gray-100 to-gray-50 text-gray-600 border-2 border-gray-200 rounded-lg"
+                          className="h-10 sm:h-12 text-sm sm:text-base border-2 border-gray-200 focus-visible:border-blue-400 focus-visible:ring-2 focus-visible:ring-blue-100 focus-visible:shadow-lg focus-visible:shadow-blue-200/50 rounded-lg bg-gradient-to-r from-gray-50 to-white shadow-sm hover:shadow-md transition-all duration-200"
                         />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
+
+                {/* Address Section using shared component */}
+                <div className="pt-2">
+                  <div className="text-sm font-medium text-gray-700 mb-3">
+                    Business Address (Optional)
+                  </div>
+                  <BusinessAddressForm
+                    form={
+                      form as unknown as UseFormReturn<BusinessAddressFormData>
+                    }
+                  />
+                </div>
               </form>
             </Form>
           </TooltipProvider>

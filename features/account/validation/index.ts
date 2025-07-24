@@ -1,2 +1,2 @@
-export * from "./business";
-export * from "./payment";
+// Re-export shared validators for backward compatibility
+export * from "@/shared/validators";

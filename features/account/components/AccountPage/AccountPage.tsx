@@ -16,10 +16,7 @@ import {
   SignatureUploadModal,
 } from "./";
 import { useAccountModals, useBusinessForm, usePaymentForm } from "../../hooks";
-import {
-  EditableBusinessData,
-  EditablePaymentAccountData,
-} from "../../validation";
+import { BusinessAddressFormData, PaymentMethodFormData } from "@/shared/types";
 
 function AccountPage() {
   // Modal states
@@ -76,12 +73,9 @@ function AccountPage() {
     resetBusinessForm();
   };
 
-  const handleBusinessSave = (data: EditableBusinessData) => {
-    handleSaveBusiness(
-      data,
-      () => closeEditBusinessModal(), // onSuccess
-      () => openEditBusinessModal() // onError - reopen modal
-    );
+  const handleBusinessSave = (data: BusinessAddressFormData) => {
+    handleSaveBusiness(data);
+    closeEditBusinessModal();
   };
 
   // Payment edit handlers
@@ -94,7 +88,7 @@ function AccountPage() {
     resetPaymentForm();
   };
 
-  const handlePaymentSave = (data: EditablePaymentAccountData) => {
+  const handlePaymentSave = (data: PaymentMethodFormData) => {
     handleSavePaymentAccount(
       data,
       () => closeEditPaymentModal(), // onSuccess

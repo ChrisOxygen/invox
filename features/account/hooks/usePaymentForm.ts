@@ -6,10 +6,8 @@ import {
   useGetPaymentAccounts,
   useUpdatePaymentAccount,
 } from "@/hooks/payments";
-import {
-  editablePaymentAccountSchema,
-  EditablePaymentAccountData,
-} from "../validation";
+import { editablePaymentAccountSchema } from "@/shared/validators";
+import type { PaymentMethodFormData } from "@/shared/types";
 
 export function usePaymentForm() {
   const { paymentAccounts } = useGetPaymentAccounts();
@@ -23,7 +21,7 @@ export function usePaymentForm() {
     (account) => account.isDefault
   );
 
-  const form = useForm<EditablePaymentAccountData>({
+  const form = useForm<PaymentMethodFormData>({
     resolver: zodResolver(editablePaymentAccountSchema),
     defaultValues: {
       accountName: "",
@@ -53,7 +51,7 @@ export function usePaymentForm() {
   };
 
   const handleSavePaymentAccount = async (
-    data: EditablePaymentAccountData,
+    data: PaymentMethodFormData,
     onSuccess: () => void,
     onError: () => void
   ) => {

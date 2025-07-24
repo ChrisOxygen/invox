@@ -13,6 +13,7 @@ interface ZoomState {
   minZoom: 25;
   maxZoom: 200;
   step: 25;
+  baseFontSize: number; // Base font size in pixels for em calculation
 }
 
 const InvoiceTemplatePreview: React.FC = () => {
@@ -24,16 +25,39 @@ const InvoiceTemplatePreview: React.FC = () => {
     minZoom: 25,
     maxZoom: 200,
     step: 25,
+    baseFontSize: 16, // 16px base font size
   });
 
+  // Calculate font size based on zoom percentage
+  const calculateFontSize = useCallback(
+    (zoomPercent: number): number => {
+      return (zoomState.baseFontSize * zoomPercent) / 100;
+    },
+    [zoomState.baseFontSize]
+  );
+
   // Calculate responsive default zoom based on container width
-  const calculateAutoZoom = useCallback((containerWidth: number): number => {
-    const optimalWidth = 700; // Ideal template display width
-    if (containerWidth < 500) return 60;
-    if (containerWidth < 650) return 75;
-    if (containerWidth < 800) return 85;
-    return Math.min(100, Math.floor((containerWidth / optimalWidth) * 100));
-  }, []);
+  const calculateAutoZoom = useCallback(
+    (containerWidth: number): number => {
+      const templateWidthEm = 49.625; // A4 width in em units (794px ÷ 16px)
+      const baseFontSize = zoomState.baseFontSize;
+      const templateWidthPx = templateWidthEm * baseFontSize;
+
+      // Calculate optimal zoom to fit container with padding
+      // Account for ScrollArea padding (pl-5 pr-10) and container margin
+      const leftPadding = 20; // pl-5 = 1.25rem = 20px
+      const rightPadding = 40; // pr-10 = 2.5rem = 40px
+      const containerPadding = 48; // py-6 = 1.5rem = 24px top/bottom, so some margin
+      const availableWidth =
+        containerWidth - leftPadding - rightPadding - containerPadding;
+
+      const optimalZoom = Math.floor((availableWidth / templateWidthPx) * 100);
+
+      // Constrain to reasonable bounds
+      return Math.max(50, Math.min(120, optimalZoom));
+    },
+    [zoomState.baseFontSize]
+  );
 
   // Handle container resize
   useEffect(() => {
@@ -162,13 +186,22 @@ const InvoiceTemplatePreview: React.FC = () => {
       {/* Template Preview */}
       <ScrollArea className="h-[calc(100vh-200px)] w-full pl-5 pr-10">
         <div
-          className="py-6 overflow-hidden transition-transform duration-200 ease-out"
+          className="py-6 overflow-hidden transition-all duration-300 ease-out"
           style={{
-            transform: `scale(${zoomState.currentZoom / 100})`,
-            transformOrigin: "top left",
+            fontSize: `${calculateFontSize(zoomState.currentZoom)}px`,
           }}
         >
-          <MainTemplate />
+          {/* Template Container with em-based styling */}
+          <div
+            className="bg-white border-2 border-gray-200 rounded-lg shadow-lg max-w-none overflow-hidden"
+            style={{
+              width: "49.625em", // A4 width in em units (794px ÷ 16px)
+              margin: "0 auto",
+              // All spacing and sizing will now scale with font-size
+            }}
+          >
+            <MainTemplate />
+          </div>
         </div>
       </ScrollArea>
     </div>

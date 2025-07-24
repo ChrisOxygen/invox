@@ -66,8 +66,8 @@ export function ActionsDropdown({
             size="sm"
             disabled={disabled}
             className={cn(
-              "h-9 w-9 p-0 border-gray-300 hover:bg-gray-50 hover:border-gray-400 transition-colors",
-              disabled && "opacity-50 cursor-not-allowed",
+              "h-9 w-9 p-0 border-2 border-gray-300 text-gray-600 hover:border-blue-400 hover:text-blue-600 hover:bg-blue-50 hover:shadow-md transition-all duration-200 transform hover:scale-105",
+              disabled && "opacity-50 cursor-not-allowed hover:scale-100",
               className
             )}
           >

@@ -41,7 +41,7 @@ function ItemsInput() {
               unitPrice: 0,
             })
           }
-          className="mt-2"
+          className="mt-2 bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white font-medium border-0 shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
         >
           Add Item
         </Button>

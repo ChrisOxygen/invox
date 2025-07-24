@@ -91,7 +91,7 @@ function ItemRow({ item, index }: ItemRowProps) {
             onFocus={() => {
               setPopoverOpen(true);
             }}
-            className="w-full"
+            className="w-full border-2 border-blue-200 hover:border-blue-400 focus:border-blue-600 focus:ring-2 focus:ring-blue-100 transition-all duration-200 disabled:bg-gray-50 disabled:border-gray-200"
             value={item.description}
             onChange={(e) => {
               updateInvoiceItem(index, { description: e.target.value });
@@ -142,8 +142,7 @@ function ItemRow({ item, index }: ItemRowProps) {
                     You haven&apos;t added any items
                   </span>
                   <Button
-                    variant="outline"
-                    className=""
+                    className="bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
                     onClick={() => {
                       setIsFormOpen(true);
                     }}
@@ -159,7 +158,7 @@ function ItemRow({ item, index }: ItemRowProps) {
 
       <Input
         type="number"
-        className="w-full text-center"
+        className="w-full text-center border-2 border-blue-200 hover:border-blue-400 focus:border-blue-600 focus:ring-2 focus:ring-blue-100 transition-all duration-200"
         value={item.quantity}
         onChange={(e) =>
           updateInvoiceItem(index, {
@@ -170,7 +169,7 @@ function ItemRow({ item, index }: ItemRowProps) {
       />
       <Input
         type="number"
-        className="w-full"
+        className="w-full border-2 border-blue-200 hover:border-blue-400 focus:border-blue-600 focus:ring-2 focus:ring-blue-100 transition-all duration-200"
         value={item.unitPrice}
         onChange={(e) =>
           updateInvoiceItem(index, {
@@ -185,10 +184,10 @@ function ItemRow({ item, index }: ItemRowProps) {
         )}
       </span>
 
-      <span className="flex justify-self-center transition-all  items-center">
+      <span className="flex justify-self-center transition-all items-center">
         {index >= 1 && (
           <button
-            className="text-black hover:text-red-700"
+            className="text-blue-600 hover:text-red-600 transition-colors duration-200 p-2 rounded-lg hover:bg-red-50"
             onClick={() => removeInvoiceItem(index)}
           >
             <FaRegTrashCan />

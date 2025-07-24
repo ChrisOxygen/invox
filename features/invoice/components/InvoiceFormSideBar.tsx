@@ -126,21 +126,35 @@ function InvoiceFormSideBar() {
         className={cn(
           // Base styles
           "h-12 w-12 p-0 rounded-lg relative cursor-pointer",
-          "transition-all duration-200 ease-in-out",
-          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-offset-2",
+          "transition-all duration-200 ease-in-out transform",
+          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2",
+          "border-2",
           // Default state
-          "text-gray-400 hover:text-gray-600 hover:bg-gray-50",
+          !active && [
+            "text-gray-500 border-transparent",
+            "hover:text-blue-600 hover:bg-gradient-to-r hover:from-blue-50 hover:to-cyan-50",
+            "hover:border-blue-200 hover:shadow-md hover:scale-105",
+          ],
           // Active state
-          active && ["text-black"],
+          active && [
+            "bg-gradient-to-r from-blue-600 to-cyan-500 text-white",
+            "border-blue-600 shadow-lg",
+            "hover:from-blue-700 hover:to-cyan-600 hover:border-blue-700",
+            "hover:shadow-xl scale-105",
+          ],
           // Disabled state for viewMode buttons without setViewMode
-          item.action === "viewMode" && !setViewMode && " cursor-not-allowed"
+          item.action === "viewMode" &&
+            !setViewMode && ["cursor-not-allowed opacity-50 hover:scale-100"]
         )}
         disabled={item.action === "viewMode" && !setViewMode}
       >
         <Icon className="h-5 w-5" />
         <span className="sr-only">{item.tooltip}</span>
 
-        {/* Active indicator */}
+        {/* Active indicator dot */}
+        {active && (
+          <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-1.5 h-1.5 bg-white rounded-full shadow-sm" />
+        )}
       </Button>
     );
   };
@@ -149,18 +163,20 @@ function InvoiceFormSideBar() {
       <nav
         className={cn(
           // Base container styles
-          "border-r border-gray-200 bg-white h-full w-16",
-          "flex flex-col items-center py-4",
-          "transition-all duration-200",
-          // Responsive adjustments
-          "sm:w-20 lg:w-16"
+          "relative border-r border-gray-200 bg-white h-full",
+          "flex flex-col items-center py-6",
+          "transition-all duration-200 shadow-sm",
+          // Responsive width adjustments
+          "w-16 sm:w-18 lg:w-20",
+          // Gradient accent border
+          "before:absolute before:left-0 before:top-0 before:h-full before:w-1",
+          "before:bg-gradient-to-b before:from-blue-600 before:to-cyan-500"
         )}
         role="navigation"
         aria-label="Invoice form navigation"
       >
-        {" "}
         {/* Navigation items container */}
-        <div className="flex flex-col gap-2 w-full items-center">
+        <div className="flex flex-col gap-3 w-full items-center">
           {navigationItems.map((item) => {
             // For navigation items (wrapped with Link)
             if (item.action === "navigate" && item.href) {
@@ -169,7 +185,7 @@ function InvoiceFormSideBar() {
                   <TooltipTrigger asChild>
                     <Link
                       href={item.href}
-                      className="block cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-offset-2 rounded-lg"
+                      className="block cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2 rounded-lg transition-all duration-200 transform hover:scale-105"
                       aria-label={item.ariaLabel || item.tooltip}
                     >
                       {renderButton(item)}
@@ -177,11 +193,12 @@ function InvoiceFormSideBar() {
                   </TooltipTrigger>
                   <TooltipContent
                     side="right"
-                    sideOffset={12}
+                    sideOffset={16}
                     className={cn(
-                      "bg-black text-white text-sm font-medium",
-                      "border border-gray-800 shadow-lg",
-                      "px-3 py-2 rounded-md",
+                      "bg-gradient-to-r from-gray-900 to-gray-800 text-white text-sm font-medium",
+                      "border border-gray-700 shadow-xl",
+                      "px-4 py-2 rounded-lg",
+                      "backdrop-blur-sm",
                       "z-50"
                     )}
                     role="tooltip"
@@ -198,11 +215,12 @@ function InvoiceFormSideBar() {
                 <TooltipTrigger asChild>{renderButton(item)}</TooltipTrigger>
                 <TooltipContent
                   side="right"
-                  sideOffset={12}
+                  sideOffset={16}
                   className={cn(
-                    "bg-black text-white text-sm font-medium",
-                    "border border-gray-800 shadow-lg",
-                    "px-3 py-2 rounded-md",
+                    "bg-gradient-to-r from-gray-900 to-gray-800 text-white text-sm font-medium",
+                    "border border-gray-700 shadow-xl",
+                    "px-4 py-2 rounded-lg",
+                    "backdrop-blur-sm",
                     "z-50"
                   )}
                   role="tooltip"
@@ -213,8 +231,12 @@ function InvoiceFormSideBar() {
             );
           })}
         </div>
-        {/* Separator line for visual grouping */}
-        <div className="w-8 h-px bg-gray-200 mt-4" />
+
+        {/* Gradient separator line for visual grouping */}
+        <div className="w-10 h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent mt-6 mb-2" />
+
+        {/* Optional: Add a small brand accent */}
+        <div className="w-2 h-2 bg-gradient-to-r from-blue-600 to-cyan-500 rounded-full opacity-60" />
       </nav>
     </TooltipProvider>
   );

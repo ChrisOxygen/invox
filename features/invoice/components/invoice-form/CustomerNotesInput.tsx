@@ -63,10 +63,8 @@ export function CustomerNotesInput({
           disabled={disabled}
           rows={rows}
           className={cn(
-            "resize-none",
+            "resize-none min-h-[100px] border-2 border-blue-200 hover:border-blue-400 focus:border-blue-600 focus:ring-2 focus:ring-blue-100 transition-all duration-200",
             "placeholder:text-gray-500",
-            "focus:ring-1 focus:ring-gray-400 focus:border-gray-400",
-            "border-gray-300",
             "text-gray-900",
             "bg-white",
             disabled && "bg-gray-50 text-gray-500 cursor-not-allowed",
@@ -82,7 +80,7 @@ export function CustomerNotesInput({
           <div
             id="notes-character-count"
             className={cn(
-              "absolute bottom-2 right-2 text-xs",
+              "absolute bottom-3 right-3 text-xs bg-white px-2 py-1 rounded",
               isAtLimit
                 ? "text-red-600"
                 : isNearLimit
@@ -96,7 +94,7 @@ export function CustomerNotesInput({
       </div>
 
       {/* Helper Text */}
-      <div className="text-xs text-gray-600">
+      <div className="text-xs text-gray-500">
         Add a personalized message to your invoice. This will appear at the
         bottom of your invoice.
       </div>

@@ -268,7 +268,294 @@ function DesignSystem() {
           <h2 className="text-2xl font-semibold text-gray-800 mb-6">
             Material Bubble Buttons
           </h2>
-          <div className=""></div>
+
+          {/* Primary Gradient Buttons */}
+          <div className="mb-8">
+            <h3 className="text-lg font-medium text-gray-700 mb-4">
+              Primary Gradient Buttons
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {/* Large Button */}
+              <div className="p-6 bg-white rounded-lg border shadow-sm">
+                <button className="w-full bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white font-medium py-3 px-6 rounded-lg border-0 shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105">
+                  Primary Large
+                </button>
+                <p className="text-xs text-gray-500 mt-2">
+                  Large size - py-3 px-6
+                </p>
+              </div>
+
+              {/* Medium Button */}
+              <div className="p-6 bg-white rounded-lg border shadow-sm">
+                <button className="w-full bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white font-medium py-2.5 px-5 rounded-lg border-0 shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105">
+                  Primary Medium
+                </button>
+                <p className="text-xs text-gray-500 mt-2">
+                  Medium size - py-2.5 px-5
+                </p>
+              </div>
+
+              {/* Small Button */}
+              <div className="p-6 bg-white rounded-lg border shadow-sm">
+                <button className="w-full bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white font-medium py-2 px-4 rounded-lg border-0 shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105 text-sm">
+                  Primary Small
+                </button>
+                <p className="text-xs text-gray-500 mt-2">
+                  Small size - py-2 px-4
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Secondary Outline Buttons */}
+          <div className="mb-8">
+            <h3 className="text-lg font-medium text-gray-700 mb-4">
+              Secondary Outline Buttons
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {/* Large Outline */}
+              <div className="p-6 bg-white rounded-lg border shadow-sm">
+                <button className="w-full bg-transparent border-2 border-blue-600 text-blue-600 hover:bg-gradient-to-r hover:from-blue-600 hover:to-cyan-500 hover:text-white font-medium py-3 px-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105">
+                  Secondary Large
+                </button>
+                <p className="text-xs text-gray-500 mt-2">
+                  Outline large - border-2
+                </p>
+              </div>
+
+              {/* Medium Outline */}
+              <div className="p-6 bg-white rounded-lg border shadow-sm">
+                <button className="w-full bg-transparent border-2 border-blue-600 text-blue-600 hover:bg-gradient-to-r hover:from-blue-600 hover:to-cyan-500 hover:text-white font-medium py-2.5 px-5 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105">
+                  Secondary Medium
+                </button>
+                <p className="text-xs text-gray-500 mt-2">Outline medium</p>
+              </div>
+
+              {/* Small Outline */}
+              <div className="p-6 bg-white rounded-lg border shadow-sm">
+                <button className="w-full bg-transparent border-2 border-blue-600 text-blue-600 hover:bg-gradient-to-r hover:from-blue-600 hover:to-cyan-500 hover:text-white font-medium py-2 px-4 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105 text-sm">
+                  Secondary Small
+                </button>
+                <p className="text-xs text-gray-500 mt-2">Outline small</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Ghost/Text Buttons */}
+          <div className="mb-8">
+            <h3 className="text-lg font-medium text-gray-700 mb-4">
+              Ghost/Text Buttons
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {/* Large Ghost */}
+              <div className="p-6 bg-white rounded-lg border shadow-sm">
+                <button className="w-full bg-transparent text-blue-600 hover:bg-blue-50 hover:text-blue-700 font-medium py-3 px-6 rounded-lg transition-all duration-200 transform hover:scale-105">
+                  Ghost Large
+                </button>
+                <p className="text-xs text-gray-500 mt-2">
+                  Ghost large - no border
+                </p>
+              </div>
+
+              {/* Medium Ghost */}
+              <div className="p-6 bg-white rounded-lg border shadow-sm">
+                <button className="w-full bg-transparent text-blue-600 hover:bg-blue-50 hover:text-blue-700 font-medium py-2.5 px-5 rounded-lg transition-all duration-200 transform hover:scale-105">
+                  Ghost Medium
+                </button>
+                <p className="text-xs text-gray-500 mt-2">Ghost medium</p>
+              </div>
+
+              {/* Small Ghost */}
+              <div className="p-6 bg-white rounded-lg border shadow-sm">
+                <button className="w-full bg-transparent text-blue-600 hover:bg-blue-50 hover:text-blue-700 font-medium py-2 px-4 rounded-lg transition-all duration-200 transform hover:scale-105 text-sm">
+                  Ghost Small
+                </button>
+                <p className="text-xs text-gray-500 mt-2">Ghost small</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Icon Buttons */}
+          <div className="mb-8">
+            <h3 className="text-lg font-medium text-gray-700 mb-4">
+              Icon Buttons
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              {/* Primary with Icon */}
+              <div className="p-6 bg-white rounded-lg border shadow-sm">
+                <button className="w-full bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white font-medium py-2.5 px-5 rounded-lg border-0 shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105 flex items-center justify-center gap-2">
+                  <svg
+                    className="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 4v16m8-8H4"
+                    />
+                  </svg>
+                  Add Item
+                </button>
+                <p className="text-xs text-gray-500 mt-2">Primary + Icon</p>
+              </div>
+
+              {/* Outline with Icon */}
+              <div className="p-6 bg-white rounded-lg border shadow-sm">
+                <button className="w-full bg-transparent border-2 border-blue-600 text-blue-600 hover:bg-gradient-to-r hover:from-blue-600 hover:to-cyan-500 hover:text-white font-medium py-2.5 px-5 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105 flex items-center justify-center gap-2">
+                  <svg
+                    className="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+                    />
+                  </svg>
+                  Edit
+                </button>
+                <p className="text-xs text-gray-500 mt-2">Outline + Icon</p>
+              </div>
+
+              {/* Icon Only Round */}
+              <div className="p-6 bg-white rounded-lg border shadow-sm">
+                <button className="mx-auto bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white w-12 h-12 rounded-full border-0 shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105 flex items-center justify-center">
+                  <svg
+                    className="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                    />
+                  </svg>
+                </button>
+                <p className="text-xs text-gray-500 mt-2 text-center">
+                  Icon Round
+                </p>
+              </div>
+
+              {/* Icon Only Square */}
+              <div className="p-6 bg-white rounded-lg border shadow-sm">
+                <button className="mx-auto bg-transparent border-2 border-blue-600 text-blue-600 hover:bg-gradient-to-r hover:from-blue-600 hover:to-cyan-500 hover:text-white w-12 h-12 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105 flex items-center justify-center">
+                  <svg
+                    className="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                    />
+                  </svg>
+                </button>
+                <p className="text-xs text-gray-500 mt-2 text-center">
+                  Icon Square
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Button States */}
+          <div className="mb-8">
+            <h3 className="text-lg font-medium text-gray-700 mb-4">
+              Button States
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              {/* Normal State */}
+              <div className="p-6 bg-white rounded-lg border shadow-sm">
+                <button className="w-full bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-medium py-2.5 px-5 rounded-lg border-0 shadow-lg transition-all duration-200">
+                  Normal
+                </button>
+                <p className="text-xs text-gray-500 mt-2">Default state</p>
+              </div>
+
+              {/* Hover State (simulated) */}
+              <div className="p-6 bg-white rounded-lg border shadow-sm">
+                <button className="w-full bg-gradient-to-r from-blue-700 to-cyan-600 text-white font-medium py-2.5 px-5 rounded-lg border-0 shadow-xl transform scale-105 transition-all duration-200">
+                  Hover
+                </button>
+                <p className="text-xs text-gray-500 mt-2">Hover state</p>
+              </div>
+
+              {/* Loading State */}
+              <div className="p-6 bg-white rounded-lg border shadow-sm">
+                <button
+                  className="w-full bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-medium py-2.5 px-5 rounded-lg border-0 shadow-lg transition-all duration-200 flex items-center justify-center gap-2"
+                  disabled
+                >
+                  <svg
+                    className="animate-spin w-4 h-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    ></path>
+                  </svg>
+                  Loading
+                </button>
+                <p className="text-xs text-gray-500 mt-2">Loading state</p>
+              </div>
+
+              {/* Disabled State */}
+              <div className="p-6 bg-white rounded-lg border shadow-sm">
+                <button
+                  className="w-full bg-gray-300 text-gray-500 font-medium py-2.5 px-5 rounded-lg border-0 cursor-not-allowed"
+                  disabled
+                >
+                  Disabled
+                </button>
+                <p className="text-xs text-gray-500 mt-2">Disabled state</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Responsive Example */}
+          <div className="mb-8">
+            <h3 className="text-lg font-medium text-gray-700 mb-4">
+              Responsive Button Layout
+            </h3>
+            <div className="p-6 bg-white rounded-lg border shadow-sm">
+              <div className="flex flex-col sm:flex-row gap-3">
+                <button className="flex-1 bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white font-medium py-2.5 px-5 rounded-lg border-0 shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105">
+                  Primary Action
+                </button>
+                <button className="flex-1 bg-transparent border-2 border-blue-600 text-blue-600 hover:bg-gradient-to-r hover:from-blue-600 hover:to-cyan-500 hover:text-white font-medium py-2.5 px-5 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105">
+                  Secondary Action
+                </button>
+                <button className="sm:flex-none bg-transparent text-blue-600 hover:bg-blue-50 hover:text-blue-700 font-medium py-2.5 px-5 rounded-lg transition-all duration-200 transform hover:scale-105">
+                  Cancel
+                </button>
+              </div>
+              <p className="text-xs text-gray-500 mt-3">
+                Stacked on mobile, horizontal on larger screens
+              </p>
+            </div>
+          </div>
         </section>
       </div>
     </div>

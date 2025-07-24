@@ -121,19 +121,19 @@ const InvoiceTemplatePreview: React.FC = () => {
       ref={containerRef}
     >
       {/* Zoom Controls Header */}
-      <div className="sticky top-0 z-10 bg-white border-b border-gray-200 px-5 py-3 flex items-center justify-between">
-        <div className="flex items-center gap-2">
+      <div className="sticky top-0 z-10 bg-white border-b border-blue-100 px-5 py-3 flex items-center justify-between shadow-sm">
+        <div className="flex items-center gap-3">
           <Button
             variant="outline"
             size="sm"
             onClick={zoomOut}
             disabled={zoomState.currentZoom <= zoomState.minZoom}
-            className="h-8 w-8 p-0"
+            className="h-9 w-9 p-0 border-2 border-blue-200 hover:border-blue-400 hover:bg-blue-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
           >
-            <Minus className="h-4 w-4" />
+            <Minus className="h-4 w-4 text-blue-600" />
           </Button>
 
-          <span className="text-sm font-medium min-w-[60px] text-center">
+          <span className="text-sm font-semibold min-w-[60px] text-center text-gray-700 bg-blue-50 px-3 py-1 rounded-lg">
             {zoomState.currentZoom}%
           </span>
 
@@ -142,9 +142,9 @@ const InvoiceTemplatePreview: React.FC = () => {
             size="sm"
             onClick={zoomIn}
             disabled={zoomState.currentZoom >= zoomState.maxZoom}
-            className="h-8 w-8 p-0"
+            className="h-9 w-9 p-0 border-2 border-blue-200 hover:border-blue-400 hover:bg-blue-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
           >
-            <Plus className="h-4 w-4" />
+            <Plus className="h-4 w-4 text-blue-600" />
           </Button>
         </div>
 
@@ -152,7 +152,7 @@ const InvoiceTemplatePreview: React.FC = () => {
           variant="outline"
           size="sm"
           onClick={resetToAutoFit}
-          className="flex items-center gap-2"
+          className="flex items-center gap-2 border-2 border-blue-200 hover:border-blue-400 hover:bg-blue-50 text-blue-600 transition-all duration-200"
         >
           <RotateCcw className="h-4 w-4" />
           Auto Fit

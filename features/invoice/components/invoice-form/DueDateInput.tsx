@@ -123,7 +123,7 @@ export function DueDateInput({
             size="sm"
             onClick={handleToggleMode}
             disabled={disabled}
-            className="h-auto p-0 text-xs text-gray-600 hover:text-black hover:bg-transparent"
+            className="h-auto p-0 text-xs text-blue-600 hover:text-blue-700 hover:bg-transparent transition-colors duration-200"
           >
             Enter custom due date
           </Button>
@@ -133,15 +133,15 @@ export function DueDateInput({
           onValueChange={handlePresetChange}
           disabled={disabled}
         >
-          <SelectTrigger className="w-full border-gray-300 focus:border-black  focus:ring-black">
+          <SelectTrigger className="w-full h-11 border-2 border-blue-200 hover:border-blue-400 focus:border-blue-600 focus:ring-2 focus:ring-blue-100 transition-all duration-200">
             <SelectValue className="" placeholder={placeholder} />
           </SelectTrigger>
-          <SelectContent className="bg-white border-gray-200">
+          <SelectContent className="bg-white border-2 border-blue-200 shadow-xl rounded-lg">
             {DUE_DATE_PRESETS.map((preset) => (
               <SelectItem
                 key={preset.value}
                 value={preset.value}
-                className="hover:bg-gray-50 focus:bg-gray-50"
+                className="hover:bg-blue-50 focus:bg-blue-50 cursor-pointer transition-colors duration-200"
               >
                 <div className="flex flex-col items-start">
                   <span className="font-medium text-gray-900">
@@ -170,7 +170,7 @@ export function DueDateInput({
           size="sm"
           onClick={handleToggleMode}
           disabled={disabled}
-          className="h-auto p-0 text-xs text-gray-600 hover:text-black hover:bg-transparent"
+          className="h-auto p-0 text-xs text-blue-600 hover:text-blue-700 hover:bg-transparent transition-colors duration-200"
         >
           Set payment terms
         </Button>
@@ -183,16 +183,16 @@ export function DueDateInput({
             variant="outline"
             disabled={disabled}
             className={cn(
-              "w-full justify-start text-left font-normal border-gray-300 focus:border-black focus:ring-black",
+              "w-full justify-start text-left font-normal h-11 border-2 border-blue-200 hover:border-blue-400 focus:border-blue-600 focus:ring-2 focus:ring-blue-100 transition-all duration-200",
               !value && "text-gray-500"
             )}
           >
-            <CalendarDays className="mr-2 h-4 w-4 text-gray-400" />
+            <CalendarDays className="mr-2 h-4 w-4 text-blue-500" />
             {value instanceof Date ? format(value, "PPP") : "Pick a date..."}
           </Button>
         </PopoverTrigger>
         <PopoverContent
-          className="w-auto p-0 bg-white border-gray-200"
+          className="w-auto p-0 bg-white border-2 border-blue-200 shadow-xl rounded-lg"
           align="start"
         >
           <Calendar
@@ -207,7 +207,7 @@ export function DueDateInput({
       </Popover>
 
       {/* Custom date help text */}
-      <div className="mt-2 text-xs text-gray-600">
+      <div className="mt-2 text-xs text-gray-500">
         Select a custom due date or use the toggle above to set payment terms
       </div>
     </div>

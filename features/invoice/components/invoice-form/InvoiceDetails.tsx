@@ -14,67 +14,109 @@ function InvoiceDetails() {
     useInvoiceForm();
   const { client, paymentDueDate } = state;
   return (
-    <div className="flex flex-col gap-6">
-      <h2 className="text-lg font-semibold">Invoice Details</h2>
-      <div className="flex flex-col gap-5">
-        <div className="flex flex-col gap-2">
-          <label className="text-sm font-medium text-gray-900">
-            Select a client/customer <span className="text-red-500">*</span>
+    <div className="flex flex-col gap-6 p-6 sm:p-8">
+      {/* Header Section */}
+      <div className="flex flex-col gap-2">
+        <h2 className="text-2xl sm:text-3xl font-bold tracking-tight bg-gradient-to-r from-blue-600 via-cyan-500 to-blue-500 bg-clip-text text-transparent">
+          Invoice Details
+        </h2>
+        <p className="text-sm text-gray-600">
+          Complete the form below to create your invoice
+        </p>
+      </div>
+
+      {/* Form Section */}
+      <div className="flex flex-col gap-6">
+        {/* Client Selection */}
+        <div className="flex flex-col gap-3">
+          <label className="text-sm font-semibold text-gray-900 flex items-center gap-2">
+            Select a client/customer
+            <span className="text-red-500 text-base">*</span>
           </label>
-          <ClientSelect
-            value={client}
-            onChange={setClient}
-            placeholder="Choose a client..."
-          />
+          <div className="relative">
+            <ClientSelect
+              value={client}
+              onChange={setClient}
+              placeholder="Choose a client..."
+            />
+          </div>
         </div>
-        <div className="flex flex-col gap-2">
+
+        {/* Due Date */}
+        <div className="flex flex-col gap-3">
           <DueDateInput
             value={paymentDueDate}
             onChange={setPaymentDueDate}
             placeholder="Choose a due date..."
           />
         </div>
-        <div className="flex flex-col gap-2">
-          <label className="text-sm font-medium text-gray-900">
-            Items <span className="text-red-500">*</span>
+
+        {/* Items Section */}
+        <div className="flex flex-col gap-3">
+          <label className="text-sm font-semibold text-gray-900 flex items-center gap-2">
+            Items
+            <span className="text-red-500 text-base">*</span>
           </label>
-          <ItemsInput />
-        </div>
-        <div className="flex gap-3 w-full">
-          <div className="flex flex-col gap-2 flex-grow">
-            <label className="text-sm font-medium text-gray-900">
-              Tax Amount
-            </label>
-            <TaxInput />
+          <div className="relative">
+            <ItemsInput />
           </div>
-          <div className="flex flex-col gap-2 flex-grow">
-            <label className="text-sm font-medium text-gray-900">
-              Discount Amount
-            </label>
-            <DiscountInput />
-          </div>
-        </div>
-        <div className="flex flex-col gap-2 flex-grow">
-          <label className="text-sm font-medium text-gray-900">
-            Payment details <span className="text-red-500">*</span>
-          </label>
-          <PaymentDetailsSelect />
-        </div>
-        <div className="flex flex-col gap-2 flex-grow">
-          <label className="text-sm font-medium text-gray-900">
-            Late Fee Options
-          </label>
-          <LatenessFeeInput />
         </div>
 
-        <div className="flex flex-col gap-2">
-          <CustomerNotesInput
-            value={state.customNote}
-            onChange={setCustomNote}
-            placeholder="Thanks for trusting us"
-            maxLength={500}
-            rows={4}
-          />
+        {/* Tax and Discount Row */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+          <div className="flex flex-col gap-3">
+            <label className="text-sm font-semibold text-gray-900">
+              Tax Amount
+            </label>
+            <div className="relative">
+              <TaxInput />
+            </div>
+          </div>
+          <div className="flex flex-col gap-3">
+            <label className="text-sm font-semibold text-gray-900">
+              Discount Amount
+            </label>
+            <div className="relative">
+              <DiscountInput />
+            </div>
+          </div>
+        </div>
+
+        {/* Payment Details */}
+        <div className="flex flex-col gap-3">
+          <label className="text-sm font-semibold text-gray-900 flex items-center gap-2">
+            Payment details
+            <span className="text-red-500 text-base">*</span>
+          </label>
+          <div className="relative">
+            <PaymentDetailsSelect />
+          </div>
+        </div>
+
+        {/* Late Fee Options */}
+        <div className="flex flex-col gap-3">
+          <label className="text-sm font-semibold text-gray-900">
+            Late Fee Options
+          </label>
+          <div className="relative">
+            <LatenessFeeInput />
+          </div>
+        </div>
+
+        {/* Customer Notes */}
+        <div className="flex flex-col gap-3">
+          <label className="text-sm font-semibold text-gray-900">
+            Customer Notes
+          </label>
+          <div className="relative">
+            <CustomerNotesInput
+              value={state.customNote}
+              onChange={setCustomNote}
+              placeholder="Thanks for trusting us with your business..."
+              maxLength={500}
+              rows={4}
+            />
+          </div>
         </div>
       </div>
     </div>

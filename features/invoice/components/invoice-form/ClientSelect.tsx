@@ -119,8 +119,8 @@ export function ClientSelect({
           onClick={handleToggleDropdown}
           disabled={disabled}
           className={cn(
-            "w-full justify-between h-9 px-3 text-left font-normal",
-            !value && "text-muted-foreground",
+            "w-full justify-between h-11 px-4 text-left font-normal border-2 border-blue-200 hover:border-blue-400 focus:border-blue-600 focus:ring-2 focus:ring-blue-100 transition-all duration-200",
+            !value && "text-gray-500",
             disabled && "cursor-not-allowed opacity-50"
           )}
         >
@@ -130,7 +130,7 @@ export function ClientSelect({
           </span>
           <ChevronDown
             className={cn(
-              "h-4 w-4 opacity-50 transition-transform",
+              "h-4 w-4 text-blue-500 transition-transform duration-200",
               isOpen && "rotate-180"
             )}
           />
@@ -138,13 +138,13 @@ export function ClientSelect({
 
         {/* Dropdown */}
         {isOpen && (
-          <Card className="absolute z-50 w-full mt-1 border shadow-lg">
+          <Card className="absolute z-50 w-full mt-2 border-2 border-blue-200 shadow-xl rounded-lg">
             <CardContent className="p-0">
               {/* Search Input */}
               {clients && clients.length > 1 && (
-                <div className="p-3 border-b">
+                <div className="p-4 border-b border-blue-100">
                   <div className="relative">
-                    <Search className="absolute left-2 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                    <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-blue-400" />
                     <Input
                       ref={searchInputRef}
                       type="text"
@@ -152,7 +152,7 @@ export function ClientSelect({
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
                       onKeyDown={handleKeyDown}
-                      className="pl-8 h-8"
+                      className="pl-10 h-10 border-blue-200 focus:border-blue-600 focus:ring-2 focus:ring-blue-100"
                     />
                   </div>
                 </div>
@@ -167,8 +167,9 @@ export function ClientSelect({
                         type="button"
                         onClick={() => handleClientSelect(client)}
                         className={cn(
-                          "w-full px-3 py-2 text-left hover:bg-gray-100 focus:bg-gray-100 focus:outline-none transition-colors",
-                          value?.id === client.id && "bg-gray-100"
+                          "w-full px-4 py-3 text-left hover:bg-blue-50 focus:bg-blue-50 focus:outline-none transition-all duration-200",
+                          value?.id === client.id &&
+                            "bg-blue-50 border-l-4 border-blue-500"
                         )}
                       >
                         <div className="flex items-center justify-between">
@@ -181,24 +182,24 @@ export function ClientSelect({
                                 {client.contactPersonName}
                               </div>
                             )}
-                            <div className="text-xs text-muted-foreground truncate">
+                            <div className="text-xs text-gray-500 truncate">
                               {client.email}
                             </div>{" "}
                           </div>{" "}
                           {value?.id === client.id && (
-                            <Check className="h-4 w-4 text-black ml-2 flex-shrink-0" />
+                            <Check className="h-4 w-4 text-blue-600 ml-2 flex-shrink-0" />
                           )}
                         </div>
                       </button>
                     ))}
                   </div>
                 ) : (
-                  <div className="py-8 text-center text-sm text-muted-foreground">
+                  <div className="py-8 text-center text-sm text-gray-500">
                     {debouncedSearchTerm ? (
                       <>
                         No clients found for &quot;{debouncedSearchTerm}&quot;
                         <br />
-                        <span className="text-xs">
+                        <span className="text-xs text-gray-400">
                           Try adjusting your search terms
                         </span>
                       </>
@@ -206,7 +207,7 @@ export function ClientSelect({
                       <>
                         No clients available
                         <br />
-                        <span className="text-xs">
+                        <span className="text-xs text-gray-400">
                           Add your first client to get started
                         </span>
                       </>
@@ -216,14 +217,13 @@ export function ClientSelect({
                   </div>
                 )}
                 {clients.length === 0 && (
-                  <div className=" flex justify-center">
+                  <div className="flex justify-center pb-4">
                     <Button
                       type="button"
-                      variant="outline"
+                      className="bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105 h-9 text-sm"
                       onClick={() => {
                         handleAddClient();
                       }}
-                      className=" h-8 text-sm"
                     >
                       <Plus className="h-4 w-4 mr-2" />
                       Add New Client
@@ -233,14 +233,13 @@ export function ClientSelect({
               </div>
               {/* Add New Client Button */}
               {clients.length > 0 && (
-                <div className="border-t p-2">
+                <div className="border-t border-blue-100 p-3">
                   <Button
                     type="button"
-                    variant="ghost"
+                    className="w-full justify-start h-9 text-sm bg-transparent text-blue-600 hover:bg-blue-50 hover:text-blue-700 transition-all duration-200"
                     onClick={() => {
                       handleAddClient();
                     }}
-                    className="w-full justify-start h-8 text-sm"
                   >
                     <Plus className="h-4 w-4 mr-2" />
                     Add New Client

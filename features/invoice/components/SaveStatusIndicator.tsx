@@ -16,22 +16,22 @@ const statusConfig = {
   unsaved: {
     icon: AlertCircle,
     text: "Unsaved",
-    className: "text-gray-500",
+    className: "text-amber-600 bg-amber-50 border border-amber-200",
   },
   saved: {
     icon: Check,
     text: "Saved",
-    className: "text-green-700",
+    className: "text-green-600 bg-green-50 border border-green-200",
   },
   saved_to_draft: {
     icon: Save,
     text: "Saved to Draft",
-    className: "text-blue-700",
+    className: "text-blue-600 bg-blue-50 border border-blue-200",
   },
   saving: {
     icon: Clock,
     text: "Saving",
-    className: "text-yellow-700",
+    className: "text-blue-600 bg-blue-50 border border-blue-200",
   },
 };
 
@@ -74,7 +74,7 @@ export function SaveStatusIndicator({ className }: SaveStatusIndicatorProps) {
   return (
     <div
       className={cn(
-        "flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium transition-all duration-200",
+        "flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 shadow-sm",
         config.className,
         className
       )}
@@ -85,7 +85,7 @@ export function SaveStatusIndicator({ className }: SaveStatusIndicatorProps) {
           status === "saving" && "animate-spin"
         )}
       />
-      <span>{config.text}</span>
+      <span className="hidden sm:inline">{config.text}</span>
     </div>
   );
 }

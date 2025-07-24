@@ -26,18 +26,18 @@ export function FavoriteButton({
       }}
       disabled={disabled}
       className={cn(
-        "h-9 w-9 p-0 border-gray-300 transition-all duration-200",
+        "h-9 w-9 p-0 transition-all duration-200 border-2",
         isFavorite
-          ? "bg-yellow-50 border-yellow-300 hover:bg-yellow-100 hover:border-yellow-400"
-          : "hover:bg-gray-50 hover:border-gray-400",
-        disabled && "opacity-50 cursor-not-allowed",
+          ? "bg-gradient-to-r from-yellow-400 to-orange-400 border-yellow-400 hover:from-yellow-500 hover:to-orange-500 hover:border-yellow-500 text-white shadow-lg hover:shadow-xl transform hover:scale-105"
+          : "border-gray-300 text-gray-400 hover:border-blue-400 hover:text-blue-600 hover:bg-blue-50 hover:shadow-md transform hover:scale-105",
+        disabled && "opacity-50 cursor-not-allowed hover:scale-100",
         className
       )}
     >
       {isFavorite ? (
-        <IoStar className="h-4 w-4 text-yellow-400" />
+        <IoStar className="h-4 w-4" />
       ) : (
-        <IoStarOutline className="h-4 w-4 text-gray-400" />
+        <IoStarOutline className="h-4 w-4" />
       )}
       <span className="sr-only">
         {isFavorite ? "Remove from favorites" : "Add to favorites"}

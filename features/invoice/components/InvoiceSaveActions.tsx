@@ -314,20 +314,21 @@ export function InvoiceSaveActions() {
   };
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
       {/* Save as Draft Button */}
       <Button
         variant="outline"
         onClick={handleSaveAsDraft}
         disabled={isButtonDisabled("draft")}
-        className="flex items-center gap-2 bg-white border-gray-300 text-gray-700 hover:bg-gray-50 hover:text-gray-900"
+        className="flex items-center gap-2 border-2 border-gray-300 text-gray-700 hover:border-blue-400 hover:text-blue-600 hover:bg-blue-50 hover:shadow-md transition-all duration-200 transform hover:scale-105 min-w-0"
       >
         {isButtonLoading("draft") ? (
           <div className="w-4 h-4 border-2 border-gray-400 border-t-transparent rounded-full animate-spin" />
         ) : (
-          <IoSaveOutline className="w-4 h-4" />
+          <IoSaveOutline className="w-4 h-4 flex-shrink-0" />
         )}
-        Save as Draft
+        <span className="hidden sm:inline">Save as Draft</span>
+        <span className="sm:hidden">Draft</span>
       </Button>
 
       {/* Save & Send Button with Dropdown */}
@@ -336,14 +337,15 @@ export function InvoiceSaveActions() {
         <Button
           onClick={handleSaveAndSend}
           disabled={isButtonDisabled("send")}
-          className="flex items-center gap-2 bg-black text-white hover:bg-gray-800 rounded-r-none"
+          className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105 rounded-r-none min-w-0"
         >
           {isButtonLoading("send") ? (
             <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
           ) : (
-            <IoSend className="w-4 h-4" />
+            <IoSend className="w-4 h-4 flex-shrink-0" />
           )}
-          Save & Send
+          <span className="hidden sm:inline">Save & Send</span>
+          <span className="sm:hidden">Send</span>
         </Button>
 
         {/* Dropdown Trigger */}
@@ -351,7 +353,7 @@ export function InvoiceSaveActions() {
           <DropdownMenuTrigger asChild>
             <Button
               disabled={isLoading}
-              className="px-2 bg-black text-white hover:bg-gray-800 rounded-l-none border-l border-gray-600"
+              className="px-2 bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105 rounded-l-none border-l border-blue-700"
             >
               <IoChevronDown className="w-4 h-4" />
             </Button>

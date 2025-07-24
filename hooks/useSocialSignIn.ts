@@ -18,7 +18,7 @@ export function useSocialSignIn() {
       console.log("Signing in with provider:", provider);
       try {
         // Check if there's a callback URL in the current URL parameters
-        const callbackUrl = searchParams?.get("callbackUrl") || "/";
+        const callbackUrl = searchParams?.get("callbackUrl") || "/app";
 
         // Use NextAuth's signIn function to initiate the authentication flow
         // The redirect is handled automatically by NextAuth

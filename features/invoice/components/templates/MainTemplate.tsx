@@ -66,9 +66,9 @@ function MainTemplate({ previewMode = false }: MainTemplateProps) {
               <Image
                 src={state.businessDetails?.business?.logo}
                 alt="Logo"
-                width={1000}
-                height={1000}
-                className=" flex-1 max-w-[220px] mr-3 -mb-[10px] object-contain"
+                width={100}
+                height={100}
+                className=" flex-1 max-w-[220px] items-start max-h-[100px] mr-3 -mb-[10px] object-contain"
               />
             ) : (
               <div className="w-[100px] h-[100px] bg-gray-200 flex items-center justify-center">

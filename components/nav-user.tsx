@@ -25,17 +25,16 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
+import { useUser } from "@/hooks/useUser";
+import { Skeleton } from "./ui/skeleton";
+import { signOut } from "next-auth/react";
+import Link from "next/link";
 
-export function NavUser({
-  user,
-}: {
-  user: {
-    name: string;
-    email: string;
-    avatar: string;
-  };
-}) {
+export function NavUser() {
   const { isMobile } = useSidebar();
+
+  const { user, isPending: gettingUser } = useUser();
+  if (gettingUser || !user) return <Skeleton className="h-10 w-full" />;
 
   return (
     <SidebarMenu>
@@ -47,10 +46,10 @@ export function NavUser({
               className="data-[state=open]:bg-gradient-to-r data-[state=open]:from-blue-50 data-[state=open]:to-cyan-50 data-[state=open]:border-blue-200 hover:bg-gradient-to-r hover:from-blue-50 hover:to-cyan-50 hover:border-blue-200 transition-all duration-200 group"
             >
               <Avatar className="h-8 w-8 rounded-lg border-2 border-blue-200 shadow-sm">
-                <AvatarImage src={user.avatar} alt={user.name} />
+                <AvatarImage src={user?.image || ""} alt={user?.name || ""} />
                 <AvatarFallback className="rounded-lg bg-gradient-to-br from-blue-600 to-cyan-400 text-white font-semibold">
-                  {user.name
-                    .split(" ")
+                  {user
+                    ?.name!.split(" ")
                     .map((n) => n[0])
                     .join("")
                     .toUpperCase()}
@@ -76,10 +75,10 @@ export function NavUser({
             <DropdownMenuLabel className="p-0 font-normal">
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm bg-gradient-to-r from-blue-50/30 to-cyan-50/30 rounded-t-lg">
                 <Avatar className="h-8 w-8 rounded-lg border-2 border-blue-200">
-                  <AvatarImage src={user.avatar} alt={user.name} />
+                  <AvatarImage src={user.image || ""} alt={user.name!} />
                   <AvatarFallback className="rounded-lg bg-gradient-to-br from-blue-600 to-cyan-400 text-white font-semibold">
-                    {user.name
-                      .split(" ")
+                    {user
+                      .name!.split(" ")
                       .map((n) => n[0])
                       .join("")
                       .toUpperCase()}
@@ -105,8 +104,10 @@ export function NavUser({
             <DropdownMenuSeparator className="border-blue-100" />
             <DropdownMenuGroup>
               <DropdownMenuItem className="hover:bg-gradient-to-r hover:from-blue-50 hover:to-cyan-50 hover:text-blue-700 transition-all duration-200">
-                <BadgeCheck className="text-blue-500" />
-                Account
+                <Link href="/app/account" className=" flex gap-2">
+                  <BadgeCheck className="text-blue-500" />
+                  Account
+                </Link>
               </DropdownMenuItem>
               <DropdownMenuItem className="hover:bg-gradient-to-r hover:from-blue-50 hover:to-cyan-50 hover:text-blue-700 transition-all duration-200">
                 <CreditCard className="text-blue-500" />
@@ -118,7 +119,12 @@ export function NavUser({
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator className="border-blue-100" />
-            <DropdownMenuItem className="hover:bg-gradient-to-r hover:from-red-50 hover:to-red-100 hover:text-red-700 transition-all duration-200">
+            <DropdownMenuItem
+              onClick={() => {
+                signOut();
+              }}
+              className="hover:bg-gradient-to-r hover:from-red-50 hover:to-red-100 hover:text-red-700 transition-all duration-200"
+            >
               <LogOut className="text-red-500" />
               Log out
             </DropdownMenuItem>

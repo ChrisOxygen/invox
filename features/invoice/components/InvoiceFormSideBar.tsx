@@ -48,7 +48,7 @@ function InvoiceFormSideBar() {
       icon: Home,
       tooltip: "Go to Dashboard",
       action: "navigate",
-      href: "/app/dashboard",
+      href: "/app",
       ariaLabel: "Navigate to dashboard",
     },
     {

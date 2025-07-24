@@ -557,6 +557,672 @@ function DesignSystem() {
             </div>
           </div>
         </section>
+
+        {/* Form Components */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-semibold text-gray-800 mb-6">
+            Form Components
+          </h2>
+
+          {/* Input Fields */}
+          <div className="mb-8">
+            <h3 className="text-lg font-medium text-gray-700 mb-4">
+              Input Fields
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Default Input */}
+              <div className="space-y-3">
+                <label className="text-sm font-semibold text-gray-900">
+                  Default Input
+                </label>
+                <input
+                  type="text"
+                  placeholder="Enter your text..."
+                  className="w-full h-11 px-4 border-2 border-blue-200 hover:border-blue-400 focus:border-blue-600 focus:ring-2 focus:ring-blue-100 transition-all duration-200 rounded-lg bg-white text-gray-900 placeholder:text-gray-500"
+                />
+                <p className="text-xs text-gray-500">
+                  Standard text input with blue borders
+                </p>
+              </div>
+
+              {/* Required Input */}
+              <div className="space-y-3">
+                <label className="text-sm font-semibold text-gray-900 flex items-center gap-2">
+                  Required Input
+                  <span className="text-red-500 text-base">*</span>
+                </label>
+                <input
+                  type="email"
+                  placeholder="Enter your email..."
+                  className="w-full h-11 px-4 border-2 border-blue-200 hover:border-blue-400 focus:border-blue-600 focus:ring-2 focus:ring-blue-100 transition-all duration-200 rounded-lg bg-white text-gray-900 placeholder:text-gray-500"
+                />
+                <p className="text-xs text-gray-500">
+                  Required field with red asterisk
+                </p>
+              </div>
+
+              {/* Error State Input */}
+              <div className="space-y-3">
+                <label className="text-sm font-semibold text-gray-900">
+                  Error State
+                </label>
+                <input
+                  type="text"
+                  placeholder="Invalid input..."
+                  className="w-full h-11 px-4 border-2 border-red-300 hover:border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-100 transition-all duration-200 rounded-lg bg-white text-gray-900 placeholder:text-gray-500"
+                />
+                <p className="text-xs text-red-600">
+                  This field contains an error
+                </p>
+              </div>
+
+              {/* Disabled Input */}
+              <div className="space-y-3">
+                <label className="text-sm font-semibold text-gray-500">
+                  Disabled Input
+                </label>
+                <input
+                  type="text"
+                  placeholder="Disabled input..."
+                  disabled
+                  className="w-full h-11 px-4 border-2 border-gray-200 bg-gray-50 text-gray-500 cursor-not-allowed rounded-lg placeholder:text-gray-400"
+                />
+                <p className="text-xs text-gray-500">
+                  Disabled state with gray styling
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Textarea */}
+          <div className="mb-8">
+            <h3 className="text-lg font-medium text-gray-700 mb-4">Textarea</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-3">
+                <label className="text-sm font-semibold text-gray-900">
+                  Standard Textarea
+                </label>
+                <textarea
+                  placeholder="Enter your message..."
+                  rows={4}
+                  className="w-full px-4 py-3 border-2 border-blue-200 hover:border-blue-400 focus:border-blue-600 focus:ring-2 focus:ring-blue-100 transition-all duration-200 rounded-lg bg-white text-gray-900 placeholder:text-gray-500 resize-none"
+                />
+                <p className="text-xs text-gray-500">Multi-line text input</p>
+              </div>
+
+              <div className="space-y-3">
+                <label className="text-sm font-semibold text-gray-900">
+                  Textarea with Counter
+                </label>
+                <div className="relative">
+                  <textarea
+                    placeholder="Enter description..."
+                    rows={4}
+                    maxLength={200}
+                    className="w-full px-4 py-3 border-2 border-blue-200 hover:border-blue-400 focus:border-blue-600 focus:ring-2 focus:ring-blue-100 transition-all duration-200 rounded-lg bg-white text-gray-900 placeholder:text-gray-500 resize-none"
+                  />
+                  <div className="absolute bottom-3 right-3 text-xs bg-white px-2 py-1 rounded text-gray-400">
+                    0/200
+                  </div>
+                </div>
+                <p className="text-xs text-gray-500">With character counter</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Number Inputs */}
+          <div className="mb-8">
+            <h3 className="text-lg font-medium text-gray-700 mb-4">
+              Number Inputs
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="space-y-3">
+                <label className="text-sm font-semibold text-gray-900">
+                  Price Input
+                </label>
+                <div className="relative">
+                  <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">
+                    $
+                  </span>
+                  <input
+                    type="number"
+                    placeholder="0.00"
+                    className="w-full h-11 pl-8 pr-4 border-2 border-blue-200 hover:border-blue-400 focus:border-blue-600 focus:ring-2 focus:ring-blue-100 transition-all duration-200 rounded-lg bg-white text-gray-900 placeholder:text-gray-500"
+                  />
+                </div>
+                <p className="text-xs text-gray-500">
+                  Currency input with prefix
+                </p>
+              </div>
+
+              <div className="space-y-3">
+                <label className="text-sm font-semibold text-gray-900">
+                  Quantity
+                </label>
+                <input
+                  type="number"
+                  placeholder="1"
+                  min="1"
+                  className="w-full h-11 px-4 text-center border-2 border-blue-200 hover:border-blue-400 focus:border-blue-600 focus:ring-2 focus:ring-blue-100 transition-all duration-200 rounded-lg bg-white text-gray-900 placeholder:text-gray-500"
+                />
+                <p className="text-xs text-gray-500">Centered number input</p>
+              </div>
+
+              <div className="space-y-3">
+                <label className="text-sm font-semibold text-gray-900">
+                  Percentage
+                </label>
+                <div className="relative">
+                  <input
+                    type="number"
+                    placeholder="0"
+                    max="100"
+                    className="w-full h-11 pl-4 pr-8 border-2 border-blue-200 hover:border-blue-400 focus:border-blue-600 focus:ring-2 focus:ring-blue-100 transition-all duration-200 rounded-lg bg-white text-gray-900 placeholder:text-gray-500"
+                  />
+                  <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500">
+                    %
+                  </span>
+                </div>
+                <p className="text-xs text-gray-500">
+                  Percentage input with suffix
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Select Components */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-semibold text-gray-800 mb-6">
+            Select Components
+          </h2>
+
+          {/* Basic Selects */}
+          <div className="mb-8">
+            <h3 className="text-lg font-medium text-gray-700 mb-4">
+              Basic Selects
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-3">
+                <label className="text-sm font-semibold text-gray-900">
+                  Standard Select
+                </label>
+                <div className="relative">
+                  <select className="w-full h-11 px-4 pr-10 border-2 border-blue-200 hover:border-blue-400 focus:border-blue-600 focus:ring-2 focus:ring-blue-100 transition-all duration-200 rounded-lg bg-white text-gray-900 appearance-none cursor-pointer">
+                    <option value="">Choose an option...</option>
+                    <option value="option1">Option 1</option>
+                    <option value="option2">Option 2</option>
+                    <option value="option3">Option 3</option>
+                  </select>
+                  <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                    <svg
+                      className="w-4 h-4 text-blue-500"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M19 9l-7 7-7-7"
+                      />
+                    </svg>
+                  </div>
+                </div>
+                <p className="text-xs text-gray-500">
+                  Standard dropdown select
+                </p>
+              </div>
+
+              <div className="space-y-3">
+                <label className="text-sm font-semibold text-gray-900 flex items-center gap-2">
+                  Required Select
+                  <span className="text-red-500 text-base">*</span>
+                </label>
+                <div className="relative">
+                  <select className="w-full h-11 px-4 pr-10 border-2 border-blue-200 hover:border-blue-400 focus:border-blue-600 focus:ring-2 focus:ring-blue-100 transition-all duration-200 rounded-lg bg-white text-gray-900 appearance-none cursor-pointer">
+                    <option value="">Select payment method...</option>
+                    <option value="credit">Credit Card</option>
+                    <option value="bank">Bank Transfer</option>
+                    <option value="paypal">PayPal</option>
+                  </select>
+                  <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                    <svg
+                      className="w-4 h-4 text-blue-500"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M19 9l-7 7-7-7"
+                      />
+                    </svg>
+                  </div>
+                </div>
+                <p className="text-xs text-gray-500">
+                  Required selection field
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Custom Dropdown */}
+          <div className="mb-8">
+            <h3 className="text-lg font-medium text-gray-700 mb-4">
+              Custom Dropdown
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-3">
+                <label className="text-sm font-semibold text-gray-900">
+                  Client Selection
+                </label>
+                <div className="relative">
+                  <button className="w-full h-11 px-4 text-left border-2 border-blue-200 hover:border-blue-400 focus:border-blue-600 focus:ring-2 focus:ring-blue-100 transition-all duration-200 rounded-lg bg-white text-gray-900 flex items-center justify-between">
+                    <span className="text-gray-500">Choose a client...</span>
+                    <svg
+                      className="w-4 h-4 text-blue-500"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M19 9l-7 7-7-7"
+                      />
+                    </svg>
+                  </button>
+                </div>
+                <p className="text-xs text-gray-500">
+                  Custom styled dropdown button
+                </p>
+              </div>
+
+              <div className="space-y-3">
+                <label className="text-sm font-semibold text-gray-900">
+                  Multi-Select
+                </label>
+                <div className="relative">
+                  <button className="w-full h-11 px-4 text-left border-2 border-blue-200 hover:border-blue-400 focus:border-blue-600 focus:ring-2 focus:ring-blue-100 transition-all duration-200 rounded-lg bg-white text-gray-900 flex items-center justify-between">
+                    <div className="flex gap-2">
+                      <span className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-blue-100 text-blue-800">
+                        Tag 1
+                      </span>
+                      <span className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-blue-100 text-blue-800">
+                        Tag 2
+                      </span>
+                    </div>
+                    <svg
+                      className="w-4 h-4 text-blue-500"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M19 9l-7 7-7-7"
+                      />
+                    </svg>
+                  </button>
+                </div>
+                <p className="text-xs text-gray-500">
+                  Multi-selection with tags
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Searchable Select */}
+          <div className="mb-8">
+            <h3 className="text-lg font-medium text-gray-700 mb-4">
+              Searchable Select
+            </h3>
+            <div className="space-y-3 max-w-md">
+              <label className="text-sm font-semibold text-gray-900">
+                Search Countries
+              </label>
+              <div className="relative">
+                <input
+                  type="text"
+                  placeholder="Search countries..."
+                  className="w-full h-11 pl-10 pr-4 border-2 border-blue-200 hover:border-blue-400 focus:border-blue-600 focus:ring-2 focus:ring-blue-100 transition-all duration-200 rounded-lg bg-white text-gray-900 placeholder:text-gray-500"
+                />
+                <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                  <svg
+                    className="w-4 h-4 text-blue-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                    />
+                  </svg>
+                </div>
+              </div>
+              <p className="text-xs text-gray-500">
+                Type to search and filter options
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Modal and Popup Components */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-semibold text-gray-800 mb-6">
+            Modal & Popup Components
+          </h2>
+
+          {/* Modal Examples */}
+          <div className="mb-8">
+            <h3 className="text-lg font-medium text-gray-700 mb-4">
+              Modal Examples
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {/* Small Modal Trigger */}
+              <div className="p-6 bg-white rounded-lg border shadow-sm">
+                <button className="w-full bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white font-medium py-2.5 px-5 rounded-lg border-0 shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105">
+                  Small Modal
+                </button>
+                <p className="text-xs text-gray-500 mt-2 text-center">
+                  Compact confirmation dialog
+                </p>
+              </div>
+
+              {/* Medium Modal Trigger */}
+              <div className="p-6 bg-white rounded-lg border shadow-sm">
+                <button className="w-full bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white font-medium py-2.5 px-5 rounded-lg border-0 shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105">
+                  Form Modal
+                </button>
+                <p className="text-xs text-gray-500 mt-2 text-center">
+                  Standard form dialog
+                </p>
+              </div>
+
+              {/* Large Modal Trigger */}
+              <div className="p-6 bg-white rounded-lg border shadow-sm">
+                <button className="w-full bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white font-medium py-2.5 px-5 rounded-lg border-0 shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105">
+                  Large Modal
+                </button>
+                <p className="text-xs text-gray-500 mt-2 text-center">
+                  Full content dialog
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Modal Preview */}
+          <div className="mb-8">
+            <h3 className="text-lg font-medium text-gray-700 mb-4">
+              Modal Preview
+            </h3>
+            <div className="bg-gray-100 rounded-lg p-8 relative overflow-hidden">
+              {/* Modal Backdrop Simulation */}
+              <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+                <div className="bg-white rounded-lg shadow-2xl max-w-md w-full mx-4 transform transition-all duration-300">
+                  {/* Modal Header */}
+                  <div className="flex items-center justify-between p-6 border-b border-gray-200">
+                    <h3 className="text-lg font-semibold text-gray-900">
+                      Confirm Action
+                    </h3>
+                    <button className="text-gray-400 hover:text-gray-600 transition-colors duration-200">
+                      <svg
+                        className="w-5 h-5"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M6 18L18 6M6 6l12 12"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+
+                  {/* Modal Body */}
+                  <div className="p-6">
+                    <p className="text-gray-600 mb-4">
+                      Are you sure you want to delete this item? This action
+                      cannot be undone.
+                    </p>
+                  </div>
+
+                  {/* Modal Footer */}
+                  <div className="flex items-center justify-end gap-3 p-6 border-t border-gray-200 bg-gray-50 rounded-b-lg">
+                    <button className="px-4 py-2 text-gray-700 bg-white border-2 border-gray-300 hover:border-gray-400 rounded-lg transition-all duration-200">
+                      Cancel
+                    </button>
+                    <button className="px-4 py-2 bg-gradient-to-r from-red-600 to-red-500 hover:from-red-700 hover:to-red-600 text-white rounded-lg transition-all duration-200">
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <p className="text-xs text-gray-500 mt-2">
+              Example modal with header, body, and action buttons
+            </p>
+          </div>
+
+          {/* Dropdown/Popover Examples */}
+          <div className="mb-8">
+            <h3 className="text-lg font-medium text-gray-700 mb-4">
+              Dropdown & Popover
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Dropdown Menu */}
+              <div className="space-y-3">
+                <label className="text-sm font-semibold text-gray-900">
+                  Dropdown Menu
+                </label>
+                <div className="relative">
+                  <button className="flex items-center gap-2 px-4 py-2 bg-white border-2 border-blue-200 hover:border-blue-400 rounded-lg transition-all duration-200">
+                    <span>Actions</span>
+                    <svg
+                      className="w-4 h-4 text-blue-500"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M19 9l-7 7-7-7"
+                      />
+                    </svg>
+                  </button>
+
+                  {/* Dropdown Content (simulated as visible) */}
+                  <div className="absolute top-full left-0 mt-2 w-48 bg-white border-2 border-blue-200 rounded-lg shadow-xl z-10">
+                    <div className="py-2">
+                      <button className="w-full px-4 py-2 text-left text-gray-900 hover:bg-blue-50 transition-colors duration-200">
+                        Edit Item
+                      </button>
+                      <button className="w-full px-4 py-2 text-left text-gray-900 hover:bg-blue-50 transition-colors duration-200">
+                        Duplicate
+                      </button>
+                      <hr className="my-2 border-gray-200" />
+                      <button className="w-full px-4 py-2 text-left text-red-600 hover:bg-red-50 transition-colors duration-200">
+                        Delete
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <p className="text-xs text-gray-500">Action menu dropdown</p>
+              </div>
+
+              {/* Date Picker Popover */}
+              <div className="space-y-3">
+                <label className="text-sm font-semibold text-gray-900">
+                  Date Picker
+                </label>
+                <div className="relative">
+                  <button className="w-full h-11 px-4 text-left border-2 border-blue-200 hover:border-blue-400 focus:border-blue-600 focus:ring-2 focus:ring-blue-100 transition-all duration-200 rounded-lg bg-white text-gray-900 flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <svg
+                        className="w-4 h-4 text-blue-500"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                        />
+                      </svg>
+                      <span>Pick a date...</span>
+                    </div>
+                  </button>
+                </div>
+                <p className="text-xs text-gray-500">Calendar date selection</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Toast Notifications */}
+          <div className="mb-8">
+            <h3 className="text-lg font-medium text-gray-700 mb-4">
+              Toast Notifications
+            </h3>
+            <div className="space-y-4">
+              {/* Success Toast */}
+              <div className="flex items-center gap-3 p-4 bg-green-50 border-l-4 border-green-500 rounded-lg">
+                <div className="flex-shrink-0">
+                  <svg
+                    className="w-5 h-5 text-green-500"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M5 13l4 4L19 7"
+                    />
+                  </svg>
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm font-medium text-green-800">Success!</p>
+                  <p className="text-sm text-green-700">
+                    Your invoice has been created successfully.
+                  </p>
+                </div>
+                <button className="flex-shrink-0 text-green-500 hover:text-green-700">
+                  <svg
+                    className="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                </button>
+              </div>
+
+              {/* Error Toast */}
+              <div className="flex items-center gap-3 p-4 bg-red-50 border-l-4 border-red-500 rounded-lg">
+                <div className="flex-shrink-0">
+                  <svg
+                    className="w-5 h-5 text-red-500"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm font-medium text-red-800">Error!</p>
+                  <p className="text-sm text-red-700">
+                    Please check your input and try again.
+                  </p>
+                </div>
+                <button className="flex-shrink-0 text-red-500 hover:text-red-700">
+                  <svg
+                    className="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                </button>
+              </div>
+
+              {/* Info Toast */}
+              <div className="flex items-center gap-3 p-4 bg-blue-50 border-l-4 border-blue-500 rounded-lg">
+                <div className="flex-shrink-0">
+                  <svg
+                    className="w-5 h-5 text-blue-500"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm font-medium text-blue-800">Info</p>
+                  <p className="text-sm text-blue-700">
+                    Auto-save is enabled for this form.
+                  </p>
+                </div>
+                <button className="flex-shrink-0 text-blue-500 hover:text-blue-700">
+                  <svg
+                    className="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
       </div>
     </div>
   );

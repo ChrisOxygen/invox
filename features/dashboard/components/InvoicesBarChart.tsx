@@ -8,22 +8,14 @@ import {
 } from "@/components/ui/chart";
 import { INVOICES_CHART_DATA } from "@/constants";
 
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-
 const chartConfig = {
   sent: {
-    label: "sent",
-    color: "#2563eb",
+    label: "Sent",
+    color: "#2563eb", // Blue-600
   },
   paid: {
-    label: "paid",
-    color: "#60a5fa",
+    label: "Paid",
+    color: "#00e5ff", // Cyan-400
   },
 } satisfies ChartConfig;
 
@@ -43,44 +35,39 @@ function getChartData(displayType: "months" | "weeks" | "days") {
 function InvoicesBarChart() {
   const chartData = getChartData("days");
   return (
-    <div className="w-full grid grid-rows-[70px_1fr] bg-white rounded-xl shadow p-4 h-full">
-      <div className=" flex  items-start justify-between">
-        <div className="flex flex-col gap-2">
-          <span className="text-lg text-gray-400 font-semibold">
-            Total Revenue
-          </span>
-          <p className=" text-gray-800 text-4xl font-bold">$150,000</p>
-        </div>
-        <Select>
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Theme" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="light">Light</SelectItem>
-            <SelectItem value="dark">Dark</SelectItem>
-            <SelectItem value="system">System</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
-      <ChartContainer
-        config={chartConfig}
-        className="h-full w-full  min-h-[240px]"
-      >
-        <BarChart className="" accessibilityLayer data={chartData}>
-          <CartesianGrid vertical={false} />
+    <div className="w-full h-full">
+      {/* Chart Container */}
+      <ChartContainer config={chartConfig} className="h-full w-full">
+        <BarChart accessibilityLayer data={chartData} className="h-full w-full">
+          <CartesianGrid
+            vertical={false}
+            stroke="#e5f3ff"
+            strokeDasharray="3 3"
+          />
           <XAxis
             dataKey="day"
             tickLine={false}
-            tickMargin={10}
+            tickMargin={8}
             axisLine={false}
+            tick={{ fontSize: 12, fill: "#6b7280" }}
             tickFormatter={(value) => value.slice(0, 3)}
           />
           <ChartTooltip
-            cursor={false}
+            cursor={{ fill: "rgba(37, 99, 235, 0.1)" }}
             content={<ChartTooltipContent indicator="dashed" />}
           />
-          <Bar dataKey="sent" fill="var(--color-sent)" radius={4} />
-          <Bar dataKey="paid" fill="var(--color-paid)" radius={4} />
+          <Bar
+            dataKey="sent"
+            fill="var(--color-sent)"
+            radius={[4, 4, 0, 0]}
+            name="Sent Invoices"
+          />
+          <Bar
+            dataKey="paid"
+            fill="var(--color-paid)"
+            radius={[4, 4, 0, 0]}
+            name="Paid Invoices"
+          />
         </BarChart>
       </ChartContainer>
     </div>

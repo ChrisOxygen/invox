@@ -8,18 +8,15 @@ import { DashboardStatsGrid } from "./DashboardStatsGrid";
 import { DashboardCharts } from "./DashboardCharts";
 import { RecentInvoicesSection } from "./RecentInvoicesSection";
 import { DashboardLoading } from "./DashboardLoading";
-import type { DashboardMetrics } from "../types";
 
 interface DashboardLayoutProps {
   userName?: string;
-  metrics?: DashboardMetrics;
   isLoading?: boolean;
   className?: string;
 }
 
 export function DashboardLayout({
   userName,
-  metrics,
   isLoading,
   className,
 }: DashboardLayoutProps) {
@@ -37,7 +34,7 @@ export function DashboardLayout({
       <DashboardHeader userName={userName} />
 
       {/* Stats Cards Section */}
-      <DashboardStatsGrid metrics={metrics} isLoading={isLoading} />
+      <DashboardStatsGrid />
 
       {/* Charts Section */}
       <DashboardCharts />

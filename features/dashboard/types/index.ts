@@ -161,3 +161,43 @@ export interface InvoiceMetricsResponse {
     };
   };
 }
+
+/**
+ * Response interface for client metrics
+ */
+export interface ClientMetricsResponse {
+  success: boolean;
+  message: string;
+  data?: {
+    currentYear: {
+      year: number;
+      monthlyData: Array<{
+        month: number;
+        monthName: string;
+        newClients: number;
+        totalClients: number;
+      }>;
+      totals: {
+        newClients: number;
+        totalClients: number;
+      };
+    };
+    previousYear: {
+      year: number;
+      monthlyData: Array<{
+        month: number;
+        monthName: string;
+        newClients: number;
+        totalClients: number;
+      }>;
+      totals: {
+        newClients: number;
+        totalClients: number;
+      };
+    };
+    yearOverYearGrowth: {
+      newClientsGrowth: number;
+      totalClientsGrowth: number;
+    };
+  };
+}

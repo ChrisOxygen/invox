@@ -28,8 +28,8 @@ export function calculateInvoiceRevenue(
   discount?: number
 ): number {
   let subtotal: number, taxesAmount: number, discountAmount: number;
-  
-  if (typeof invoiceOrSubtotal === 'number') {
+
+  if (typeof invoiceOrSubtotal === "number") {
     // Called with individual parameters
     subtotal = invoiceOrSubtotal;
     taxesAmount = taxes || 0;
@@ -40,7 +40,7 @@ export function calculateInvoiceRevenue(
     taxesAmount = invoiceOrSubtotal.taxes;
     discountAmount = invoiceOrSubtotal.discount;
   }
-  
+
   const revenue = subtotal + taxesAmount - discountAmount;
   return Math.max(0, Number(revenue.toFixed(2))); // Ensure non-negative and round to 2 decimals
 }

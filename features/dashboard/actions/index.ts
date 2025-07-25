@@ -1,3 +1,5 @@
+"use server";
+
 /**
  * Dashboard actions for retrieving invoice metrics and analytics
  */
@@ -5,11 +7,11 @@
 import { auth } from "@/auth";
 import { prisma } from "@/prisma/prisma";
 import { InvoiceStatus } from "@prisma/client";
-import type { InvoiceMetricsResponse } from "../types";
-import { 
+import type { InvoiceMetricsResponse, ClientMetricsResponse } from "../types";
+import {
   calculateInvoiceRevenue,
   calculateGrowthPercentage,
-  getMonthName
+  getMonthName,
 } from "../utils";
 
 /**
@@ -183,6 +185,155 @@ export async function _getInvoiceMetrics(): Promise<InvoiceMetricsResponse> {
     return {
       success: false,
       message: "Failed to retrieve invoice metrics",
+    };
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
+/**
+ * Get client metrics for the current year and previous year
+ * This function retrieves monthly breakdown data for charts and annual totals for stat cards
+ */
+export async function _getClientMetrics(): Promise<ClientMetricsResponse> {
+  try {
+    const session = await auth();
+    if (!session || !session.user?.id) {
+      return {
+        success: false,
+        message: "User not authenticated",
+      };
+    }
+
+    // Get user's business
+    const user = await prisma.user.findUnique({
+      where: { id: session.user.id },
+      include: {
+        business: true,
+      },
+    });
+
+    if (!user || !user.business) {
+      return {
+        success: false,
+        message: "Business profile not found",
+      };
+    }
+
+    const currentYear = new Date().getFullYear();
+    const previousYear = currentYear - 1;
+
+    // Date ranges for current and previous year
+    const currentYearStart = new Date(currentYear, 0, 1);
+    const currentYearEnd = new Date(currentYear, 11, 31, 23, 59, 59, 999);
+    const previousYearStart = new Date(previousYear, 0, 1);
+    const previousYearEnd = new Date(previousYear, 11, 31, 23, 59, 59, 999);
+
+    // Get all clients for both years
+    const [currentYearClients, previousYearClients, totalClients] =
+      await Promise.all([
+        prisma.client.findMany({
+          where: {
+            userId: session.user.id,
+            createdAt: {
+              gte: currentYearStart,
+              lte: currentYearEnd,
+            },
+          },
+          select: {
+            id: true,
+            createdAt: true,
+          },
+        }),
+        prisma.client.findMany({
+          where: {
+            userId: session.user.id,
+            createdAt: {
+              gte: previousYearStart,
+              lte: previousYearEnd,
+            },
+          },
+          select: {
+            id: true,
+            createdAt: true,
+          },
+        }),
+        prisma.client.count({
+          where: {
+            userId: session.user.id,
+          },
+        }),
+      ]);
+
+    // Function to process year data
+    const processYearData = (
+      clients: typeof currentYearClients,
+      year: number
+    ) => {
+      // Initialize monthly data array
+      const monthlyData = Array.from({ length: 12 }, (_, index) => ({
+        month: index + 1,
+        monthName: getMonthName(index + 1),
+        newClients: 0,
+        totalClients: 0,
+      }));
+
+      // Process each client
+      clients.forEach((client) => {
+        const clientMonth = new Date(client.createdAt).getMonth(); // 0-indexed
+        monthlyData[clientMonth].newClients++;
+      });
+
+      // Calculate cumulative totals for each month
+      let cumulativeTotal = 0;
+      monthlyData.forEach((month) => {
+        cumulativeTotal += month.newClients;
+        month.totalClients = cumulativeTotal;
+      });
+
+      // Calculate totals
+      const totals = {
+        newClients: clients.length,
+        totalClients: year === currentYear ? totalClients : clients.length,
+      };
+
+      return {
+        year,
+        monthlyData,
+        totals,
+      };
+    };
+
+    // Process data for both years
+    const currentYearData = processYearData(currentYearClients, currentYear);
+    const previousYearData = processYearData(previousYearClients, previousYear);
+
+    // Calculate year-over-year growth
+    const yearOverYearGrowth = {
+      newClientsGrowth: calculateGrowthPercentage(
+        currentYearData.totals.newClients,
+        previousYearData.totals.newClients
+      ),
+      totalClientsGrowth: calculateGrowthPercentage(
+        currentYearData.totals.totalClients,
+        previousYearData.totals.totalClients
+      ),
+    };
+
+    return {
+      success: true,
+      message: "Client metrics retrieved successfully",
+      data: {
+        currentYear: currentYearData,
+        previousYear: previousYearData,
+        yearOverYearGrowth,
+      },
+    };
+  } catch (error) {
+    console.error("Error getting client metrics:", error);
+    return {
+      success: false,
+      message: "Failed to retrieve client metrics",
     };
   } finally {
     await prisma.$disconnect();

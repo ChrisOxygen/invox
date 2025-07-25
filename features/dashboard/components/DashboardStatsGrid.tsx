@@ -4,17 +4,26 @@
  */
 
 import { DashboardStatsCard } from "./DashboardStatsCard";
-import type { DashboardMetrics } from "../types";
+import { useDashboardMetrics } from "../hooks";
 
-interface DashboardStatsGridProps {
-  metrics?: DashboardMetrics;
-  isLoading?: boolean;
-}
+export function DashboardStatsGrid() {
+  const { data: metrics, isLoading, isError } = useDashboardMetrics();
 
-export function DashboardStatsGrid({
-  metrics,
-  isLoading,
-}: DashboardStatsGridProps) {
+  // Error state
+  if (isError) {
+    return (
+      <div className="w-full h-full flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-gray-500">Failed to load dashboard metrics</p>
+          <p className="text-sm text-gray-400">
+            Please try refreshing the page
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  // Loading state
   if (isLoading) {
     return (
       <div className="w-full h-full grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">

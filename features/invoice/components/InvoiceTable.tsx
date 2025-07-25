@@ -33,7 +33,7 @@ export function InvoiceTable({
   showActions = true,
   showFavorites = true,
   initialItemsPerPage = 10,
-  className = "space-y-6",
+  className = "h-full flex flex-col",
 }: InvoiceTableProps) {
   // State for filters and pagination
   const [searchQuery, setSearchQuery] = useState("");
@@ -140,7 +140,7 @@ export function InvoiceTable({
     <div className={className}>
       {/* Search and Filters Section */}
       {(showSearch || showFilters) && (
-        <div className="bg-gradient-to-r from-blue-50/50 to-cyan-50/50 border border-blue-200 rounded-xl p-4 shadow-sm">
+        <div className="bg-gradient-to-r from-blue-50/50 to-cyan-50/50 border border-blue-200 rounded-xl p-4 shadow-sm flex-shrink-0 mb-4">
           <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             {showSearch && (
               <InvoiceSearch
@@ -162,8 +162,8 @@ export function InvoiceTable({
         </div>
       )}
 
-      {/* Data Table */}
-      <div className="bg-white/80 backdrop-blur-sm border border-blue-200 rounded-xl shadow-sm overflow-hidden">
+      {/* Data Table - Takes remaining space */}
+      <div className="flex-1 flex flex-col min-h-0 bg-white/80 backdrop-blur-sm border border-blue-200 rounded-xl shadow-sm overflow-hidden">
         <InvoiceDataTable
           invoices={invoices}
           isLoading={isLoading}
@@ -172,12 +172,13 @@ export function InvoiceTable({
           onDeleteInvoice={showActions ? handleDeleteInvoice : undefined}
           showActions={showActions}
           showFavorites={showFavorites}
+          className="flex-1 flex flex-col min-h-0"
         />
       </div>
 
       {/* Pagination Section */}
       {showPagination && !isLoading && !isError && invoices.length > 0 && (
-        <div className="bg-gradient-to-r from-blue-50/30 to-cyan-50/30 border border-blue-200 rounded-xl p-4">
+        <div className="mt-4">
           <InvoicePagination
             currentPage={currentPage}
             totalPages={totalPages}

@@ -217,9 +217,12 @@ export async function _createInvoice(
       validatedData.data.invoiceNumber ||
       (await generateInvoiceNumber(user.business.id));
 
-    // Check if invoice number is unique
-    const existingInvoice = await prisma.invoice.findUnique({
-      where: { invoiceNumber },
+    // Check if invoice number is unique within the business
+    const existingInvoice = await prisma.invoice.findFirst({
+      where: {
+        invoiceNumber,
+        businessId: user.business.id,
+      },
     });
 
     if (existingInvoice) {

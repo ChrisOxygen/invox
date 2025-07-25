@@ -175,7 +175,7 @@ model PaymentAccount {
 
 model Invoice {
   id                     String        @id @default(auto()) @map("_id") @db.ObjectId
-  invoiceNumber          String        @unique
+  invoiceNumber          String
   invoiceDate            DateTime
   paymentDueDate         DateTime
   subtotal               Float // Note: Consider using cents/integer for financial precision
@@ -196,6 +196,7 @@ model Invoice {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  @@unique([invoiceNumber, businessId]) // Invoice number unique per business
   @@index([businessId, status]) // For business invoice filtering
   @@index([clientId]) // For client invoice history
   @@index([status]) // For status-based queries

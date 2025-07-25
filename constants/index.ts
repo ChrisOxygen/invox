@@ -9,7 +9,7 @@ import { VscFeedback } from "react-icons/vsc";
 export const DASHBOARD_MAIN_NAV = [
   {
     title: "Home",
-    url: "/",
+    url: "/app",
     icon: HiOutlineHome,
   },
   {

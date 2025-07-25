@@ -37,13 +37,13 @@ export function InvoiceViewToolbar({ invoiceId }: InvoiceViewToolbarProps) {
 
   if (isLoading) {
     return (
-      <div className="border-b border-gray-200 bg-white p-4">
+      <div className="border-b border-blue-200 bg-gradient-to-r from-white via-blue-50 to-cyan-50 p-4 shadow-sm">
         <div className="flex flex-wrap items-center justify-center gap-3">
-          <Skeleton className="h-10 w-32" />
-          <Skeleton className="h-10 w-28" />
-          <Skeleton className="h-10 w-36" />
-          <Skeleton className="h-10 w-32" />
-          <Skeleton className="h-10 w-36" />
+          <Skeleton className="h-10 w-32 bg-blue-200" />
+          <Skeleton className="h-10 w-28 bg-blue-200" />
+          <Skeleton className="h-10 w-36 bg-blue-200" />
+          <Skeleton className="h-10 w-32 bg-blue-200" />
+          <Skeleton className="h-10 w-36 bg-blue-200" />
         </div>
       </div>
     );
@@ -54,12 +54,12 @@ export function InvoiceViewToolbar({ invoiceId }: InvoiceViewToolbarProps) {
   }
 
   return (
-    <div className="border-b border-gray-200 bg-white p-4">
+    <div className="border-b border-blue-200 bg-gradient-to-r from-white via-blue-50 to-cyan-50 p-4 shadow-sm">
       <div className="flex flex-wrap items-center justify-center gap-3">
         <Button
           variant="outline"
           asChild
-          className="flex items-center gap-2 border-gray-300 hover:border-black hover:bg-gray-50"
+          className="flex items-center gap-2 border-blue-300 text-blue-700 hover:border-blue-500 hover:bg-blue-100 hover:text-blue-800 transition-all duration-200 shadow-sm"
         >
           <Link href={`/app/invoices/edit/${invoiceId}`}>
             <FiEdit2 className="h-4 w-4" />
@@ -70,15 +70,15 @@ export function InvoiceViewToolbar({ invoiceId }: InvoiceViewToolbarProps) {
         <Button
           onClick={handleSendEmail}
           variant="outline"
-          className="flex items-center gap-2 border-gray-300 hover:border-black hover:bg-gray-50"
+          className="flex items-center gap-2 border-cyan-300 text-cyan-700 hover:border-cyan-500 hover:bg-cyan-100 hover:text-cyan-800 transition-all duration-200 shadow-sm"
         >
           <FiMail className="h-4 w-4" />
           Send Email
         </Button>
+
         <Button
           asChild
-          variant="outline"
-          className="flex items-center gap-2 border-gray-300 hover:border-black hover:bg-gray-50"
+          className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
         >
           <PDFDownloadLink
             document={<InvoicePDF invoiceData={invoice} />}
@@ -95,7 +95,7 @@ export function InvoiceViewToolbar({ invoiceId }: InvoiceViewToolbarProps) {
         <Button
           onClick={handleMarkAsPaid}
           variant="outline"
-          className="flex items-center gap-2 border-gray-300 hover:border-black hover:bg-gray-50"
+          className="flex items-center gap-2 border-green-400 text-green-700 hover:border-green-500 hover:bg-green-50 hover:text-green-800 transition-all duration-200 shadow-sm"
         >
           <FiCheck className="h-4 w-4" />
           Mark as Paid
@@ -104,7 +104,7 @@ export function InvoiceViewToolbar({ invoiceId }: InvoiceViewToolbarProps) {
         <Button
           onClick={handleRecordPayment}
           variant="outline"
-          className="flex items-center gap-2 border-gray-300 hover:border-black hover:bg-gray-50"
+          className="flex items-center gap-2 border-blue-300 text-blue-700 hover:border-blue-500 hover:bg-blue-100 hover:text-blue-800 transition-all duration-200 shadow-sm"
         >
           <FiCreditCard className="h-4 w-4" />
           Record Payment

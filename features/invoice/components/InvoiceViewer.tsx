@@ -16,14 +16,14 @@ export function InvoiceViewer() {
 
   if (gettingInvoice) {
     return (
-      <div className="flex-1 bg-gray-100 p-6">
+      <div className="flex-1 bg-gradient-to-br from-blue-50 via-cyan-50 to-blue-100 p-6">
         <div className="flex justify-center">
           <div className="w-full max-w-4xl space-y-4">
-            <Skeleton className="h-8 w-1/3" />
-            <Skeleton className="h-4 w-1/2" />
-            <Skeleton className="h-32 w-full" />
-            <Skeleton className="h-16 w-full" />
-            <Skeleton className="h-24 w-full" />
+            <Skeleton className="h-8 w-1/3 bg-blue-200" />
+            <Skeleton className="h-4 w-1/2 bg-blue-200" />
+            <Skeleton className="h-32 w-full bg-blue-200" />
+            <Skeleton className="h-16 w-full bg-blue-200" />
+            <Skeleton className="h-24 w-full bg-blue-200" />
           </div>
         </div>
       </div>
@@ -74,10 +74,10 @@ export function InvoiceViewer() {
     : businessDetails?.businessName || "";
 
   return (
-    <ScrollArea className="h-[calc(100vh-200px)] w-full bg-gray-100 p-6">
+    <ScrollArea className="h-[calc(100vh-200px)] w-full bg-gradient-to-br from-blue-50 via-cyan-50 to-blue-100 p-6">
       <div className="h-full w-full items-center flex flex-col p-5">
         <div
-          className={`w-[794px] min-h-[1123px] bg-white text-black flex flex-col border border-gray-200 shadow-sm `}
+          className={`w-[794px] min-h-[1123px] bg-white text-black flex flex-col border border-blue-200 shadow-xl rounded-lg overflow-hidden`}
         >
           {/* Invoice Title with Horizontal Line */}
           <div className="px-10 mt-5">
@@ -97,8 +97,8 @@ export function InvoiceViewer() {
                   </div>
                 )}
               </div>
-              <div className="border-t-2 border-gray-800 flex-grow mr-3"></div>
-              <p className="uppercase text-4xl bg-white px-3 py-1 font-bold">
+              <div className="border-t-2 border-blue-600 flex-grow mr-3"></div>
+              <p className="uppercase text-4xl bg-white px-3 py-1 font-bold text-blue-600">
                 Invoice
               </p>
             </div>
@@ -106,7 +106,7 @@ export function InvoiceViewer() {
 
           {/* Client and Invoice Details */}
           <div className="px-10 flex flex-col mt-6">
-            <span className="font-bold text-lg">Invoice to:</span>
+            <span className="font-bold text-lg text-blue-700">Invoice to:</span>
             <div className="flex text-xs justify-between items-end">
               <div className="flex flex-col w-[200px]">
                 <h4 className="font-bold">{clientBusinessName}</h4>
@@ -132,9 +132,9 @@ export function InvoiceViewer() {
 
           {/* Items Table */}
           <div className="px-10 mt-8">
-            <div className="border border-gray-300 w-full flex flex-col">
+            <div className="border border-blue-300 w-full flex flex-col shadow-sm">
               {/* Table Header */}
-              <div className="flex bg-black text-white text-xs p-2">
+              <div className="flex bg-gradient-to-r from-blue-600 to-cyan-500 text-white text-xs p-2">
                 <div className="w-[20px] text-center">sl.</div>
                 <div className="flex-1 ml-5">Item description</div>
                 <div className="w-[50px] text-right">Price</div>
@@ -147,7 +147,7 @@ export function InvoiceViewer() {
                 <div
                   key={item.id}
                   className={`flex text-xs p-2 ${
-                    index % 2 === 1 ? "bg-gray-100" : ""
+                    index % 2 === 1 ? "bg-blue-50" : ""
                   }`}
                 >
                   <div className="w-[20px] text-center">{index + 1}</div>
@@ -225,8 +225,10 @@ export function InvoiceViewer() {
               </div>
 
               <div className="flex font-bold py-1 text-sm">
-                <span className="z-10 font-semibold bg-white pr-2">Total:</span>
-                <span className="z-10 ml-auto bg-white pl-2">
+                <span className="z-10 font-semibold bg-white pr-2 text-blue-700">
+                  Total:
+                </span>
+                <span className="z-10 ml-auto bg-white pl-2 text-blue-700">
                   ${finalTotal.toFixed(2)}
                 </span>
               </div>
@@ -250,8 +252,8 @@ export function InvoiceViewer() {
                   </span>
                 )}
               </div>
-              <div className="border-t-2 border-gray-800 text-xs flex items-center justify-center">
-                <span className="text-xs font-semibold">
+              <div className="border-t-2 border-blue-600 text-xs flex items-center justify-center">
+                <span className="text-xs font-semibold text-blue-700">
                   Authorized Signature
                 </span>
               </div>
@@ -259,13 +261,15 @@ export function InvoiceViewer() {
           </div>
 
           {/* Signature Section */}
-          <div className="mt-auto border-t-10 border-gray-800 text-xs flex items-center justify-between px-10 py-5">
+          <div className="mt-auto border-t-10 border-blue-600 text-xs flex items-center justify-between px-10 py-5 bg-gradient-to-r from-blue-50 to-cyan-50">
             <div className="flex gap-2 items-center">
               {businessName && (
-                <span className="pr-2 font-semibold">{businessName}</span>
+                <span className="pr-2 font-semibold text-blue-700">
+                  {businessName}
+                </span>
               )}
               {email && (
-                <span className="px-2 border-l border-gray-300 font-semibold">
+                <span className="px-2 border-l border-blue-300 font-semibold text-blue-700">
                   {email}
                 </span>
               )}

@@ -34,7 +34,7 @@ export function InvoiceFilters({
   sortOrder,
   onSortOrderChange,
   sortOptions = defaultSortOptions,
-  className = "flex flex-wrap gap-2",
+  className = "flex flex-wrap gap-3",
 }: InvoiceFiltersProps) {
   return (
     <div className={className}>
@@ -44,26 +44,57 @@ export function InvoiceFilters({
           onStatusFilterChange(value)
         }
       >
-        <SelectTrigger className="w-full md:w-40">
+        <SelectTrigger className="w-full md:w-40 border-2 border-blue-200 hover:border-blue-400 focus:border-blue-600 focus:ring-2 focus:ring-blue-100 transition-all duration-200 text-blue-700">
           <SelectValue placeholder="Filter by status" />
         </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="ALL">All Statuses</SelectItem>
-          <SelectItem value="DRAFT">Draft</SelectItem>
-          <SelectItem value="SENT">Sent</SelectItem>
-          <SelectItem value="PAID">Paid</SelectItem>
-          <SelectItem value="OVERDUE">Overdue</SelectItem>
-          <SelectItem value="CANCELLED">Cancelled</SelectItem>
+        <SelectContent className="border-blue-200 bg-white/95 backdrop-blur-sm">
+          <SelectItem value="ALL" className="hover:bg-blue-50 focus:bg-blue-50">
+            All Statuses
+          </SelectItem>
+          <SelectItem
+            value="DRAFT"
+            className="hover:bg-blue-50 focus:bg-blue-50"
+          >
+            Draft
+          </SelectItem>
+          <SelectItem
+            value="SENT"
+            className="hover:bg-blue-50 focus:bg-blue-50"
+          >
+            Sent
+          </SelectItem>
+          <SelectItem
+            value="PAID"
+            className="hover:bg-blue-50 focus:bg-blue-50"
+          >
+            Paid
+          </SelectItem>
+          <SelectItem
+            value="OVERDUE"
+            className="hover:bg-blue-50 focus:bg-blue-50"
+          >
+            Overdue
+          </SelectItem>
+          <SelectItem
+            value="CANCELLED"
+            className="hover:bg-blue-50 focus:bg-blue-50"
+          >
+            Cancelled
+          </SelectItem>
         </SelectContent>
       </Select>
 
       <Select value={sortOrder} onValueChange={onSortOrderChange}>
-        <SelectTrigger className="w-full md:w-52">
+        <SelectTrigger className="w-full md:w-52 border-2 border-blue-200 hover:border-blue-400 focus:border-blue-600 focus:ring-2 focus:ring-blue-100 transition-all duration-200 text-blue-700">
           <SelectValue placeholder="Sort by" />
         </SelectTrigger>
-        <SelectContent>
+        <SelectContent className="border-blue-200 bg-white/95 backdrop-blur-sm">
           {sortOptions.map((option) => (
-            <SelectItem key={option.value} value={option.value}>
+            <SelectItem
+              key={option.value}
+              value={option.value}
+              className="hover:bg-blue-50 focus:bg-blue-50"
+            >
               {option.label}
             </SelectItem>
           ))}

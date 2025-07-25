@@ -33,7 +33,7 @@ export function InvoiceTable({
   showActions = true,
   showFavorites = true,
   initialItemsPerPage = 10,
-  className = "space-y-4",
+  className = "space-y-6",
 }: InvoiceTableProps) {
   // State for filters and pagination
   const [searchQuery, setSearchQuery] = useState("");
@@ -140,47 +140,53 @@ export function InvoiceTable({
     <div className={className}>
       {/* Search and Filters Section */}
       {(showSearch || showFilters) && (
-        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-          {showSearch && (
-            <InvoiceSearch
-              searchQuery={searchQuery}
-              onSearchChange={setSearchQuery}
-              placeholder="Search invoices..."
-            />
-          )}
+        <div className="bg-gradient-to-r from-blue-50/50 to-cyan-50/50 border border-blue-200 rounded-xl p-4 shadow-sm">
+          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+            {showSearch && (
+              <InvoiceSearch
+                searchQuery={searchQuery}
+                onSearchChange={setSearchQuery}
+                placeholder="Search invoices..."
+              />
+            )}
 
-          {showFilters && (
-            <InvoiceFilters
-              statusFilter={statusFilter}
-              onStatusFilterChange={setStatusFilter}
-              sortOrder={sortOrder}
-              onSortOrderChange={setSortOrder}
-            />
-          )}
+            {showFilters && (
+              <InvoiceFilters
+                statusFilter={statusFilter}
+                onStatusFilterChange={setStatusFilter}
+                sortOrder={sortOrder}
+                onSortOrderChange={setSortOrder}
+              />
+            )}
+          </div>
         </div>
       )}
 
       {/* Data Table */}
-      <InvoiceDataTable
-        invoices={invoices}
-        isLoading={isLoading}
-        isError={isError}
-        error={error || undefined}
-        onDeleteInvoice={showActions ? handleDeleteInvoice : undefined}
-        showActions={showActions}
-        showFavorites={showFavorites}
-      />
+      <div className="bg-white/80 backdrop-blur-sm border border-blue-200 rounded-xl shadow-sm overflow-hidden">
+        <InvoiceDataTable
+          invoices={invoices}
+          isLoading={isLoading}
+          isError={isError}
+          error={error || undefined}
+          onDeleteInvoice={showActions ? handleDeleteInvoice : undefined}
+          showActions={showActions}
+          showFavorites={showFavorites}
+        />
+      </div>
 
       {/* Pagination Section */}
       {showPagination && !isLoading && !isError && invoices.length > 0 && (
-        <InvoicePagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          totalCount={totalCount}
-          itemsPerPage={itemsPerPage}
-          onPageChange={setCurrentPage}
-          onItemsPerPageChange={setItemsPerPage}
-        />
+        <div className="bg-gradient-to-r from-blue-50/30 to-cyan-50/30 border border-blue-200 rounded-xl p-4">
+          <InvoicePagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            totalCount={totalCount}
+            itemsPerPage={itemsPerPage}
+            onPageChange={setCurrentPage}
+            onItemsPerPageChange={setItemsPerPage}
+          />
+        </div>
       )}
 
       {/* Delete Confirmation Modal */}
@@ -193,14 +199,19 @@ export function InvoiceTable({
           }?`}
         >
           <div className="space-y-6">
-            <div className="text-center space-y-2">
-              <div className="mx-auto w-12 h-12 rounded-full bg-red-100 flex items-center justify-center">
-                <FiTrash2 className="h-6 w-6 text-red-600" />
+            <div className="text-center space-y-4">
+              <div className="mx-auto w-16 h-16 rounded-full bg-red-100 border-2 border-red-200 flex items-center justify-center">
+                <FiTrash2 className="h-8 w-8 text-red-600" />
               </div>
-              <p className="text-sm text-gray-600">
-                This action cannot be undone. This will permanently delete the
-                invoice and remove all associated data from our servers.
-              </p>
+              <div className="space-y-2">
+                <h3 className="text-lg font-semibold text-gray-900">
+                  Are you absolutely sure?
+                </h3>
+                <p className="text-sm text-gray-600 max-w-sm mx-auto">
+                  This action cannot be undone. This will permanently delete the
+                  invoice and remove all associated data from our servers.
+                </p>
+              </div>
             </div>
 
             <div className="flex flex-col sm:flex-row gap-3 justify-end">
@@ -208,14 +219,14 @@ export function InvoiceTable({
                 variant="outline"
                 onClick={handleDeleteCancel}
                 disabled={isDeleting}
+                className="border-blue-300 text-blue-700 hover:bg-blue-50"
               >
                 Cancel
               </Button>
               <Button
-                variant="destructive"
                 onClick={handleDeleteConfirm}
                 disabled={isDeleting}
-                className="flex items-center gap-2"
+                className="bg-red-600 hover:bg-red-700 text-white flex items-center gap-2"
               >
                 {isDeleting ? (
                   <>

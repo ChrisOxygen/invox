@@ -27,11 +27,13 @@ import { FavoriteIcon } from "./FavoriteIcon";
 
 // Status badge color map
 const statusColorMap = {
-  DRAFT: "bg-gray-200 text-gray-800",
-  SENT: "bg-gray-800 text-white",
-  PAID: "bg-gray-500 text-white",
-  OVERDUE: "bg-gray-900 text-white",
-  CANCELLED: "bg-white text-gray-800 border border-gray-800",
+  DRAFT:
+    "bg-gradient-to-r from-blue-100 to-cyan-100 text-blue-700 border border-blue-200",
+  SENT: "bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg",
+  PAID: "bg-gradient-to-r from-cyan-500 to-cyan-600 text-white shadow-lg",
+  OVERDUE: "bg-gradient-to-r from-red-500 to-red-600 text-white shadow-lg",
+  CANCELLED:
+    "bg-gradient-to-r from-gray-100 to-gray-200 text-gray-700 border border-gray-300",
 };
 
 interface InvoiceDataTableProps {
@@ -53,7 +55,7 @@ export function InvoiceDataTable({
   onDeleteInvoice,
   showActions = true,
   showFavorites = true,
-  className = "rounded-md border border-gray-200",
+  className = "rounded-xl border-2 border-blue-200 bg-white/90 backdrop-blur-sm shadow-lg",
 }: InvoiceDataTableProps) {
   const handleDeleteClick = (
     e: React.MouseEvent,
@@ -69,20 +71,34 @@ export function InvoiceDataTable({
       <div className="hidden md:block">
         <Table>
           <TableHeader>
-            <TableRow>
-              <TableHead className="w-[120px]">Invoice #</TableHead>
-              <TableHead className="w-[200px]">Client</TableHead>
-              <TableHead className="w-[120px]">Amount</TableHead>
-              <TableHead className="w-[100px]">Status</TableHead>
-              <TableHead className="w-[120px]">Due Date</TableHead>
-              <TableHead className="w-[120px]">Created</TableHead>
+            <TableRow className="border-b-2 border-blue-100 bg-gradient-to-r from-blue-50/80 to-cyan-50/80">
+              <TableHead className="w-[120px] text-blue-700 font-semibold">
+                Invoice #
+              </TableHead>
+              <TableHead className="w-[200px] text-blue-700 font-semibold">
+                Client
+              </TableHead>
+              <TableHead className="w-[120px] text-blue-700 font-semibold">
+                Amount
+              </TableHead>
+              <TableHead className="w-[100px] text-blue-700 font-semibold">
+                Status
+              </TableHead>
+              <TableHead className="w-[120px] text-blue-700 font-semibold">
+                Due Date
+              </TableHead>
+              <TableHead className="w-[120px] text-blue-700 font-semibold">
+                Created
+              </TableHead>
               {showFavorites && (
                 <TableHead className="w-[50px]">
-                  <IoStar className="h-4 w-4 text-black" />
+                  <IoStar className="h-4 w-4 text-cyan-400" />
                 </TableHead>
               )}
               {showActions && (
-                <TableHead className="w-[100px] text-right">Actions</TableHead>
+                <TableHead className="w-[100px] text-right text-blue-700 font-semibold">
+                  Actions
+                </TableHead>
               )}
             </TableRow>
           </TableHeader>
@@ -130,7 +146,7 @@ export function InvoiceDataTable({
               <TableRow>
                 <TableCell
                   colSpan={6 + (showFavorites ? 1 : 0) + (showActions ? 1 : 0)}
-                  className="text-center py-10 text-red-500"
+                  className="text-center py-10 text-red-600 bg-red-50/50"
                 >
                   Error: {error}
                 </TableCell>
@@ -139,24 +155,31 @@ export function InvoiceDataTable({
               <TableRow>
                 <TableCell
                   colSpan={6 + (showFavorites ? 1 : 0) + (showActions ? 1 : 0)}
-                  className="text-center py-10"
+                  className="text-center py-10 text-blue-600 bg-blue-50/50"
                 >
                   No invoices found. Try adjusting your filters.
                 </TableCell>
               </TableRow>
             ) : (
               invoices.map((invoice) => (
-                <TableRow key={invoice.id} className="hover:bg-gray-50">
+                <TableRow
+                  key={invoice.id}
+                  className="hover:bg-gradient-to-r hover:from-blue-50/40 hover:to-cyan-50/40 transition-all duration-200 border-b border-blue-100/50"
+                >
                   <TableCell className="font-medium">
                     <Link
                       href={`/app/invoices/${invoice.id}`}
-                      className="font-medium text-gray-900 hover:text-gray-700 cursor-pointer"
+                      className="font-medium text-blue-700 hover:text-blue-900 cursor-pointer transition-colors duration-200"
                     >
                       {invoice.invoiceNumber || `INV-${invoice.id.slice(0, 8)}`}
                     </Link>
                   </TableCell>
-                  <TableCell>{invoice.client?.BusinessName || "N/A"}</TableCell>
-                  <TableCell>{formatCurrency(invoice.subtotal || 0)}</TableCell>
+                  <TableCell className="text-gray-700">
+                    {invoice.client?.BusinessName || "N/A"}
+                  </TableCell>
+                  <TableCell className="font-semibold text-blue-600">
+                    {formatCurrency(invoice.subtotal || 0)}
+                  </TableCell>
                   <TableCell>
                     <Badge
                       className={cn(
@@ -171,7 +194,7 @@ export function InvoiceDataTable({
                       ? new Date(invoice.paymentDueDate).toLocaleDateString()
                       : "N/A"}
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="text-gray-600">
                     {invoice.createdAt
                       ? new Date(invoice.createdAt).toLocaleDateString()
                       : "N/A"}
@@ -188,7 +211,7 @@ export function InvoiceDataTable({
                           variant="outline"
                           size="sm"
                           asChild
-                          className="border-gray-300 hover:border-black hover:bg-gray-50"
+                          className="border-2 border-blue-200 hover:border-blue-400 hover:bg-blue-50 text-blue-600 hover:text-blue-700 transition-all duration-200"
                         >
                           <Link href={`/app/invoices/${invoice.id}`}>
                             <FiEye className="h-3 w-3" />
@@ -198,7 +221,7 @@ export function InvoiceDataTable({
                           variant="outline"
                           size="sm"
                           asChild
-                          className="border-gray-300 hover:border-black hover:bg-gray-50"
+                          className="border-2 border-cyan-200 hover:border-cyan-400 hover:bg-cyan-50 text-cyan-600 hover:text-cyan-700 transition-all duration-200"
                         >
                           <Link href={`/app/invoices/edit/${invoice.id}`}>
                             <FiEdit2 className="h-3 w-3" />
@@ -209,7 +232,7 @@ export function InvoiceDataTable({
                             variant="outline"
                             size="sm"
                             onClick={(e) => handleDeleteClick(e, invoice)}
-                            className="border-gray-300 hover:border-red-500 hover:bg-red-50 hover:text-red-600"
+                            className="border-2 border-red-200 hover:border-red-400 hover:bg-red-50 hover:text-red-600 text-red-500 transition-all duration-200"
                           >
                             <FiTrash2 className="h-3 w-3" />
                           </Button>
@@ -229,28 +252,31 @@ export function InvoiceDataTable({
         {isLoading ? (
           <div className="space-y-4 p-4">
             {[...Array(5)].map((_, i) => (
-              <div key={i} className="border rounded-lg p-4">
+              <div
+                key={i}
+                className="border-2 border-blue-200 rounded-xl p-4 bg-white/90 backdrop-blur-sm"
+              >
                 <div className="space-y-3">
                   <div className="flex justify-between items-start">
-                    <Skeleton className="h-5 w-24" />
-                    <Skeleton className="h-6 w-16" />
+                    <Skeleton className="h-5 w-24 bg-blue-100" />
+                    <Skeleton className="h-6 w-16 bg-cyan-100" />
                   </div>
-                  <Skeleton className="h-4 w-32" />
-                  <Skeleton className="h-4 w-20" />
+                  <Skeleton className="h-4 w-32 bg-blue-100" />
+                  <Skeleton className="h-4 w-20 bg-cyan-100" />
                   <div className="flex justify-between items-center pt-2">
-                    <Skeleton className="h-4 w-16" />
-                    <Skeleton className="h-4 w-20" />
+                    <Skeleton className="h-4 w-16 bg-blue-100" />
+                    <Skeleton className="h-4 w-20 bg-cyan-100" />
                   </div>
                 </div>
               </div>
             ))}
           </div>
         ) : isError ? (
-          <div className="text-center py-10 text-red-500 p-4">
+          <div className="text-center py-10 text-red-600 p-4 bg-red-50/50 rounded-xl border-2 border-red-200 mx-4">
             Error: {error}
           </div>
         ) : invoices.length === 0 ? (
-          <div className="text-center py-10 p-4">
+          <div className="text-center py-10 p-4 text-blue-600 bg-blue-50/50 rounded-xl border-2 border-blue-200 mx-4">
             No invoices found. Try adjusting your filters.
           </div>
         ) : (
@@ -258,7 +284,7 @@ export function InvoiceDataTable({
             {invoices.map((invoice) => (
               <div
                 key={invoice.id}
-                className="border rounded-lg p-4 bg-white hover:bg-gray-50 transition-colors"
+                className="border-2 border-blue-200 rounded-xl p-4 bg-white/90 backdrop-blur-sm hover:bg-gradient-to-r hover:from-blue-50/40 hover:to-cyan-50/40 transition-all duration-200 shadow-lg hover:shadow-xl"
               >
                 <div className="flex justify-between items-start mb-3">
                   <div className="flex-1">
@@ -268,13 +294,13 @@ export function InvoiceDataTable({
                       )}
                       <Link
                         href={`/app/invoices/${invoice.id}`}
-                        className="font-medium text-black hover:text-gray-700"
+                        className="font-medium text-blue-700 hover:text-blue-900 transition-colors duration-200"
                       >
                         {invoice.invoiceNumber ||
                           `INV-${invoice.id.slice(0, 8)}`}
                       </Link>
                     </div>
-                    <div className="text-sm text-gray-500 mt-1">
+                    <div className="text-sm text-gray-600 mt-1">
                       {invoice.client?.BusinessName || "N/A"}
                     </div>
                     <div className="flex items-center gap-2 mt-2">
@@ -282,12 +308,12 @@ export function InvoiceDataTable({
                         className={cn(
                           statusColorMap[invoice.status] ||
                             statusColorMap.DRAFT,
-                          "text-xs"
+                          "text-xs font-medium"
                         )}
                       >
                         {invoice.status}
                       </Badge>
-                      <span className="text-sm font-medium text-black">
+                      <span className="text-sm font-semibold text-blue-600">
                         {formatCurrency(invoice.subtotal || 0)}
                       </span>
                     </div>
@@ -298,18 +324,21 @@ export function InvoiceDataTable({
                         <Button
                           variant="outline"
                           size="sm"
-                          className="border-gray-300 hover:border-black"
+                          className="border-2 border-blue-200 hover:border-blue-400 text-blue-600 hover:text-blue-700 hover:bg-blue-50 transition-all duration-200"
                         >
                           <FiMoreHorizontal className="h-4 w-4" />
                         </Button>
                       </PopoverTrigger>
-                      <PopoverContent align="end" className="w-40 p-2">
+                      <PopoverContent
+                        align="end"
+                        className="w-40 p-2 border-2 border-blue-200 bg-white/95 backdrop-blur-sm"
+                      >
                         <div className="space-y-1">
                           <Button
                             variant="ghost"
                             size="sm"
                             asChild
-                            className="w-full justify-start hover:bg-gray-100"
+                            className="w-full justify-start hover:bg-blue-50 hover:text-blue-700 transition-all duration-200"
                           >
                             <Link href={`/app/invoices/${invoice.id}`}>
                               <FiEye className="mr-2 h-3 w-3" />
@@ -320,7 +349,7 @@ export function InvoiceDataTable({
                             variant="ghost"
                             size="sm"
                             asChild
-                            className="w-full justify-start hover:bg-gray-100"
+                            className="w-full justify-start hover:bg-cyan-50 hover:text-cyan-700 transition-all duration-200"
                           >
                             <Link href={`/app/invoices/edit/${invoice.id}`}>
                               <FiEdit2 className="mr-2 h-3 w-3" />
@@ -332,7 +361,7 @@ export function InvoiceDataTable({
                               variant="ghost"
                               size="sm"
                               onClick={() => onDeleteInvoice(invoice)}
-                              className="w-full justify-start hover:bg-red-50 hover:text-red-600"
+                              className="w-full justify-start hover:bg-red-50 hover:text-red-600 transition-all duration-200"
                             >
                               <FiTrash2 className="mr-2 h-3 w-3" />
                               Delete
@@ -343,7 +372,7 @@ export function InvoiceDataTable({
                     </Popover>
                   )}
                 </div>
-                <div className="flex justify-between items-center pt-2 border-t border-gray-100 text-xs text-gray-500">
+                <div className="flex justify-between items-center pt-2 border-t-2 border-blue-100 text-xs text-gray-600">
                   <span>
                     Due:{" "}
                     {invoice.paymentDueDate

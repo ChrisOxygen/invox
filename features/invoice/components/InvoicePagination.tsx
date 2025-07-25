@@ -40,7 +40,7 @@ export function InvoicePagination({
   onPageChange,
   onItemsPerPageChange,
   itemsPerPageOptions = defaultItemsPerPageOptions,
-  className = "flex flex-col items-center justify-between gap-4 md:flex-row",
+  className = "flex flex-col items-center justify-between gap-4 md:flex-row mt-auto p-4 bg-gradient-to-r from-blue-50/80 to-cyan-50/80 rounded-xl border-2 border-blue-200",
 }: InvoicePaginationProps) {
   // Calculate the range of items being displayed
   const startItem = (currentPage - 1) * itemsPerPage + 1;
@@ -88,7 +88,7 @@ export function InvoicePagination({
 
   return (
     <div className={className}>
-      <div className="text-sm text-gray-500">
+      <div className="text-sm text-blue-600 font-medium">
         Showing {startItem} to {endItem} of {totalCount} invoices
       </div>
 
@@ -100,12 +100,16 @@ export function InvoicePagination({
             onPageChange(1); // Reset to first page when changing items per page
           }}
         >
-          <SelectTrigger className="w-[100px] h-9">
+          <SelectTrigger className="w-[100px] h-9 border-2 border-blue-200 hover:border-blue-400 focus:border-blue-600 focus:ring-2 focus:ring-blue-100 transition-all duration-200 text-blue-700">
             <SelectValue placeholder="Per page" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="border-blue-200 bg-white/95 backdrop-blur-sm">
             {itemsPerPageOptions.map((option) => (
-              <SelectItem key={option} value={option.toString()}>
+              <SelectItem
+                key={option}
+                value={option.toString()}
+                className="hover:bg-blue-50 focus:bg-blue-50"
+              >
                 {option} per page
               </SelectItem>
             ))}
@@ -119,7 +123,7 @@ export function InvoicePagination({
                 onClick={() => onPageChange(Math.max(currentPage - 1, 1))}
                 className={cn(
                   currentPage === 1 && "pointer-events-none opacity-50",
-                  "cursor-pointer"
+                  "cursor-pointer border-2 border-blue-200 hover:border-blue-400 hover:bg-blue-50 text-blue-600 hover:text-blue-700 transition-all duration-200"
                 )}
               />
             </PaginationItem>
@@ -127,12 +131,17 @@ export function InvoicePagination({
             {getPageNumbers().map((pageNumber, index) => (
               <PaginationItem key={index}>
                 {pageNumber === "ellipsis" ? (
-                  <PaginationEllipsis />
+                  <PaginationEllipsis className="text-blue-400" />
                 ) : (
                   <PaginationLink
                     isActive={currentPage === pageNumber}
                     onClick={() => onPageChange(pageNumber as number)}
-                    className="cursor-pointer"
+                    className={cn(
+                      "cursor-pointer border-2 transition-all duration-200",
+                      currentPage === pageNumber
+                        ? "border-blue-600 bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-lg"
+                        : "border-blue-200 hover:border-blue-400 hover:bg-blue-50 text-blue-600 hover:text-blue-700"
+                    )}
                   >
                     {pageNumber}
                   </PaginationLink>
@@ -148,7 +157,7 @@ export function InvoicePagination({
                 className={cn(
                   currentPage === totalPages &&
                     "pointer-events-none opacity-50",
-                  "cursor-pointer"
+                  "cursor-pointer border-2 border-blue-200 hover:border-blue-400 hover:bg-blue-50 text-blue-600 hover:text-blue-700 transition-all duration-200"
                 )}
               />
             </PaginationItem>

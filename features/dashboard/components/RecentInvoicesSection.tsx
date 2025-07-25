@@ -39,7 +39,7 @@ export function RecentInvoicesSection({
           </Button>
         </div>
       </div>
-      <div className="p-2 lg:p-4">
+      <div className="">
         <ScrollArea className="w-full max-h-96">
           <InvoiceTable
             showFilters={false}

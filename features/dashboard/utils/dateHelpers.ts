@@ -147,3 +147,24 @@ export function getCurrentAndPreviousMonthRanges(): {
     previous: getPreviousMonthRange(now),
   };
 }
+
+/**
+ * Get month name from month number (1-12)
+ */
+export function getMonthName(month: number): string {
+  const monthNames = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+  return monthNames[month - 1] || "Unknown";
+}

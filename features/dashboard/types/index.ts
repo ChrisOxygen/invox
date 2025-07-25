@@ -111,3 +111,53 @@ export interface GrowthResult {
   growthPercentage: number;
   trend: TrendDirection;
 }
+
+/**
+ * Response interface for invoice metrics
+ */
+export interface InvoiceMetricsResponse {
+  success: boolean;
+  message: string;
+  data?: {
+    currentYear: {
+      year: number;
+      monthlyData: Array<{
+        month: number;
+        monthName: string;
+        revenue: number;
+        paidInvoices: number;
+        pendingInvoices: number;
+        totalInvoices: number;
+      }>;
+      totals: {
+        revenue: number;
+        paidInvoices: number;
+        pendingInvoices: number;
+        totalInvoices: number;
+      };
+    };
+    previousYear: {
+      year: number;
+      monthlyData: Array<{
+        month: number;
+        monthName: string;
+        revenue: number;
+        paidInvoices: number;
+        pendingInvoices: number;
+        totalInvoices: number;
+      }>;
+      totals: {
+        revenue: number;
+        paidInvoices: number;
+        pendingInvoices: number;
+        totalInvoices: number;
+      };
+    };
+    yearOverYearGrowth: {
+      revenueGrowth: number;
+      paidInvoicesGrowth: number;
+      pendingInvoicesGrowth: number;
+      totalInvoicesGrowth: number;
+    };
+  };
+}

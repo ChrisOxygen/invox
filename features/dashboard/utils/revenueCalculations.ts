@@ -16,8 +16,32 @@ import {
  * Calculate the net revenue from an invoice
  * Formula: subtotal + taxes - discount
  */
-export function calculateInvoiceRevenue(invoice: InvoiceData): number {
-  const revenue = invoice.subtotal + invoice.taxes - invoice.discount;
+export function calculateInvoiceRevenue(invoice: InvoiceData): number;
+export function calculateInvoiceRevenue(
+  subtotal: number,
+  taxes: number,
+  discount: number
+): number;
+export function calculateInvoiceRevenue(
+  invoiceOrSubtotal: InvoiceData | number,
+  taxes?: number,
+  discount?: number
+): number {
+  let subtotal: number, taxesAmount: number, discountAmount: number;
+  
+  if (typeof invoiceOrSubtotal === 'number') {
+    // Called with individual parameters
+    subtotal = invoiceOrSubtotal;
+    taxesAmount = taxes || 0;
+    discountAmount = discount || 0;
+  } else {
+    // Called with invoice object
+    subtotal = invoiceOrSubtotal.subtotal;
+    taxesAmount = invoiceOrSubtotal.taxes;
+    discountAmount = invoiceOrSubtotal.discount;
+  }
+  
+  const revenue = subtotal + taxesAmount - discountAmount;
   return Math.max(0, Number(revenue.toFixed(2))); // Ensure non-negative and round to 2 decimals
 }
 

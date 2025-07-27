@@ -196,6 +196,9 @@ model Invoice {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  customNotes String? // Custom notes for the invoice
+  lateFeeTerms String? // Terms for late fees, e.g., "2% per month after 30 days"
+
   @@unique([invoiceNumber, businessId]) // Invoice number unique per business
   @@index([businessId, status]) // For business invoice filtering
   @@index([clientId]) // For client invoice history

@@ -9,16 +9,27 @@ export const calculateItemTotal = (
   return Math.round(quantity * unitPrice * 100) / 100; // Round to 2 decimal places
 };
 
+export function calculateSubTotal(
+  items: {
+    description?: string;
+    quantity?: number;
+    unitPrice?: number;
+  }[]
+): number {
+  return items.reduce((total, item) => {
+    // Skip items without quantity or unitPrice
+    if (!item.quantity || !item.unitPrice) {
+      return total;
+    }
+    return total + item.quantity * item.unitPrice;
+  }, 0);
+}
+
 // Re-export validation utilities
 export * from "./invoiceFormValidation";
 
 // Re-export fingerprinting utilities
 export * from "./invoiceFormUtils";
-
-// Calculate subtotal from items
-export const calculateSubtotal = (items: InvoiceItem[]): number => {
-  return items.reduce((sum, item) => sum + item.total, 0);
-};
 
 // Calculate total with tax and discount (both as absolute amounts)
 export const calculateTotal = (

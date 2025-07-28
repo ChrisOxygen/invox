@@ -14,15 +14,15 @@ export interface InvoiceFormState {
   invoiceNumber?: string;
   invoiceDate?: Date;
   paymentDueDate: Date | null;
-  paymentTerms?: string;
-  acceptedPaymentMethods?: string;
   invoiceItems?: {
     description?: string;
     quantity?: number;
     unitPrice?: number;
   }[];
   customNote: string;
+  taxStructure: "flat" | "percentage";
   tax?: number;
+  discountType: "flat" | "percentage";
   discount?: number;
   lateFeeText?: string;
   invoiceStatus?: "DRAFT" | "SENT" | "PAID" | "OVERDUE" | "CANCELLED";
@@ -68,14 +68,6 @@ export type InvoiceFormAction =
       payload: Date | null;
     }
   | {
-      type: "SET_PAYMENT_TERMS";
-      payload: string;
-    }
-  | {
-      type: "SET_ACCEPTED_PAYMENT_METHODS";
-      payload: string;
-    }
-  | {
       type: "SET_INVOICE_ITEMS";
       payload: {
         description?: string;
@@ -117,8 +109,16 @@ export type InvoiceFormAction =
       payload: number;
     }
   | {
+      type: "SET_TAX_STRUCTURE";
+      payload: "flat" | "percentage";
+    }
+  | {
       type: "SET_DISCOUNT";
       payload: number;
+    }
+  | {
+      type: "SET_DISCOUNT_TYPE";
+      payload: "flat" | "percentage";
     }
   | {
       type: "SET_IS_FAVORITE";
@@ -163,11 +163,11 @@ export interface InvoiceFormContextType {
   setInvoiceNumber: (invoiceNumber: string) => void;
   setInvoiceDate: (date: Date) => void;
   setPaymentDueDate: (date: Date | null) => void;
-  setPaymentTerms: (terms: string) => void;
-  setAcceptedPaymentMethods: (methods: string) => void;
   setCustomNote: (note: string) => void;
   setLateFeeText: (text: string) => void;
   setTax: (tax: number) => void;
+  setTaxStructure: (structure: "flat" | "percentage") => void;
+  setDiscountType: (type: "flat" | "percentage") => void;
   setDiscount: (discount: number) => void;
   toggleIsFavorite: () => void;
   setPaymentAccount: (id: string) => void;
@@ -177,7 +177,6 @@ export interface InvoiceFormContextType {
   setUnsavedChanges: (hasChanges: boolean) => void;
   resetForm: () => void;
   formLoading: boolean;
-  isSaving: boolean;
 
   addInvoiceItem: (item: {
     description?: string;

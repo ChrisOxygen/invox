@@ -10,7 +10,6 @@ import {
 import { useUserAndBusiness } from "./useUserAndBusiness";
 import { useGetPaymentAccounts } from "@/hooks/payments/useGetPaymentAccounts";
 import { useGetInvoiceById } from "./useGetInvoiceById";
-import { useInvoiceAutoSave } from "./useInvoiceAutoSave";
 import {
   getValidationErrors,
   validateForm,
@@ -44,13 +43,13 @@ export function useInvoiceFormLogic({
   const formLoading =
     gettingBusinessDetails || gettingPaymentAccounts || isLoadingInvoice;
 
-  // Auto-save functionality
-  const { isAutoSaving } = useInvoiceAutoSave({
-    state,
-    hasInitialized,
-    formLoading,
-    dispatch,
-  });
+  // // Auto-save functionality
+  // const { isAutoSaving } = useInvoiceAutoSave({
+  //   state,
+  //   hasInitialized,
+  //   formLoading,
+  //   dispatch,
+  // });
 
   // Initialize business details and payment accounts
   useEffect(() => {
@@ -196,14 +195,6 @@ export function useInvoiceFormLogic({
         dispatch({ type: "SET_INVOICE_DATE", payload: date });
       },
 
-      setPaymentTerms: (terms: string) => {
-        dispatch({ type: "SET_PAYMENT_TERMS", payload: terms });
-      },
-
-      setAcceptedPaymentMethods: (methods: string) => {
-        dispatch({ type: "SET_ACCEPTED_PAYMENT_METHODS", payload: methods });
-      },
-
       setPaymentAccount: (id: string) => {
         const paymentAccount = paymentAccounts.find(
           (account) => account.id === id
@@ -278,12 +269,11 @@ export function useInvoiceFormLogic({
     [state]
   );
 
-  const isSaving = isAutoSaving;
+  console.log("Invoice Form Logic State:", state);
 
   return {
     formLoading,
     actionHandlers,
     validationMethods,
-    isSaving,
   };
 }

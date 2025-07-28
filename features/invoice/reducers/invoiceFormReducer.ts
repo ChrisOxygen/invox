@@ -10,8 +10,6 @@ export const initialState: InvoiceFormState = {
   invoiceNumber: undefined,
   invoiceDate: new Date(),
   paymentDueDate: null,
-  paymentTerms: "",
-  acceptedPaymentMethods: "",
   invoiceItems: [
     {
       description: "",
@@ -22,6 +20,8 @@ export const initialState: InvoiceFormState = {
   customNote: "Thank you for your trust in our services!",
   tax: 0,
   discount: 0,
+  taxStructure: "flat",
+  discountType: "flat",
   isFavorite: false,
   lateFeeText: "",
   invoiceStatus: "DRAFT",
@@ -82,18 +82,7 @@ export function invoiceFormReducer(
         paymentDueDate: action.payload,
         hasUnsavedChanges: true,
       };
-    case "SET_PAYMENT_TERMS":
-      return {
-        ...state,
-        paymentTerms: action.payload,
-        hasUnsavedChanges: true,
-      };
-    case "SET_ACCEPTED_PAYMENT_METHODS":
-      return {
-        ...state,
-        acceptedPaymentMethods: action.payload,
-        hasUnsavedChanges: true,
-      };
+
     case "SET_INVOICE_ITEMS":
       return {
         ...state,
@@ -146,6 +135,18 @@ export function invoiceFormReducer(
         discount: action.payload,
         hasUnsavedChanges: true,
       };
+    case "SET_TAX_STRUCTURE":
+      return {
+        ...state,
+        taxStructure: action.payload,
+        hasUnsavedChanges: true,
+      };
+    case "SET_DISCOUNT_TYPE":
+      return {
+        ...state,
+        discountType: action.payload,
+        hasUnsavedChanges: true,
+      };
     case "SET_IS_FAVORITE":
       return {
         ...state,
@@ -181,7 +182,6 @@ export function invoiceFormReducer(
         discount: action.payload.discount || 0,
         isFavorite: action.payload.isFavorite || false,
         invoiceItems: action.payload.invoiceItems,
-        acceptedPaymentMethods: action.payload.acceptedPaymentMethods || "",
         // Don't set hasUnsavedChanges when loading existing data
       };
     default:

@@ -8,7 +8,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useInvoiceForm } from "../../index";
 
 function LatenessFeeInput() {
@@ -16,8 +16,17 @@ function LatenessFeeInput() {
   const [customLateFee, setCustomLateFee] = useState<string>("");
   const [showCustomLateFeeInput, setShowCustomLateFeeInput] =
     useState<boolean>(false);
+  const [hasUserTyped, setHasUserTyped] = useState(false);
 
-  const { setLateFeeText } = useInvoiceForm();
+  const { state, setLateFeeText } = useInvoiceForm();
+  const { validation } = state;
+
+  // Reset hasUserTyped when validation state changes (new submit)
+  useEffect(() => {
+    setHasUserTyped(false);
+  }, [validation.isValid, validation.errors.lateFeeText]);
+
+  const hasError = validation.errors.lateFeeText && !hasUserTyped;
 
   const lateFeeOptions = [
     { value: "no-fees", label: "No late fees" },
@@ -27,6 +36,7 @@ function LatenessFeeInput() {
     { value: "custom", label: "Custom amount" },
   ];
   const handleLateFeeSelect = (value: string) => {
+    setHasUserTyped(true);
     setSelectedLateFee(value);
     setLateFeeText(value);
     if (value === "custom") {
@@ -38,6 +48,7 @@ function LatenessFeeInput() {
   };
 
   const handleCustomLateFeeChange = (value: string) => {
+    setHasUserTyped(true);
     setCustomLateFee(value);
     setLateFeeText(value);
   };
@@ -49,7 +60,13 @@ function LatenessFeeInput() {
           Late Fee Options
         </label>
         <Select onValueChange={handleLateFeeSelect} value={selectedLateFee}>
-          <SelectTrigger className="w-full h-11 border-2 border-blue-200 hover:border-blue-400 focus:border-blue-600 focus:ring-2 focus:ring-blue-100 transition-all duration-200 font-inter text-left text-sm sm:text-base">
+          <SelectTrigger
+            className={`w-full h-11 border-2 transition-all duration-200 font-inter text-left text-sm sm:text-base ${
+              hasError
+                ? "border-red-500 hover:border-red-600 focus:border-red-600 focus:ring-2 focus:ring-red-100"
+                : "border-blue-200 hover:border-blue-400 focus:border-blue-600 focus:ring-2 focus:ring-blue-100"
+            }`}
+          >
             <SelectValue placeholder="Select late fee option" />
           </SelectTrigger>
           <SelectContent className="bg-white border-2 border-blue-200 shadow-xl rounded-lg">
@@ -64,6 +81,11 @@ function LatenessFeeInput() {
             ))}
           </SelectContent>
         </Select>
+        {hasError && (
+          <p className="text-red-500 text-sm mt-1">
+            {validation.errors.lateFeeText}
+          </p>
+        )}
 
         {/* Custom late fee input */}
         {showCustomLateFeeInput && (
@@ -72,7 +94,11 @@ function LatenessFeeInput() {
               placeholder="Enter custom amount or percentage"
               value={customLateFee}
               onChange={(e) => handleCustomLateFeeChange(e.target.value)}
-              className="h-11 border-2 border-blue-200 hover:border-blue-400 focus:border-blue-600 focus:ring-2 focus:ring-blue-100 transition-all duration-200 font-inter text-sm sm:text-base"
+              className={`h-11 border-2 transition-all duration-200 font-inter text-sm sm:text-base ${
+                hasError
+                  ? "border-red-500 hover:border-red-600 focus:border-red-600 focus:ring-2 focus:ring-red-100"
+                  : "border-blue-200 hover:border-blue-400 focus:border-blue-600 focus:ring-2 focus:ring-blue-100"
+              }`}
             />
           </div>
         )}

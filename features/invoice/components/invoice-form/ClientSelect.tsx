@@ -9,6 +9,7 @@ import { cn } from "@/lib/utils";
 import { Client } from "@prisma/client";
 import { useGetClients } from "@/features/clients/hooks";
 import { ClientForm } from "@/features/clients/components/ClientForm";
+import { useInvoiceForm } from "../../index";
 
 interface ClientSelectProps {
   value?: Client | null; // Full client object
@@ -25,7 +26,10 @@ export function ClientSelect({
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const [hasUserTyped, setHasUserTyped] = useState(false);
 
+  const { state } = useInvoiceForm();
+  const { validation } = state;
   const { clients, isLoading: isGettingClients, refetch } = useGetClients();
 
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -35,6 +39,13 @@ export function ClientSelect({
 
   // The selected client is now the value itself
   const selectedClient = value;
+
+  // Reset hasUserTyped when validation state changes (new submit)
+  useEffect(() => {
+    setHasUserTyped(false);
+  }, [validation.isValid, validation.errors.client]);
+
+  const hasError = validation.errors.client && !hasUserTyped;
 
   // Debounce search term
   useEffect(() => {
@@ -88,6 +99,7 @@ export function ClientSelect({
     }
   };
   const handleClientSelect = (client: Client) => {
+    setHasUserTyped(true);
     onChange(client);
     setIsOpen(false);
     setSearchTerm("");
@@ -105,6 +117,7 @@ export function ClientSelect({
     setIsOpen(false);
   };
   const handleFormSuccess = (newClient: Client) => {
+    setHasUserTyped(true);
     onChange(newClient);
     refetch(); // Refresh the clients list
   };
@@ -119,8 +132,11 @@ export function ClientSelect({
           onClick={handleToggleDropdown}
           disabled={disabled}
           className={cn(
-            "w-full justify-between h-11 px-4 text-left font-normal border-2 border-blue-200 hover:border-blue-400 focus:border-blue-600 focus:ring-2 focus:ring-blue-100 transition-all duration-200",
+            "w-full justify-between h-11 px-4 text-left font-normal border-2 transition-all duration-200",
             !value && "text-gray-500",
+            hasError
+              ? "border-red-500 hover:border-red-600 focus:border-red-600 focus:ring-2 focus:ring-red-100"
+              : "border-blue-200 hover:border-blue-400 focus:border-blue-600 focus:ring-2 focus:ring-blue-100",
             disabled && "cursor-not-allowed opacity-50"
           )}
         >
@@ -250,6 +266,11 @@ export function ClientSelect({
           </Card>
         )}
       </div>
+
+      {/* Error Message */}
+      {hasError && (
+        <p className="text-red-500 text-sm mt-1">{validation.errors.client}</p>
+      )}
 
       {/* Client Form Dialog */}
       <ClientForm

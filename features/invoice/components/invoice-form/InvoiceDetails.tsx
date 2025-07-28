@@ -8,6 +8,8 @@ import TaxInput from "./TaxInput";
 import PaymentDetailsSelect from "./PaymentDetailsSelect";
 import LatenessFeeInput from "./LatenessFeeInput";
 import DiscountInput from "./DiscountInput";
+import TaxStructureInput from "./TaxStructureInput";
+import DiscountTypeInput from "./DiscountTypeInput";
 
 function InvoiceDetails() {
   const { state, setClient, setPaymentDueDate, setCustomNote } =
@@ -62,14 +64,14 @@ function InvoiceDetails() {
           </div>
         </div>
 
-        {/* Tax and Discount Row */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+        {/* Discount Type and Discount Amount */}
+        <div className="flex flex-col gap-6">
           <div className="flex flex-col gap-3">
             <label className="text-sm font-semibold text-gray-900">
-              Tax Amount
+              Discount Type
             </label>
             <div className="relative">
-              <TaxInput />
+              <DiscountTypeInput />
             </div>
           </div>
           <div className="flex flex-col gap-3">
@@ -78,6 +80,26 @@ function InvoiceDetails() {
             </label>
             <div className="relative">
               <DiscountInput />
+            </div>
+          </div>
+        </div>
+
+        {/* Tax Structure and Tax Amount */}
+        <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-3">
+            <label className="text-sm font-semibold text-gray-900">
+              Tax Structure
+            </label>
+            <div className="relative">
+              <TaxStructureInput />
+            </div>
+          </div>
+          <div className="flex flex-col gap-3">
+            <label className="text-sm font-semibold text-gray-900">
+              Tax Amount
+            </label>
+            <div className="relative">
+              <TaxInput />
             </div>
           </div>
         </div>

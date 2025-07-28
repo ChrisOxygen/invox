@@ -26,6 +26,10 @@ export const initialState: InvoiceFormState = {
   lateFeeText: "",
   invoiceStatus: "DRAFT",
   hasUnsavedChanges: false,
+  validation: {
+    isValid: true,
+    errors: {},
+  },
 };
 
 export function invoiceFormReducer(
@@ -183,6 +187,11 @@ export function invoiceFormReducer(
         isFavorite: action.payload.isFavorite || false,
         invoiceItems: action.payload.invoiceItems,
         // Don't set hasUnsavedChanges when loading existing data
+      };
+    case "SET_VALIDATION":
+      return {
+        ...state,
+        validation: action.payload,
       };
     default:
       return state;

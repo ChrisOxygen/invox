@@ -6,14 +6,12 @@ import {
   InvoiceFormAction,
   FormMode,
   ViewMode,
+  InvoiceValidationResult,
 } from "../types/invoiceForm";
 import { useUserAndBusiness } from "./useUserAndBusiness";
 import { useGetPaymentAccounts } from "@/hooks/payments/useGetPaymentAccounts";
 import { useGetInvoiceById } from "./useGetInvoiceById";
-import {
-  getValidationErrors,
-  validateForm,
-} from "../utils/invoiceFormValidation";
+import { getInvoiceItemErrors } from "../utils";
 
 interface UseInvoiceFormLogicProps {
   state: InvoiceFormState;
@@ -42,14 +40,6 @@ export function useInvoiceFormLogic({
 
   const formLoading =
     gettingBusinessDetails || gettingPaymentAccounts || isLoadingInvoice;
-
-  // // Auto-save functionality
-  // const { isAutoSaving } = useInvoiceAutoSave({
-  //   state,
-  //   hasInitialized,
-  //   formLoading,
-  //   dispatch,
-  // });
 
   // Initialize business details and payment accounts
   useEffect(() => {
@@ -243,6 +233,14 @@ export function useInvoiceFormLogic({
         dispatch({ type: "SET_DISCOUNT", payload: discount });
       },
 
+      setTaxStructure: (structure: "flat" | "percentage") => {
+        dispatch({ type: "SET_TAX_STRUCTURE", payload: structure });
+      },
+
+      setDiscountType: (type: "flat" | "percentage") => {
+        dispatch({ type: "SET_DISCOUNT_TYPE", payload: type });
+      },
+
       toggleIsFavorite: () => {
         dispatch({ type: "SET_IS_FAVORITE" });
       },
@@ -263,10 +261,12 @@ export function useInvoiceFormLogic({
   // Validation methods
   const validationMethods = useMemo(
     () => ({
-      getValidationErrors: () => getValidationErrors(state),
-      validateForm: () => validateForm(state),
+      getValidationErrors: () => getInvoiceItemErrors(state),
+      setValidationErrors: (validation: InvoiceValidationResult) => {
+        dispatch({ type: "SET_VALIDATION", payload: validation });
+      },
     }),
-    [state]
+    [state, dispatch]
   );
 
   console.log("Invoice Form Logic State:", state);

@@ -28,6 +28,7 @@ export interface InvoiceFormState {
   invoiceStatus?: "DRAFT" | "SENT" | "PAID" | "OVERDUE" | "CANCELLED";
   isFavorite: boolean;
   hasUnsavedChanges: boolean;
+  validation: InvoiceValidationResult;
 }
 
 export type InvoiceFormAction =
@@ -151,7 +152,29 @@ export type InvoiceFormAction =
         }[];
         acceptedPaymentMethods?: string;
       };
+    }
+  | {
+      type: "SET_VALIDATION";
+      payload: InvoiceValidationResult;
     };
+
+// create a type for invoice errors thats is an objects of invoices ststes as keys, and an array of strings as values
+export type InvoiceFieldErrors = {
+  [key in keyof InvoiceFormState]?: string[] | string;
+} & {
+  itemErrors?: invoiceItemErrors[];
+};
+
+export type InvoiceValidationResult = {
+  isValid: boolean;
+  errors: InvoiceFieldErrors;
+};
+
+export type invoiceItemErrors = {
+  description?: string; // Description is required
+  quantity?: string; // Quantity must be greater than 0
+  unitPrice?: string; // Unit price cannot be negative
+};
 
 export interface InvoiceFormContextType {
   state: InvoiceFormState;
@@ -190,6 +213,6 @@ export interface InvoiceFormContextType {
   ) => void;
 
   // Validation methods
-  validateForm: () => boolean;
-  getValidationErrors: () => string[];
+  getValidationErrors: () => InvoiceValidationResult;
+  setValidationErrors: (validation: InvoiceValidationResult) => void;
 }

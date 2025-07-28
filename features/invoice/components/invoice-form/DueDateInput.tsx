@@ -21,6 +21,7 @@ import {
 import { cn } from "@/lib/utils";
 import { DUE_DATE_PRESETS } from "@/constants";
 import { calculateDueDate } from "@/utils";
+import { useInvoiceForm } from "../../index";
 
 interface DueDateSelectorProps {
   value: Date | null;
@@ -35,9 +36,20 @@ export function DueDateInput({
   disabled = false,
   placeholder = "Select due date...",
 }: DueDateSelectorProps) {
+  const { state } = useInvoiceForm();
+  const { validation } = state;
+  const [hasUserTyped, setHasUserTyped] = useState(false);
   const [mode, setMode] = useState<"preset" | "custom">("preset");
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [selectedPreset, setSelectedPreset] = useState<string | null>(null);
+
+  // Reset hasUserTyped when validation state changes (new submit)
+  useEffect(() => {
+    setHasUserTyped(false);
+  }, [validation.isValid, validation.errors.paymentDueDate]);
+
+  const hasError = validation.errors.paymentDueDate && !hasUserTyped;
+
   // Find if a date matches any preset
   const findMatchingPreset = useCallback((date: Date): string | null => {
     const today = new Date();
@@ -83,6 +95,7 @@ export function DueDateInput({
       setMode("custom");
       setIsCalendarOpen(true);
     } else {
+      setHasUserTyped(true);
       setMode("preset");
       setSelectedPreset(presetValue);
       const calculatedDate = calculateDueDate(presetValue);
@@ -93,6 +106,7 @@ export function DueDateInput({
   // Handle custom date selection
   const handleDateSelect = (date: Date | undefined) => {
     if (date) {
+      setHasUserTyped(true);
       onChange(date);
       setIsCalendarOpen(false);
     }
@@ -133,7 +147,13 @@ export function DueDateInput({
           onValueChange={handlePresetChange}
           disabled={disabled}
         >
-          <SelectTrigger className="w-full h-11 border-2 border-blue-200 hover:border-blue-400 focus:border-blue-600 focus:ring-2 focus:ring-blue-100 transition-all duration-200">
+          <SelectTrigger
+            className={`w-full h-11 border-2 transition-all duration-200 ${
+              hasError
+                ? "border-red-500 hover:border-red-600 focus:border-red-600 focus:ring-2 focus:ring-red-100"
+                : "border-blue-200 hover:border-blue-400 focus:border-blue-600 focus:ring-2 focus:ring-blue-100"
+            }`}
+          >
             <SelectValue className="" placeholder={placeholder} />
           </SelectTrigger>
           <SelectContent className="bg-white border-2 border-blue-200 shadow-xl rounded-lg">
@@ -155,6 +175,11 @@ export function DueDateInput({
             ))}
           </SelectContent>
         </Select>
+        {hasError && (
+          <p className="text-red-500 text-sm mt-1">
+            {validation.errors.paymentDueDate}
+          </p>
+        )}
       </div>
     );
   }
@@ -183,8 +208,11 @@ export function DueDateInput({
             variant="outline"
             disabled={disabled}
             className={cn(
-              "w-full justify-start text-left font-normal h-11 border-2 border-blue-200 hover:border-blue-400 focus:border-blue-600 focus:ring-2 focus:ring-blue-100 transition-all duration-200",
-              !value && "text-gray-500"
+              "w-full justify-start text-left font-normal h-11 border-2 transition-all duration-200",
+              !value && "text-gray-500",
+              hasError
+                ? "border-red-500 hover:border-red-600 focus:border-red-600 focus:ring-2 focus:ring-red-100"
+                : "border-blue-200 hover:border-blue-400 focus:border-blue-600 focus:ring-2 focus:ring-blue-100"
             )}
           >
             <CalendarDays className="mr-2 h-4 w-4 text-blue-500" />
@@ -205,6 +233,12 @@ export function DueDateInput({
           />
         </PopoverContent>
       </Popover>
+
+      {hasError && (
+        <p className="text-red-500 text-sm mt-1">
+          {validation.errors.paymentDueDate}
+        </p>
+      )}
 
       {/* Custom date help text */}
       <div className="mt-2 text-xs text-gray-500">

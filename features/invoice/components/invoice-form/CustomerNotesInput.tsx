@@ -1,9 +1,10 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
+import { useInvoiceForm } from "../../index";
 
 interface CustomNotesProps {
   value: string;
@@ -27,6 +28,17 @@ export function CustomerNotesInput({
   rows = 4,
   required = false,
 }: CustomNotesProps) {
+  const { state } = useInvoiceForm();
+  const { validation } = state;
+  const [hasUserTyped, setHasUserTyped] = useState(false);
+
+  // Reset hasUserTyped when validation state changes (new submit)
+  useEffect(() => {
+    setHasUserTyped(false);
+  }, [validation.isValid, validation.errors.customNote]);
+
+  const hasError = validation.errors.customNote && !hasUserTyped;
+
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newValue = e.target.value;
 
@@ -35,6 +47,7 @@ export function CustomerNotesInput({
       return;
     }
 
+    setHasUserTyped(true);
     onChange(newValue);
   };
 
@@ -63,10 +76,13 @@ export function CustomerNotesInput({
           disabled={disabled}
           rows={rows}
           className={cn(
-            "resize-none min-h-[100px] border-2 border-blue-200 hover:border-blue-400 focus:border-blue-600 focus:ring-2 focus:ring-blue-100 transition-all duration-200",
+            "resize-none min-h-[100px] border-2 transition-all duration-200",
             "placeholder:text-gray-500",
             "text-gray-900",
             "bg-white",
+            hasError
+              ? "border-red-500 hover:border-red-600 focus:border-red-600 focus:ring-2 focus:ring-red-100"
+              : "border-blue-200 hover:border-blue-400 focus:border-blue-600 focus:ring-2 focus:ring-blue-100",
             disabled && "bg-gray-50 text-gray-500 cursor-not-allowed",
             isAtLimit &&
               "border-red-300 focus:border-red-400 focus:ring-red-400"
@@ -92,6 +108,11 @@ export function CustomerNotesInput({
           </div>
         )}
       </div>
+
+      {/* Error Message */}
+      {hasError && (
+        <p className="text-red-500 text-sm">{validation.errors.customNote}</p>
+      )}
 
       {/* Helper Text */}
       <div className="text-xs text-gray-500">

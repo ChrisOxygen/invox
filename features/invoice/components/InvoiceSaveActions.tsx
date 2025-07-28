@@ -19,12 +19,13 @@ import {
 import { useInvoiceForm } from "../index";
 import { useCreateInvoice, useUpdateInvoice } from "../hooks";
 import { CreateInvoiceInput, UpdateInvoiceInput } from "@/dataSchemas/invoice";
+import { showErrorToast } from "@/components/toast-templates";
 
 type SaveAction = "draft" | "send" | "download" | "exit";
 
 export function InvoiceSaveActions() {
   const router = useRouter();
-  const { state } = useInvoiceForm();
+  const { state, getValidationErrors, setValidationErrors } = useInvoiceForm();
   const [activeAction, setActiveAction] = useState<SaveAction | null>(null);
 
   const { mutate: createInvoice, isPending: isCreating } = useCreateInvoice({
@@ -110,51 +111,68 @@ export function InvoiceSaveActions() {
 
   const handleSaveAsDraft = () => {
     if (!state.client || !state.businessDetails || !state.paymentDueDate) {
-      console.error("Missing required fields");
+      showErrorToast(
+        "error",
+        "Please fill in all required fields before saving."
+      );
       return;
     }
 
-    setActiveAction("draft");
-    const { invoiceItems, subtotal, taxAmount, discountAmount, total } =
-      prepareInvoiceData("DRAFT");
-
-    if (state.invoiceId) {
-      // Update existing invoice
-      const updateData: UpdateInvoiceInput = {
-        invoiceId: state.invoiceId,
-        clientId: state.client.id,
-        invoiceDate: state.invoiceDate || new Date(),
-        paymentDueDate: state.paymentDueDate,
-        items: invoiceItems,
-        subtotal,
-        taxes: taxAmount,
-        discount: discountAmount,
-        total,
-        acceptedPaymentMethods:
-          state.paymentAccount?.gatewayType || "bank-transfer",
-        customNote: state.customNote,
-        lateFeeText: state.lateFeeText,
-      };
-      updateInvoice(updateData);
-    } else {
-      // Create new invoice
-      const createData: CreateInvoiceInput = {
-        clientId: state.client.id,
-        invoiceNumber: state.invoiceNumber,
-        invoiceDate: state.invoiceDate || new Date(),
-        paymentDueDate: state.paymentDueDate,
-        items: invoiceItems,
-        subtotal,
-        taxes: taxAmount,
-        discount: discountAmount,
-        total,
-        acceptedPaymentMethods:
-          state.paymentAccount?.gatewayType || "bank-transfer",
-        customNote: state.customNote,
-        lateFeeText: state.lateFeeText,
-      };
-      createInvoice(createData);
+    const validationResult = getValidationErrors();
+    if (!validationResult.isValid) {
+      // push errors to provider
+      console.log("Validation errors:", validationResult.errors);
+      setValidationErrors(validationResult);
+      showErrorToast(
+        "error",
+        "Please fix the validation errors before saving."
+      );
+      return;
     }
+
+    console.log("Saving invoice as draft...", validationResult);
+
+    // setActiveAction("draft");
+    // const { invoiceItems, subtotal, taxAmount, discountAmount, total } =
+    //   prepareInvoiceData("DRAFT");
+
+    // if (state.invoiceId) {
+    //   // Update existing invoice
+    //   const updateData: UpdateInvoiceInput = {
+    //     invoiceId: state.invoiceId,
+    //     clientId: state.client.id,
+    //     invoiceDate: state.invoiceDate || new Date(),
+    //     paymentDueDate: state.paymentDueDate,
+    //     items: invoiceItems,
+    //     subtotal,
+    //     taxes: taxAmount,
+    //     discount: discountAmount,
+    //     total,
+    //     acceptedPaymentMethods:
+    //       state.paymentAccount?.gatewayType || "bank-transfer",
+    //     customNote: state.customNote,
+    //     lateFeeText: state.lateFeeText,
+    //   };
+    //   updateInvoice(updateData);
+    // } else {
+    //   // Create new invoice
+    //   const createData: CreateInvoiceInput = {
+    //     clientId: state.client.id,
+    //     invoiceNumber: state.invoiceNumber,
+    //     invoiceDate: state.invoiceDate || new Date(),
+    //     paymentDueDate: state.paymentDueDate,
+    //     items: invoiceItems,
+    //     subtotal,
+    //     taxes: taxAmount,
+    //     discount: discountAmount,
+    //     total,
+    //     acceptedPaymentMethods:
+    //       state.paymentAccount?.gatewayType || "bank-transfer",
+    //     customNote: state.customNote,
+    //     lateFeeText: state.lateFeeText,
+    //   };
+    //   createInvoice(createData);
+    // }
   };
 
   const handleSaveAndSend = () => {

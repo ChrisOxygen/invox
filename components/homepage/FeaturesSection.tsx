@@ -2,9 +2,9 @@ import Image from "next/image";
 
 export default function FeaturesSection() {
   return (
-    <section className="py-24 bg-white">
+    <section className=" bg-white">
       <div className="content-wrapper flex flex-col gap-16">
-        <div className="flex justify-between items-start gap-12">
+        <div className="flex flex-col lg:flex-row justify-between items-start gap-12">
           <div className="flex flex-col gap-6">
             <span className="uppercase font-semibold text-blue-600 text-sm tracking-wider">
               Built for Small Business
@@ -17,7 +17,7 @@ export default function FeaturesSection() {
               </span>
             </h2>
           </div>
-          <p className="max-w-[600px] text-gray-600 text-xl leading-relaxed">
+          <p className="lg:max-w-[600px] max-w-full text-gray-600 text-xl leading-relaxed">
             At Invox, we understand the challenges small business owners face
             with invoicing. Our platform is designed to simplify every step of
             the process, from creation to payment. Each feature reflects our

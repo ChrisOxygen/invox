@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function SeenOnSection() {
   return (
-    <section className=" pt-[300px]">
+    <section className=" lg:pt-[300px] pt-5 sm:pt-[200px]">
       <div className="max-w-[1250px] mx-auto flex flex-col items-center py-20 gap-5">
         <span className=" uppercase text-gray-500 text-sm font-semibold">
           as seen on

@@ -14,7 +14,7 @@ export default function FAQSection() {
     setOpenFaqIndex((prevIndex) => (prevIndex === index ? null : index));
   };
   return (
-    <section className="py-24 bg-gray-50 bg-cover bg-right bg-[url('/assets/decor-grid-double-big.webp')]">
+    <section className=" bg-gray-50 bg-cover bg-right bg-[url('/assets/decor-grid-double-big.webp')]">
       <div className="content-wrapper flex flex-col items-center gap-16">
         <div className="flex flex-col items-center gap-6 text-center">
           <span className="uppercase font-semibold text-blue-600 text-sm tracking-wider">

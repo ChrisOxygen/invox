@@ -204,3 +204,22 @@ export const FAQ_DATA = [
       "Yes! You can start with our free plan that includes up to 5 invoices per month. No credit card required to get started, and you can upgrade anytime as your business grows.",
   },
 ];
+
+export const NAVIGATION_LINKS = [
+  {
+    href: "/",
+    label: "Home",
+  },
+  {
+    href: "/about",
+    label: "About",
+  },
+  {
+    href: "/#testimonials",
+    label: "Testimonials",
+  },
+  {
+    href: "/contact",
+    label: "Contact",
+  },
+];

@@ -155,5 +155,5 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 .content-wrapper {
-  @apply max-w-[1250px] mx-auto py-25;
+  @apply max-w-[1250px] mx-auto px-5 lg:px-0 py-25;
 }

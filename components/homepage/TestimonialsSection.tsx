@@ -2,7 +2,7 @@ import { FaStar } from "react-icons/fa";
 
 export default function TestimonialsSection() {
   return (
-    <section className="py-24 bg-white">
+    <section className=" bg-white">
       <div className="content-wrapper flex flex-col items-center gap-16">
         <div className="flex flex-col items-center gap-6 text-center">
           <span className="uppercase font-semibold text-blue-600 text-sm tracking-wider">

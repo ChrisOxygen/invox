@@ -5,9 +5,9 @@ import ExternalNavMenu from "../ExternalNavMenu";
 
 export default function HeroSection() {
   return (
-    <section className=" h-screen grid grid-rows-[80px_1fr] w-full bg-cover bg-[url('/assets/bg-scaled.webp')]">
+    <section className=" lg:h-screen   grid grid-rows-[80px_1fr] w-full bg-cover bg-[url('/assets/bg-scaled.webp')]">
       <ExternalNavMenu />
-      <div className="row-start-2 flex flex-col gap-7 items-center justify-center">
+      <div className="row-start-2 mt-20 lg:mt-0 flex flex-col gap-7 items-center px-5 lg:px-0 justify-center">
         <div className="flex flex-col items-center text-center max-w-4xl mx-auto px-6">
           <h1 className="text-4xl md:text-5xl lg:text-5xl font-bold bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent mb-6 leading-tight">
             From Draft to Payment: <br />
@@ -29,7 +29,7 @@ export default function HeroSection() {
             </Link>
           </div>
         </div>
-        <div className=" w-full max-w-[1400px] -mb-[500px]">
+        <div className=" w-full max-w-[1400px] -mb-[50px] sm:-mb-[200px] lg:-mb-[500px]">
           <Image
             src="/assets/custom-img-08.webp"
             alt="Invoice Hero Image"

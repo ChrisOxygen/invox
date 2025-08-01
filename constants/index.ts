@@ -176,3 +176,31 @@ export const INVOICES_CHART_DATA = {
     { day: "Sunday", sent: 6, paid: 3 },
   ],
 };
+
+export const FAQ_DATA = [
+  {
+    question: "How quickly can I create my first invoice?",
+    answer:
+      "You can create and send your first professional invoice in under 2 minutes. Simply choose a template, add your client details and services, and hit send. No setup required.",
+  },
+  {
+    question: "What payment methods can my clients use?",
+    answer:
+      "Invox supports all major payment methods including credit cards, debit cards, bank transfers, and popular digital wallets. Your clients can pay however they prefer.",
+  },
+  {
+    question: "Do you charge transaction fees?",
+    answer:
+      "We keep our pricing transparent with no hidden fees. Standard payment processing rates apply (2.9% + 30¢ for card payments), but there are no additional transaction fees from Invox.",
+  },
+  {
+    question: "Can I track which invoices have been viewed or paid?",
+    answer:
+      "Absolutely. You'll receive real-time notifications when clients view your invoices, and our dashboard shows the status of all your invoices at a glance - draft, sent, viewed, or paid.",
+  },
+  {
+    question: "Is there a free trial available?",
+    answer:
+      "Yes! You can start with our free plan that includes up to 5 invoices per month. No credit card required to get started, and you can upgrade anytime as your business grows.",
+  },
+];

@@ -153,3 +153,7 @@ input[type="number"]::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
+
+.content-wrapper {
+  @apply max-w-[1250px] mx-auto py-25;
+}

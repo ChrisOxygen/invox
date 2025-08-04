@@ -223,3 +223,18 @@ export const NAVIGATION_LINKS = [
     label: "Contact",
   },
 ];
+
+export const LEGAL_LINKS = [
+  {
+    href: "/terms-of-service",
+    label: "Terms of Service",
+  },
+  {
+    href: "/privacy-policy",
+    label: "Privacy Policy",
+  },
+  {
+    href: "/cookie-policy",
+    label: "Cookie Policy",
+  },
+];

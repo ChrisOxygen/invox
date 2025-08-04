@@ -1,7 +1,8 @@
 import { LEGAL_LINKS, NAVIGATION_LINKS } from "@/constants";
 import Image from "next/image";
 import Link from "next/link";
-import { FaLinkedin, FaTwitter, FaInstagram, FaGithub } from "react-icons/fa";
+import { FaLinkedin, FaGithub } from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6";
 
 function ExternalFooter() {
   return (
@@ -63,25 +64,25 @@ function ExternalFooter() {
 
             <div className="flex gap-4 sm:gap-5">
               <Link
-                href=""
+                href="https://www.linkedin.com/in/christopher-okafor-17084416b/"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="text-gray-500 hover:text-blue-600 transition-all duration-300 transform hover:scale-110 hover:shadow-lg p-2 rounded-lg hover:bg-white/50 cursor-pointer"
               >
                 <FaLinkedin className="w-6 h-6 sm:w-7 sm:h-7" />
               </Link>
               <Link
-                href=""
+                href="https://x.com/chris_okafor_x"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="text-gray-500 hover:text-blue-600 transition-all duration-300 transform hover:scale-110 hover:shadow-lg p-2 rounded-lg hover:bg-white/50 cursor-pointer"
               >
-                <FaTwitter className="w-6 h-6 sm:w-7 sm:h-7" />
+                <FaXTwitter className="w-6 h-6 sm:w-7 sm:h-7" />
               </Link>
               <Link
-                href=""
-                className="text-gray-500 hover:text-blue-600 transition-all duration-300 transform hover:scale-110 hover:shadow-lg p-2 rounded-lg hover:bg-white/50 cursor-pointer"
-              >
-                <FaInstagram className="w-6 h-6 sm:w-7 sm:h-7" />
-              </Link>
-              <Link
-                href=""
+                href="https://github.com/ChrisOxygen"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="text-gray-500 hover:text-blue-600 transition-all duration-300 transform hover:scale-110 hover:shadow-lg p-2 rounded-lg hover:bg-white/50 cursor-pointer"
               >
                 <FaGithub className="w-6 h-6 sm:w-7 sm:h-7" />
@@ -97,10 +98,12 @@ function ExternalFooter() {
           <div className="text-gray-600 text-sm sm:text-base order-1 sm:order-2">
             Built with <span className="text-red-500 animate-pulse">❤️</span> by{" "}
             <Link
-              href=""
+              href="https://github.com/ChrisOxygen"
+              target="_blank"
+              rel="noopener noreferrer"
               className="text-blue-600 hover:text-blue-700 font-medium transition-all duration-200 hover:underline cursor-pointer"
             >
-              Your Company Name
+              Chris Okafor
             </Link>
           </div>
         </div>

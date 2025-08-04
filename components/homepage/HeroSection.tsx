@@ -18,12 +18,15 @@ export default function HeroSection() {
             automated reminders and seamless payment processing.
           </p>
           <div className="flex flex-col items-center gap-2">
-            <Button className="bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white font-medium py-6 sm:py-7 px-8 sm:px-12 rounded-lg border-0 shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105 text-base sm:text-lg">
-              Create Your First Invoice
+            <Button
+              asChild
+              className="bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white font-medium py-6 sm:py-7 px-8 sm:px-12 rounded-lg border-0 shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105 text-base sm:text-lg cursor-pointer"
+            >
+              <Link href="/signup">Create Your First Invoice</Link>
             </Button>
             <Link
               href="/about"
-              className="text-gray-800 text-xs sm:text-sm hover:text-cyan-500 font-medium hover:underline transition-all duration-200"
+              className="text-gray-800 text-xs sm:text-sm hover:text-cyan-500 font-medium hover:underline transition-all duration-200 cursor-pointer"
             >
               Watch how it works
             </Link>

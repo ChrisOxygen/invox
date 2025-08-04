@@ -48,7 +48,7 @@ function ExternalNavMenu() {
               <li key={link.href}>
                 <Link
                   href={link.href}
-                  className="text-gray-800 hover:text-blue-600 font-medium transition-all duration-200 hover:underline"
+                  className="text-gray-800 hover:text-blue-600 font-medium transition-all duration-200 hover:underline cursor-pointer"
                 >
                   {link.label}
                 </Link>
@@ -57,13 +57,19 @@ function ExternalNavMenu() {
           </menu>
         </nav>
         <div className="hidden lg:flex gap-3 items-center justify-end">
-          <Button className="bg-transparent text-blue-600 hover:bg-transparent hover:text-blue-700 font-medium py-3 px-7 rounded-lg border border-blue-600 transition-all duration-200 transform hover:scale-105 flex items-center gap-2">
+          <Button
+            asChild
+            className="bg-transparent text-blue-600 hover:bg-transparent hover:text-blue-700 font-medium py-3 px-7 rounded-lg border border-blue-600 transition-all duration-200 transform hover:scale-105 cursor-pointer"
+          >
             <Link href="/login" className="flex items-center gap-2">
               <FiLogIn className="w-5 h-5 mr-1" />
               Login
             </Link>
           </Button>
-          <Button className="bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white font-medium py-3 px-9 rounded-lg border-0 shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105 flex items-center gap-2">
+          <Button
+            asChild
+            className="bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white font-medium py-3 px-9 rounded-lg border-0 shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105 cursor-pointer"
+          >
             <Link href="/signup" className="flex items-center gap-2 text-white">
               Get Started
               <FiUserPlus className="w-5 h-5 ml-1" />
@@ -71,7 +77,10 @@ function ExternalNavMenu() {
           </Button>
         </div>
         <div className="lg:hidden  col-start-3 flex gap-3 items-center justify-end">
-          <Button className="bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white font-medium py-2 sm:py-3 px-4 sm:px-6 lg:px-9 rounded-lg border-0 shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105 flex items-center gap-1 sm:gap-2 text-sm sm:text-base">
+          <Button
+            asChild
+            className="bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white font-medium py-2 sm:py-3 px-4 sm:px-6 lg:px-9 rounded-lg border-0 shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105 text-sm sm:text-base cursor-pointer"
+          >
             <Link
               href="/signup"
               className="flex items-center gap-1 sm:gap-2 text-white"

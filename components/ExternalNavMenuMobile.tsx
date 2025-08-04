@@ -47,7 +47,7 @@ export function ExternalNavMenuMobile() {
                   <Link
                     href={link.href}
                     className={`
-                      block w-full text-left px-4 py-3 font-medium transition-all duration-200 transform hover:scale-[1.02]
+                      block w-full text-left px-4 py-3 font-medium transition-all duration-200 transform hover:scale-[1.02] cursor-pointer
                       ${
                         isActiveLink(link.href)
                           ? "bg-gradient-to-r from-transparent to-blue-600 border-r-2 border-blue-600 via-cyan-500 text-gray-700"
@@ -68,7 +68,7 @@ export function ExternalNavMenuMobile() {
             <SheetTrigger asChild>
               <Button
                 asChild
-                className="w-full bg-transparent text-blue-600 hover:bg-blue-50 hover:text-blue-700 font-medium py-3 px-6 rounded-lg border-2 border-blue-600 hover:border-blue-700 transition-all duration-200 transform hover:scale-[1.02]"
+                className="w-full bg-transparent text-blue-600 hover:bg-blue-50 hover:text-blue-700 font-medium py-3 px-6 rounded-lg border-2 border-blue-600 hover:border-blue-700 transition-all duration-200 transform hover:scale-[1.02] cursor-pointer"
               >
                 <Link
                   href="/login"
@@ -82,7 +82,7 @@ export function ExternalNavMenuMobile() {
             <SheetTrigger asChild>
               <Button
                 asChild
-                className="w-full bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white font-medium py-3 px-6 rounded-lg border-0 shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02]"
+                className="w-full bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white font-medium py-3 px-6 rounded-lg border-0 shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02] cursor-pointer"
               >
                 <Link
                   href="/signup"

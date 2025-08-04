@@ -32,7 +32,7 @@ function ExternalFooter() {
                   <li key={link.href}>
                     <Link
                       href={link.href}
-                      className="text-gray-800 hover:text-blue-600 text-lg sm:text-xl lg:text-2xl font-medium transition-all duration-200 hover:underline hover:scale-105"
+                      className="text-gray-800 hover:text-blue-600 text-lg sm:text-xl lg:text-2xl font-medium transition-all duration-200 hover:underline hover:scale-105 cursor-pointer"
                     >
                       {link.label}
                     </Link>
@@ -53,7 +53,7 @@ function ExternalFooter() {
                 >
                   <Link
                     href={link.href}
-                    className="text-gray-600 hover:text-blue-600 italic font-medium text-sm sm:text-base transition-all duration-200 hover:underline"
+                    className="text-gray-600 hover:text-blue-600 italic font-medium text-sm sm:text-base transition-all duration-200 hover:underline cursor-pointer"
                   >
                     {link.label}
                   </Link>
@@ -64,25 +64,25 @@ function ExternalFooter() {
             <div className="flex gap-4 sm:gap-5">
               <Link
                 href=""
-                className="text-gray-500 hover:text-blue-600 transition-all duration-300 transform hover:scale-110 hover:shadow-lg p-2 rounded-lg hover:bg-white/50"
+                className="text-gray-500 hover:text-blue-600 transition-all duration-300 transform hover:scale-110 hover:shadow-lg p-2 rounded-lg hover:bg-white/50 cursor-pointer"
               >
                 <FaLinkedin className="w-6 h-6 sm:w-7 sm:h-7" />
               </Link>
               <Link
                 href=""
-                className="text-gray-500 hover:text-blue-600 transition-all duration-300 transform hover:scale-110 hover:shadow-lg p-2 rounded-lg hover:bg-white/50"
+                className="text-gray-500 hover:text-blue-600 transition-all duration-300 transform hover:scale-110 hover:shadow-lg p-2 rounded-lg hover:bg-white/50 cursor-pointer"
               >
                 <FaTwitter className="w-6 h-6 sm:w-7 sm:h-7" />
               </Link>
               <Link
                 href=""
-                className="text-gray-500 hover:text-blue-600 transition-all duration-300 transform hover:scale-110 hover:shadow-lg p-2 rounded-lg hover:bg-white/50"
+                className="text-gray-500 hover:text-blue-600 transition-all duration-300 transform hover:scale-110 hover:shadow-lg p-2 rounded-lg hover:bg-white/50 cursor-pointer"
               >
                 <FaInstagram className="w-6 h-6 sm:w-7 sm:h-7" />
               </Link>
               <Link
                 href=""
-                className="text-gray-500 hover:text-blue-600 transition-all duration-300 transform hover:scale-110 hover:shadow-lg p-2 rounded-lg hover:bg-white/50"
+                className="text-gray-500 hover:text-blue-600 transition-all duration-300 transform hover:scale-110 hover:shadow-lg p-2 rounded-lg hover:bg-white/50 cursor-pointer"
               >
                 <FaGithub className="w-6 h-6 sm:w-7 sm:h-7" />
               </Link>
@@ -98,7 +98,7 @@ function ExternalFooter() {
             Built with <span className="text-red-500 animate-pulse">❤️</span> by{" "}
             <Link
               href=""
-              className="text-blue-600 hover:text-blue-700 font-medium transition-all duration-200 hover:underline"
+              className="text-blue-600 hover:text-blue-700 font-medium transition-all duration-200 hover:underline cursor-pointer"
             >
               Your Company Name
             </Link>

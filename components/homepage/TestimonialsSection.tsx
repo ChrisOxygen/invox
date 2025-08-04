@@ -5,17 +5,17 @@ export default function TestimonialsSection() {
     <section className=" bg-white">
       <div className="content-wrapper flex flex-col items-center gap-16">
         <div className="flex flex-col items-center gap-6 text-center">
-          <span className="uppercase font-semibold text-blue-600 text-sm tracking-wider">
+          <span className="uppercase font-semibold text-blue-600 text-xs sm:text-sm tracking-wider">
             Hear from our customers
           </span>
-          <h2 className="font-bold text-4xl text-center max-w-[500px] text-gray-900 leading-tight">
+          <h2 className="font-bold text-2xl sm:text-3xl lg:text-4xl text-center max-w-[500px] text-gray-900 leading-tight">
             What our users are saying about
             <span className="bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
               {" "}
               Invox
             </span>
           </h2>
-          <p className="text-xl text-gray-600 max-w-[600px] leading-relaxed">
+          <p className="text-base sm:text-lg lg:text-xl text-gray-600 max-w-[600px] leading-relaxed">
             Don&apos;t just take our word for it - see what our customers have
             to say about their experience
           </p>
@@ -26,14 +26,14 @@ export default function TestimonialsSection() {
             <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-200/20 to-cyan-200/20 rounded-full blur-3xl"></div>
             <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-br from-cyan-200/20 to-blue-200/20 rounded-full blur-3xl"></div>
 
-            <div className="flex gap-1 items-center text-3xl text-yellow-400 relative z-10">
+            <div className="flex gap-1 items-center text-2xl sm:text-3xl text-yellow-400 relative z-10">
               <FaStar />
               <FaStar />
               <FaStar />
               <FaStar />
               <FaStar />
             </div>
-            <blockquote className="font-medium text-2xl text-gray-800 leading-relaxed italic relative z-10">
+            <blockquote className="font-medium text-lg sm:text-xl lg:text-2xl text-gray-800 leading-relaxed italic relative z-10">
               &ldquo;Invox has completely streamlined my invoicing process. The
               interface is clean and intuitive - I can create professional
               invoices in minutes instead of hours. The automated payment
@@ -43,8 +43,10 @@ export default function TestimonialsSection() {
               looking to simplify their billing!&rdquo;
             </blockquote>
             <div className="flex flex-col items-center gap-2 relative z-10">
-              <span className="font-bold text-gray-900 text-xl">Sarah M.</span>
-              <span className="text-blue-600 font-medium text-base">
+              <span className="font-bold text-gray-900 text-lg sm:text-xl">
+                Sarah M.
+              </span>
+              <span className="text-blue-600 font-medium text-sm sm:text-base">
                 Freelance Designer
               </span>
             </div>

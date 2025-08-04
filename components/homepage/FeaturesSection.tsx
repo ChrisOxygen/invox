@@ -6,10 +6,10 @@ export default function FeaturesSection() {
       <div className="content-wrapper flex flex-col gap-16">
         <div className="flex flex-col lg:flex-row justify-between items-start gap-12">
           <div className="flex flex-col gap-6">
-            <span className="uppercase font-semibold text-blue-600 text-sm tracking-wider">
+            <span className="uppercase font-semibold text-blue-600 text-xs sm:text-sm tracking-wider">
               Built for Small Business
             </span>
-            <h2 className="font-bold text-4xl max-w-[500px] text-gray-900 leading-tight">
+            <h2 className="font-bold text-2xl sm:text-3xl lg:text-4xl max-w-[500px] text-gray-900 leading-tight">
               Streamlining invoicing for
               <span className="bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
                 {" "}
@@ -17,7 +17,7 @@ export default function FeaturesSection() {
               </span>
             </h2>
           </div>
-          <p className="lg:max-w-[600px] max-w-full text-gray-600 text-xl leading-relaxed">
+          <p className="lg:max-w-[600px] max-w-full text-gray-600 text-base sm:text-lg lg:text-xl leading-relaxed">
             At Invox, we understand the challenges small business owners face
             with invoicing. Our platform is designed to simplify every step of
             the process, from creation to payment. Each feature reflects our
@@ -36,10 +36,10 @@ export default function FeaturesSection() {
                 className="object-contain filter brightness-0 invert"
               />
             </div>
-            <h4 className="font-bold text-xl text-gray-900">
+            <h4 className="font-bold text-lg sm:text-xl text-gray-900">
               Smart Invoice Creation
             </h4>
-            <p className="text-gray-600 text-base leading-relaxed">
+            <p className="text-gray-600 text-sm sm:text-base leading-relaxed">
               Create professional invoices in seconds with customizable
               templates designed for your industry.
             </p>
@@ -54,10 +54,10 @@ export default function FeaturesSection() {
                 className="object-contain filter brightness-0 invert"
               />
             </div>
-            <h4 className="font-bold text-xl text-gray-900">
+            <h4 className="font-bold text-lg sm:text-xl text-gray-900">
               Automated Reminders
             </h4>
-            <p className="text-gray-600 text-base leading-relaxed">
+            <p className="text-gray-600 text-sm sm:text-base leading-relaxed">
               Never chase payments again with smart, automated follow-up
               reminders that get results.
             </p>
@@ -72,10 +72,10 @@ export default function FeaturesSection() {
                 className="object-contain filter brightness-0 invert"
               />
             </div>
-            <h4 className="font-bold text-xl text-gray-900">
+            <h4 className="font-bold text-lg sm:text-xl text-gray-900">
               Instant Payments
             </h4>
-            <p className="text-gray-600 text-base leading-relaxed">
+            <p className="text-gray-600 text-sm sm:text-base leading-relaxed">
               Accept credit cards, bank transfers, and digital payments with
               seamless integration.
             </p>
@@ -90,10 +90,10 @@ export default function FeaturesSection() {
                 className="object-contain filter brightness-0 invert"
               />
             </div>
-            <h4 className="font-bold text-xl text-gray-900">
+            <h4 className="font-bold text-lg sm:text-xl text-gray-900">
               Real-time Analytics
             </h4>
-            <p className="text-gray-600 text-base leading-relaxed">
+            <p className="text-gray-600 text-sm sm:text-base leading-relaxed">
               Track your revenue, outstanding payments, and cash flow with
               detailed reporting dashboards.
             </p>

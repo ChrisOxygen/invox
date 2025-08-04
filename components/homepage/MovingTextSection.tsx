@@ -2,10 +2,10 @@
 
 function MovingTextSection() {
   return (
-    <section className="py-20 overflow-hidden">
+    <section className="py-10 overflow-hidden">
       <div className="relative">
         <div
-          className="flex items-center whitespace-nowrap text-8xl md:text-9xl lg:text-[12rem] font-semibold text-gray-100 uppercase tracking-wider"
+          className="flex items-center whitespace-nowrap text-5xl sm:text-6xl md:text-8xl lg:text-9xl xl:text-[12rem] font-semibold text-gray-100 uppercase tracking-wider"
           style={{
             animation: "scroll-text 30s linear infinite",
             minWidth: "300%",

@@ -29,7 +29,7 @@ export function ExternalNavMenuMobile() {
     <Sheet>
       <SheetTrigger asChild>
         <span className=" cursor-pointer text-gray-700 hover:text-blue-600 transition-all duration-200">
-          <FiMenu className="text-4xl" />
+          <FiMenu className="md:text-4xl text-2xl" />
         </span>
       </SheetTrigger>
       <SheetContent className="w-80 sm:w-96">

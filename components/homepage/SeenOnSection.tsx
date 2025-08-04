@@ -4,7 +4,7 @@ export default function SeenOnSection() {
   return (
     <section className=" lg:pt-[300px] pt-5 sm:pt-[200px]">
       <div className="max-w-[1250px] mx-auto flex flex-col items-center py-20 gap-5">
-        <span className=" uppercase text-gray-500 text-sm font-semibold">
+        <span className=" uppercase text-gray-500 text-xs sm:text-sm font-semibold">
           as seen on
         </span>
         <div className=" flex items-center gap-7 relative overflow-x-clip">

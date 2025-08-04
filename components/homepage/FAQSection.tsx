@@ -17,17 +17,17 @@ export default function FAQSection() {
     <section className=" bg-gray-50 bg-cover bg-right bg-[url('/assets/decor-grid-double-big.webp')]">
       <div className="content-wrapper flex flex-col items-center gap-16">
         <div className="flex flex-col items-center gap-6 text-center">
-          <span className="uppercase font-semibold text-blue-600 text-sm tracking-wider">
+          <span className="uppercase font-semibold text-blue-600 text-xs sm:text-sm tracking-wider">
             Got Questions?
           </span>
-          <h2 className="font-bold text-4xl text-center max-w-[500px] text-gray-900 leading-tight">
+          <h2 className="font-bold text-2xl sm:text-3xl lg:text-4xl text-center max-w-[500px] text-gray-900 leading-tight">
             Everything you need to know about
             <span className="bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
               {" "}
               Invox
             </span>
           </h2>
-          <p className="text-xl text-gray-600 max-w-[600px] leading-relaxed">
+          <p className="text-base sm:text-lg lg:text-xl text-gray-600 max-w-[600px] leading-relaxed">
             Find answers to the most common questions about our invoice
             management platform
           </p>
@@ -47,7 +47,7 @@ export default function FAQSection() {
                 className="w-full p-6 bg-transparent cursor-pointer flex justify-between items-center text-left hover:bg-gray-50 transition-all duration-200"
                 onClick={() => toggleFaq(index)}
               >
-                <h3 className="font-semibold text-xl text-gray-900 leading-relaxed">
+                <h3 className="font-semibold text-lg sm:text-xl text-gray-900 leading-relaxed">
                   {faq.question}
                 </h3>
                 <span
@@ -57,9 +57,9 @@ export default function FAQSection() {
                   )}
                 >
                   {openFaqIndex === index ? (
-                    <FaMinus className="w-5 h-5" />
+                    <FaMinus className="w-4 h-4 sm:w-5 sm:h-5" />
                   ) : (
-                    <FaPlus className="w-5 h-5" />
+                    <FaPlus className="w-4 h-4 sm:w-5 sm:h-5" />
                   )}
                 </span>
               </button>
@@ -71,7 +71,7 @@ export default function FAQSection() {
                     : "max-h-0 opacity-0"
                 )}
               >
-                <p className="text-gray-600 text-lg leading-relaxed px-6 pb-6 border-t border-gray-100">
+                <p className="text-gray-600 text-base sm:text-lg leading-relaxed px-6 pb-6 border-t border-gray-100">
                   {faq.answer}
                 </p>
               </div>

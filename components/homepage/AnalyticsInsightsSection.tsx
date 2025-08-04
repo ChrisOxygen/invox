@@ -11,10 +11,10 @@ export default function AnalyticsInsightsSection() {
         <div className="basis-1/2 flex flex-col gap-12">
           <div className="flex flex-col gap-6">
             <div className="flex flex-col gap-4">
-              <span className="uppercase font-semibold text-blue-600 text-sm tracking-wider">
+              <span className="uppercase font-semibold text-blue-600 text-xs sm:text-sm tracking-wider">
                 Smart business intelligence
               </span>
-              <h2 className="font-bold text-4xl max-w-[400px] text-gray-900 leading-tight">
+              <h2 className="font-bold text-2xl sm:text-3xl lg:text-4xl max-w-[400px] text-gray-900 leading-tight">
                 Get powerful
                 <span className="bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
                   {" "}
@@ -23,7 +23,7 @@ export default function AnalyticsInsightsSection() {
               </h2>
             </div>
 
-            <p className="lg:max-w-[600px] max-w-full text-gray-600 text-xl leading-relaxed">
+            <p className="lg:max-w-[600px] max-w-full text-gray-600 text-base sm:text-lg lg:text-xl leading-relaxed">
               Invox transforms your invoicing data into actionable business
               intelligence. Our advanced analytics help you understand payment
               patterns, identify your best clients, and optimize your cash flow
@@ -35,10 +35,10 @@ export default function AnalyticsInsightsSection() {
               <div className="size-16 rounded-xl mb-3 grid place-items-center text-3xl bg-gradient-to-br from-blue-600 to-cyan-500 text-white shadow-lg">
                 <TbFileAnalytics />
               </div>
-              <h4 className="font-bold text-2xl text-gray-900 leading-tight">
+              <h4 className="font-bold text-lg sm:text-xl lg:text-2xl text-gray-900 leading-tight">
                 Cash Flow Forecasting
               </h4>
-              <p className="text-gray-600 text-base leading-relaxed">
+              <p className="text-gray-600 text-sm sm:text-base leading-relaxed">
                 Predict your future revenue with intelligent forecasting based
                 on your invoicing history and payment patterns.
               </p>
@@ -47,10 +47,10 @@ export default function AnalyticsInsightsSection() {
               <div className="size-16 rounded-xl mb-3 grid place-items-center text-3xl bg-gradient-to-br from-blue-600 to-cyan-500 text-white shadow-lg">
                 <GrDocumentPerformance />
               </div>
-              <h4 className="font-bold text-2xl text-gray-900 leading-tight">
+              <h4 className="font-bold text-lg sm:text-xl lg:text-2xl text-gray-900 leading-tight">
                 Performance Analytics
               </h4>
-              <p className="text-gray-600 text-base leading-relaxed">
+              <p className="text-gray-600 text-sm sm:text-base leading-relaxed">
                 Identify your most valuable clients and track payment behaviors
                 to strengthen business relationships.
               </p>

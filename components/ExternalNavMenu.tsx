@@ -39,7 +39,7 @@ function ExternalNavMenu() {
             alt="Logo"
             width={120}
             height={50}
-            className="object-contain"
+            className="object-contain w-20 sm:w-24 md:w-[120px] h-auto"
           />
         </Link>
         <nav className="justify-center hidden lg:flex">
@@ -71,10 +71,13 @@ function ExternalNavMenu() {
           </Button>
         </div>
         <div className="lg:hidden  col-start-3 flex gap-3 items-center justify-end">
-          <Button className="bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white font-medium py-3 px-9 rounded-lg border-0 shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105 flex items-center gap-2">
-            <Link href="/signup" className="flex items-center gap-2 text-white">
+          <Button className="bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white font-medium py-2 sm:py-3 px-4 sm:px-6 lg:px-9 rounded-lg border-0 shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105 flex items-center gap-1 sm:gap-2 text-sm sm:text-base">
+            <Link
+              href="/signup"
+              className="flex items-center gap-1 sm:gap-2 text-white"
+            >
               Get Started
-              <FiUserPlus className="w-5 h-5 ml-1" />
+              <FiUserPlus className="w-4 h-4 sm:w-5 sm:h-5 ml-0.5 sm:ml-1" />
             </Link>
           </Button>
           <ExternalNavMenuMobile />

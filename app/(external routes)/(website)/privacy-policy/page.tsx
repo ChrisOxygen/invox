@@ -2,7 +2,7 @@ import InnerPageHeader from "@/components/InnerPageHeader";
 
 export default function PrivacyPolicyPage() {
   return (
-    <main className="">
+    <>
       <InnerPageHeader
         title="Privacy Policy"
         description="Learn how we collect, use, and protect your personal information"
@@ -345,6 +345,6 @@ export default function PrivacyPolicyPage() {
           </div>
         </div>
       </section>
-    </main>
+    </>
   );
 }

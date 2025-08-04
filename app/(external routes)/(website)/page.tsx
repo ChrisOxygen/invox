@@ -1,4 +1,3 @@
-import ExternalFooter from "@/components/ExternalFooter";
 import {
   HeroSection,
   FeaturesSection,
@@ -12,7 +11,7 @@ import MovingTextSection from "@/components/homepage/MovingTextSection";
 
 export default function HomePage() {
   return (
-    <main className="">
+    <>
       <HeroSection />
       <SeenOnSection />
       <FeaturesSection />
@@ -24,7 +23,6 @@ export default function HomePage() {
       <TestimonialsSection />
       <FAQSection />
       <CTASection />
-      <ExternalFooter />
-    </main>
+    </>
   );
 }

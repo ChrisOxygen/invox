@@ -22,14 +22,14 @@ function CTASection() {
             <div className="flex flex-col sm:flex-row gap-4 sm:gap-5 items-center justify-center w-full sm:w-auto">
               <Button
                 asChild
-                className="w-full sm:w-auto bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white font-medium py-3 sm:py-4 lg:py-6 px-6 sm:px-8 lg:px-12 rounded-lg border-0 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 text-base sm:text-lg cursor-pointer"
+                className="w-full sm:w-auto bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white font-medium sm:py-4 py-6 px-6 sm:px-8 lg:px-12 rounded-lg border-0 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 text-base sm:text-lg cursor-pointer"
               >
                 <Link href="/signup">Create Your First Invoice</Link>
               </Button>
 
               <Button
                 asChild
-                className="w-full sm:w-auto bg-white/10 backdrop-blur-sm border-2 border-white/30 text-white hover:bg-white/20 hover:border-white/50 font-medium py-3 sm:py-4 lg:py-6 px-6 sm:px-8 lg:px-12 rounded-lg shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 text-base sm:text-lg cursor-pointer"
+                className="w-full sm:w-auto bg-white/10 backdrop-blur-sm border-2 border-white/30 text-white hover:bg-white/20 hover:border-white/50 font-medium py-6 px-6 sm:px-8 lg:px-12 rounded-lg shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 text-base sm:text-lg cursor-pointer"
               >
                 <Link href="/about">Learn More</Link>
               </Button>

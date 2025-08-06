@@ -1,7 +1,16 @@
+import { FAQSection, TestimonialsSection } from "@/components/homepage";
+import CTASection from "@/components/homepage/CTASection";
+import MovingTextSection from "@/components/homepage/MovingTextSection";
+
 export default function AboutPage() {
   return (
-    <div>
-      <h1>About</h1>
-    </div>
+    <>
+      <section className=""></section>
+      <MovingTextSection />
+
+      <TestimonialsSection />
+      <FAQSection />
+      <CTASection />
+    </>
   );
 }

@@ -1,12 +1,13 @@
 "use client";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { CreateInvoiceInput } from "@/dataSchemas/invoice";
-import { InvoiceResponse } from "@/types/api/invoice";
+import { ZCreateInvoiceInput } from "@/dataSchemas/invoice";
+
 import { _createInvoice } from "../actions";
+import { ApiResponse } from "@/types";
 
 interface UseCreateInvoiceOptions {
-  onSuccess?: (data: InvoiceResponse) => void;
+  onSuccess?: (invoiceId: string) => void;
   onError?: (error: string) => void;
 }
 
@@ -15,7 +16,9 @@ export function useCreateInvoice(options?: UseCreateInvoiceOptions) {
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
-    mutationFn: async (data: CreateInvoiceInput) => {
+    mutationFn: async (
+      data: ZCreateInvoiceInput
+    ): Promise<ApiResponse<string>> => {
       const result = await _createInvoice(data);
 
       if (!result.success) {
@@ -24,12 +27,15 @@ export function useCreateInvoice(options?: UseCreateInvoiceOptions) {
 
       return result;
     },
-    onSuccess: (data) => {
+    onSuccess: (result) => {
       // Invalidate and refetch invoice-related queries
       queryClient.invalidateQueries({ queryKey: ["invoices"] });
       queryClient.invalidateQueries({ queryKey: ["invoice-stats"] });
 
-      options?.onSuccess?.(data);
+      // Call the success callback with the invoice ID
+      if (result.data) {
+        options?.onSuccess?.(result.data);
+      }
     },
     onError: (error: Error) => {
       options?.onError?.(error.message);
@@ -43,10 +49,7 @@ export function useCreateInvoice(options?: UseCreateInvoiceOptions) {
     isError: mutation.isError,
     error: mutation.error?.message || null,
     isSuccess: mutation.isSuccess,
-    data: mutation.data,
+    data: mutation.data?.data || null, // Extract the invoice ID from the response
     reset: mutation.reset,
   };
 }
-
-// Export the type for convenience
-export type { CreateInvoiceInput as CreateInvoiceData };

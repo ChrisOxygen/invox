@@ -1,12 +1,13 @@
 "use client";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { UpdateInvoiceInput } from "@/dataSchemas/invoice";
-import { InvoiceResponse } from "@/types/api/invoice";
+
 import { _updateInvoice } from "../actions";
+import { ZUpdateInvoiceInput } from "@/dataSchemas";
+import { ApiResponse } from "@/types/api";
 
 interface UseUpdateInvoiceOptions {
-  onSuccess?: (data: InvoiceResponse) => void;
+  onSuccess?: (invoiceId: string) => void;
   onError?: (error: string) => void;
 }
 
@@ -15,7 +16,9 @@ export function useUpdateInvoice(options?: UseUpdateInvoiceOptions) {
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
-    mutationFn: async (data: UpdateInvoiceInput) => {
+    mutationFn: async (
+      data: ZUpdateInvoiceInput
+    ): Promise<ApiResponse<string>> => {
       const result = await _updateInvoice(data);
 
       if (!result.success) {
@@ -24,17 +27,20 @@ export function useUpdateInvoice(options?: UseUpdateInvoiceOptions) {
 
       return result;
     },
-    onSuccess: (data) => {
+    onSuccess: (result) => {
       // Invalidate and refetch invoice-related queries
       queryClient.invalidateQueries({ queryKey: ["invoices"] });
       queryClient.invalidateQueries({ queryKey: ["invoice-stats"] });
 
-      // Update the specific invoice in cache if it exists
-      if (data.data?.id) {
-        queryClient.setQueryData(["invoice", data.data.id], data);
+      // Invalidate the specific invoice query to refetch updated data
+      if (result.data) {
+        queryClient.invalidateQueries({ queryKey: ["invoice", result.data] });
       }
 
-      options?.onSuccess?.(data);
+      // Call the success callback with the invoice ID
+      if (result.data) {
+        options?.onSuccess?.(result.data);
+      }
     },
     onError: (error: Error) => {
       options?.onError?.(error.message);
@@ -48,10 +54,7 @@ export function useUpdateInvoice(options?: UseUpdateInvoiceOptions) {
     isError: mutation.isError,
     error: mutation.error?.message || null,
     isSuccess: mutation.isSuccess,
-    data: mutation.data,
+    data: mutation.data?.data || null, // Extract the invoice ID from the response
     reset: mutation.reset,
   };
 }
-
-// Export the type for convenience
-export type { UpdateInvoiceInput as UpdateInvoiceData };

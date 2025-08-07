@@ -1,6 +1,13 @@
 "use server";
 
-import { PrismaClient, InvoiceStatus, Client, Business } from "@prisma/client";
+import {
+  PrismaClient,
+  InvoiceStatus,
+  Client,
+  Business,
+  TaxType,
+  DiscountType,
+} from "@prisma/client";
 import { auth } from "@/auth";
 import { ApiResponse } from "@/types/api";
 import { UserWithBusiness } from "@/types/database";
@@ -24,6 +31,7 @@ import {
   InvoiceFiltersInput,
   PaginationInput,
   DeleteInvoiceInput,
+  ZCreateInvoiceInput,
 } from "@/dataSchemas/invoice";
 
 const prisma = new PrismaClient();
@@ -35,14 +43,21 @@ function transformInvoiceToWithRelations(invoice: {
   invoiceDate: Date;
   paymentDueDate: Date;
   subtotal: number;
-  taxes: number;
+  tax: number;
+  taxType: TaxType;
   discount?: number;
+  discountType: DiscountType;
+  total: number;
   invoiceItems: unknown;
-  acceptedPaymentMethods: string;
+  paymentAccountId?: string | null;
   status: InvoiceStatus;
   isFavorite: boolean;
   businessId: string;
   clientId: string;
+  customNote?: string | null;
+  lateFeeTerms?: string | null;
+  sentAt?: Date | null;
+  paidAt?: Date | null;
   createdAt: Date;
   updatedAt: Date;
   client: Client;
@@ -51,6 +66,11 @@ function transformInvoiceToWithRelations(invoice: {
   return {
     ...invoice,
     discount: invoice.discount || 0, // Default to 0 if not present
+    paymentAccountId: invoice.paymentAccountId || null, // Ensure null instead of undefined
+    customNote: invoice.customNote || null, // Ensure null instead of undefined
+    lateFeeTerms: invoice.lateFeeTerms || null, // Ensure null instead of undefined
+    sentAt: invoice.sentAt || null,
+    paidAt: invoice.paidAt || null,
     invoiceItems: Array.isArray(invoice.invoiceItems)
       ? invoice.invoiceItems
       : undefined,
@@ -132,8 +152,8 @@ async function generateInvoiceNumber(businessId: string): Promise<string> {
 
 // Create a new invoice
 export async function _createInvoice(
-  data: CreateInvoiceInput
-): Promise<InvoiceResponse> {
+  data: ZCreateInvoiceInput
+): Promise<ApiResponse<string>> {
   try {
     const session = await auth();
     if (!session || !session.user?.id) {
@@ -154,18 +174,8 @@ export async function _createInvoice(
       };
     }
 
-    // Validate and sanitize invoice items
-    const invoiceItems = validatedData.data.items || [];
-
-    if (!invoiceItems || invoiceItems.length === 0) {
-      return {
-        success: false,
-        message: "At least one invoice item is required",
-      };
-    }
-
-    // Sanitize and validate each item
-    const sanitizedItems = invoiceItems.map((item, index) => {
+    // Calculate subtotal from invoice items
+    const sanitizedItems = validatedData.data.items.map((item, index) => {
       const sanitizedItem = {
         description: item.description?.trim() || `Item ${index + 1}`,
         quantity: Math.max(1, Math.round(item.quantity || 1)),
@@ -180,6 +190,70 @@ export async function _createInvoice(
         total: Number(itemTotal.toFixed(2)),
       };
     });
+
+    // Calculate subtotal
+    const subtotal = sanitizedItems.reduce((sum, item) => sum + item.total, 0);
+
+    if (subtotal <= 0) {
+      return {
+        success: false,
+        message: "Subtotal must be greater than zero",
+      };
+    }
+
+    // Calculate tax amount based on type
+    let taxAmount = 0;
+    if (validatedData.data.tax > 0) {
+      if (validatedData.data.taxType === "PERCENTAGE") {
+        taxAmount = (subtotal * validatedData.data.tax) / 100;
+      } else {
+        taxAmount = validatedData.data.tax;
+      }
+
+      if (taxAmount < 0) {
+        return {
+          success: false,
+          message: "Tax calculation resulted in negative value",
+        };
+      }
+    }
+
+    // Calculate discount amount (applied after taxes)
+    let discountAmount = 0;
+    if (validatedData.data.discount && validatedData.data.discount > 0) {
+      const baseForDiscount = subtotal + taxAmount;
+
+      if (validatedData.data.discountType === "PERCENTAGE") {
+        discountAmount = (baseForDiscount * validatedData.data.discount) / 100;
+      } else {
+        discountAmount = validatedData.data.discount;
+      }
+
+      if (discountAmount < 0) {
+        return {
+          success: false,
+          message: "Discount calculation resulted in negative value",
+        };
+      }
+
+      // Ensure discount doesn't exceed the base amount
+      if (discountAmount > baseForDiscount) {
+        return {
+          success: false,
+          message: "Discount amount cannot exceed the subtotal plus taxes",
+        };
+      }
+    }
+
+    // Calculate final total
+    const total = subtotal + taxAmount - discountAmount;
+
+    if (total <= 0) {
+      return {
+        success: false,
+        message: "Final total must be greater than zero",
+      };
+    }
 
     // Get user's business
     const user = await prisma.user.findUnique({
@@ -238,15 +312,20 @@ export async function _createInvoice(
         invoiceNumber,
         invoiceDate: validatedData.data.invoiceDate,
         paymentDueDate: validatedData.data.paymentDueDate,
-        subtotal: validatedData.data.subtotal,
-        taxes: validatedData.data.taxes,
-        discount: validatedData.data.discount || 0,
+        subtotal: Number(subtotal.toFixed(2)),
+        tax: Number(taxAmount.toFixed(2)),
+        taxType: validatedData.data.taxType || "PERCENTAGE",
+        discount: Number(discountAmount.toFixed(2)),
+        discountType: validatedData.data.discountType || "PERCENTAGE",
+        total: Number(total.toFixed(2)),
         invoiceItems: sanitizedItems, // Store the sanitized invoice items
-        acceptedPaymentMethods: validatedData.data.acceptedPaymentMethods,
-        status: InvoiceStatus.DRAFT,
+        paymentAccountId: validatedData.data.paymentAccountId,
+        status: validatedData.data.status || InvoiceStatus.DRAFT,
         isFavorite: validatedData.data.isFavorite || false,
         businessId: user.business.id,
         clientId: validatedData.data.clientId,
+        customNote: validatedData.data.customNote,
+        lateFeeTerms: validatedData.data.lateFeeTerms,
       },
       include: {
         client: true,
@@ -257,7 +336,7 @@ export async function _createInvoice(
     return {
       success: true,
       message: "Invoice created successfully",
-      data: transformInvoiceToWithRelations(newInvoice),
+      data: newInvoice.id,
     };
   } catch (error) {
     console.error("Error creating invoice:", error);

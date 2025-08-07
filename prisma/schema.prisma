@@ -22,6 +22,16 @@ enum InvoiceStatus {
   CANCELLED
 }
 
+enum DiscountType {
+  FIXED
+  PERCENTAGE
+}
+
+enum TaxType {
+  FIXED
+  PERCENTAGE
+}
+
 
 
 model User {
@@ -182,9 +192,11 @@ model Invoice {
   
    // Financial fields - use Float for MongoDB compatibility
   subtotal               Float
-  taxes                  Float
-  discount               Float       @default(0)
-  total                  Float       // Add calculated total
+  tax                  Float
+  taxType                TaxType       @default(PERCENTAGE)
+  discount               Float         @default(0)
+  discountType           DiscountType  @default(PERCENTAGE)
+  total                  Float         // Add calculated total
   
   invoiceItems           Json // Array of invoice items with description, quantity, unitPrice  
   // Single payment account for this invoice

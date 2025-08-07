@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { InvoiceStatus } from "@prisma/client";
+import { InvoiceStatus, TaxType, DiscountType } from "@prisma/client";
 
 // Base invoice item schema
 export const invoiceItemSchema = z.object({
@@ -16,7 +16,7 @@ export const invoiceItemSchema = z.object({
     .number()
     .min(0.01, "Unit price must be at least $0.01")
     .max(999999.99, "Unit price cannot exceed $999,999.99"),
-  total: z.number().min(0, "Total amount cannot be negative"),
+  // Removed total field - will be calculated on server side
 });
 
 // Form schema for invoice items array
@@ -31,6 +31,7 @@ export const invoiceItemsFormSchema = z.object({
 export const createInvoiceSchema = z
   .object({
     clientId: z.string().min(1, "Client is required"),
+    businessId: z.string().min(1, "Business is required"),
     invoiceNumber: z.string().optional(),
     invoiceDate: z.date({
       required_error: "Invoice date is required",
@@ -39,14 +40,15 @@ export const createInvoiceSchema = z
       required_error: "Payment due date is required",
     }),
     items: z.array(invoiceItemSchema).min(1, "At least one item is required"),
-    subtotal: z.number().min(0, "Subtotal must be positive"),
-    taxes: z.number().min(0, "Taxes must be positive"),
+    tax: z.number().min(0, "Tax must be positive"),
+    taxType: z.nativeEnum(TaxType).optional(),
     discount: z.number().min(0, "Discount must be positive").optional(),
-    total: z.number().min(0, "Total must be positive"),
-    acceptedPaymentMethods: z.string().min(1, "Payment methods are required"),
+    discountType: z.nativeEnum(DiscountType).optional(),
+    status: z.nativeEnum(InvoiceStatus).optional(), // Add status field
+    paymentAccountId: z.string().optional(), // Optional payment account
     isFavorite: z.boolean().optional(),
     customNote: z.string().optional(),
-    lateFeeText: z.string().optional(),
+    lateFeeTerms: z.string().optional(), // Changed from lateFeeText to match Prisma model
   })
   .refine(
     (data) => {
@@ -69,6 +71,32 @@ export const createInvoiceSchema = z
       message: "Payment due date must be after or equal to invoice date",
       path: ["paymentDueDate"],
     }
+  )
+  .refine(
+    (data) => {
+      // If tax amount exists, taxType must also exist
+      if (data.tax > 0) {
+        return data.taxType !== undefined;
+      }
+      return true;
+    },
+    {
+      message: "Tax type is required when tax amount is provided",
+      path: ["taxType"],
+    }
+  )
+  .refine(
+    (data) => {
+      // If discount amount exists, discountType must also exist
+      if (data.discount && data.discount > 0) {
+        return data.discountType !== undefined;
+      }
+      return true;
+    },
+    {
+      message: "Discount type is required when discount amount is provided",
+      path: ["discountType"],
+    }
   );
 
 // Update invoice schema
@@ -76,23 +104,21 @@ export const updateInvoiceSchema = z
   .object({
     invoiceId: z.string().min(1, "Invoice ID is required"),
     clientId: z.string().min(1, "Client is required").optional(),
+    businessId: z.string().min(1, "Business is required").optional(),
     invoiceDate: z.date().optional(),
     paymentDueDate: z.date().optional(),
     items: z
       .array(invoiceItemSchema)
       .min(1, "At least one item is required")
       .optional(),
-    subtotal: z.number().min(0, "Subtotal must be positive").optional(),
-    taxes: z.number().min(0, "Taxes must be positive").optional(),
+    tax: z.number().min(0, "Tax must be positive").optional(),
+    taxType: z.nativeEnum(TaxType).optional(),
     discount: z.number().min(0, "Discount must be positive").optional(),
-    total: z.number().min(0, "Total must be positive").optional(),
-    acceptedPaymentMethods: z
-      .string()
-      .min(1, "Payment methods are required")
-      .optional(),
+    discountType: z.nativeEnum(DiscountType).optional(),
+    paymentAccountId: z.string().optional(), // Optional payment account
     isFavorite: z.boolean().optional(),
     customNote: z.string().optional(),
-    lateFeeText: z.string().optional(),
+    lateFeeTerms: z.string().optional(), // Changed from lateFeeText to match Prisma model
   })
   .refine(
     (data) => {
@@ -105,6 +131,32 @@ export const updateInvoiceSchema = z
     {
       message: "Payment due date must be after or equal to invoice date",
       path: ["paymentDueDate"],
+    }
+  )
+  .refine(
+    (data) => {
+      // If tax amount exists, taxType must also exist
+      if (data.tax && data.tax > 0) {
+        return data.taxType !== undefined;
+      }
+      return true;
+    },
+    {
+      message: "Tax type is required when tax amount is provided",
+      path: ["taxType"],
+    }
+  )
+  .refine(
+    (data) => {
+      // If discount amount exists, discountType must also exist
+      if (data.discount && data.discount > 0) {
+        return data.discountType !== undefined;
+      }
+      return true;
+    },
+    {
+      message: "Discount type is required when discount amount is provided",
+      path: ["discountType"],
     }
   );
 
@@ -181,7 +233,7 @@ export type InvoiceItemInput = z.infer<typeof invoiceItemSchema>;
 export type InvoiceItemsFormInput = z.infer<typeof invoiceItemsFormSchema>;
 
 // Export input types
-export type CreateInvoiceInput = z.infer<typeof createInvoiceSchema>;
+export type ZCreateInvoiceInput = z.infer<typeof createInvoiceSchema>;
 export type UpdateInvoiceInput = z.infer<typeof updateInvoiceSchema>;
 export type UpdateInvoiceStatusInput = z.infer<
   typeof updateInvoiceStatusSchema

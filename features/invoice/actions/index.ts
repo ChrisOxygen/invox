@@ -2,16 +2,20 @@
 
 import {
   PrismaClient,
+  Prisma,
   InvoiceStatus,
   Client,
   Business,
   TaxType,
   DiscountType,
 } from "@prisma/client";
-import { auth } from "@/auth";
 import { ApiResponse } from "@/types/api";
 import { UserWithBusiness } from "@/types/database";
 import { InvoiceWithRelations } from "@/types/invoice";
+import {
+  requireAuthentication,
+  checkAuthentication,
+} from "@/features/auth/utils";
 import {
   InvoiceResponse,
   InvoiceListApiResponse,
@@ -21,7 +25,6 @@ import {
 import {
   createInvoiceSchema,
   updateInvoiceSchema,
-  updateInvoiceStatusSchema,
   invoiceFiltersSchema,
   paginationSchema,
   deleteInvoiceSchema,
@@ -30,7 +33,6 @@ import {
   DeleteInvoiceInput,
   ZCreateInvoiceInput,
   ZUpdateInvoiceInput,
-  ZUpdateInvoiceStatusInput,
 } from "@/dataSchemas/invoice";
 import { calculateInvoiceTotals } from "@/utils/invoice-calculations";
 import {
@@ -41,11 +43,551 @@ import { createInvoiceRecord } from "@/utils/invoice-persistence";
 import {
   handleInvoiceError,
   createSuccessResponse,
-  AuthenticationError,
   ValidationError,
 } from "@/utils/invoice-errors";
 
 const prisma = new PrismaClient();
+
+// Centralized timestamp logic
+function calculateStatusTimestamps(
+  newStatus: InvoiceStatus,
+  existingInvoice?: {
+    status: InvoiceStatus;
+    sentAt?: Date | null;
+    paidAt?: Date | null;
+  }
+): Partial<{ sentAt: Date; paidAt: Date }> {
+  const timestamps: Partial<{ sentAt: Date; paidAt: Date }> = {};
+
+  if (newStatus === InvoiceStatus.SENT || newStatus === InvoiceStatus.PAID) {
+    const now = new Date();
+
+    // Handle status changes for existing invoices
+    if (existingInvoice) {
+      if (newStatus !== existingInvoice.status) {
+        if (newStatus === InvoiceStatus.SENT && !existingInvoice.sentAt) {
+          timestamps.sentAt = now;
+        }
+        if (newStatus === InvoiceStatus.PAID) {
+          if (!existingInvoice.sentAt) {
+            timestamps.sentAt = now;
+          }
+          timestamps.paidAt = now;
+        }
+      }
+    }
+    // Handle initial timestamps for new invoices
+    else {
+      if (newStatus === InvoiceStatus.SENT) {
+        timestamps.sentAt = now;
+      }
+      if (newStatus === InvoiceStatus.PAID) {
+        timestamps.sentAt = now;
+        timestamps.paidAt = now;
+      }
+    }
+  }
+
+  return timestamps;
+}
+
+// Extract common calculation setup
+function prepareCalculationInput(
+  items: Array<{
+    description: string;
+    quantity: number;
+    unitPrice: number;
+    total?: number;
+  }>,
+  tax = 0,
+  taxType: TaxType = TaxType.PERCENTAGE,
+  discount = 0,
+  discountType: DiscountType = DiscountType.PERCENTAGE
+) {
+  return {
+    items,
+    tax,
+    taxType,
+    discount,
+    discountType,
+  };
+}
+
+// Status handler for invoice creation and updates
+async function handleInvoiceStatusLogic(
+  status: InvoiceStatus,
+  validatedData: {
+    invoiceNumber?: string | null;
+    invoiceDate?: Date | null;
+    paymentDueDate?: Date | null;
+    items?: Array<{
+      description: string;
+      quantity: number;
+      unitPrice: number;
+      total?: number;
+    }>;
+    tax?: number;
+    taxType?: TaxType;
+    discount?: number;
+    discountType?: DiscountType;
+  },
+  businessId: string,
+  existingInvoice?: {
+    status: InvoiceStatus;
+    sentAt?: Date | null;
+    paidAt?: Date | null;
+  }
+) {
+  let invoiceNumber = validatedData.invoiceNumber;
+  let invoiceDate = validatedData.invoiceDate;
+  let paymentDueDate = validatedData.paymentDueDate;
+  let calculations = null;
+
+  if (status === InvoiceStatus.DRAFT) {
+    // DRAFT: Very flexible, allow minimal data
+    if (validatedData.items && validatedData.items.length > 0) {
+      calculations = calculateInvoiceTotals(
+        prepareCalculationInput(
+          validatedData.items,
+          validatedData.tax,
+          validatedData.taxType,
+          validatedData.discount,
+          validatedData.discountType
+        )
+      );
+    } else {
+      // For DRAFT with no items, set minimal calculations
+      calculations = {
+        sanitizedItems: [],
+        subtotal: 0,
+        taxAmount: 0,
+        discountAmount: 0,
+        total: 0,
+      };
+    }
+  } else if (status === InvoiceStatus.SENT || status === InvoiceStatus.PAID) {
+    // SENT/PAID: Require complete data
+    if (!invoiceNumber) {
+      invoiceNumber = await generateUniqueInvoiceNumber(businessId);
+    }
+
+    if (!invoiceDate) {
+      invoiceDate = new Date();
+    }
+
+    if (!paymentDueDate) {
+      // Default to 30 days from invoice date
+      paymentDueDate = new Date(invoiceDate);
+      paymentDueDate.setDate(
+        paymentDueDate.getDate() + INVOICE_DEFAULTS.dueDaysOffset
+      );
+    }
+
+    if (!validatedData.items || validatedData.items.length === 0) {
+      throw new ValidationError("Items are required for SENT/PAID status");
+    }
+
+    // Calculate totals (required for SENT/PAID)
+    calculations = calculateInvoiceTotals(
+      prepareCalculationInput(
+        validatedData.items,
+        validatedData.tax,
+        validatedData.taxType,
+        validatedData.discount,
+        validatedData.discountType
+      )
+    );
+  }
+
+  // Calculate status timestamps using centralized logic
+  const statusTimestamps = calculateStatusTimestamps(status, existingInvoice);
+
+  return {
+    invoiceNumber,
+    invoiceDate,
+    paymentDueDate,
+    calculations,
+    statusTimestamps,
+  };
+}
+
+// Default values configuration
+const INVOICE_DEFAULTS = {
+  tax: 0,
+  taxType: TaxType.PERCENTAGE,
+  discount: 0,
+  discountType: DiscountType.PERCENTAGE,
+  isFavorite: false,
+  invoiceNumber: "DRAFT",
+  dueDaysOffset: 30,
+} as const;
+
+// Type definitions for data builders
+interface InvoiceDataInput {
+  clientId?: string;
+  items?: Array<{
+    description: string;
+    quantity: number;
+    unitPrice: number;
+    total?: number;
+  }>;
+  tax?: number;
+  taxType?: TaxType;
+  discount?: number;
+  discountType?: DiscountType;
+  isFavorite?: boolean;
+  paymentAccountId?: string | null;
+  customNote?: string | null;
+  lateFeeTerms?: string | null;
+  invoiceNumber?: string | null;
+  invoiceDate?: Date | null;
+  paymentDueDate?: Date | null;
+  status?: InvoiceStatus;
+}
+
+// Centralized field merger utility
+function mergeInvoiceFields(
+  validatedData: InvoiceDataInput,
+  existingData?: Partial<InvoiceDataInput>,
+  defaults = INVOICE_DEFAULTS
+) {
+  return {
+    invoiceNumber:
+      validatedData.invoiceNumber ??
+      existingData?.invoiceNumber ??
+      defaults.invoiceNumber,
+    invoiceDate: validatedData.invoiceDate ?? existingData?.invoiceDate ?? null,
+    paymentDueDate:
+      validatedData.paymentDueDate ?? existingData?.paymentDueDate ?? null,
+    tax: validatedData.tax ?? existingData?.tax ?? defaults.tax,
+    taxType: validatedData.taxType ?? existingData?.taxType ?? defaults.taxType,
+    discount:
+      validatedData.discount ?? existingData?.discount ?? defaults.discount,
+    discountType:
+      validatedData.discountType ??
+      existingData?.discountType ??
+      defaults.discountType,
+    isFavorite:
+      validatedData.isFavorite ??
+      existingData?.isFavorite ??
+      defaults.isFavorite,
+    paymentAccountId:
+      validatedData.paymentAccountId ?? existingData?.paymentAccountId ?? null,
+    customNote: validatedData.customNote ?? existingData?.customNote ?? null,
+    lateFeeTerms:
+      validatedData.lateFeeTerms ?? existingData?.lateFeeTerms ?? null,
+  };
+}
+
+// Data builder for invoice updates
+function buildInvoiceUpdateData(
+  validatedData: {
+    clientId?: string;
+    invoiceNumber?: string | null;
+    invoiceDate?: Date | null;
+    paymentDueDate?: Date | null;
+    items?: Array<{
+      description: string;
+      quantity: number;
+      unitPrice: number;
+      total?: number;
+    }>;
+    tax?: number;
+    taxType?: TaxType;
+    discount?: number;
+    discountType?: DiscountType;
+    status?: InvoiceStatus;
+    paymentAccountId?: string | null;
+    isFavorite?: boolean;
+    customNote?: string | null;
+    lateFeeTerms?: string | null;
+  },
+  calculations: {
+    subtotal: number;
+    total: number;
+    sanitizedItems: Array<{
+      description: string;
+      quantity: number;
+      unitPrice: number;
+      total?: number;
+    }>;
+  } | null,
+  statusTimestamps: Partial<{
+    sentAt: Date;
+    paidAt: Date;
+  }>
+) {
+  // Merge fields using the centralized utility
+  const merged = mergeInvoiceFields(validatedData);
+
+  return {
+    updatedAt: new Date(),
+    ...(validatedData.clientId && { clientId: validatedData.clientId }),
+    ...(validatedData.invoiceNumber !== undefined && {
+      invoiceNumber: validatedData.invoiceNumber,
+    }),
+    ...(validatedData.invoiceDate !== undefined && {
+      invoiceDate: validatedData.invoiceDate,
+    }),
+    ...(validatedData.paymentDueDate !== undefined && {
+      paymentDueDate: validatedData.paymentDueDate,
+    }),
+    ...(validatedData.items && {
+      invoiceItems: calculations?.sanitizedItems
+        ? JSON.parse(JSON.stringify(calculations.sanitizedItems))
+        : JSON.parse(JSON.stringify(validatedData.items)),
+    }),
+    ...(calculations && {
+      subtotal: calculations.subtotal,
+      total: calculations.total,
+    }),
+    tax: merged.tax,
+    taxType: merged.taxType,
+    discount: merged.discount,
+    discountType: merged.discountType,
+    isFavorite: merged.isFavorite,
+    paymentAccountId: merged.paymentAccountId,
+    customNote: merged.customNote,
+    lateFeeTerms: merged.lateFeeTerms,
+    ...statusTimestamps,
+  };
+}
+
+// Data builder for complete invoice updates (SENT/PAID)
+function buildCompleteInvoiceUpdateData(
+  validatedData: {
+    clientId?: string;
+    paymentAccountId?: string | null;
+    isFavorite?: boolean;
+    customNote?: string | null;
+    lateFeeTerms?: string | null;
+  },
+  mergedData: {
+    tax: number;
+    taxType: TaxType;
+    discount: number;
+    discountType: DiscountType;
+    status?: InvoiceStatus;
+  },
+  finalInvoiceNumber: string,
+  finalInvoiceDate: Date,
+  finalPaymentDueDate: Date,
+  calculations: {
+    subtotal: number;
+    total: number;
+    sanitizedItems: Array<{
+      description: string;
+      quantity: number;
+      unitPrice: number;
+      total?: number;
+    }>;
+  },
+  statusTimestamps: Partial<{
+    sentAt: Date;
+    paidAt: Date;
+  }>
+) {
+  return {
+    updatedAt: new Date(),
+    ...(validatedData.clientId && { clientId: validatedData.clientId }),
+    invoiceNumber: finalInvoiceNumber,
+    invoiceDate: finalInvoiceDate,
+    paymentDueDate: finalPaymentDueDate,
+    invoiceItems: JSON.parse(JSON.stringify(calculations.sanitizedItems)),
+    subtotal: calculations.subtotal,
+    total: calculations.total,
+    tax: mergedData.tax,
+    taxType: mergedData.taxType,
+    discount: mergedData.discount,
+    discountType: mergedData.discountType,
+    status: mergedData.status,
+    paymentAccountId: validatedData.paymentAccountId,
+    isFavorite: validatedData.isFavorite,
+    customNote: validatedData.customNote,
+    lateFeeTerms: validatedData.lateFeeTerms,
+    ...statusTimestamps,
+  };
+}
+
+// Consolidated invoice creation function
+async function createInvoice(
+  validatedData: {
+    clientId: string;
+    tax?: number;
+    taxType?: TaxType;
+    discount?: number;
+    discountType?: DiscountType;
+    paymentAccountId?: string | null;
+    isFavorite?: boolean;
+    customNote?: string | null;
+    lateFeeTerms?: string | null;
+  },
+  businessId: string,
+  invoiceNumber: string | null,
+  invoiceDate: Date | null,
+  paymentDueDate: Date | null,
+  calculations: {
+    subtotal: number;
+    total: number;
+    sanitizedItems: Array<{
+      description: string;
+      quantity: number;
+      unitPrice: number;
+      total?: number;
+    }>;
+  } | null,
+  status: InvoiceStatus,
+  statusTimestamps: Partial<{ sentAt: Date; paidAt: Date }> = {},
+  isDraft: boolean = false
+) {
+  if (isDraft) {
+    // For drafts, use simpler creation
+    const invoiceData = {
+      businessId,
+      clientId: validatedData.clientId,
+      invoiceNumber: invoiceNumber || null,
+      invoiceDate: invoiceDate || null,
+      paymentDueDate: paymentDueDate || null,
+      invoiceItems: JSON.parse(
+        JSON.stringify(calculations?.sanitizedItems || [])
+      ),
+      tax: validatedData.tax || null,
+      taxType: validatedData.taxType || TaxType.PERCENTAGE,
+      discount: validatedData.discount || 0,
+      discountType: validatedData.discountType || DiscountType.PERCENTAGE,
+      subtotal: calculations?.subtotal || null,
+      total: calculations?.total || null,
+      status,
+      isFavorite: validatedData.isFavorite || false,
+      paymentAccountId: validatedData.paymentAccountId || null,
+      customNote: validatedData.customNote || null,
+      lateFeeTerms: validatedData.lateFeeTerms || null,
+    };
+
+    return await prisma.invoice.create({ data: invoiceData });
+  } else {
+    // For complete invoices, use the external creation utility and apply timestamps
+    const invoiceData = {
+      invoiceNumber: invoiceNumber!,
+      invoiceDate: invoiceDate!,
+      paymentDueDate: paymentDueDate!,
+      subtotal: calculations!.subtotal,
+      tax: validatedData.tax || 0,
+      taxType: validatedData.taxType || TaxType.PERCENTAGE,
+      discount: validatedData.discount || 0,
+      discountType: validatedData.discountType || DiscountType.PERCENTAGE,
+      total: calculations!.total,
+      invoiceItems: calculations!.sanitizedItems,
+      status,
+      isFavorite: validatedData.isFavorite || false,
+      businessId,
+      clientId: validatedData.clientId,
+      paymentAccountId: validatedData.paymentAccountId || undefined,
+      customNote: validatedData.customNote || undefined,
+      lateFeeTerms: validatedData.lateFeeTerms || undefined,
+    };
+
+    const newInvoice = await createInvoiceRecord(invoiceData);
+
+    // Apply timestamps if needed
+    if (Object.keys(statusTimestamps).length > 0) {
+      await prisma.invoice.update({
+        where: { id: newInvoice.id },
+        data: statusTimestamps,
+      });
+    }
+
+    return newInvoice;
+  }
+}
+
+// Wrapper for creating draft invoices
+async function createDraftInvoice(
+  validatedData: {
+    clientId: string;
+    tax?: number;
+    taxType?: TaxType;
+    discount?: number;
+    discountType?: DiscountType;
+    paymentAccountId?: string | null;
+    isFavorite?: boolean;
+    customNote?: string | null;
+    lateFeeTerms?: string | null;
+  },
+  businessId: string,
+  invoiceNumber: string | null,
+  invoiceDate: Date | null,
+  paymentDueDate: Date | null,
+  calculations: {
+    subtotal: number;
+    total: number;
+    sanitizedItems: Array<{
+      description: string;
+      quantity: number;
+      unitPrice: number;
+      total?: number;
+    }>;
+  } | null,
+  status: InvoiceStatus
+) {
+  return createInvoice(
+    validatedData,
+    businessId,
+    invoiceNumber,
+    invoiceDate,
+    paymentDueDate,
+    calculations,
+    status,
+    {},
+    true // isDraft = true
+  );
+}
+
+// Database operation for creating complete invoices
+async function createCompleteInvoice(
+  validatedData: {
+    clientId: string;
+    tax?: number;
+    taxType?: TaxType;
+    discount?: number;
+    discountType?: DiscountType;
+    isFavorite?: boolean;
+    paymentAccountId?: string | null;
+    customNote?: string | null;
+    lateFeeTerms?: string | null;
+  },
+  businessId: string,
+  invoiceNumber: string,
+  invoiceDate: Date,
+  paymentDueDate: Date,
+  calculations: {
+    subtotal: number;
+    total: number;
+    sanitizedItems: Array<{
+      description: string;
+      quantity: number;
+      unitPrice: number;
+      total?: number;
+    }>;
+  },
+  status: InvoiceStatus,
+  statusTimestamps: Partial<{
+    sentAt: Date;
+    paidAt: Date;
+  }>
+) {
+  return createInvoice(
+    validatedData,
+    businessId,
+    invoiceNumber,
+    invoiceDate,
+    paymentDueDate,
+    calculations,
+    status,
+    statusTimestamps,
+    false // isDraft = false
+  );
+}
 
 // Helper function to transform Prisma invoice result to InvoiceWithRelations
 function transformInvoiceToWithRelations(invoice: {
@@ -76,16 +618,16 @@ function transformInvoiceToWithRelations(invoice: {
 }): InvoiceWithRelations {
   return {
     ...invoice,
-    invoiceNumber: invoice.invoiceNumber || "DRAFT", // Provide default for drafts
-    invoiceDate: invoice.invoiceDate || new Date(), // Provide default
-    paymentDueDate: invoice.paymentDueDate || new Date(), // Provide default
-    subtotal: invoice.subtotal || 0, // Default to 0 if not present
-    tax: invoice.tax || 0, // Default to 0 if not present
-    total: invoice.total || 0, // Default to 0 if not present
-    discount: invoice.discount || 0, // Default to 0 if not present
-    paymentAccountId: invoice.paymentAccountId || null, // Ensure null instead of undefined
-    customNote: invoice.customNote || null, // Ensure null instead of undefined
-    lateFeeTerms: invoice.lateFeeTerms || null, // Ensure null instead of undefined
+    invoiceNumber: invoice.invoiceNumber || INVOICE_DEFAULTS.invoiceNumber,
+    invoiceDate: invoice.invoiceDate || new Date(),
+    paymentDueDate: invoice.paymentDueDate || new Date(),
+    subtotal: invoice.subtotal || 0,
+    tax: invoice.tax || INVOICE_DEFAULTS.tax,
+    total: invoice.total || 0,
+    discount: invoice.discount || INVOICE_DEFAULTS.discount,
+    paymentAccountId: invoice.paymentAccountId || null,
+    customNote: invoice.customNote || null,
+    lateFeeTerms: invoice.lateFeeTerms || null,
     sentAt: invoice.sentAt || null,
     paidAt: invoice.paidAt || null,
     invoiceItems: Array.isArray(invoice.invoiceItems)
@@ -99,8 +641,8 @@ export async function _getUserAndBusiness(): Promise<
   ApiResponse<UserWithBusiness>
 > {
   try {
-    const session = await auth();
-    if (!session || !session.user?.id) {
+    const { isAuthenticated, session } = await checkAuthentication();
+    if (!isAuthenticated || !session) {
       return {
         success: false,
         message: "User not authenticated",
@@ -143,10 +685,7 @@ export async function _createInvoice(
   data: ZCreateInvoiceInput
 ): Promise<ApiResponse<string>> {
   try {
-    const session = await auth();
-    if (!session?.user?.id) {
-      throw new AuthenticationError();
-    }
+    const session = await requireAuthentication();
 
     // Validate input data
     const validatedData = createInvoiceSchema.safeParse(data);
@@ -165,136 +704,48 @@ export async function _createInvoice(
     );
 
     const invoiceStatus = validatedData.data.status || InvoiceStatus.DRAFT;
-    let invoiceNumber = validatedData.data.invoiceNumber;
-    let invoiceDate = validatedData.data.invoiceDate;
-    let paymentDueDate = validatedData.data.paymentDueDate;
-    let calculations = null;
 
     // Handle status-specific logic
+    const {
+      invoiceNumber,
+      invoiceDate,
+      paymentDueDate,
+      calculations,
+      statusTimestamps,
+    } = await handleInvoiceStatusLogic(
+      invoiceStatus,
+      validatedData.data,
+      user.business!.id
+    );
+
+    // Create invoice based on status
+    let newInvoice;
     if (invoiceStatus === InvoiceStatus.DRAFT) {
-      // DRAFT: Very flexible, allow minimal data
-      if (validatedData.data.items && validatedData.data.items.length > 0) {
-        calculations = calculateInvoiceTotals({
-          items: validatedData.data.items,
-          tax: validatedData.data.tax || 0,
-          taxType: validatedData.data.taxType || TaxType.PERCENTAGE,
-          discount: validatedData.data.discount || 0,
-          discountType:
-            validatedData.data.discountType || DiscountType.PERCENTAGE,
-        });
-      } else {
-        // For DRAFT with no items, set minimal calculations
-        calculations = {
-          sanitizedItems: [],
-          subtotal: 0,
-          taxAmount: 0,
-          discountAmount: 0,
-          total: 0,
-        };
-      }
-    } else if (
-      invoiceStatus === InvoiceStatus.SENT ||
-      invoiceStatus === InvoiceStatus.PAID
-    ) {
-      // SENT/PAID: Require complete data
-      if (!invoiceNumber) {
-        invoiceNumber = await generateUniqueInvoiceNumber(user.business!.id);
-      }
-
-      if (!invoiceDate) {
-        invoiceDate = new Date();
-      }
-
-      if (!paymentDueDate) {
-        // Default to 30 days from invoice date
-        paymentDueDate = new Date(invoiceDate);
-        paymentDueDate.setDate(paymentDueDate.getDate() + 30);
-      }
-
-      // Calculate totals (required for SENT/PAID)
-      calculations = calculateInvoiceTotals({
-        items: validatedData.data.items || [],
-        tax: validatedData.data.tax || 0,
-        taxType: validatedData.data.taxType || TaxType.PERCENTAGE,
-        discount: validatedData.data.discount || 0,
-        discountType:
-          validatedData.data.discountType || DiscountType.PERCENTAGE,
-      });
-    }
-
-    // For DRAFT status, we need to create the invoice directly since some fields are optional
-    if (invoiceStatus === InvoiceStatus.DRAFT) {
-      const draftInvoice = await prisma.invoice.create({
-        data: {
-          businessId: user.business!.id,
-          clientId: validatedData.data.clientId,
-          invoiceNumber: invoiceNumber || null,
-          invoiceDate: invoiceDate || null,
-          paymentDueDate: paymentDueDate || null,
-          invoiceItems: JSON.parse(
-            JSON.stringify(validatedData.data.items || [])
-          ),
-          tax: validatedData.data.tax || null,
-          taxType: validatedData.data.taxType || TaxType.PERCENTAGE,
-          discount: validatedData.data.discount || 0,
-          discountType:
-            validatedData.data.discountType || DiscountType.PERCENTAGE,
-          subtotal: calculations?.subtotal || null,
-          total: calculations?.total || null,
-          status: invoiceStatus,
-          isFavorite: validatedData.data.isFavorite || false,
-          paymentAccountId: validatedData.data.paymentAccountId || null,
-          customNote: validatedData.data.customNote || null,
-          lateFeeTerms: validatedData.data.lateFeeTerms || null,
-        },
-      });
+      newInvoice = await createDraftInvoice(
+        validatedData.data,
+        user.business!.id,
+        invoiceNumber ?? null,
+        invoiceDate ?? null,
+        paymentDueDate ?? null,
+        calculations,
+        invoiceStatus
+      );
 
       return createSuccessResponse(
-        draftInvoice.id,
+        newInvoice.id,
         "Draft invoice created successfully"
       );
     } else {
-      // For SENT/PAID status, use the persistence function with required fields
-      const invoiceData = {
-        invoiceNumber: invoiceNumber!,
-        invoiceDate: invoiceDate!,
-        paymentDueDate: paymentDueDate!,
-        subtotal: calculations!.subtotal,
-        tax: validatedData.data.tax || 0,
-        taxType: validatedData.data.taxType || TaxType.PERCENTAGE,
-        discount: validatedData.data.discount || 0,
-        discountType:
-          validatedData.data.discountType || DiscountType.PERCENTAGE,
-        total: calculations!.total,
-        invoiceItems: calculations!.sanitizedItems,
-        status: invoiceStatus,
-        isFavorite: validatedData.data.isFavorite || false,
-        businessId: user.business!.id,
-        clientId: validatedData.data.clientId,
-        paymentAccountId: validatedData.data.paymentAccountId,
-        customNote: validatedData.data.customNote,
-        lateFeeTerms: validatedData.data.lateFeeTerms,
-      };
-
-      // Create invoice with required fields
-      const newInvoice = await createInvoiceRecord(invoiceData);
-
-      // Update timestamps based on status
-      if (
-        invoiceStatus === InvoiceStatus.SENT ||
-        invoiceStatus === InvoiceStatus.PAID
-      ) {
-        await prisma.invoice.update({
-          where: { id: newInvoice.id },
-          data: {
-            ...(invoiceStatus === InvoiceStatus.SENT && { sentAt: new Date() }),
-            ...(invoiceStatus === InvoiceStatus.PAID && {
-              sentAt: new Date(),
-              paidAt: new Date(),
-            }),
-          },
-        });
-      }
+      newInvoice = await createCompleteInvoice(
+        validatedData.data,
+        user.business!.id,
+        invoiceNumber!,
+        invoiceDate!,
+        paymentDueDate!,
+        calculations!,
+        invoiceStatus,
+        statusTimestamps
+      );
 
       return createSuccessResponse(
         newInvoice.id,
@@ -311,10 +762,7 @@ export async function _updateInvoice(
   data: ZUpdateInvoiceInput
 ): Promise<ApiResponse<string>> {
   try {
-    const session = await auth();
-    if (!session?.user?.id) {
-      throw new AuthenticationError();
-    }
+    const session = await requireAuthentication();
 
     // Validate input data
     const validatedData = updateInvoiceSchema.safeParse(data);
@@ -360,16 +808,25 @@ export async function _updateInvoice(
       );
     }
 
-    // Merge existing data with update data
+    // Merge existing data with update data using centralized utility
+    const mergedFields = mergeInvoiceFields(validatedData.data, {
+      invoiceNumber: existingInvoice.invoiceNumber,
+      invoiceDate: existingInvoice.invoiceDate,
+      paymentDueDate: existingInvoice.paymentDueDate,
+      tax: existingInvoice.tax ?? undefined,
+      taxType: existingInvoice.taxType,
+      discount: existingInvoice.discount ?? undefined,
+      discountType: existingInvoice.discountType,
+      paymentAccountId: existingInvoice.paymentAccountId,
+      isFavorite: existingInvoice.isFavorite,
+      customNote: existingInvoice.customNote,
+      lateFeeTerms: existingInvoice.lateFeeTerms,
+    });
+
     const mergedData = {
       clientId: validatedData.data.clientId || existingInvoice.clientId,
       businessId: existingInvoice.businessId,
-      invoiceNumber:
-        validatedData.data.invoiceNumber || existingInvoice.invoiceNumber,
-      invoiceDate:
-        validatedData.data.invoiceDate || existingInvoice.invoiceDate,
-      paymentDueDate:
-        validatedData.data.paymentDueDate || existingInvoice.paymentDueDate,
+      ...mergedFields,
       items:
         validatedData.data.items ||
         (existingInvoice.invoiceItems as Array<{
@@ -379,119 +836,45 @@ export async function _updateInvoice(
           total?: number;
         }>) ||
         [],
-      tax:
-        validatedData.data.tax !== undefined
-          ? validatedData.data.tax
-          : existingInvoice.tax || 0,
-      taxType: validatedData.data.taxType || existingInvoice.taxType,
-      discount:
-        validatedData.data.discount !== undefined
-          ? validatedData.data.discount
-          : existingInvoice.discount || 0,
-      discountType:
-        validatedData.data.discountType || existingInvoice.discountType,
       status: validatedData.data.status || existingInvoice.status,
-      paymentAccountId:
-        validatedData.data.paymentAccountId !== undefined
-          ? validatedData.data.paymentAccountId
-          : existingInvoice.paymentAccountId,
-      isFavorite:
-        validatedData.data.isFavorite !== undefined
-          ? validatedData.data.isFavorite
-          : existingInvoice.isFavorite,
-      customNote:
-        validatedData.data.customNote !== undefined
-          ? validatedData.data.customNote
-          : existingInvoice.customNote,
-      lateFeeTerms:
-        validatedData.data.lateFeeTerms !== undefined
-          ? validatedData.data.lateFeeTerms
-          : existingInvoice.lateFeeTerms,
     };
 
     // Handle status-specific validation and logic
     const newStatus = mergedData.status;
-    let calculations = null;
-    const statusTimestamps: Partial<{
-      sentAt: Date;
-      paidAt: Date;
-    }> = {};
+    const {
+      invoiceNumber: finalInvoiceNumber,
+      invoiceDate: finalInvoiceDate,
+      paymentDueDate: finalPaymentDueDate,
+      calculations,
+      statusTimestamps,
+    } = await handleInvoiceStatusLogic(
+      newStatus,
+      {
+        invoiceNumber: mergedFields.invoiceNumber,
+        invoiceDate: mergedFields.invoiceDate,
+        paymentDueDate: mergedFields.paymentDueDate,
+        items: mergedData.items,
+        tax: mergedFields.tax,
+        taxType: mergedFields.taxType,
+        discount: mergedFields.discount,
+        discountType: mergedFields.discountType,
+      },
+      existingInvoice.businessId,
+      existingInvoice
+    );
 
+    // Update invoice based on status
+    let updatedInvoice;
     if (newStatus === InvoiceStatus.DRAFT) {
-      // DRAFT: Very flexible, allow partial updates
-      if (mergedData.items && mergedData.items.length > 0) {
-        calculations = calculateInvoiceTotals({
-          items: mergedData.items,
-          tax: mergedData.tax,
-          taxType: mergedData.taxType,
-          discount: mergedData.discount,
-          discountType: mergedData.discountType,
-        });
-      } else {
-        // For DRAFT with no items, set minimal calculations
-        calculations = {
-          sanitizedItems: [],
-          subtotal: 0,
-          taxAmount: 0,
-          discountAmount: 0,
-          total: 0,
-        };
-      }
+      const updateData = buildInvoiceUpdateData(
+        validatedData.data,
+        calculations,
+        statusTimestamps
+      );
 
-      // Update invoice with flexible data for DRAFT
-      const updatedInvoice = await prisma.invoice.update({
+      updatedInvoice = await prisma.invoice.update({
         where: { id: validatedData.data.invoiceId },
-        data: {
-          ...(validatedData.data.clientId && {
-            clientId: validatedData.data.clientId,
-          }),
-          ...(validatedData.data.invoiceNumber !== undefined && {
-            invoiceNumber: validatedData.data.invoiceNumber,
-          }),
-          ...(validatedData.data.invoiceDate !== undefined && {
-            invoiceDate: validatedData.data.invoiceDate,
-          }),
-          ...(validatedData.data.paymentDueDate !== undefined && {
-            paymentDueDate: validatedData.data.paymentDueDate,
-          }),
-          ...(validatedData.data.items && {
-            invoiceItems: JSON.parse(
-              JSON.stringify(calculations?.sanitizedItems || [])
-            ),
-          }),
-          ...(validatedData.data.tax !== undefined && {
-            tax: validatedData.data.tax,
-          }),
-          ...(validatedData.data.taxType && {
-            taxType: validatedData.data.taxType,
-          }),
-          ...(validatedData.data.discount !== undefined && {
-            discount: validatedData.data.discount,
-          }),
-          ...(validatedData.data.discountType && {
-            discountType: validatedData.data.discountType,
-          }),
-          ...(calculations && {
-            subtotal: calculations.subtotal,
-            total: calculations.total,
-          }),
-          ...(validatedData.data.status && {
-            status: validatedData.data.status,
-          }),
-          ...(validatedData.data.paymentAccountId !== undefined && {
-            paymentAccountId: validatedData.data.paymentAccountId,
-          }),
-          ...(validatedData.data.isFavorite !== undefined && {
-            isFavorite: validatedData.data.isFavorite,
-          }),
-          ...(validatedData.data.customNote !== undefined && {
-            customNote: validatedData.data.customNote,
-          }),
-          ...(validatedData.data.lateFeeTerms !== undefined && {
-            lateFeeTerms: validatedData.data.lateFeeTerms,
-          }),
-          updatedAt: new Date(),
-        },
+        data: updateData as Prisma.InvoiceUpdateInput,
       });
 
       return createSuccessResponse(
@@ -502,83 +885,25 @@ export async function _updateInvoice(
       newStatus === InvoiceStatus.SENT ||
       newStatus === InvoiceStatus.PAID
     ) {
-      // SENT/PAID: Validate required fields exist after merge
-      if (!mergedData.invoiceNumber) {
-        mergedData.invoiceNumber = await generateUniqueInvoiceNumber(
-          existingInvoice.businessId
-        );
-      }
-
-      if (!mergedData.invoiceDate) {
-        mergedData.invoiceDate = new Date();
-      }
-
-      if (!mergedData.paymentDueDate) {
-        mergedData.paymentDueDate = new Date(mergedData.invoiceDate);
-        mergedData.paymentDueDate.setDate(
-          mergedData.paymentDueDate.getDate() + 30
-        );
-      }
-
-      if (!mergedData.items || mergedData.items.length === 0) {
-        throw new ValidationError("Items are required for SENT/PAID status");
-      }
-
-      // Calculate totals (required for SENT/PAID)
-      calculations = calculateInvoiceTotals({
-        items: mergedData.items,
-        tax: mergedData.tax,
-        taxType: mergedData.taxType,
-        discount: mergedData.discount,
-        discountType: mergedData.discountType,
-      });
-
-      // Handle status change timestamps
-      if (existingInvoice.status !== newStatus) {
-        if (newStatus === InvoiceStatus.SENT && !existingInvoice.sentAt) {
-          statusTimestamps.sentAt = new Date();
-        }
-        if (newStatus === InvoiceStatus.PAID) {
-          if (!existingInvoice.sentAt) {
-            statusTimestamps.sentAt = new Date();
-          }
-          statusTimestamps.paidAt = new Date();
-        }
-      }
-
-      // Update invoice with complete data for SENT/PAID
-      const updatedInvoice = await prisma.invoice.update({
-        where: { id: validatedData.data.invoiceId },
-        data: {
-          ...(validatedData.data.clientId && {
-            clientId: validatedData.data.clientId,
-          }),
-          invoiceNumber: mergedData.invoiceNumber,
-          invoiceDate: mergedData.invoiceDate,
-          paymentDueDate: mergedData.paymentDueDate,
-          invoiceItems: JSON.parse(JSON.stringify(calculations.sanitizedItems)),
-          tax: mergedData.tax,
-          taxType: mergedData.taxType,
-          discount: mergedData.discount,
-          discountType: mergedData.discountType,
-          subtotal: calculations.subtotal,
-          total: calculations.total,
+      const updateData = buildCompleteInvoiceUpdateData(
+        validatedData.data,
+        {
+          tax: mergedFields.tax,
+          taxType: mergedFields.taxType,
+          discount: mergedFields.discount,
+          discountType: mergedFields.discountType,
           status: newStatus,
-          ...(validatedData.data.paymentAccountId !== undefined && {
-            paymentAccountId: validatedData.data.paymentAccountId,
-          }),
-          ...(validatedData.data.isFavorite !== undefined && {
-            isFavorite: validatedData.data.isFavorite,
-          }),
-          ...(validatedData.data.customNote !== undefined && {
-            customNote: validatedData.data.customNote,
-          }),
-          ...(validatedData.data.lateFeeTerms !== undefined && {
-            lateFeeTerms: validatedData.data.lateFeeTerms,
-          }),
-          ...statusTimestamps,
-          updatedAt: new Date(),
         },
+        finalInvoiceNumber!,
+        finalInvoiceDate!,
+        finalPaymentDueDate!,
+        calculations!,
+        statusTimestamps
+      );
+
+      updatedInvoice = await prisma.invoice.update({
+        where: { id: validatedData.data.invoiceId },
+        data: updateData as Prisma.InvoiceUpdateInput,
       });
 
       return createSuccessResponse(
@@ -594,96 +919,11 @@ export async function _updateInvoice(
   }
 }
 
-// Update invoice status
-export async function _updateInvoiceStatus(
-  data: ZUpdateInvoiceStatusInput
-): Promise<InvoiceResponse> {
-  try {
-    const session = await auth();
-    if (!session || !session.user?.id) {
-      return {
-        success: false,
-        message: "User not authenticated",
-      };
-    }
-
-    // Validate input data
-    const validatedData = updateInvoiceStatusSchema.safeParse(data);
-    if (!validatedData.success) {
-      return {
-        success: false,
-        message: `Validation error: ${validatedData.error.errors
-          .map((e) => e.message)
-          .join(", ")}`,
-      };
-    }
-
-    // Get the existing invoice
-    const existingInvoice = await prisma.invoice.findFirst({
-      where: {
-        id: validatedData.data.invoiceId,
-        business: {
-          userId: session.user.id,
-        },
-      },
-      include: {
-        client: true,
-        business: true,
-      },
-    });
-
-    if (!existingInvoice) {
-      return {
-        success: false,
-        message: "Invoice not found or access denied",
-      };
-    }
-
-    // Validate status transitions
-    if (
-      existingInvoice.status === InvoiceStatus.PAID &&
-      validatedData.data.status !== InvoiceStatus.PAID
-    ) {
-      return {
-        success: false,
-        message: "Cannot change status of a paid invoice",
-      };
-    }
-
-    // Update the invoice status
-    const updatedInvoice = await prisma.invoice.update({
-      where: { id: validatedData.data.invoiceId },
-      data: {
-        status: validatedData.data.status,
-        updatedAt: new Date(),
-      },
-      include: {
-        client: true,
-        business: true,
-      },
-    });
-
-    return {
-      success: true,
-      message: "Invoice status updated successfully",
-      data: transformInvoiceToWithRelations(updatedInvoice),
-    };
-  } catch (error) {
-    console.error("Error updating invoice status:", error);
-    return {
-      success: false,
-      message: "Failed to update invoice status",
-    };
-  } finally {
-    await prisma.$disconnect();
-  }
-}
-
 // Get single invoice
 export async function _getInvoice(invoiceId: string): Promise<InvoiceResponse> {
   try {
-    const session = await auth();
-    if (!session || !session.user?.id) {
+    const { isAuthenticated, session } = await checkAuthentication();
+    if (!isAuthenticated || !session) {
       return {
         success: false,
         message: "User not authenticated",
@@ -732,8 +972,8 @@ export async function _getInvoices(
   pagination?: PaginationInput
 ): Promise<InvoiceListApiResponse> {
   try {
-    const session = await auth();
-    if (!session || !session.user?.id) {
+    const { isAuthenticated, session } = await checkAuthentication();
+    if (!isAuthenticated || !session) {
       return {
         success: false,
         message: "User not authenticated",
@@ -897,8 +1137,8 @@ export async function _getInvoices(
 // Get invoice statistics
 export async function _getInvoiceStats(): Promise<InvoiceStatsResponse> {
   try {
-    const session = await auth();
-    if (!session || !session.user?.id) {
+    const { isAuthenticated, session } = await checkAuthentication();
+    if (!isAuthenticated || !session) {
       return {
         success: false,
         message: "User not authenticated",
@@ -1007,8 +1247,8 @@ export async function _deleteInvoice(
   data: DeleteInvoiceInput
 ): Promise<InvoiceDeleteResponse> {
   try {
-    const session = await auth();
-    if (!session || !session.user?.id) {
+    const { isAuthenticated, session } = await checkAuthentication();
+    if (!isAuthenticated || !session) {
       return {
         success: false,
         message: "User not authenticated",

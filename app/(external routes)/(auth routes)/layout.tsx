@@ -1,5 +1,7 @@
 "use client";
 
+import Image from "next/image";
+
 function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
     <main className="bg-gradient-to-br from-blue-600 via-cyan-500 to-blue-700 bg-cover bg-center relative p-2 min-h-screen w-full grid grid-cols-1 lg:grid-cols-2">
@@ -19,7 +21,13 @@ function AuthLayout({ children }: { children: React.ReactNode }) {
           {/* Brand Logo */}
           <div className="mb-8">
             <div className="w-20 h-20 mx-auto bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center shadow-2xl border border-white/30">
-              <span className="text-white font-bold text-3xl">I</span>
+              <Image
+                src="/assets/logo-white-icon.webp"
+                alt="Invox Logo"
+                width={40}
+                height={40}
+                className="w-10 h-10"
+              />
             </div>
           </div>
 
@@ -43,7 +51,13 @@ function AuthLayout({ children }: { children: React.ReactNode }) {
         <div className="lg:hidden absolute top-4 left-1/2 transform -translate-x-1/2">
           <div className="flex items-center space-x-2 text-white">
             <div className="w-8 h-8 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center border border-white/30">
-              <span className="text-white font-bold text-sm">I</span>
+              <Image
+                src="/assets/logo-white-icon.webp"
+                alt="Invox Logo"
+                width={20}
+                height={20}
+                className="w-5 h-5"
+              />
             </div>
             <span className="text-xl font-bold">Invox</span>
           </div>

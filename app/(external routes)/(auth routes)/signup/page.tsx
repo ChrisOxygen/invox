@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { FaGoogle, FaGithub } from "react-icons/fa";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -77,7 +78,13 @@ function SignUpPage() {
         <div className="mb-8 text-center">
           <div className="mb-6">
             <div className="w-16 h-16 mx-auto bg-gradient-to-r from-blue-600 to-cyan-500 rounded-xl flex items-center justify-center shadow-lg">
-              <span className="text-white font-bold text-xl">I</span>
+              <Image
+                src="/assets/logo-white-icon.webp"
+                alt="Invox Logo"
+                width={32}
+                height={32}
+                className="w-8 h-8"
+              />
             </div>
           </div>
           <h1 className="mb-3 text-3xl sm:text-4xl font-bold bg-gradient-to-r from-blue-600 via-cyan-500 to-blue-500 bg-clip-text text-transparent tracking-tight">

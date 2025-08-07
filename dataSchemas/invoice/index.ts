@@ -161,7 +161,7 @@ export const createInvoiceSchema = z
     }
   );
 
-// Update invoice schema with status-based validation
+// Update invoice schema with enhanced status-based validation
 export const updateInvoiceSchema = z
   .object({
     invoiceId: z.string().min(1, "Invoice ID is required"),
@@ -183,17 +183,31 @@ export const updateInvoiceSchema = z
   })
   .refine(
     (data) => {
+      // DRAFT status validation - very flexible
+      if (data.status === InvoiceStatus.DRAFT) {
+        return true; // Allow all fields to be optional/empty for DRAFT updates
+      }
+      return true;
+    },
+    {
+      message: "Draft update validation passed",
+      path: ["status"],
+    }
+  )
+  .refine(
+    (data) => {
       // SENT status validation when updating to SENT
       if (data.status === InvoiceStatus.SENT) {
-        // Note: These checks assume the current invoice data will be merged
-        // The application should ensure required fields are present before allowing SENT status
+        // Note: Application-level validation should ensure the invoice has all required fields
+        // before allowing status change to SENT. This includes checking the existing invoice
+        // data merged with the update data to ensure completeness.
         return true; // Application-level validation will handle this
       }
       return true;
     },
     {
       message:
-        "SENT status requires: invoice number, invoice date, payment due date, and items",
+        "SENT status requires: invoice number, invoice date, payment due date, and items (validated at application level)",
       path: ["status"],
     }
   )
@@ -202,14 +216,30 @@ export const updateInvoiceSchema = z
       // PAID status validation when updating to PAID
       if (data.status === InvoiceStatus.PAID) {
         // Note: Application should validate all SENT requirements are met
-        // and set paidAt timestamp automatically
+        // and will automatically set paidAt timestamp
         return true; // Application-level validation will handle this
       }
       return true;
     },
     {
-      message: "PAID status requires all SENT requirements to be met first",
+      message:
+        "PAID status requires all SENT requirements to be met first (validated at application level)",
       path: ["status"],
+    }
+  )
+  .refine(
+    (data) => {
+      // Validate that invoice date is not in the future (only if provided)
+      if (data.invoiceDate) {
+        const today = new Date();
+        today.setHours(23, 59, 59, 999);
+        return data.invoiceDate <= today;
+      }
+      return true;
+    },
+    {
+      message: "Invoice date cannot be in the future",
+      path: ["invoiceDate"],
     }
   )
   .refine(
@@ -326,8 +356,8 @@ export type InvoiceItemsFormInput = z.infer<typeof invoiceItemsFormSchema>;
 
 // Export input types
 export type ZCreateInvoiceInput = z.infer<typeof createInvoiceSchema>;
-export type UpdateInvoiceInput = z.infer<typeof updateInvoiceSchema>;
-export type UpdateInvoiceStatusInput = z.infer<
+export type ZUpdateInvoiceInput = z.infer<typeof updateInvoiceSchema>;
+export type ZUpdateInvoiceStatusInput = z.infer<
   typeof updateInvoiceStatusSchema
 >;
 export type InvoiceFiltersInput = z.infer<typeof invoiceFiltersSchema>;

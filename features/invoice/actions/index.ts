@@ -25,13 +25,12 @@ import {
   invoiceFiltersSchema,
   paginationSchema,
   deleteInvoiceSchema,
-  CreateInvoiceInput,
-  UpdateInvoiceInput,
-  UpdateInvoiceStatusInput,
   InvoiceFiltersInput,
   PaginationInput,
   DeleteInvoiceInput,
   ZCreateInvoiceInput,
+  ZUpdateInvoiceInput,
+  ZUpdateInvoiceStatusInput,
 } from "@/dataSchemas/invoice";
 import { calculateInvoiceTotals } from "@/utils/invoice-calculations";
 import {
@@ -309,30 +308,25 @@ export async function _createInvoice(
 
 // Update an existing invoice
 export async function _updateInvoice(
-  data: UpdateInvoiceInput
-): Promise<InvoiceResponse> {
-  console.log("Updating invoice with data:", data);
+  data: ZUpdateInvoiceInput
+): Promise<ApiResponse<string>> {
   try {
     const session = await auth();
-    if (!session || !session.user?.id) {
-      return {
-        success: false,
-        message: "User not authenticated",
-      };
+    if (!session?.user?.id) {
+      throw new AuthenticationError();
     }
 
     // Validate input data
     const validatedData = updateInvoiceSchema.safeParse(data);
     if (!validatedData.success) {
-      return {
-        success: false,
-        message: `Validation error: ${validatedData.error.errors
+      throw new ValidationError(
+        `Validation error: ${validatedData.error.errors
           .map((e) => e.message)
-          .join(", ")}`,
-      };
+          .join(", ")}`
+      );
     }
 
-    // Get the existing invoice
+    // Get the existing invoice first
     const existingInvoice = await prisma.invoice.findFirst({
       where: {
         id: validatedData.data.invoiceId,
@@ -347,127 +341,262 @@ export async function _updateInvoice(
     });
 
     if (!existingInvoice) {
-      return {
-        success: false,
-        message: "Invoice not found or access denied",
-      };
+      throw new ValidationError("Invoice not found or access denied");
     }
 
     // Check if invoice is paid (cannot be updated)
     if (existingInvoice.status === InvoiceStatus.PAID) {
-      return {
-        success: false,
-        message: "Cannot update a paid invoice",
-      };
+      throw new ValidationError("Cannot update a paid invoice");
     }
 
-    // If client is being changed, verify it belongs to user
-    if (validatedData.data.clientId) {
-      const client = await prisma.client.findFirst({
-        where: {
-          id: validatedData.data.clientId,
-          userId: session.user.id,
+    // If client is being changed, validate it belongs to user
+    if (
+      validatedData.data.clientId &&
+      validatedData.data.clientId !== existingInvoice.clientId
+    ) {
+      await validateUserBusinessAndClient(
+        session.user.id,
+        validatedData.data.clientId
+      );
+    }
+
+    // Merge existing data with update data
+    const mergedData = {
+      clientId: validatedData.data.clientId || existingInvoice.clientId,
+      businessId: existingInvoice.businessId,
+      invoiceNumber:
+        validatedData.data.invoiceNumber || existingInvoice.invoiceNumber,
+      invoiceDate:
+        validatedData.data.invoiceDate || existingInvoice.invoiceDate,
+      paymentDueDate:
+        validatedData.data.paymentDueDate || existingInvoice.paymentDueDate,
+      items:
+        validatedData.data.items ||
+        (existingInvoice.invoiceItems as Array<{
+          description: string;
+          quantity: number;
+          unitPrice: number;
+          total?: number;
+        }>) ||
+        [],
+      tax:
+        validatedData.data.tax !== undefined
+          ? validatedData.data.tax
+          : existingInvoice.tax || 0,
+      taxType: validatedData.data.taxType || existingInvoice.taxType,
+      discount:
+        validatedData.data.discount !== undefined
+          ? validatedData.data.discount
+          : existingInvoice.discount || 0,
+      discountType:
+        validatedData.data.discountType || existingInvoice.discountType,
+      status: validatedData.data.status || existingInvoice.status,
+      paymentAccountId:
+        validatedData.data.paymentAccountId !== undefined
+          ? validatedData.data.paymentAccountId
+          : existingInvoice.paymentAccountId,
+      isFavorite:
+        validatedData.data.isFavorite !== undefined
+          ? validatedData.data.isFavorite
+          : existingInvoice.isFavorite,
+      customNote:
+        validatedData.data.customNote !== undefined
+          ? validatedData.data.customNote
+          : existingInvoice.customNote,
+      lateFeeTerms:
+        validatedData.data.lateFeeTerms !== undefined
+          ? validatedData.data.lateFeeTerms
+          : existingInvoice.lateFeeTerms,
+    };
+
+    // Handle status-specific validation and logic
+    const newStatus = mergedData.status;
+    let calculations = null;
+    const statusTimestamps: Partial<{
+      sentAt: Date;
+      paidAt: Date;
+    }> = {};
+
+    if (newStatus === InvoiceStatus.DRAFT) {
+      // DRAFT: Very flexible, allow partial updates
+      if (mergedData.items && mergedData.items.length > 0) {
+        calculations = calculateInvoiceTotals({
+          items: mergedData.items,
+          tax: mergedData.tax,
+          taxType: mergedData.taxType,
+          discount: mergedData.discount,
+          discountType: mergedData.discountType,
+        });
+      } else {
+        // For DRAFT with no items, set minimal calculations
+        calculations = {
+          sanitizedItems: [],
+          subtotal: 0,
+          taxAmount: 0,
+          discountAmount: 0,
+          total: 0,
+        };
+      }
+
+      // Update invoice with flexible data for DRAFT
+      const updatedInvoice = await prisma.invoice.update({
+        where: { id: validatedData.data.invoiceId },
+        data: {
+          ...(validatedData.data.clientId && {
+            clientId: validatedData.data.clientId,
+          }),
+          ...(validatedData.data.invoiceNumber !== undefined && {
+            invoiceNumber: validatedData.data.invoiceNumber,
+          }),
+          ...(validatedData.data.invoiceDate !== undefined && {
+            invoiceDate: validatedData.data.invoiceDate,
+          }),
+          ...(validatedData.data.paymentDueDate !== undefined && {
+            paymentDueDate: validatedData.data.paymentDueDate,
+          }),
+          ...(validatedData.data.items && {
+            invoiceItems: JSON.parse(
+              JSON.stringify(calculations?.sanitizedItems || [])
+            ),
+          }),
+          ...(validatedData.data.tax !== undefined && {
+            tax: validatedData.data.tax,
+          }),
+          ...(validatedData.data.taxType && {
+            taxType: validatedData.data.taxType,
+          }),
+          ...(validatedData.data.discount !== undefined && {
+            discount: validatedData.data.discount,
+          }),
+          ...(validatedData.data.discountType && {
+            discountType: validatedData.data.discountType,
+          }),
+          ...(calculations && {
+            subtotal: calculations.subtotal,
+            total: calculations.total,
+          }),
+          ...(validatedData.data.status && {
+            status: validatedData.data.status,
+          }),
+          ...(validatedData.data.paymentAccountId !== undefined && {
+            paymentAccountId: validatedData.data.paymentAccountId,
+          }),
+          ...(validatedData.data.isFavorite !== undefined && {
+            isFavorite: validatedData.data.isFavorite,
+          }),
+          ...(validatedData.data.customNote !== undefined && {
+            customNote: validatedData.data.customNote,
+          }),
+          ...(validatedData.data.lateFeeTerms !== undefined && {
+            lateFeeTerms: validatedData.data.lateFeeTerms,
+          }),
+          updatedAt: new Date(),
         },
       });
 
-      if (!client) {
-        return {
-          success: false,
-          message: "Client not found or access denied",
-        };
-      }
-    }
-
-    // Validate and sanitize invoice items if provided
-    let sanitizedItems = undefined;
-    if (validatedData.data.items) {
-      const invoiceItems = validatedData.data.items;
-
-      if (invoiceItems.length === 0) {
-        return {
-          success: false,
-          message: "At least one invoice item is required",
-        };
+      return createSuccessResponse(
+        updatedInvoice.id,
+        "Draft invoice updated successfully"
+      );
+    } else if (
+      newStatus === InvoiceStatus.SENT ||
+      newStatus === InvoiceStatus.PAID
+    ) {
+      // SENT/PAID: Validate required fields exist after merge
+      if (!mergedData.invoiceNumber) {
+        mergedData.invoiceNumber = await generateUniqueInvoiceNumber(
+          existingInvoice.businessId
+        );
       }
 
-      sanitizedItems = invoiceItems.map((item, index) => {
-        const sanitizedItem = {
-          description: item.description?.trim() || `Item ${index + 1}`,
-          quantity: Math.max(1, Math.round(item.quantity || 1)),
-          unitPrice: Math.max(0.01, Number((item.unitPrice || 0).toFixed(2))),
-        };
+      if (!mergedData.invoiceDate) {
+        mergedData.invoiceDate = new Date();
+      }
 
-        // Calculate total for this item
-        const itemTotal = sanitizedItem.quantity * sanitizedItem.unitPrice;
+      if (!mergedData.paymentDueDate) {
+        mergedData.paymentDueDate = new Date(mergedData.invoiceDate);
+        mergedData.paymentDueDate.setDate(
+          mergedData.paymentDueDate.getDate() + 30
+        );
+      }
 
-        return {
-          ...sanitizedItem,
-          total: Number(itemTotal.toFixed(2)),
-        };
+      if (!mergedData.items || mergedData.items.length === 0) {
+        throw new ValidationError("Items are required for SENT/PAID status");
+      }
+
+      // Calculate totals (required for SENT/PAID)
+      calculations = calculateInvoiceTotals({
+        items: mergedData.items,
+        tax: mergedData.tax,
+        taxType: mergedData.taxType,
+        discount: mergedData.discount,
+        discountType: mergedData.discountType,
       });
+
+      // Handle status change timestamps
+      if (existingInvoice.status !== newStatus) {
+        if (newStatus === InvoiceStatus.SENT && !existingInvoice.sentAt) {
+          statusTimestamps.sentAt = new Date();
+        }
+        if (newStatus === InvoiceStatus.PAID) {
+          if (!existingInvoice.sentAt) {
+            statusTimestamps.sentAt = new Date();
+          }
+          statusTimestamps.paidAt = new Date();
+        }
+      }
+
+      // Update invoice with complete data for SENT/PAID
+      const updatedInvoice = await prisma.invoice.update({
+        where: { id: validatedData.data.invoiceId },
+        data: {
+          ...(validatedData.data.clientId && {
+            clientId: validatedData.data.clientId,
+          }),
+          invoiceNumber: mergedData.invoiceNumber,
+          invoiceDate: mergedData.invoiceDate,
+          paymentDueDate: mergedData.paymentDueDate,
+          invoiceItems: JSON.parse(JSON.stringify(calculations.sanitizedItems)),
+          tax: mergedData.tax,
+          taxType: mergedData.taxType,
+          discount: mergedData.discount,
+          discountType: mergedData.discountType,
+          subtotal: calculations.subtotal,
+          total: calculations.total,
+          status: newStatus,
+          ...(validatedData.data.paymentAccountId !== undefined && {
+            paymentAccountId: validatedData.data.paymentAccountId,
+          }),
+          ...(validatedData.data.isFavorite !== undefined && {
+            isFavorite: validatedData.data.isFavorite,
+          }),
+          ...(validatedData.data.customNote !== undefined && {
+            customNote: validatedData.data.customNote,
+          }),
+          ...(validatedData.data.lateFeeTerms !== undefined && {
+            lateFeeTerms: validatedData.data.lateFeeTerms,
+          }),
+          ...statusTimestamps,
+          updatedAt: new Date(),
+        },
+      });
+
+      return createSuccessResponse(
+        updatedInvoice.id,
+        "Invoice updated successfully"
+      );
     }
 
-    // Update the invoice
-    const updatedInvoice = await prisma.invoice.update({
-      where: { id: validatedData.data.invoiceId },
-      data: {
-        ...(validatedData.data.clientId && {
-          clientId: validatedData.data.clientId,
-        }),
-        ...(validatedData.data.invoiceDate && {
-          invoiceDate: validatedData.data.invoiceDate,
-        }),
-        ...(validatedData.data.paymentDueDate && {
-          paymentDueDate: validatedData.data.paymentDueDate,
-        }),
-        ...(validatedData.data.tax !== undefined && {
-          tax: validatedData.data.tax,
-        }),
-        ...(validatedData.data.taxType && {
-          taxType: validatedData.data.taxType,
-        }),
-        ...(validatedData.data.discount !== undefined && {
-          discount: validatedData.data.discount,
-        }),
-        ...(validatedData.data.discountType && {
-          discountType: validatedData.data.discountType,
-        }),
-        ...(sanitizedItems && {
-          invoiceItems: sanitizedItems,
-        }),
-        ...(validatedData.data.isFavorite !== undefined && {
-          isFavorite: validatedData.data.isFavorite,
-        }),
-        ...(validatedData.data.status && {
-          status: validatedData.data.status,
-        }),
-        updatedAt: new Date(),
-      },
-      include: {
-        client: true,
-        business: true,
-      },
-    });
-
-    return {
-      success: true,
-      message: "Invoice updated successfully",
-      data: transformInvoiceToWithRelations(updatedInvoice),
-    };
+    // This shouldn't be reached, but just in case
+    throw new ValidationError("Invalid invoice status");
   } catch (error) {
-    console.error("Error updating invoice:", error);
-    return {
-      success: false,
-      message: "Failed to update invoice",
-    };
-  } finally {
-    await prisma.$disconnect();
+    return handleInvoiceError(error);
   }
 }
 
 // Update invoice status
 export async function _updateInvoiceStatus(
-  data: UpdateInvoiceStatusInput
+  data: ZUpdateInvoiceStatusInput
 ): Promise<InvoiceResponse> {
   try {
     const session = await auth();

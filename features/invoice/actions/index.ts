@@ -33,21 +33,33 @@ import {
   DeleteInvoiceInput,
   ZCreateInvoiceInput,
 } from "@/dataSchemas/invoice";
+import { calculateInvoiceTotals } from "@/utils/invoice-calculations";
+import {
+  validateUserBusinessAndClient,
+  generateUniqueInvoiceNumber,
+} from "@/utils/invoice-validation";
+import { createInvoiceRecord } from "@/utils/invoice-persistence";
+import {
+  handleInvoiceError,
+  createSuccessResponse,
+  AuthenticationError,
+  ValidationError,
+} from "@/utils/invoice-errors";
 
 const prisma = new PrismaClient();
 
 // Helper function to transform Prisma invoice result to InvoiceWithRelations
 function transformInvoiceToWithRelations(invoice: {
   id: string;
-  invoiceNumber: string;
-  invoiceDate: Date;
-  paymentDueDate: Date;
-  subtotal: number;
-  tax: number;
+  invoiceNumber: string | null;
+  invoiceDate: Date | null;
+  paymentDueDate: Date | null;
+  subtotal: number | null;
+  tax: number | null;
   taxType: TaxType;
   discount?: number;
   discountType: DiscountType;
-  total: number;
+  total: number | null;
   invoiceItems: unknown;
   paymentAccountId?: string | null;
   status: InvoiceStatus;
@@ -65,6 +77,12 @@ function transformInvoiceToWithRelations(invoice: {
 }): InvoiceWithRelations {
   return {
     ...invoice,
+    invoiceNumber: invoice.invoiceNumber || "DRAFT", // Provide default for drafts
+    invoiceDate: invoice.invoiceDate || new Date(), // Provide default
+    paymentDueDate: invoice.paymentDueDate || new Date(), // Provide default
+    subtotal: invoice.subtotal || 0, // Default to 0 if not present
+    tax: invoice.tax || 0, // Default to 0 if not present
+    total: invoice.total || 0, // Default to 0 if not present
     discount: invoice.discount || 0, // Default to 0 if not present
     paymentAccountId: invoice.paymentAccountId || null, // Ensure null instead of undefined
     customNote: invoice.customNote || null, // Ensure null instead of undefined
@@ -121,231 +139,171 @@ export async function _getUserAndBusiness(): Promise<
   }
 }
 
-// Generate unique invoice number
-async function generateInvoiceNumber(businessId: string): Promise<string> {
-  const currentYear = new Date().getFullYear();
-  const prefix = `INV-${currentYear}`;
-
-  // Get the last invoice number for this business this year
-  const lastInvoice = await prisma.invoice.findFirst({
-    where: {
-      businessId,
-      invoiceNumber: {
-        startsWith: prefix,
-      },
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
-
-  let nextNumber = 1;
-  if (lastInvoice && lastInvoice.invoiceNumber) {
-    const lastNumberPart = lastInvoice.invoiceNumber.split("-").pop();
-    if (lastNumberPart && !isNaN(parseInt(lastNumberPart))) {
-      nextNumber = parseInt(lastNumberPart) + 1;
-    }
-  }
-
-  return `${prefix}-${nextNumber.toString().padStart(4, "0")}`;
-}
-
-// Create a new invoice
+// Create a new invoice - Handles DRAFT, SENT, and PAID status correctly
 export async function _createInvoice(
   data: ZCreateInvoiceInput
 ): Promise<ApiResponse<string>> {
   try {
     const session = await auth();
-    if (!session || !session.user?.id) {
-      return {
-        success: false,
-        message: "User not authenticated",
-      };
+    if (!session?.user?.id) {
+      throw new AuthenticationError();
     }
 
     // Validate input data
     const validatedData = createInvoiceSchema.safeParse(data);
     if (!validatedData.success) {
-      return {
-        success: false,
-        message: `Validation error: ${validatedData.error.errors
+      throw new ValidationError(
+        `Validation error: ${validatedData.error.errors
           .map((e) => e.message)
-          .join(", ")}`,
-      };
+          .join(", ")}`
+      );
     }
 
-    // Calculate subtotal from invoice items
-    const sanitizedItems = validatedData.data.items.map((item, index) => {
-      const sanitizedItem = {
-        description: item.description?.trim() || `Item ${index + 1}`,
-        quantity: Math.max(1, Math.round(item.quantity || 1)),
-        unitPrice: Math.max(0.01, Number((item.unitPrice || 0).toFixed(2))),
-      };
+    // Validate user, business, and client
+    const { user } = await validateUserBusinessAndClient(
+      session.user.id,
+      validatedData.data.clientId
+    );
 
-      // Calculate total for this item
-      const itemTotal = sanitizedItem.quantity * sanitizedItem.unitPrice;
+    const invoiceStatus = validatedData.data.status || InvoiceStatus.DRAFT;
+    let invoiceNumber = validatedData.data.invoiceNumber;
+    let invoiceDate = validatedData.data.invoiceDate;
+    let paymentDueDate = validatedData.data.paymentDueDate;
+    let calculations = null;
 
-      return {
-        ...sanitizedItem,
-        total: Number(itemTotal.toFixed(2)),
-      };
-    });
-
-    // Calculate subtotal
-    const subtotal = sanitizedItems.reduce((sum, item) => sum + item.total, 0);
-
-    if (subtotal <= 0) {
-      return {
-        success: false,
-        message: "Subtotal must be greater than zero",
-      };
-    }
-
-    // Calculate tax amount based on type
-    let taxAmount = 0;
-    if (validatedData.data.tax > 0) {
-      if (validatedData.data.taxType === "PERCENTAGE") {
-        taxAmount = (subtotal * validatedData.data.tax) / 100;
+    // Handle status-specific logic
+    if (invoiceStatus === InvoiceStatus.DRAFT) {
+      // DRAFT: Very flexible, allow minimal data
+      if (validatedData.data.items && validatedData.data.items.length > 0) {
+        calculations = calculateInvoiceTotals({
+          items: validatedData.data.items,
+          tax: validatedData.data.tax || 0,
+          taxType: validatedData.data.taxType || TaxType.PERCENTAGE,
+          discount: validatedData.data.discount || 0,
+          discountType:
+            validatedData.data.discountType || DiscountType.PERCENTAGE,
+        });
       } else {
-        taxAmount = validatedData.data.tax;
-      }
-
-      if (taxAmount < 0) {
-        return {
-          success: false,
-          message: "Tax calculation resulted in negative value",
+        // For DRAFT with no items, set minimal calculations
+        calculations = {
+          sanitizedItems: [],
+          subtotal: 0,
+          taxAmount: 0,
+          discountAmount: 0,
+          total: 0,
         };
       }
-    }
-
-    // Calculate discount amount (applied after taxes)
-    let discountAmount = 0;
-    if (validatedData.data.discount && validatedData.data.discount > 0) {
-      const baseForDiscount = subtotal + taxAmount;
-
-      if (validatedData.data.discountType === "PERCENTAGE") {
-        discountAmount = (baseForDiscount * validatedData.data.discount) / 100;
-      } else {
-        discountAmount = validatedData.data.discount;
+    } else if (
+      invoiceStatus === InvoiceStatus.SENT ||
+      invoiceStatus === InvoiceStatus.PAID
+    ) {
+      // SENT/PAID: Require complete data
+      if (!invoiceNumber) {
+        invoiceNumber = await generateUniqueInvoiceNumber(user.business!.id);
       }
 
-      if (discountAmount < 0) {
-        return {
-          success: false,
-          message: "Discount calculation resulted in negative value",
-        };
+      if (!invoiceDate) {
+        invoiceDate = new Date();
       }
 
-      // Ensure discount doesn't exceed the base amount
-      if (discountAmount > baseForDiscount) {
-        return {
-          success: false,
-          message: "Discount amount cannot exceed the subtotal plus taxes",
-        };
+      if (!paymentDueDate) {
+        // Default to 30 days from invoice date
+        paymentDueDate = new Date(invoiceDate);
+        paymentDueDate.setDate(paymentDueDate.getDate() + 30);
       }
+
+      // Calculate totals (required for SENT/PAID)
+      calculations = calculateInvoiceTotals({
+        items: validatedData.data.items || [],
+        tax: validatedData.data.tax || 0,
+        taxType: validatedData.data.taxType || TaxType.PERCENTAGE,
+        discount: validatedData.data.discount || 0,
+        discountType:
+          validatedData.data.discountType || DiscountType.PERCENTAGE,
+      });
     }
 
-    // Calculate final total
-    const total = subtotal + taxAmount - discountAmount;
+    // For DRAFT status, we need to create the invoice directly since some fields are optional
+    if (invoiceStatus === InvoiceStatus.DRAFT) {
+      const draftInvoice = await prisma.invoice.create({
+        data: {
+          businessId: user.business!.id,
+          clientId: validatedData.data.clientId,
+          invoiceNumber: invoiceNumber || null,
+          invoiceDate: invoiceDate || null,
+          paymentDueDate: paymentDueDate || null,
+          invoiceItems: JSON.parse(
+            JSON.stringify(validatedData.data.items || [])
+          ),
+          tax: validatedData.data.tax || null,
+          taxType: validatedData.data.taxType || TaxType.PERCENTAGE,
+          discount: validatedData.data.discount || 0,
+          discountType:
+            validatedData.data.discountType || DiscountType.PERCENTAGE,
+          subtotal: calculations?.subtotal || null,
+          total: calculations?.total || null,
+          status: invoiceStatus,
+          isFavorite: validatedData.data.isFavorite || false,
+          paymentAccountId: validatedData.data.paymentAccountId || null,
+          customNote: validatedData.data.customNote || null,
+          lateFeeTerms: validatedData.data.lateFeeTerms || null,
+        },
+      });
 
-    if (total <= 0) {
-      return {
-        success: false,
-        message: "Final total must be greater than zero",
-      };
-    }
-
-    // Get user's business
-    const user = await prisma.user.findUnique({
-      where: { id: session.user.id },
-      include: {
-        business: true,
-      },
-    });
-
-    if (!user || !user.business) {
-      return {
-        success: false,
-        message:
-          "Business profile not found. Please complete your business setup.",
-      };
-    }
-
-    // Verify client belongs to user
-    const client = await prisma.client.findFirst({
-      where: {
-        id: validatedData.data.clientId,
-        userId: session.user.id,
-      },
-    });
-
-    if (!client) {
-      return {
-        success: false,
-        message: "Client not found or access denied",
-      };
-    }
-
-    // Generate invoice number if not provided
-    const invoiceNumber =
-      validatedData.data.invoiceNumber ||
-      (await generateInvoiceNumber(user.business.id));
-
-    // Check if invoice number is unique within the business
-    const existingInvoice = await prisma.invoice.findFirst({
-      where: {
-        invoiceNumber,
-        businessId: user.business.id,
-      },
-    });
-
-    if (existingInvoice) {
-      return {
-        success: false,
-        message: "Invoice number already exists",
-      };
-    }
-
-    // Create the invoice
-    const newInvoice = await prisma.invoice.create({
-      data: {
-        invoiceNumber,
-        invoiceDate: validatedData.data.invoiceDate,
-        paymentDueDate: validatedData.data.paymentDueDate,
-        subtotal: Number(subtotal.toFixed(2)),
-        tax: Number(taxAmount.toFixed(2)),
-        taxType: validatedData.data.taxType || "PERCENTAGE",
-        discount: Number(discountAmount.toFixed(2)),
-        discountType: validatedData.data.discountType || "PERCENTAGE",
-        total: Number(total.toFixed(2)),
-        invoiceItems: sanitizedItems, // Store the sanitized invoice items
-        paymentAccountId: validatedData.data.paymentAccountId,
-        status: validatedData.data.status || InvoiceStatus.DRAFT,
+      return createSuccessResponse(
+        draftInvoice.id,
+        "Draft invoice created successfully"
+      );
+    } else {
+      // For SENT/PAID status, use the persistence function with required fields
+      const invoiceData = {
+        invoiceNumber: invoiceNumber!,
+        invoiceDate: invoiceDate!,
+        paymentDueDate: paymentDueDate!,
+        subtotal: calculations!.subtotal,
+        tax: validatedData.data.tax || 0,
+        taxType: validatedData.data.taxType || TaxType.PERCENTAGE,
+        discount: validatedData.data.discount || 0,
+        discountType:
+          validatedData.data.discountType || DiscountType.PERCENTAGE,
+        total: calculations!.total,
+        invoiceItems: calculations!.sanitizedItems,
+        status: invoiceStatus,
         isFavorite: validatedData.data.isFavorite || false,
-        businessId: user.business.id,
+        businessId: user.business!.id,
         clientId: validatedData.data.clientId,
+        paymentAccountId: validatedData.data.paymentAccountId,
         customNote: validatedData.data.customNote,
         lateFeeTerms: validatedData.data.lateFeeTerms,
-      },
-      include: {
-        client: true,
-        business: true,
-      },
-    });
+      };
 
-    return {
-      success: true,
-      message: "Invoice created successfully",
-      data: newInvoice.id,
-    };
+      // Create invoice with required fields
+      const newInvoice = await createInvoiceRecord(invoiceData);
+
+      // Update timestamps based on status
+      if (
+        invoiceStatus === InvoiceStatus.SENT ||
+        invoiceStatus === InvoiceStatus.PAID
+      ) {
+        await prisma.invoice.update({
+          where: { id: newInvoice.id },
+          data: {
+            ...(invoiceStatus === InvoiceStatus.SENT && { sentAt: new Date() }),
+            ...(invoiceStatus === InvoiceStatus.PAID && {
+              sentAt: new Date(),
+              paidAt: new Date(),
+            }),
+          },
+        });
+      }
+
+      return createSuccessResponse(
+        newInvoice.id,
+        "Invoice created successfully"
+      );
+    }
   } catch (error) {
-    console.error("Error creating invoice:", error);
-    return {
-      success: false,
-      message: "Failed to create invoice",
-    };
-  } finally {
-    await prisma.$disconnect();
+    return handleInvoiceError(error);
   }
 }
 
@@ -462,23 +420,26 @@ export async function _updateInvoice(
         ...(validatedData.data.paymentDueDate && {
           paymentDueDate: validatedData.data.paymentDueDate,
         }),
-        ...(validatedData.data.subtotal !== undefined && {
-          subtotal: validatedData.data.subtotal,
+        ...(validatedData.data.tax !== undefined && {
+          tax: validatedData.data.tax,
         }),
-        ...(validatedData.data.taxes !== undefined && {
-          taxes: validatedData.data.taxes,
+        ...(validatedData.data.taxType && {
+          taxType: validatedData.data.taxType,
         }),
         ...(validatedData.data.discount !== undefined && {
           discount: validatedData.data.discount,
         }),
+        ...(validatedData.data.discountType && {
+          discountType: validatedData.data.discountType,
+        }),
         ...(sanitizedItems && {
           invoiceItems: sanitizedItems,
         }),
-        ...(validatedData.data.acceptedPaymentMethods && {
-          acceptedPaymentMethods: validatedData.data.acceptedPaymentMethods,
-        }),
         ...(validatedData.data.isFavorite !== undefined && {
           isFavorite: validatedData.data.isFavorite,
+        }),
+        ...(validatedData.data.status && {
+          status: validatedData.data.status,
         }),
         updatedAt: new Date(),
       },

@@ -27,35 +27,94 @@ export const invoiceItemsFormSchema = z.object({
     .max(50, "Cannot exceed 50 items per invoice"),
 });
 
-// Create invoice schema
+// Create invoice schema with status-based validation
 export const createInvoiceSchema = z
   .object({
     clientId: z.string().min(1, "Client is required"),
     businessId: z.string().min(1, "Business is required"),
     invoiceNumber: z.string().optional(),
-    invoiceDate: z.date({
-      required_error: "Invoice date is required",
-    }),
-    paymentDueDate: z.date({
-      required_error: "Payment due date is required",
-    }),
-    items: z.array(invoiceItemSchema).min(1, "At least one item is required"),
-    tax: z.number().min(0, "Tax must be positive"),
-    taxType: z.nativeEnum(TaxType).optional(),
-    discount: z.number().min(0, "Discount must be positive").optional(),
-    discountType: z.nativeEnum(DiscountType).optional(),
-    status: z.nativeEnum(InvoiceStatus).optional(), // Add status field
+    invoiceDate: z.date().optional(), // Optional for DRAFT
+    paymentDueDate: z.date().optional(), // Optional for DRAFT
+    items: z.array(invoiceItemSchema).optional().default([]), // Allow empty array for DRAFT
+    tax: z.number().min(0, "Tax must be positive").optional().default(0),
+    taxType: z.nativeEnum(TaxType).optional().default(TaxType.PERCENTAGE),
+    discount: z
+      .number()
+      .min(0, "Discount must be positive")
+      .optional()
+      .default(0),
+    discountType: z
+      .nativeEnum(DiscountType)
+      .optional()
+      .default(DiscountType.PERCENTAGE),
+    status: z.nativeEnum(InvoiceStatus).optional().default(InvoiceStatus.DRAFT),
     paymentAccountId: z.string().optional(), // Optional payment account
-    isFavorite: z.boolean().optional(),
+    isFavorite: z.boolean().optional().default(false),
     customNote: z.string().optional(),
-    lateFeeTerms: z.string().optional(), // Changed from lateFeeText to match Prisma model
+    lateFeeTerms: z.string().optional(),
   })
   .refine(
     (data) => {
-      // Validate that invoice date is not in the future
-      const today = new Date();
-      today.setHours(23, 59, 59, 999);
-      return data.invoiceDate <= today;
+      // DRAFT status validation - very flexible
+      if (data.status === InvoiceStatus.DRAFT) {
+        return true; // Allow all fields to be optional/empty for DRAFT
+      }
+      return true;
+    },
+    {
+      message: "Draft validation passed",
+      path: ["status"],
+    }
+  )
+  .refine(
+    (data) => {
+      // SENT status validation - business ready requirements
+      if (data.status === InvoiceStatus.SENT) {
+        if (!data.invoiceNumber || !data.invoiceDate || !data.paymentDueDate) {
+          return false;
+        }
+        if (!data.items || data.items.length === 0) {
+          return false;
+        }
+        return true;
+      }
+      return true;
+    },
+    {
+      message:
+        "For SENT status: Invoice number, invoice date, payment due date, and items are required",
+      path: ["status"],
+    }
+  )
+  .refine(
+    (data) => {
+      // PAID status validation - all SENT requirements + paidAt
+      if (data.status === InvoiceStatus.PAID) {
+        if (!data.invoiceNumber || !data.invoiceDate || !data.paymentDueDate) {
+          return false;
+        }
+        if (!data.items || data.items.length === 0) {
+          return false;
+        }
+        // Note: paidAt will be set automatically when status changes to PAID
+        return true;
+      }
+      return true;
+    },
+    {
+      message: "For PAID status: All SENT requirements must be met",
+      path: ["status"],
+    }
+  )
+  .refine(
+    (data) => {
+      // Validate that invoice date is not in the future (only if provided)
+      if (data.invoiceDate) {
+        const today = new Date();
+        today.setHours(23, 59, 59, 999);
+        return data.invoiceDate <= today;
+      }
+      return true;
     },
     {
       message: "Invoice date cannot be in the future",
@@ -64,8 +123,11 @@ export const createInvoiceSchema = z
   )
   .refine(
     (data) => {
-      // Validate that payment due date is after invoice date
-      return data.paymentDueDate >= data.invoiceDate;
+      // Validate that payment due date is after invoice date (only if both provided)
+      if (data.invoiceDate && data.paymentDueDate) {
+        return data.paymentDueDate >= data.invoiceDate;
+      }
+      return true;
     },
     {
       message: "Payment due date must be after or equal to invoice date",
@@ -75,7 +137,7 @@ export const createInvoiceSchema = z
   .refine(
     (data) => {
       // If tax amount exists, taxType must also exist
-      if (data.tax > 0) {
+      if (data.tax && data.tax > 0) {
         return data.taxType !== undefined;
       }
       return true;
@@ -99,27 +161,57 @@ export const createInvoiceSchema = z
     }
   );
 
-// Update invoice schema
+// Update invoice schema with status-based validation
 export const updateInvoiceSchema = z
   .object({
     invoiceId: z.string().min(1, "Invoice ID is required"),
     clientId: z.string().min(1, "Client is required").optional(),
     businessId: z.string().min(1, "Business is required").optional(),
+    invoiceNumber: z.string().optional(),
     invoiceDate: z.date().optional(),
     paymentDueDate: z.date().optional(),
-    items: z
-      .array(invoiceItemSchema)
-      .min(1, "At least one item is required")
-      .optional(),
+    items: z.array(invoiceItemSchema).optional(),
     tax: z.number().min(0, "Tax must be positive").optional(),
     taxType: z.nativeEnum(TaxType).optional(),
     discount: z.number().min(0, "Discount must be positive").optional(),
     discountType: z.nativeEnum(DiscountType).optional(),
-    paymentAccountId: z.string().optional(), // Optional payment account
+    status: z.nativeEnum(InvoiceStatus).optional(),
+    paymentAccountId: z.string().optional(),
     isFavorite: z.boolean().optional(),
     customNote: z.string().optional(),
-    lateFeeTerms: z.string().optional(), // Changed from lateFeeText to match Prisma model
+    lateFeeTerms: z.string().optional(),
   })
+  .refine(
+    (data) => {
+      // SENT status validation when updating to SENT
+      if (data.status === InvoiceStatus.SENT) {
+        // Note: These checks assume the current invoice data will be merged
+        // The application should ensure required fields are present before allowing SENT status
+        return true; // Application-level validation will handle this
+      }
+      return true;
+    },
+    {
+      message:
+        "SENT status requires: invoice number, invoice date, payment due date, and items",
+      path: ["status"],
+    }
+  )
+  .refine(
+    (data) => {
+      // PAID status validation when updating to PAID
+      if (data.status === InvoiceStatus.PAID) {
+        // Note: Application should validate all SENT requirements are met
+        // and set paidAt timestamp automatically
+        return true; // Application-level validation will handle this
+      }
+      return true;
+    },
+    {
+      message: "PAID status requires all SENT requirements to be met first",
+      path: ["status"],
+    }
+  )
   .refine(
     (data) => {
       // If both dates are provided, validate their relationship

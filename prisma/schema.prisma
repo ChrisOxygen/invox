@@ -186,17 +186,17 @@ model PaymentAccount {
 
 model Invoice {
   id                     String        @id @default(auto()) @map("_id") @db.ObjectId
-  invoiceNumber          String
-  invoiceDate            DateTime
-  paymentDueDate         DateTime
+  invoiceNumber          String?       // Optional - auto-generated when moving to SENT
+  invoiceDate            DateTime?     // Optional - can default to current date when sending
+  paymentDueDate         DateTime?     // Optional - can be calculated when sending
   
    // Financial fields - use Float for MongoDB compatibility
-  subtotal               Float
-  tax                  Float
+  subtotal               Float?        // Optional - can be 0 or calculated
+  tax                    Float?        // Optional - can be 0 or calculated
   taxType                TaxType       @default(PERCENTAGE)
   discount               Float         @default(0)
   discountType           DiscountType  @default(PERCENTAGE)
-  total                  Float         // Add calculated total
+  total                  Float?        // Optional - can be calculated
   
   invoiceItems           Json // Array of invoice items with description, quantity, unitPrice  
   // Single payment account for this invoice
@@ -224,7 +224,8 @@ model Invoice {
   updatedAt DateTime @updatedAt
 
 
-  @@unique([invoiceNumber, businessId]) // Invoice number unique per business
+  // Note: invoiceNumber unique constraint handled at application level since it's now optional
+  @@index([businessId, invoiceNumber]) // For business invoice filtering with number
   @@index([businessId, status]) // For business invoice filtering
   @@index([clientId]) // For client invoice history
   @@index([status]) // For status-based queries

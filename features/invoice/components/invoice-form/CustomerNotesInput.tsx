@@ -38,7 +38,7 @@ function CustomerNotesInput() {
   return (
     <div className="w-full">
       {/* Internal Label */}
-      <label 
+      <label
         htmlFor="custom-notes"
         className="text-sm font-semibold text-gray-900 block mb-3"
       >
@@ -86,7 +86,11 @@ function CustomerNotesInput() {
 
       {/* Error Message */}
       {hasError && (
-        <p id="custom-notes-error" className="text-red-500 text-sm mt-1" role="alert">
+        <p
+          id="custom-notes-error"
+          className="text-red-500 text-sm mt-1"
+          role="alert"
+        >
           {validation.errors.customNote}
         </p>
       )}
@@ -94,7 +98,8 @@ function CustomerNotesInput() {
       {/* Helper Text */}
       {!hasError && (
         <p id="notes-helper" className="text-xs text-gray-500 mt-1">
-          Add a personalized message to your invoice. This will appear at the bottom of your invoice.
+          Add a personalized message to your invoice. This will appear at the
+          bottom of your invoice.
         </p>
       )}
     </div>

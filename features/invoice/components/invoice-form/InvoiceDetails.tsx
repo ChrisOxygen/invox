@@ -57,41 +57,21 @@ function InvoiceDetails() {
 
         {/* Discount Type and Discount Amount */}
         <div className="flex flex-col gap-6">
-          <div className="flex flex-col gap-3">
-            <label className="text-sm font-semibold text-gray-900">
-              Discount Type
-            </label>
-            <div className="relative">
-              <DiscountTypeInput />
-            </div>
+          <div className="relative">
+            <DiscountTypeInput />
           </div>
-          <div className="flex flex-col gap-3">
-            <label className="text-sm font-semibold text-gray-900">
-              Discount Amount
-            </label>
-            <div className="relative">
-              <DiscountInput />
-            </div>
+          <div className="relative">
+            <DiscountInput />
           </div>
         </div>
 
         {/* Tax Structure and Tax Amount */}
         <div className="flex flex-col gap-6">
-          <div className="flex flex-col gap-3">
-            <label className="text-sm font-semibold text-gray-900">
-              Tax type
-            </label>
-            <div className="relative">
-              <TaxTypeInput />
-            </div>
+          <div className="relative">
+            <TaxTypeInput />
           </div>
-          <div className="flex flex-col gap-3">
-            <label className="text-sm font-semibold text-gray-900">
-              Tax Amount
-            </label>
-            <div className="relative">
-              <TaxInput />
-            </div>
+          <div className="relative">
+            <TaxInput />
           </div>
         </div>
 

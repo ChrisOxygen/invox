@@ -17,6 +17,12 @@ function DiscountInput() {
 
   const hasError = validation.errors.discount && !hasUserTyped;
 
+  // Dynamic label based on discount type
+  const label =
+    discountType === DiscountType.FIXED
+      ? "Discount Amount"
+      : "Discount Percentage";
+
   // Context-aware placeholder based on discount type
   const placeholder =
     discountType === DiscountType.FIXED
@@ -45,6 +51,11 @@ function DiscountInput() {
 
   return (
     <div className="w-full">
+      {/* Dynamic Label */}
+      <label className="text-sm font-semibold text-gray-900 block mb-3">
+        {label}
+      </label>
+
       <Input
         type="number"
         placeholder={placeholder}

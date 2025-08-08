@@ -25,6 +25,11 @@ function DiscountTypeInput() {
 
   return (
     <div className="w-full">
+      {/* Label */}
+      <label className="text-sm font-semibold text-gray-900 block mb-3">
+        Discount Type
+      </label>
+
       <fieldset className="w-full">
         <legend className="sr-only">Discount Type Selection</legend>
         <RadioGroup

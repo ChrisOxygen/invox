@@ -25,6 +25,11 @@ function TaxTypeInput() {
 
   return (
     <div className="w-full">
+      {/* Label */}
+      <label className="text-sm font-semibold text-gray-900 block mb-3">
+        Tax Type
+      </label>
+
       <fieldset className="w-full">
         <legend className="sr-only">Tax Type Selection</legend>
         <RadioGroup

@@ -1,6 +1,5 @@
 "use client";
 import { ClientSelect } from "./ClientSelect";
-import { useInvoiceForm } from "../../index";
 import DueDateInput from "./DueDateInput";
 import ItemsInput from "./ItemsInput";
 import CustomerNotesInput from "./CustomerNotesInput";
@@ -12,8 +11,6 @@ import TaxTypeInput from "./TaxTypeInput";
 import DiscountTypeInput from "./DiscountTypeInput";
 
 function InvoiceDetails() {
-  const { state, setCustomNote } = useInvoiceForm();
-
   return (
     <div className="flex flex-col gap-6 p-6 sm:p-8">
       {/* Header Section */}
@@ -86,19 +83,8 @@ function InvoiceDetails() {
         </div>
 
         {/* Customer Notes */}
-        <div className="flex flex-col gap-3">
-          <label className="text-sm font-semibold text-gray-900">
-            Customer Notes
-          </label>
-          <div className="relative">
-            <CustomerNotesInput
-              value={state.customNote}
-              onChange={setCustomNote}
-              placeholder="Thanks for trusting us with your business..."
-              maxLength={500}
-              rows={4}
-            />
-          </div>
+        <div className="relative">
+          <CustomerNotesInput />
         </div>
       </div>
     </div>

@@ -32,7 +32,9 @@ function validateRequiredFields(
     errors.clientId = "Please select a client";
   }
 
-  if (!state.invoiceNumber) {
+  // ✅ FIX: Only require invoiceNumber for EXISTING invoices
+  // For new invoices (no invoiceId), the server will auto-generate it
+  if (state.invoiceId && !state.invoiceNumber) {
     errors.invoiceNumber = "Invoice number is required";
   }
 

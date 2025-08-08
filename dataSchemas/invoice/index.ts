@@ -70,7 +70,8 @@ export const createInvoiceSchema = z
     (data) => {
       // SENT status validation - business ready requirements
       if (data.status === InvoiceStatus.SENT) {
-        if (!data.invoiceNumber || !data.invoiceDate || !data.paymentDueDate) {
+        // Note: invoiceNumber is auto-generated on server if not provided
+        if (!data.invoiceDate || !data.paymentDueDate) {
           return false;
         }
         if (!data.items || data.items.length === 0) {
@@ -82,7 +83,7 @@ export const createInvoiceSchema = z
     },
     {
       message:
-        "For SENT status: Invoice number, invoice date, payment due date, and items are required",
+        "For SENT status: Invoice date, payment due date, and items are required",
       path: ["status"],
     }
   )
@@ -90,7 +91,8 @@ export const createInvoiceSchema = z
     (data) => {
       // PAID status validation - all SENT requirements + paidAt
       if (data.status === InvoiceStatus.PAID) {
-        if (!data.invoiceNumber || !data.invoiceDate || !data.paymentDueDate) {
+        // Note: invoiceNumber is auto-generated on server if not provided
+        if (!data.invoiceDate || !data.paymentDueDate) {
           return false;
         }
         if (!data.items || data.items.length === 0) {
@@ -207,7 +209,7 @@ export const updateInvoiceSchema = z
     },
     {
       message:
-        "SENT status requires: invoice number, invoice date, payment due date, and items (validated at application level)",
+        "SENT status requires: invoice date, payment due date, and items (invoice number auto-generated)",
       path: ["status"],
     }
   )

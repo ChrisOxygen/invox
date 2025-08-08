@@ -173,7 +173,8 @@ export function InvoiceSaveActions() {
         return;
       }
 
-      // Additional validation for SENT status
+      // ✅ FIX: Updated validation that accounts for auto-generated invoice numbers
+      // Only validate if this is an existing invoice that should already have a number
       const validationResult = getValidationErrors();
       if (!validationResult.isValid) {
         console.log("Validation errors:", validationResult.errors);
@@ -196,7 +197,7 @@ export function InvoiceSaveActions() {
         };
         updateInvoice(updateData);
       } else {
-        // Create new invoice
+        // Create new invoice - server will auto-generate invoice number
         const createData: ZCreateInvoiceInput = invoiceData;
         createInvoice(createData);
       }
@@ -223,7 +224,7 @@ export function InvoiceSaveActions() {
         return;
       }
 
-      // Additional validation
+      // ✅ FIX: Updated validation that accounts for auto-generated invoice numbers
       const validationResult = getValidationErrors();
       if (!validationResult.isValid) {
         console.log("Validation errors:", validationResult.errors);
@@ -246,7 +247,7 @@ export function InvoiceSaveActions() {
         };
         updateInvoice(updateData);
       } else {
-        // Create new invoice
+        // Create new invoice - server will auto-generate invoice number
         const createData: ZCreateInvoiceInput = invoiceData;
         createInvoice(createData);
       }

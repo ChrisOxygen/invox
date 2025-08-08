@@ -23,25 +23,19 @@ import { DUE_DATE_PRESETS } from "@/constants";
 import { calculateDueDate } from "@/utils";
 import { useInvoiceForm } from "../../index";
 
-interface DueDateSelectorProps {
-  value: Date | null;
-  onChange: (value: Date | null) => void;
-  disabled?: boolean;
-  placeholder?: string;
-}
-
-export function DueDateInput({
-  value,
-  onChange,
-  disabled = false,
-  placeholder = "Select due date...",
-}: DueDateSelectorProps) {
-  const { state } = useInvoiceForm();
-  const { validation } = state;
+export function DueDateInput() {
+  const { state, setPaymentDueDate } = useInvoiceForm();
+  const { validation, paymentDueDate } = state;
   const [hasUserTyped, setHasUserTyped] = useState(false);
   const [mode, setMode] = useState<"preset" | "custom">("preset");
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [selectedPreset, setSelectedPreset] = useState<string | null>(null);
+
+  // Internal props - no external configuration needed
+  const value = paymentDueDate;
+  const disabled = false; // Can be extended later if needed
+  const placeholder =
+    mode === "preset" ? "Select payment terms..." : "Pick a date...";
 
   // Reset hasUserTyped when validation state changes (new submit)
   useEffect(() => {
@@ -99,7 +93,7 @@ export function DueDateInput({
       setMode("preset");
       setSelectedPreset(presetValue);
       const calculatedDate = calculateDueDate(presetValue);
-      onChange(calculatedDate);
+      setPaymentDueDate(calculatedDate);
     }
   };
 
@@ -107,7 +101,7 @@ export function DueDateInput({
   const handleDateSelect = (date: Date | undefined) => {
     if (date) {
       setHasUserTyped(true);
-      onChange(date);
+      setPaymentDueDate(date);
       setIsCalendarOpen(false);
     }
   }; // Handle toggle between modes
@@ -115,10 +109,10 @@ export function DueDateInput({
     if (mode === "preset") {
       setMode("custom");
       setIsCalendarOpen(true);
-      onChange(null);
+      setPaymentDueDate(null);
     } else {
       setMode("preset");
-      onChange(null);
+      setPaymentDueDate(null);
     }
   };
 

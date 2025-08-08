@@ -12,8 +12,8 @@ import TaxStructureInput from "./TaxStructureInput";
 import DiscountTypeInput from "./DiscountTypeInput";
 
 function InvoiceDetails() {
-  const { state, setPaymentDueDate, setCustomNote } = useInvoiceForm();
-  const { paymentDueDate } = state;
+  const { state, setCustomNote } = useInvoiceForm();
+
   return (
     <div className="flex flex-col gap-6 p-6 sm:p-8">
       {/* Header Section */}
@@ -41,11 +41,7 @@ function InvoiceDetails() {
 
         {/* Due Date */}
         <div className="flex flex-col gap-3">
-          <DueDateInput
-            value={paymentDueDate}
-            onChange={setPaymentDueDate}
-            placeholder="Choose a due date..."
-          />
+          <DueDateInput />
         </div>
 
         {/* Items Section */}

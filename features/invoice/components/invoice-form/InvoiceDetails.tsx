@@ -12,9 +12,8 @@ import TaxStructureInput from "./TaxStructureInput";
 import DiscountTypeInput from "./DiscountTypeInput";
 
 function InvoiceDetails() {
-  const { state, setClient, setPaymentDueDate, setCustomNote } =
-    useInvoiceForm();
-  const { client, paymentDueDate } = state;
+  const { state, setPaymentDueDate, setCustomNote } = useInvoiceForm();
+  const { paymentDueDate } = state;
   return (
     <div className="flex flex-col gap-6 p-6 sm:p-8">
       {/* Header Section */}
@@ -36,11 +35,7 @@ function InvoiceDetails() {
             <span className="text-red-500 text-base">*</span>
           </label>
           <div className="relative">
-            <ClientSelect
-              value={client}
-              onChange={setClient}
-              placeholder="Choose a client..."
-            />
+            <ClientSelect />
           </div>
         </div>
 

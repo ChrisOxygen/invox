@@ -11,25 +11,15 @@ import { useGetClients } from "@/features/clients/hooks";
 import { ClientForm } from "@/features/clients/components/ClientForm";
 import { useInvoiceForm } from "../../index";
 
-interface ClientSelectProps {
-  value?: Client | null; // Full client object
-  onChange: (client: Client | null) => void;
-  placeholder?: string;
-}
-
-export function ClientSelect({
-  value, // Full client object
-  onChange,
-  placeholder = "Select a client...",
-}: ClientSelectProps) {
+export function ClientSelect() {
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [hasUserTyped, setHasUserTyped] = useState(false);
 
-  const { state } = useInvoiceForm();
-  const { validation } = state;
+  const { state, setClientId } = useInvoiceForm();
+  const { validation, clientId } = state;
   const { clients, isLoading: isGettingClients, refetch } = useGetClients();
 
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -37,15 +27,24 @@ export function ClientSelect({
 
   const disabled = isGettingClients;
 
-  // The selected client is now the value itself
-  const selectedClient = value;
+  // Find the selected client by clientId
+  const selectedClient = clientId
+    ? clients.find((client) => client.id === clientId)
+    : null;
+
+  // Internal placeholder - contextual based on state
+  const placeholder = selectedClient
+    ? selectedClient.BusinessName
+    : clients.length === 0
+    ? "Add your first client..."
+    : "Select a client...";
 
   // Reset hasUserTyped when validation state changes (new submit)
   useEffect(() => {
     setHasUserTyped(false);
-  }, [validation.isValid, validation.errors.client]);
+  }, [validation.isValid, validation.errors.clientId]);
 
-  const hasError = validation.errors.client && !hasUserTyped;
+  const hasError = validation.errors.clientId && !hasUserTyped;
 
   // Debounce search term
   useEffect(() => {
@@ -100,7 +99,7 @@ export function ClientSelect({
   };
   const handleClientSelect = (client: Client) => {
     setHasUserTyped(true);
-    onChange(client);
+    setClientId(client.id);
     setIsOpen(false);
     setSearchTerm("");
   };
@@ -118,7 +117,7 @@ export function ClientSelect({
   };
   const handleFormSuccess = (newClient: Client) => {
     setHasUserTyped(true);
-    onChange(newClient);
+    setClientId(newClient.id);
     refetch(); // Refresh the clients list
   };
 
@@ -133,7 +132,7 @@ export function ClientSelect({
           disabled={disabled}
           className={cn(
             "w-full justify-between h-11 px-4 text-left font-normal border-2 transition-all duration-200",
-            !value && "text-gray-500",
+            !selectedClient && "text-gray-500",
             hasError
               ? "border-red-500 hover:border-red-600 focus:border-red-600 focus:ring-2 focus:ring-red-100"
               : "border-blue-200 hover:border-blue-400 focus:border-blue-600 focus:ring-2 focus:ring-blue-100",
@@ -184,7 +183,7 @@ export function ClientSelect({
                         onClick={() => handleClientSelect(client)}
                         className={cn(
                           "w-full px-4 py-3 text-left hover:bg-blue-50 focus:bg-blue-50 focus:outline-none transition-all duration-200",
-                          value?.id === client.id &&
+                          selectedClient?.id === client.id &&
                             "bg-blue-50 border-l-4 border-blue-500"
                         )}
                       >
@@ -202,7 +201,7 @@ export function ClientSelect({
                               {client.email}
                             </div>{" "}
                           </div>{" "}
-                          {value?.id === client.id && (
+                          {selectedClient?.id === client.id && (
                             <Check className="h-4 w-4 text-blue-600 ml-2 flex-shrink-0" />
                           )}
                         </div>
@@ -269,7 +268,9 @@ export function ClientSelect({
 
       {/* Error Message */}
       {hasError && (
-        <p className="text-red-500 text-sm mt-1">{validation.errors.client}</p>
+        <p className="text-red-500 text-sm mt-1">
+          {validation.errors.clientId}
+        </p>
       )}
 
       {/* Client Form Dialog */}

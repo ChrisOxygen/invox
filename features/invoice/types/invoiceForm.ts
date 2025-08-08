@@ -1,4 +1,9 @@
-import { Client, PaymentAccount } from "@prisma/client";
+import {
+  PaymentAccount,
+  TaxType,
+  DiscountType,
+  InvoiceStatus,
+} from "@prisma/client";
 import { UserWithBusiness } from "@/types";
 
 export type FormMode = "create" | "edit";
@@ -10,7 +15,7 @@ export interface InvoiceFormState {
   invoiceId?: string;
   businessDetails: UserWithBusiness | null;
   paymentAccount: PaymentAccount | null;
-  client?: Client | null;
+  clientId?: string;
   invoiceNumber?: string;
   invoiceDate?: Date;
   paymentDueDate: Date | null;
@@ -20,12 +25,12 @@ export interface InvoiceFormState {
     unitPrice?: number;
   }[];
   customNote: string;
-  taxStructure: "flat" | "percentage";
+  taxType: TaxType;
   tax?: number;
-  discountType: "flat" | "percentage";
+  discountType: DiscountType;
   discount?: number;
-  lateFeeText?: string;
-  invoiceStatus?: "DRAFT" | "SENT" | "PAID" | "OVERDUE" | "CANCELLED";
+  lateFeeTerms?: string;
+  invoiceStatus?: InvoiceStatus;
   isFavorite: boolean;
   hasUnsavedChanges: boolean;
   validation: InvoiceValidationResult;
@@ -53,8 +58,8 @@ export type InvoiceFormAction =
       payload: PaymentAccount;
     }
   | {
-      type: "SET_CLIENT";
-      payload: Client | null;
+      type: "SET_CLIENT_ID";
+      payload: string | null;
     }
   | {
       type: "SET_INVOICE_NUMBER";
@@ -102,7 +107,7 @@ export type InvoiceFormAction =
       payload: string;
     }
   | {
-      type: "SET_LATE_FEE_TEXT";
+      type: "SET_LATE_FEE_TERMS";
       payload: string;
     }
   | {
@@ -110,8 +115,8 @@ export type InvoiceFormAction =
       payload: number;
     }
   | {
-      type: "SET_TAX_STRUCTURE";
-      payload: "flat" | "percentage";
+      type: "SET_TAX_TYPE";
+      payload: TaxType;
     }
   | {
       type: "SET_DISCOUNT";
@@ -119,14 +124,14 @@ export type InvoiceFormAction =
     }
   | {
       type: "SET_DISCOUNT_TYPE";
-      payload: "flat" | "percentage";
+      payload: DiscountType;
     }
   | {
       type: "SET_IS_FAVORITE";
     }
   | {
       type: "SET_INVOICE_STATUS";
-      payload: "DRAFT" | "SENT" | "PAID" | "OVERDUE" | "CANCELLED";
+      payload: InvoiceStatus;
     }
   | {
       type: "SET_UNSAVED_CHANGES";
@@ -138,19 +143,21 @@ export type InvoiceFormAction =
   | {
       type: "LOAD_EXISTING_INVOICE";
       payload: {
-        client: Client;
+        clientId: string;
         invoiceNumber: string;
         invoiceDate: Date;
         paymentDueDate: Date;
-        taxes: number;
+        tax: number;
+        taxType: TaxType;
         discount?: number;
+        discountType: DiscountType;
         isFavorite?: boolean;
         invoiceItems: {
           description?: string;
           quantity?: number;
           unitPrice?: number;
         }[];
-        acceptedPaymentMethods?: string;
+        lateFeeTerms?: string;
       };
     }
   | {
@@ -182,21 +189,19 @@ export interface InvoiceFormContextType {
   setViewMode: (viewMode: ViewMode) => void;
 
   // Convenience methods for controlled components
-  setClient: (client: Client | null) => void;
+  setClientId: (clientId: string | null) => void;
   setInvoiceNumber: (invoiceNumber: string) => void;
   setInvoiceDate: (date: Date) => void;
   setPaymentDueDate: (date: Date | null) => void;
   setCustomNote: (note: string) => void;
-  setLateFeeText: (text: string) => void;
+  setLateFeeTerms: (terms: string) => void;
   setTax: (tax: number) => void;
-  setTaxStructure: (structure: "flat" | "percentage") => void;
-  setDiscountType: (type: "flat" | "percentage") => void;
+  setTaxType: (type: TaxType) => void;
+  setDiscountType: (type: DiscountType) => void;
   setDiscount: (discount: number) => void;
   toggleIsFavorite: () => void;
   setPaymentAccount: (id: string) => void;
-  setInvoiceStatus: (
-    status: "DRAFT" | "SENT" | "PAID" | "OVERDUE" | "CANCELLED"
-  ) => void;
+  setInvoiceStatus: (status: InvoiceStatus) => void;
   setUnsavedChanges: (hasChanges: boolean) => void;
   resetForm: () => void;
   formLoading: boolean;

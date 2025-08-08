@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from "react";
 import { useParams } from "next/navigation";
-import { Client } from "@prisma/client";
+import { TaxType, DiscountType, InvoiceStatus } from "@prisma/client";
 import {
   InvoiceFormState,
   InvoiceFormAction,
@@ -137,15 +137,17 @@ export function useInvoiceFormLogic({
       dispatch({
         type: "LOAD_EXISTING_INVOICE",
         payload: {
-          client: existingInvoice.client,
+          clientId: existingInvoice.client.id,
           invoiceNumber: existingInvoice.invoiceNumber || "",
-          invoiceDate: existingInvoice.invoiceDate,
-          paymentDueDate: existingInvoice.paymentDueDate,
-          taxes: existingInvoice.taxes || 0,
+          invoiceDate: existingInvoice.invoiceDate || new Date(),
+          paymentDueDate: existingInvoice.paymentDueDate || new Date(),
+          tax: existingInvoice.tax || 0,
+          taxType: existingInvoice.taxType,
           discount: existingInvoice.discount,
+          discountType: existingInvoice.discountType,
           isFavorite: existingInvoice.isFavorite,
           invoiceItems: loadedItems,
-          acceptedPaymentMethods: existingInvoice.acceptedPaymentMethods,
+          lateFeeTerms: existingInvoice.lateFeeTerms || undefined,
         },
       });
 
@@ -161,8 +163,8 @@ export function useInvoiceFormLogic({
         dispatch({ type: "RESET_FORM" });
       },
 
-      setClient: (client: Client | null) => {
-        dispatch({ type: "SET_CLIENT", payload: client });
+      setClientId: (clientId: string | null) => {
+        dispatch({ type: "SET_CLIENT_ID", payload: clientId });
       },
 
       setPaymentDueDate: (date: Date | null) => {
@@ -195,8 +197,8 @@ export function useInvoiceFormLogic({
         dispatch({ type: "SET_PAYMENT_ACCOUNT", payload: paymentAccount });
       },
 
-      setLateFeeText: (text: string) => {
-        dispatch({ type: "SET_LATE_FEE_TEXT", payload: text });
+      setLateFeeTerms: (terms: string) => {
+        dispatch({ type: "SET_LATE_FEE_TERMS", payload: terms });
       },
 
       addInvoiceItem: (item: {
@@ -233,11 +235,11 @@ export function useInvoiceFormLogic({
         dispatch({ type: "SET_DISCOUNT", payload: discount });
       },
 
-      setTaxStructure: (structure: "flat" | "percentage") => {
-        dispatch({ type: "SET_TAX_STRUCTURE", payload: structure });
+      setTaxType: (type: TaxType) => {
+        dispatch({ type: "SET_TAX_TYPE", payload: type });
       },
 
-      setDiscountType: (type: "flat" | "percentage") => {
+      setDiscountType: (type: DiscountType) => {
         dispatch({ type: "SET_DISCOUNT_TYPE", payload: type });
       },
 
@@ -245,9 +247,7 @@ export function useInvoiceFormLogic({
         dispatch({ type: "SET_IS_FAVORITE" });
       },
 
-      setInvoiceStatus: (
-        status: "DRAFT" | "SENT" | "PAID" | "OVERDUE" | "CANCELLED"
-      ) => {
+      setInvoiceStatus: (status: InvoiceStatus) => {
         dispatch({ type: "SET_INVOICE_STATUS", payload: status });
       },
 

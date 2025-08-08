@@ -1,4 +1,5 @@
 import { InvoiceFormState, InvoiceFormAction } from "../types/invoiceForm";
+import { TaxType, DiscountType, InvoiceStatus } from "@prisma/client";
 
 export const initialState: InvoiceFormState = {
   formMode: "create",
@@ -6,7 +7,7 @@ export const initialState: InvoiceFormState = {
   invoiceId: undefined,
   businessDetails: null,
   paymentAccount: null,
-  client: null,
+  clientId: undefined,
   invoiceNumber: undefined,
   invoiceDate: new Date(),
   paymentDueDate: null,
@@ -20,11 +21,11 @@ export const initialState: InvoiceFormState = {
   customNote: "Thank you for your trust in our services!",
   tax: 0,
   discount: 0,
-  taxStructure: "flat",
-  discountType: "flat",
+  taxType: TaxType.FIXED,
+  discountType: DiscountType.FIXED,
   isFavorite: false,
-  lateFeeText: "",
-  invoiceStatus: "DRAFT",
+  lateFeeTerms: "",
+  invoiceStatus: InvoiceStatus.DRAFT,
   hasUnsavedChanges: false,
   validation: {
     isValid: true,
@@ -62,10 +63,10 @@ export function invoiceFormReducer(
         ...state,
         paymentAccount: action.payload,
       };
-    case "SET_CLIENT":
+    case "SET_CLIENT_ID":
       return {
         ...state,
-        client: action.payload,
+        clientId: action.payload || undefined,
         hasUnsavedChanges: true,
       };
     case "SET_INVOICE_NUMBER":
@@ -121,10 +122,10 @@ export function invoiceFormReducer(
         customNote: action.payload,
         hasUnsavedChanges: true,
       };
-    case "SET_LATE_FEE_TEXT":
+    case "SET_LATE_FEE_TERMS":
       return {
         ...state,
-        lateFeeText: action.payload,
+        lateFeeTerms: action.payload,
         hasUnsavedChanges: true,
       };
     case "SET_TAX":
@@ -139,10 +140,10 @@ export function invoiceFormReducer(
         discount: action.payload,
         hasUnsavedChanges: true,
       };
-    case "SET_TAX_STRUCTURE":
+    case "SET_TAX_TYPE":
       return {
         ...state,
-        taxStructure: action.payload,
+        taxType: action.payload,
         hasUnsavedChanges: true,
       };
     case "SET_DISCOUNT_TYPE":
@@ -173,19 +174,22 @@ export function invoiceFormReducer(
         ...initialState,
         formMode: state.formMode,
         invoiceId: state.invoiceId,
-        client: state.client,
+        clientId: state.clientId,
       };
     case "LOAD_EXISTING_INVOICE":
       return {
         ...state,
-        client: action.payload.client,
+        clientId: action.payload.clientId,
         invoiceNumber: action.payload.invoiceNumber,
         invoiceDate: action.payload.invoiceDate,
         paymentDueDate: action.payload.paymentDueDate,
-        tax: action.payload.taxes,
+        tax: action.payload.tax,
+        taxType: action.payload.taxType,
         discount: action.payload.discount || 0,
+        discountType: action.payload.discountType,
         isFavorite: action.payload.isFavorite || false,
         invoiceItems: action.payload.invoiceItems,
+        lateFeeTerms: action.payload.lateFeeTerms,
         // Don't set hasUnsavedChanges when loading existing data
       };
     case "SET_VALIDATION":

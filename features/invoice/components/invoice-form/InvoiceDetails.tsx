@@ -76,14 +76,8 @@ function InvoiceDetails() {
         </div>
 
         {/* Payment Details */}
-        <div className="flex flex-col gap-3">
-          <label className="text-sm font-semibold text-gray-900 flex items-center gap-2">
-            Payment details
-            <span className="text-red-500 text-base">*</span>
-          </label>
-          <div className="relative">
-            <PaymentDetailsSelect />
-          </div>
+        <div className="relative">
+          <PaymentDetailsSelect />
         </div>
 
         {/* Late Fee Options */}

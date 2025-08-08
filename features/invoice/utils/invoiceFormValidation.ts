@@ -43,6 +43,10 @@ function validateRequiredFields(
   if (!state.paymentDueDate) {
     errors.paymentDueDate = "Payment due date is required";
   }
+
+  if (!state.paymentAccount) {
+    errors.paymentAccount = "Payment account is required";
+  }
 }
 
 // Helper function to validate date relationships

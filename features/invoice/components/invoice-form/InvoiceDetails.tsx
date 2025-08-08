@@ -8,7 +8,7 @@ import TaxInput from "./TaxInput";
 import PaymentDetailsSelect from "./PaymentDetailsSelect";
 import LatenessFeeInput from "./LatenessFeeInput";
 import DiscountInput from "./DiscountInput";
-import TaxStructureInput from "./TaxStructureInput";
+import TaxTypeInput from "./TaxTypeInput";
 import DiscountTypeInput from "./DiscountTypeInput";
 
 function InvoiceDetails() {
@@ -79,10 +79,10 @@ function InvoiceDetails() {
         <div className="flex flex-col gap-6">
           <div className="flex flex-col gap-3">
             <label className="text-sm font-semibold text-gray-900">
-              Tax Structure
+              Tax type
             </label>
             <div className="relative">
-              <TaxStructureInput />
+              <TaxTypeInput />
             </div>
           </div>
           <div className="flex flex-col gap-3">

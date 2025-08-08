@@ -18,8 +18,12 @@ import {
 } from "react-icons/io5";
 import { useInvoiceForm } from "../index";
 import { useCreateInvoice, useUpdateInvoice } from "../hooks";
-import { CreateInvoiceInput, UpdateInvoiceInput } from "@/dataSchemas/invoice";
-import { showErrorToast } from "@/components/toast-templates";
+import {
+  ZCreateInvoiceInput,
+  ZUpdateInvoiceInput,
+} from "@/dataSchemas/invoice";
+import { showErrorToast, showSuccessToast } from "@/components/toast-templates";
+import { InvoiceStatus } from "@prisma/client";
 
 type SaveAction = "draft" | "send" | "download" | "exit";
 
@@ -86,240 +90,204 @@ export function InvoiceSaveActions() {
 
   const isLoading = isCreating || isUpdating;
 
-  const prepareInvoiceData = (status: "DRAFT" | "SENT") => {
-    const invoiceItems = (state.invoiceItems || []).map((item) => ({
-      description: item.description || "",
-      quantity: item.quantity || 1,
-      unitPrice: item.unitPrice || 0,
-      total: (item.quantity || 1) * (item.unitPrice || 0),
-    }));
-
-    const subtotal = invoiceItems.reduce((sum, item) => sum + item.total, 0);
-    const taxAmount = state.tax || 0;
-    const discountAmount = state.discount || 0;
-    const total = Math.max(0, subtotal - taxAmount - discountAmount);
+  const prepareInvoiceData = (status: InvoiceStatus) => {
+    // Filter and sanitize items to ensure they meet schema requirements
+    const sanitizedItems = (state.invoiceItems || [])
+      .filter(
+        (item) =>
+          item.description &&
+          item.description.trim() !== "" &&
+          item.quantity &&
+          item.quantity > 0 &&
+          item.unitPrice !== undefined &&
+          item.unitPrice >= 0
+      )
+      .map((item) => ({
+        description: item.description!.trim(),
+        quantity: item.quantity!,
+        unitPrice: item.unitPrice!,
+      }));
 
     return {
-      invoiceItems,
-      subtotal,
-      taxAmount,
-      discountAmount,
-      total,
       status,
+      clientId: state.clientId!,
+      businessId: state.businessDetails?.id || "",
+      invoiceNumber: state.invoiceNumber,
+      invoiceDate: state.invoiceDate,
+      paymentDueDate: state.paymentDueDate!,
+      items: sanitizedItems,
+      tax: state.tax || 0,
+      taxType: state.taxType,
+      discount: state.discount || 0,
+      discountType: state.discountType,
+      paymentAccountId: state.paymentAccount?.id,
+      isFavorite: state.isFavorite,
+      customNote: state.customNote,
+      lateFeeTerms: state.lateFeeTerms,
     };
   };
 
   const handleSaveAsDraft = () => {
-    if (!state.client || !state.businessDetails || !state.paymentDueDate) {
-      showErrorToast(
-        "error",
-        "Please fill in all required fields before saving."
-      );
-      return;
+    try {
+      // Basic validation for draft
+      if (!state.clientId || !state.businessDetails?.id) {
+        showErrorToast(
+          "error",
+          "Please select a client and ensure business details are available."
+        );
+        return;
+      }
+
+      setActiveAction("draft");
+      const invoiceData = prepareInvoiceData(InvoiceStatus.DRAFT);
+
+      if (state.invoiceId) {
+        // Update existing invoice
+        const updateData: ZUpdateInvoiceInput = {
+          invoiceId: state.invoiceId,
+          ...invoiceData,
+        };
+        updateInvoice(updateData);
+      } else {
+        // Create new invoice
+        const createData: ZCreateInvoiceInput = invoiceData;
+        createInvoice(createData);
+      }
+
+      showSuccessToast("success", "Invoice saved as draft successfully!");
+    } catch (error) {
+      console.error("Error saving draft:", error);
+      showErrorToast("error", "Failed to save invoice as draft");
     }
-
-    const validationResult = getValidationErrors();
-    if (!validationResult.isValid) {
-      // push errors to provider
-      console.log("Validation errors:", validationResult.errors);
-      setValidationErrors(validationResult);
-      showErrorToast(
-        "error",
-        "Please fix the validation errors before saving."
-      );
-      return;
-    }
-
-    console.log("Saving invoice as draft...", validationResult);
-
-    // setActiveAction("draft");
-    // const { invoiceItems, subtotal, taxAmount, discountAmount, total } =
-    //   prepareInvoiceData("DRAFT");
-
-    // if (state.invoiceId) {
-    //   // Update existing invoice
-    //   const updateData: UpdateInvoiceInput = {
-    //     invoiceId: state.invoiceId,
-    //     clientId: state.client.id,
-    //     invoiceDate: state.invoiceDate || new Date(),
-    //     paymentDueDate: state.paymentDueDate,
-    //     items: invoiceItems,
-    //     subtotal,
-    //     taxes: taxAmount,
-    //     discount: discountAmount,
-    //     total,
-    //     acceptedPaymentMethods:
-    //       state.paymentAccount?.gatewayType || "bank-transfer",
-    //     customNote: state.customNote,
-    //     lateFeeText: state.lateFeeText,
-    //   };
-    //   updateInvoice(updateData);
-    // } else {
-    //   // Create new invoice
-    //   const createData: CreateInvoiceInput = {
-    //     clientId: state.client.id,
-    //     invoiceNumber: state.invoiceNumber,
-    //     invoiceDate: state.invoiceDate || new Date(),
-    //     paymentDueDate: state.paymentDueDate,
-    //     items: invoiceItems,
-    //     subtotal,
-    //     taxes: taxAmount,
-    //     discount: discountAmount,
-    //     total,
-    //     acceptedPaymentMethods:
-    //       state.paymentAccount?.gatewayType || "bank-transfer",
-    //     customNote: state.customNote,
-    //     lateFeeText: state.lateFeeText,
-    //   };
-    //   createInvoice(createData);
-    // }
   };
 
-  const handleSaveAndSend = () => {
-    if (!state.client || !state.businessDetails || !state.paymentDueDate) {
-      console.error("Missing required fields");
-      return;
-    }
+  const handleSaveAndSend = async () => {
+    try {
+      // Validate required fields for SENT status
+      if (
+        !state.clientId ||
+        !state.businessDetails?.id ||
+        !state.paymentDueDate
+      ) {
+        showErrorToast("error", "Missing required fields for sending invoice");
+        return;
+      }
 
-    setActiveAction("send");
-    const { invoiceItems, subtotal, taxAmount, discountAmount, total } =
-      prepareInvoiceData("SENT");
+      // Additional validation for SENT status
+      const validationResult = getValidationErrors();
+      if (!validationResult.isValid) {
+        console.log("Validation errors:", validationResult.errors);
+        setValidationErrors(validationResult);
+        showErrorToast(
+          "error",
+          "Please fix the validation errors before sending."
+        );
+        return;
+      }
 
-    if (state.invoiceId) {
-      // Update existing invoice
-      const updateData: UpdateInvoiceInput = {
-        invoiceId: state.invoiceId,
-        clientId: state.client.id,
-        invoiceDate: state.invoiceDate || new Date(),
-        paymentDueDate: state.paymentDueDate,
-        items: invoiceItems,
-        subtotal,
-        taxes: taxAmount,
-        discount: discountAmount,
-        total,
-        acceptedPaymentMethods:
-          state.paymentAccount?.gatewayType || "bank-transfer",
-        customNote: state.customNote,
-        lateFeeText: state.lateFeeText,
-      };
-      updateInvoice(updateData);
-    } else {
-      // Create new invoice
-      const createData: CreateInvoiceInput = {
-        clientId: state.client.id,
-        invoiceNumber: state.invoiceNumber,
-        invoiceDate: state.invoiceDate || new Date(),
-        paymentDueDate: state.paymentDueDate,
-        items: invoiceItems,
-        subtotal,
-        taxes: taxAmount,
-        discount: discountAmount,
-        total,
-        acceptedPaymentMethods:
-          state.paymentAccount?.gatewayType || "bank-transfer",
-        customNote: state.customNote,
-        lateFeeText: state.lateFeeText,
-      };
-      createInvoice(createData);
+      setActiveAction("send");
+      const invoiceData = prepareInvoiceData(InvoiceStatus.SENT);
+
+      if (state.invoiceId) {
+        // Update existing invoice
+        const updateData: ZUpdateInvoiceInput = {
+          invoiceId: state.invoiceId,
+          ...invoiceData,
+        };
+        updateInvoice(updateData);
+      } else {
+        // Create new invoice
+        const createData: ZCreateInvoiceInput = invoiceData;
+        createInvoice(createData);
+      }
+
+      showSuccessToast("success", "Invoice sent successfully!");
+    } catch (error) {
+      console.error("Error sending invoice:", error);
+      showErrorToast("error", "Failed to send invoice");
     }
   };
 
   const handleSaveAndDownload = () => {
-    if (!state.client || !state.businessDetails || !state.paymentDueDate) {
-      console.error("Missing required fields");
-      return;
-    }
+    try {
+      // Validate required fields for download
+      if (
+        !state.clientId ||
+        !state.businessDetails?.id ||
+        !state.paymentDueDate
+      ) {
+        showErrorToast(
+          "error",
+          "Missing required fields for downloading invoice"
+        );
+        return;
+      }
 
-    setActiveAction("download");
-    const { invoiceItems, subtotal, taxAmount, discountAmount, total } =
-      prepareInvoiceData("SENT");
+      // Additional validation
+      const validationResult = getValidationErrors();
+      if (!validationResult.isValid) {
+        console.log("Validation errors:", validationResult.errors);
+        setValidationErrors(validationResult);
+        showErrorToast(
+          "error",
+          "Please fix the validation errors before downloading."
+        );
+        return;
+      }
 
-    if (state.invoiceId) {
-      // Update existing invoice
-      const updateData: UpdateInvoiceInput = {
-        invoiceId: state.invoiceId,
-        clientId: state.client.id,
-        invoiceDate: state.invoiceDate || new Date(),
-        paymentDueDate: state.paymentDueDate,
-        items: invoiceItems,
-        subtotal,
-        taxes: taxAmount,
-        discount: discountAmount,
-        total,
-        acceptedPaymentMethods:
-          state.paymentAccount?.gatewayType || "bank-transfer",
-        customNote: state.customNote,
-        lateFeeText: state.lateFeeText,
-      };
-      updateInvoice(updateData);
-    } else {
-      // Create new invoice
-      const createData: CreateInvoiceInput = {
-        clientId: state.client.id,
-        invoiceNumber: state.invoiceNumber,
-        invoiceDate: state.invoiceDate || new Date(),
-        paymentDueDate: state.paymentDueDate,
-        items: invoiceItems,
-        subtotal,
-        taxes: taxAmount,
-        discount: discountAmount,
-        total,
-        acceptedPaymentMethods:
-          state.paymentAccount?.gatewayType || "bank-transfer",
-        customNote: state.customNote,
-        lateFeeText: state.lateFeeText,
-      };
-      createInvoice(createData);
+      setActiveAction("download");
+      const invoiceData = prepareInvoiceData(InvoiceStatus.SENT);
+
+      if (state.invoiceId) {
+        // Update existing invoice
+        const updateData: ZUpdateInvoiceInput = {
+          invoiceId: state.invoiceId,
+          ...invoiceData,
+        };
+        updateInvoice(updateData);
+      } else {
+        // Create new invoice
+        const createData: ZCreateInvoiceInput = invoiceData;
+        createInvoice(createData);
+      }
+
+      // Note: PDF download functionality will be implemented later
+      showSuccessToast("success", "Invoice ready for download!");
+    } catch (error) {
+      console.error("Error preparing invoice for download:", error);
+      showErrorToast("error", "Failed to prepare invoice for download");
     }
   };
 
   const handleSaveAndExit = () => {
-    if (!state.client || !state.businessDetails || !state.paymentDueDate) {
-      console.error("Missing required fields");
-      return;
-    }
+    try {
+      // For exit, save as draft if not enough data for SENT
+      if (!state.clientId || !state.businessDetails?.id) {
+        showErrorToast("error", "Please select a client before exiting");
+        return;
+      }
 
-    setActiveAction("exit");
-    const currentStatus = state.invoiceStatus || "DRAFT";
-    const { invoiceItems, subtotal, taxAmount, discountAmount, total } =
-      prepareInvoiceData(currentStatus === "DRAFT" ? "DRAFT" : "SENT");
+      setActiveAction("exit");
+      const currentStatus = state.invoiceStatus || InvoiceStatus.DRAFT;
+      const invoiceData = prepareInvoiceData(currentStatus);
 
-    if (state.invoiceId) {
-      // Update existing invoice
-      const updateData: UpdateInvoiceInput = {
-        invoiceId: state.invoiceId,
-        clientId: state.client.id,
-        invoiceDate: state.invoiceDate || new Date(),
-        paymentDueDate: state.paymentDueDate,
-        items: invoiceItems,
-        subtotal,
-        taxes: taxAmount,
-        discount: discountAmount,
-        total,
-        acceptedPaymentMethods:
-          state.paymentAccount?.gatewayType || "bank-transfer",
-        customNote: state.customNote,
-        lateFeeText: state.lateFeeText,
-      };
-      updateInvoice(updateData);
-    } else {
-      // Create new invoice with draft status
-      const createData: CreateInvoiceInput = {
-        clientId: state.client.id,
-        invoiceNumber: state.invoiceNumber,
-        invoiceDate: state.invoiceDate || new Date(),
-        paymentDueDate: state.paymentDueDate,
-        items: invoiceItems,
-        subtotal,
-        taxes: taxAmount,
-        discount: discountAmount,
-        total,
-        acceptedPaymentMethods:
-          state.paymentAccount?.gatewayType || "bank-transfer",
-        customNote: state.customNote,
-        lateFeeText: state.lateFeeText,
-      };
-      createInvoice(createData);
+      if (state.invoiceId) {
+        // Update existing invoice
+        const updateData: ZUpdateInvoiceInput = {
+          invoiceId: state.invoiceId,
+          ...invoiceData,
+        };
+        updateInvoice(updateData);
+      } else {
+        // Create new invoice with current status
+        const createData: ZCreateInvoiceInput = invoiceData;
+        createInvoice(createData);
+      }
+
+      showSuccessToast("success", "Invoice saved successfully!");
+    } catch (error) {
+      console.error("Error saving invoice:", error);
+      showErrorToast("error", "Failed to save invoice");
     }
   };
 

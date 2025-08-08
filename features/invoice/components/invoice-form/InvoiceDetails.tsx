@@ -81,13 +81,8 @@ function InvoiceDetails() {
         </div>
 
         {/* Late Fee Options */}
-        <div className="flex flex-col gap-3">
-          <label className="text-sm font-semibold text-gray-900">
-            Late Fee Options
-          </label>
-          <div className="relative">
-            <LatenessFeeInput />
-          </div>
+        <div className="relative">
+          <LatenessFeeInput />
         </div>
 
         {/* Customer Notes */}

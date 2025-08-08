@@ -1,6 +1,6 @@
 // Query hooks (for fetching data)
 export { useGetInvoices } from "./useGetInvoices";
-export { useGetInvoice } from "./useGetInvoiceById";
+export { useGetInvoiceById } from "./useGetInvoiceById";
 export { useGetInvoiceStats } from "./useGetInvoiceStats";
 export { useUserAndBusiness } from "./useUserAndBusiness";
 
@@ -12,13 +12,9 @@ export { useDeleteInvoice } from "./useDeleteInvoice";
 
 // Form logic hooks
 export { useInvoiceFormLogic } from "./useInvoiceFormLogic";
-export { useInvoiceAutoSave } from "./useInvoiceAutoSave";
 
 // Re-export types for convenience
 export type { UseGetInvoicesParams } from "./useGetInvoices";
-export type { UseGetInvoiceParams } from "./useGetInvoiceById";
 export type { UseGetInvoiceStatsParams } from "./useGetInvoiceStats";
-export type { CreateInvoiceData } from "./useCreateInvoice";
-export type { UpdateInvoiceData } from "./useUpdateInvoice";
 export type { UpdateInvoiceStatusData } from "./useUpdateInvoiceStatus";
 export type { DeleteInvoiceData } from "./useDeleteInvoice";

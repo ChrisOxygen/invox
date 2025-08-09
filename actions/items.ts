@@ -3,8 +3,12 @@
 import { Item, PrismaClient } from "@prisma/client";
 import { auth } from "@/auth";
 import { ApiResponse, BaseResponse } from "@/types/api";
-import { createItemSchema, updateItemSchema } from "@/features/items/validation/itemSchemas";
-import { CreateItemInput, UpdateItemInput } from "@/types/schemas/item";
+import {
+  createItemSchema,
+  updateItemSchema,
+  ZCreateItemInput,
+  ZUpdateItemInput,
+} from "@/features/items/validation/itemSchemas";
 
 const prisma = new PrismaClient();
 
@@ -106,7 +110,7 @@ export async function _getItems(
 
 // Create a new item
 export async function _createItem(
-  data: CreateItemInput
+  data: ZCreateItemInput
 ): Promise<ApiResponse<Item>> {
   try {
     const session = await auth();
@@ -170,7 +174,7 @@ export async function _createItem(
 // Update an existing item
 export async function _updateItem(
   itemId: string,
-  data: UpdateItemInput
+  data: ZUpdateItemInput
 ): Promise<ApiResponse<Item>> {
   try {
     const session = await auth();

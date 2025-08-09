@@ -20,8 +20,12 @@ import {
 } from "@/components/ui/form";
 
 import { useCreateItem, useUpdateItem } from "@/features/items/hooks";
-import { createItemSchema, updateItemSchema } from "@/features/items/validation/itemSchemas";
-import { CreateItemInput, UpdateItemInput } from "@/types/schemas/item";
+import {
+  createItemSchema,
+  updateItemSchema,
+  ZCreateItemInput,
+  ZUpdateItemInput,
+} from "@/features/items/validation/itemSchemas";
 
 interface ItemFormProps {
   open: boolean;
@@ -67,7 +71,7 @@ export function ItemForm({
   });
 
   // Form setup
-  const form = useForm<CreateItemInput | UpdateItemInput>({
+  const form = useForm<ZCreateItemInput | ZUpdateItemInput>({
     resolver: zodResolver(isEditing ? updateItemSchema : createItemSchema),
     defaultValues: {
       name: item?.name || "",
@@ -92,15 +96,15 @@ export function ItemForm({
     onOpenChange(false);
   };
 
-  const onSubmit = async (data: CreateItemInput | UpdateItemInput) => {
+  const onSubmit = async (data: ZCreateItemInput | ZUpdateItemInput) => {
     try {
       if (isEditing && item) {
         await updateItem.updateItemAsync({
           itemId: item.id,
-          data: data as UpdateItemInput,
+          data: data as ZUpdateItemInput,
         });
       } else {
-        await createItem.createItemAsync(data as CreateItemInput);
+        await createItem.createItemAsync(data as ZCreateItemInput);
       }
     } catch (error) {
       // Error handling is done in the hooks

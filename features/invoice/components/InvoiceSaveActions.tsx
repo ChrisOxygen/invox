@@ -53,6 +53,7 @@ export function InvoiceSaveActions() {
         default:
           break;
       }
+      showSuccessToast("success", "Invoice sent successfully!");
     },
     onError: (error) => {
       console.error("Failed to create invoice:", error);
@@ -81,10 +82,13 @@ export function InvoiceSaveActions() {
         default:
           break;
       }
+      showSuccessToast("success", "Invoice sent successfully!");
     },
+
     onError: (error) => {
       console.error("Failed to update invoice:", error);
       setActiveAction(null);
+      showErrorToast("error", "Failed to save invoice");
     },
   });
 
@@ -153,11 +157,8 @@ export function InvoiceSaveActions() {
         const createData: ZCreateInvoiceInput = invoiceData;
         createInvoice(createData);
       }
-
-      showSuccessToast("success", "Invoice saved as draft successfully!");
     } catch (error) {
       console.error("Error saving draft:", error);
-      showErrorToast("error", "Failed to save invoice as draft");
     }
   };
 
@@ -201,8 +202,6 @@ export function InvoiceSaveActions() {
         const createData: ZCreateInvoiceInput = invoiceData;
         createInvoice(createData);
       }
-
-      showSuccessToast("success", "Invoice sent successfully!");
     } catch (error) {
       console.error("Error sending invoice:", error);
       showErrorToast("error", "Failed to send invoice");

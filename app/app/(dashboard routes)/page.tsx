@@ -10,8 +10,6 @@ function Dashboard() {
     <DashboardLayout
       userName={user?.name || undefined}
       isLoading={gettingUser}
-      // TODO: Add real metrics data when available
-      // metrics={dashboardMetrics}
     />
   );
 }

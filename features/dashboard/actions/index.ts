@@ -53,11 +53,14 @@ export async function _getInvoiceMetrics(): Promise<InvoiceMetricsResponse> {
     const previousYearStart = new Date(previousYear, 0, 1);
     const previousYearEnd = new Date(previousYear, 11, 31, 23, 59, 59, 999);
 
-    // Get all invoices for both years
+    // Get all invoices for both years - only include invoices with dates (SENT/PAID)
     const [currentYearInvoices, previousYearInvoices] = await Promise.all([
       prisma.invoice.findMany({
         where: {
           businessId,
+          status: {
+            in: [InvoiceStatus.SENT, InvoiceStatus.PAID, InvoiceStatus.OVERDUE],
+          },
           invoiceDate: {
             gte: currentYearStart,
             lte: currentYearEnd,
@@ -67,14 +70,18 @@ export async function _getInvoiceMetrics(): Promise<InvoiceMetricsResponse> {
           id: true,
           invoiceDate: true,
           subtotal: true,
-          taxes: true,
+          tax: true,
           discount: true,
+          total: true,
           status: true,
         },
       }),
       prisma.invoice.findMany({
         where: {
           businessId,
+          status: {
+            in: [InvoiceStatus.SENT, InvoiceStatus.PAID, InvoiceStatus.OVERDUE],
+          },
           invoiceDate: {
             gte: previousYearStart,
             lte: previousYearEnd,
@@ -84,8 +91,9 @@ export async function _getInvoiceMetrics(): Promise<InvoiceMetricsResponse> {
           id: true,
           invoiceDate: true,
           subtotal: true,
-          taxes: true,
+          tax: true,
           discount: true,
+          total: true,
           status: true,
         },
       }),
@@ -108,12 +116,19 @@ export async function _getInvoiceMetrics(): Promise<InvoiceMetricsResponse> {
 
       // Process each invoice
       invoices.forEach((invoice) => {
+        // Skip invoices without dates (shouldn't happen due to filtering, but safety check)
+        if (!invoice.invoiceDate) return;
+
         const invoiceMonth = new Date(invoice.invoiceDate).getMonth(); // 0-indexed
-        const revenue = calculateInvoiceRevenue(
-          invoice.subtotal,
-          invoice.taxes,
-          invoice.discount
-        );
+
+        // Use total if available, otherwise calculate from components
+        const revenue =
+          invoice.total ??
+          calculateInvoiceRevenue(
+            invoice.subtotal ?? 0,
+            invoice.tax ?? 0,
+            invoice.discount ?? 0
+          );
 
         // Update monthly data
         monthlyData[invoiceMonth].totalInvoices++;
@@ -121,7 +136,10 @@ export async function _getInvoiceMetrics(): Promise<InvoiceMetricsResponse> {
         if (invoice.status === InvoiceStatus.PAID) {
           monthlyData[invoiceMonth].revenue += revenue;
           monthlyData[invoiceMonth].paidInvoices++;
-        } else if (invoice.status === InvoiceStatus.SENT) {
+        } else if (
+          invoice.status === InvoiceStatus.SENT ||
+          invoice.status === InvoiceStatus.OVERDUE
+        ) {
           monthlyData[invoiceMonth].pendingInvoices++;
         }
       });

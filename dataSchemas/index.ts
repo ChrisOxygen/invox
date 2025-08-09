@@ -1,12 +1,9 @@
 import { z } from "zod";
 
 // Re-export commonly used schemas for backward compatibility
-export { signupFormSchema } from "./auth/signup";
-export { loginFormSchema } from "./auth/login";
 export { businessFormSchema } from "./business/profile";
 
 // Re-export new structured schemas
-export * from "./auth";
 export * from "./business";
 export * from "./payments";
 export * from "./base";

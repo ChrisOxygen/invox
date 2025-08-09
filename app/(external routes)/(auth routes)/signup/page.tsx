@@ -20,9 +20,8 @@ import { Separator } from "@/components/ui/separator";
 import { useState } from "react";
 import InBoxLoader from "@/components/InBoxLoader";
 import useSocialSignIn from "@/hooks/useSocialSignIn";
-import { signupFormSchema } from "@/dataSchemas";
+import { signupFormSchema, ZSignupFormInput } from "@/features/auth/validation/authSchemas";
 import { useCredentialSignup } from "@/hooks/useCredentialSignup";
-import { SignupFormInput } from "@/types/schemas/auth";
 
 function SignUpPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -38,7 +37,7 @@ function SignUpPage() {
     error,
     reset,
   } = useCredentialSignup(); // Initialize form
-  const form = useForm<SignupFormInput>({
+  const form = useForm<ZSignupFormInput>({
     resolver: zodResolver(signupFormSchema),
     defaultValues: {
       name: "",
@@ -49,7 +48,7 @@ function SignUpPage() {
   });
 
   // Handle form submission
-  const onSubmit = (values: SignupFormInput) => {
+  const onSubmit = (values: ZSignupFormInput) => {
     // Reset any previous errors
     reset();
 

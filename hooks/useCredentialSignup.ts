@@ -4,15 +4,15 @@ import { useRouter } from "next/navigation";
 import { SignupRequest } from "@/types/api/auth";
 import { _createUserWithCredentials } from "@/actions";
 import { BaseResponse } from "@/types/api";
-import { SignupFormInput } from "@/types/schemas/auth";
+import { ZSignupFormInput } from "@/features/auth/validation/authSchemas";
 
 export function useCredentialSignup() {
   const router = useRouter();
-  const mutation = useMutation<BaseResponse, Error, SignupFormInput>({
+  const mutation = useMutation<BaseResponse, Error, ZSignupFormInput>({
     /**
      * Mutation function that calls the createUser server action
      */
-    mutationFn: async (values: SignupFormInput) => {
+    mutationFn: async (values: ZSignupFormInput) => {
       // Transform form data to SignupRequest (remove confirmPassword)
       const signupData: SignupRequest = {
         name: values.name,

@@ -18,8 +18,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { useState } from "react";
-import { loginFormSchema } from "@/dataSchemas";
-import { LoginFormInput } from "@/types/schemas/auth";
+import { loginFormSchema, ZLoginFormInput } from "@/features/auth/validation/authSchemas";
 import InBoxLoader from "@/components/InBoxLoader";
 import { useLogin } from "@/hooks/useLogin";
 import useSocialSignIn from "@/hooks/useSocialSignIn";
@@ -31,7 +30,7 @@ function LoginPage() {
   const { mutate: signInWithProvider, isPending: isSocialSignInPending } =
     useSocialSignIn();
   // Initialize form
-  const form = useForm<LoginFormInput>({
+  const form = useForm<ZLoginFormInput>({
     resolver: zodResolver(loginFormSchema),
     defaultValues: {
       email: "",
@@ -49,7 +48,7 @@ function LoginPage() {
     setShowPassword(!showPassword);
   };
   // Handle form submission
-  const onSubmit = (values: LoginFormInput) => {
+  const onSubmit = (values: ZLoginFormInput) => {
     // Trigger the login mutation
     signInWithCredentials(values);
   };

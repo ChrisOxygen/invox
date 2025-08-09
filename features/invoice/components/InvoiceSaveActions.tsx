@@ -33,62 +33,72 @@ export function InvoiceSaveActions() {
   const [activeAction, setActiveAction] = useState<SaveAction | null>(null);
 
   const { mutate: createInvoice, isPending: isCreating } = useCreateInvoice({
-    onSuccess: () => {
-      setActiveAction(null);
-
-      switch (activeAction) {
-        case "draft":
-          router.push("/app/invoices");
-          break;
-        case "send":
-          router.push("/app/dashboard");
-          break;
-        case "download":
-          console.log("downloaded");
-          router.push("/app/invoices");
-          break;
-        case "exit":
-          router.push("/app/invoices");
-          break;
-        default:
-          break;
+    onSuccess: (response) => {
+      if (response.success) {
+        switch (activeAction) {
+          case "draft":
+            router.push("/app/invoices");
+            break;
+          case "send":
+            router.push("/app");
+            break;
+          case "download":
+            //TODO: Implement download functionality
+            router.push("/app/invoices");
+            break;
+          case "exit":
+            router.push("/app/invoices");
+            break;
+          default:
+            break;
+        }
+        showSuccessToast(
+          "success",
+          response.message || "Invoice saved successfully!"
+        );
+      } else {
+        throw new Error(response.message || "Failed to create invoice");
       }
-      showSuccessToast("success", "Invoice sent successfully!");
     },
     onError: (error) => {
       console.error("Failed to create invoice:", error);
       setActiveAction(null);
+      showErrorToast("error", error || "Failed to save invoice");
     },
   });
 
   const { mutate: updateInvoice, isPending: isUpdating } = useUpdateInvoice({
-    onSuccess: () => {
-      setActiveAction(null);
-
-      switch (activeAction) {
-        case "draft":
-          router.push("/app/invoices");
-          break;
-        case "send":
-          router.push("/app/dashboard");
-          break;
-        case "download":
-          console.log("downloaded");
-          router.push("/app/invoices");
-          break;
-        case "exit":
-          router.push("/app/invoices");
-          break;
-        default:
-          break;
+    onSuccess: (response) => {
+      if (response.success) {
+        switch (activeAction) {
+          case "draft":
+            router.push("/app/invoices");
+            break;
+          case "send":
+            router.push("/app");
+            break;
+          case "download":
+            console.log("downloaded");
+            router.push("/app/invoices");
+            break;
+          case "exit":
+            router.push("/app/invoices");
+            break;
+          default:
+            break;
+        }
+        showSuccessToast(
+          "success",
+          response.message || "Invoice saved successfully!"
+        );
+      } else {
+        throw new Error(response.message || "Failed to create invoice");
       }
-      showSuccessToast("success", "Invoice sent successfully!");
     },
-
     onError: (error) => {
-      console.error("Failed to update invoice:", error);
+      console.error("Failed to create invoice:", error);
       setActiveAction(null);
-      showErrorToast("error", "Failed to save invoice");
+      showErrorToast("error", error || "Failed to save invoice");
     },
   });
 
@@ -132,162 +142,138 @@ export function InvoiceSaveActions() {
   };
 
   const handleSaveAsDraft = () => {
-    try {
-      // Basic validation for draft
-      if (!state.clientId || !state.businessDetails?.id) {
-        showErrorToast(
-          "error",
-          "Please select a client and ensure business details are available."
-        );
-        return;
-      }
+    // Basic validation for draft
+    if (!state.clientId || !state.businessDetails?.id) {
+      showErrorToast(
+        "error",
+        "Please select a client and ensure business details are available."
+      );
+      return;
+    }
 
-      setActiveAction("draft");
-      const invoiceData = prepareInvoiceData(InvoiceStatus.DRAFT);
+    setActiveAction("draft");
+    const invoiceData = prepareInvoiceData(InvoiceStatus.DRAFT);
 
-      if (state.invoiceId) {
-        // Update existing invoice
-        const updateData: ZUpdateInvoiceInput = {
-          invoiceId: state.invoiceId,
-          ...invoiceData,
-        };
-        updateInvoice(updateData);
-      } else {
-        // Create new invoice
-        const createData: ZCreateInvoiceInput = invoiceData;
-        createInvoice(createData);
-      }
-    } catch (error) {
-      console.error("Error saving draft:", error);
+    if (state.invoiceId) {
+      // Update existing invoice
+      const updateData: ZUpdateInvoiceInput = {
+        invoiceId: state.invoiceId,
+        ...invoiceData,
+      };
+      updateInvoice(updateData);
+    } else {
+      // Create new invoice
+      const createData: ZCreateInvoiceInput = invoiceData;
+      createInvoice(createData);
     }
   };
 
-  const handleSaveAndSend = async () => {
-    try {
-      // Validate required fields for SENT status
-      if (
-        !state.clientId ||
-        !state.businessDetails?.id ||
-        !state.paymentDueDate
-      ) {
-        showErrorToast("error", "Missing required fields for sending invoice");
-        return;
-      }
+  const handleSaveAndSend = () => {
+    // Validate required fields for SENT status
+    if (
+      !state.clientId ||
+      !state.businessDetails?.id ||
+      !state.paymentDueDate
+    ) {
+      showErrorToast("error", "Missing required fields for sending invoice");
+      return;
+    }
 
-      // ✅ FIX: Updated validation that accounts for auto-generated invoice numbers
-      // Only validate if this is an existing invoice that should already have a number
-      const validationResult = getValidationErrors();
-      if (!validationResult.isValid) {
-        console.log("Validation errors:", validationResult.errors);
-        setValidationErrors(validationResult);
-        showErrorToast(
-          "error",
-          "Please fix the validation errors before sending."
-        );
-        return;
-      }
+    // ✅ FIX: Updated validation that accounts for auto-generated invoice numbers
+    // Only validate if this is an existing invoice that should already have a number
+    const validationResult = getValidationErrors();
+    if (!validationResult.isValid) {
+      console.log("Validation errors:", validationResult.errors);
+      setValidationErrors(validationResult);
+      showErrorToast(
+        "error",
+        "Please fix the validation errors before sending."
+      );
+      return;
+    }
 
-      setActiveAction("send");
-      const invoiceData = prepareInvoiceData(InvoiceStatus.SENT);
+    setActiveAction("send");
+    const invoiceData = prepareInvoiceData(InvoiceStatus.SENT);
 
-      if (state.invoiceId) {
-        // Update existing invoice
-        const updateData: ZUpdateInvoiceInput = {
-          invoiceId: state.invoiceId,
-          ...invoiceData,
-        };
-        updateInvoice(updateData);
-      } else {
-        // Create new invoice - server will auto-generate invoice number
-        const createData: ZCreateInvoiceInput = invoiceData;
-        createInvoice(createData);
-      }
-    } catch (error) {
-      console.error("Error sending invoice:", error);
-      showErrorToast("error", "Failed to send invoice");
+    if (state.invoiceId) {
+      // Update existing invoice
+      const updateData: ZUpdateInvoiceInput = {
+        invoiceId: state.invoiceId,
+        ...invoiceData,
+      };
+      updateInvoice(updateData);
+    } else {
+      // Create new invoice - server will auto-generate invoice number
+      const createData: ZCreateInvoiceInput = invoiceData;
+      createInvoice(createData);
     }
   };
 
   const handleSaveAndDownload = () => {
-    try {
-      // Validate required fields for download
-      if (
-        !state.clientId ||
-        !state.businessDetails?.id ||
-        !state.paymentDueDate
-      ) {
-        showErrorToast(
-          "error",
-          "Missing required fields for downloading invoice"
-        );
-        return;
-      }
+    // Validate required fields for download
+    if (
+      !state.clientId ||
+      !state.businessDetails?.id ||
+      !state.paymentDueDate
+    ) {
+      showErrorToast(
+        "error",
+        "Missing required fields for downloading invoice"
+      );
+      return;
+    }
 
-      // ✅ FIX: Updated validation that accounts for auto-generated invoice numbers
-      const validationResult = getValidationErrors();
-      if (!validationResult.isValid) {
-        console.log("Validation errors:", validationResult.errors);
-        setValidationErrors(validationResult);
-        showErrorToast(
-          "error",
-          "Please fix the validation errors before downloading."
-        );
-        return;
-      }
+    // ✅ FIX: Updated validation that accounts for auto-generated invoice numbers
+    const validationResult = getValidationErrors();
+    if (!validationResult.isValid) {
+      console.log("Validation errors:", validationResult.errors);
+      setValidationErrors(validationResult);
+      showErrorToast(
+        "error",
+        "Please fix the validation errors before downloading."
+      );
+      return;
+    }
 
-      setActiveAction("download");
-      const invoiceData = prepareInvoiceData(InvoiceStatus.SENT);
+    setActiveAction("download");
+    const invoiceData = prepareInvoiceData(InvoiceStatus.SENT);
 
-      if (state.invoiceId) {
-        // Update existing invoice
-        const updateData: ZUpdateInvoiceInput = {
-          invoiceId: state.invoiceId,
-          ...invoiceData,
-        };
-        updateInvoice(updateData);
-      } else {
-        // Create new invoice - server will auto-generate invoice number
-        const createData: ZCreateInvoiceInput = invoiceData;
-        createInvoice(createData);
-      }
-
-      // Note: PDF download functionality will be implemented later
-      showSuccessToast("success", "Invoice ready for download!");
-    } catch (error) {
-      console.error("Error preparing invoice for download:", error);
-      showErrorToast("error", "Failed to prepare invoice for download");
+    if (state.invoiceId) {
+      // Update existing invoice
+      const updateData: ZUpdateInvoiceInput = {
+        invoiceId: state.invoiceId,
+        ...invoiceData,
+      };
+      updateInvoice(updateData);
+    } else {
+      // Create new invoice - server will auto-generate invoice number
+      const createData: ZCreateInvoiceInput = invoiceData;
+      createInvoice(createData);
     }
   };
 
   const handleSaveAndExit = () => {
-    try {
-      // For exit, save as draft if not enough data for SENT
-      if (!state.clientId || !state.businessDetails?.id) {
-        showErrorToast("error", "Please select a client before exiting");
-        return;
-      }
+    // For exit, save as draft if not enough data for SENT
+    if (!state.clientId || !state.businessDetails?.id) {
+      showErrorToast("error", "Please select a client before exiting");
+      return;
+    }
 
-      setActiveAction("exit");
-      const currentStatus = state.invoiceStatus || InvoiceStatus.DRAFT;
-      const invoiceData = prepareInvoiceData(currentStatus);
+    setActiveAction("exit");
+    const currentStatus = state.invoiceStatus || InvoiceStatus.DRAFT;
+    const invoiceData = prepareInvoiceData(currentStatus);
 
-      if (state.invoiceId) {
-        // Update existing invoice
-        const updateData: ZUpdateInvoiceInput = {
-          invoiceId: state.invoiceId,
-          ...invoiceData,
-        };
-        updateInvoice(updateData);
-      } else {
-        // Create new invoice with current status
-        const createData: ZCreateInvoiceInput = invoiceData;
-        createInvoice(createData);
-      }
-
-      showSuccessToast("success", "Invoice saved successfully!");
-    } catch (error) {
-      console.error("Error saving invoice:", error);
-      showErrorToast("error", "Failed to save invoice");
+    if (state.invoiceId) {
+      // Update existing invoice
+      const updateData: ZUpdateInvoiceInput = {
+        invoiceId: state.invoiceId,
+        ...invoiceData,
+      };
+      updateInvoice(updateData);
+    } else {
+      // Create new invoice with current status
+      const createData: ZCreateInvoiceInput = invoiceData;
+      createInvoice(createData);
     }
   };
 

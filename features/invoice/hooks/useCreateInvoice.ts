@@ -7,7 +7,7 @@ import { _createInvoice } from "../actions";
 import { ApiResponse } from "@/types";
 
 interface UseCreateInvoiceOptions {
-  onSuccess?: (invoiceId: string) => void;
+  onSuccess?: (response: ApiResponse<string>) => void;
   onError?: (error: string) => void;
 }
 
@@ -32,9 +32,9 @@ export function useCreateInvoice(options?: UseCreateInvoiceOptions) {
       queryClient.invalidateQueries({ queryKey: ["invoices"] });
       queryClient.invalidateQueries({ queryKey: ["invoice-stats"] });
 
-      // Call the success callback with the invoice ID
-      if (result.data) {
-        options?.onSuccess?.(result.data);
+      // Call the success callback with the API response
+      if (result) {
+        options?.onSuccess?.(result);
       }
     },
     onError: (error: Error) => {

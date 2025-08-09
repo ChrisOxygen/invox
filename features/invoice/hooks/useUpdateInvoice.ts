@@ -7,7 +7,7 @@ import { ZUpdateInvoiceInput } from "@/dataSchemas";
 import { ApiResponse } from "@/types/api";
 
 interface UseUpdateInvoiceOptions {
-  onSuccess?: (invoiceId: string) => void;
+  onSuccess?: (response: ApiResponse<string>) => void;
   onError?: (error: string) => void;
 }
 
@@ -38,8 +38,8 @@ export function useUpdateInvoice(options?: UseUpdateInvoiceOptions) {
       }
 
       // Call the success callback with the invoice ID
-      if (result.data) {
-        options?.onSuccess?.(result.data);
+      if (result) {
+        options?.onSuccess?.(result);
       }
     },
     onError: (error: Error) => {

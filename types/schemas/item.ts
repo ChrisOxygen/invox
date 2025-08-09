@@ -1,4 +1,4 @@
-import { createItemSchema, updateItemSchema } from "@/dataSchemas";
+import { createItemSchema, updateItemSchema } from "@/features/items/validation/itemSchemas";
 import { z } from "zod";
 
 export type CreateItemInput = z.infer<typeof createItemSchema>;

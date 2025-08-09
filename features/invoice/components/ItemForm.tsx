@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/form";
 
 import { useCreateItem, useUpdateItem } from "@/features/items/hooks";
-import { createItemSchema, updateItemSchema } from "@/dataSchemas";
+import { createItemSchema, updateItemSchema } from "@/features/items/validation/itemSchemas";
 import { CreateItemInput, UpdateItemInput } from "@/types/schemas/item";
 
 interface ItemFormProps {

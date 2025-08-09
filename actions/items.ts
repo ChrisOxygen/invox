@@ -3,7 +3,7 @@
 import { Item, PrismaClient } from "@prisma/client";
 import { auth } from "@/auth";
 import { ApiResponse, BaseResponse } from "@/types/api";
-import { createItemSchema, updateItemSchema } from "@/dataSchemas/item";
+import { createItemSchema, updateItemSchema } from "@/features/items/validation/itemSchemas";
 import { CreateItemInput, UpdateItemInput } from "@/types/schemas/item";
 
 const prisma = new PrismaClient();

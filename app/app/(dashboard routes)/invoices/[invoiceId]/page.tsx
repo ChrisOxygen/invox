@@ -3,13 +3,11 @@ import { InvoiceViewToolbar } from "@/features/invoice/components/InvoiceViewToo
 import { InvoiceViewer } from "@/features/invoice/components/InvoiceViewer";
 
 interface InvoicePageProps {
-  params: {
-    invoiceId: string;
-  };
+  params: Promise<{ invoiceId: string }>;
 }
 
-function InvoicePage({ params }: InvoicePageProps) {
-  const { invoiceId } = params;
+async function InvoicePage({ params }: InvoicePageProps) {
+  const { invoiceId } = await params;
 
   return (
     <div className="grid grid-rows-[100px,1fr] h-full bg-gradient-to-br from-blue-50 via-cyan-50 to-blue-100">

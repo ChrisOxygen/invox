@@ -1,7 +1,10 @@
-import { CreateClientInput, UpdateClientInput } from "../schemas/client";
+import {
+  ZCreateClientInput,
+  ZUpdateClientInput,
+} from "@/features/clients/validation/clientSchemas";
 
-export interface CreateClientRequest extends CreateClientInput {}
-export interface UpdateClientRequest extends UpdateClientInput {
+export interface CreateClientRequest extends ZCreateClientInput {}
+export interface UpdateClientRequest extends ZUpdateClientInput {
   clientId: string;
 }
 

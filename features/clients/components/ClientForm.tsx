@@ -20,8 +20,12 @@ import {
 } from "@/components/ui/form";
 
 import { useCreateClient, useUpdateClient } from "@/features/clients/hooks";
-import { createClientSchema, updateClientSchema } from "@/dataSchemas/client";
-import { CreateClientInput, UpdateClientInput } from "@/types/schemas/client";
+import {
+  createClientSchema,
+  updateClientSchema,
+  ZCreateClientInput,
+  ZUpdateClientInput,
+} from "@/features/clients/validation/clientSchemas";
 import { Building2, Mail, User, MapPin, Loader2 } from "lucide-react";
 
 interface ClientFormProps {
@@ -71,7 +75,7 @@ export function ClientForm({
   });
 
   // Form setup
-  const form = useForm<CreateClientInput | UpdateClientInput>({
+  const form = useForm<ZCreateClientInput | ZUpdateClientInput>({
     resolver: zodResolver(isEditing ? updateClientSchema : createClientSchema),
     defaultValues: {
       BusinessName: client?.BusinessName || "",
@@ -98,7 +102,7 @@ export function ClientForm({
     onOpenChange(false);
   };
 
-  const onSubmit = async (data: CreateClientInput | UpdateClientInput) => {
+  const onSubmit = async (data: ZCreateClientInput | ZUpdateClientInput) => {
     try {
       if (isEditing && client) {
         await updateClient.updateClientAsync({
@@ -106,7 +110,7 @@ export function ClientForm({
           clientId: client.id,
         });
       } else {
-        await createClient.createClientAsync(data as CreateClientInput);
+        await createClient.createClientAsync(data as ZCreateClientInput);
       }
     } catch (error) {
       // Error handling is done in the hooks

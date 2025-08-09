@@ -20,7 +20,10 @@ import { Separator } from "@/components/ui/separator";
 import { useState } from "react";
 import InBoxLoader from "@/components/InBoxLoader";
 import useSocialSignIn from "@/hooks/useSocialSignIn";
-import { signupFormSchema, ZSignupFormInput } from "@/features/auth/validation/authSchemas";
+import {
+  signupFormSchema,
+  ZSignupFormInput,
+} from "@/features/auth/validation/authSchemas";
 import { useCredentialSignup } from "@/hooks/useCredentialSignup";
 
 function SignUpPage() {

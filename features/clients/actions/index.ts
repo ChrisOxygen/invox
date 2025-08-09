@@ -9,7 +9,7 @@ import {
   createClientSchema,
   updateClientSchema,
   clientIdSchema,
-} from "@/dataSchemas/client";
+} from "@/features/clients/validation/clientSchemas";
 
 const prisma = new PrismaClient();
 

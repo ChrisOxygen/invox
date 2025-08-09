@@ -18,7 +18,10 @@ import {
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { useState } from "react";
-import { loginFormSchema, ZLoginFormInput } from "@/features/auth/validation/authSchemas";
+import {
+  loginFormSchema,
+  ZLoginFormInput,
+} from "@/features/auth/validation/authSchemas";
 import InBoxLoader from "@/components/InBoxLoader";
 import { useLogin } from "@/hooks/useLogin";
 import useSocialSignIn from "@/hooks/useSocialSignIn";

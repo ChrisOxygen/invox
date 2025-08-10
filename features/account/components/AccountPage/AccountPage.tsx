@@ -2,7 +2,7 @@
 
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { useUserWithBusiness } from "@/features/business/hooks";
-import { useGetPaymentAccounts } from "@/hooks/payments";
+import { useGetPaymentAccounts } from "@/features/payments/hooks";
 import InBoxLoader from "@/components/InBoxLoader";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";

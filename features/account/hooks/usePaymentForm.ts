@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import {
   useGetPaymentAccounts,
   useUpdatePaymentAccount,
-} from "@/hooks/payments";
+} from "@/features/payments/hooks";
 import { editablePaymentAccountSchema } from "@/shared/validators";
 import type { PaymentMethodFormData } from "@/shared/types";
 

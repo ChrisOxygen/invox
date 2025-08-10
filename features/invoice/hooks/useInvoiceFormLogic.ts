@@ -9,7 +9,7 @@ import {
   InvoiceValidationResult,
 } from "../types/invoiceForm";
 import { useUserAndBusiness } from "./useUserAndBusiness";
-import { useGetPaymentAccounts } from "@/hooks/payments/useGetPaymentAccounts";
+import { useGetPaymentAccounts } from "@/features/payments/hooks/useGetPaymentAccounts";
 import { useGetInvoiceById } from "./useGetInvoiceById";
 import { getInvoiceItemErrors } from "../utils";
 

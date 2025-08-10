@@ -59,7 +59,7 @@ import {
   useUpdatePaymentAccount,
   useDeletePaymentAccount,
   useSetPaymentAccountAsDefault,
-} from "@/hooks/payments";
+} from "@/features/payments/hooks";
 import { createPaymentAccountSchema } from "@/shared/validators/payment";
 import { CreatePaymentAccountInput } from "@/types/schemas/payments";
 import InBoxLoader from "@/components/InBoxLoader";

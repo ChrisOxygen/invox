@@ -7,7 +7,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useGetPaymentAccounts } from "@/hooks/payments/useGetPaymentAccounts";
+import { useGetPaymentAccounts } from "@/features/payments/hooks/useGetPaymentAccounts";
 import { useInvoiceForm } from "../../index";
 import { Button } from "@/components/ui/button";
 import { InvoiceStatus } from "@prisma/client";

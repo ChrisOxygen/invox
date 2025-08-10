@@ -21,7 +21,7 @@ import { useCreateInvoice, useUpdateInvoice } from "../hooks";
 import {
   ZCreateInvoiceInput,
   ZUpdateInvoiceInput,
-} from "@/dataSchemas/invoice";
+} from "@/features/invoice/validation/invoiceSchemas";
 import { showErrorToast, showSuccessToast } from "@/components/toast-templates";
 import { InvoiceStatus } from "@prisma/client";
 

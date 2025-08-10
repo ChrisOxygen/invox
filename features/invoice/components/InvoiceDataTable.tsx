@@ -22,7 +22,7 @@ import { cn } from "@/lib/utils";
 import { FiEdit2, FiEye, FiTrash2, FiMoreHorizontal } from "react-icons/fi";
 import { IoStar } from "react-icons/io5";
 import { formatCurrency } from "@/utils";
-import { InvoiceWithRelations } from "@/types/invoice";
+import { InvoiceWithRelations } from "../types/invoiceTypes";
 import { FavoriteIcon } from "./FavoriteIcon";
 
 // Status badge color map

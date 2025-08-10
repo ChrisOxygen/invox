@@ -2,12 +2,12 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { InvoiceListApiResponse } from "@/types/api/invoice";
-import { InvoiceFiltersInput, PaginationInput } from "@/dataSchemas/invoice";
+import { ZInvoiceFiltersInput, ZPaginationInput } from "@/features/invoice/validation/invoiceSchemas";
 import { _getInvoices } from "../actions";
 
 interface UseGetInvoicesParams {
-  filters?: InvoiceFiltersInput;
-  pagination?: PaginationInput;
+  filters?: ZInvoiceFiltersInput;
+  pagination?: ZPaginationInput;
   enabled?: boolean;
 }
 

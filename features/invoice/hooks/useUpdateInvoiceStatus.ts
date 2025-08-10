@@ -1,7 +1,7 @@
 "use client";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { UpdateInvoiceStatusInput } from "@/dataSchemas/invoice";
+import { ZUpdateInvoiceStatusInput } from "@/features/invoice/validation/invoiceSchemas";
 import { InvoiceResponse } from "@/types/api/invoice";
 import { _updateInvoiceStatus } from "../actions";
 
@@ -17,7 +17,7 @@ export function useUpdateInvoiceStatus(
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
-    mutationFn: async (data: UpdateInvoiceStatusInput) => {
+    mutationFn: async (data: ZUpdateInvoiceStatusInput) => {
       const result = await _updateInvoiceStatus(data);
 
       if (!result.success) {
@@ -56,4 +56,4 @@ export function useUpdateInvoiceStatus(
 }
 
 // Export the type for convenience
-export type { UpdateInvoiceStatusInput as UpdateInvoiceStatusData };
+export type { ZUpdateInvoiceStatusInput as UpdateInvoiceStatusData };

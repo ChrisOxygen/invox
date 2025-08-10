@@ -1,5 +1,5 @@
 import { InvoiceFormState } from "../types/invoiceForm";
-import { InvoiceItem, InvoiceWithRelations } from "@/types/invoice";
+import { InvoiceItem, InvoiceWithRelations } from "../types/invoiceTypes";
 
 // Calculate item total
 export const calculateItemTotal = (

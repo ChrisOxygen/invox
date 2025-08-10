@@ -11,7 +11,7 @@ import {
 } from "@prisma/client";
 import { ApiResponse } from "@/types/api";
 import { UserWithBusiness } from "@/types/database";
-import { InvoiceWithRelations } from "@/types/invoice";
+import { InvoiceWithRelations } from "../types/invoiceTypes";
 import {
   requireAuthentication,
   checkAuthentication,
@@ -28,12 +28,12 @@ import {
   invoiceFiltersSchema,
   paginationSchema,
   deleteInvoiceSchema,
-  InvoiceFiltersInput,
-  PaginationInput,
-  DeleteInvoiceInput,
+  ZInvoiceFiltersInput,
+  ZPaginationInput,
+  ZDeleteInvoiceInput,
   ZCreateInvoiceInput,
   ZUpdateInvoiceInput,
-} from "@/dataSchemas/invoice";
+} from "@/features/invoice/validation/invoiceSchemas";
 import { calculateInvoiceTotals } from "@/utils/invoice-calculations";
 import {
   validateUserBusinessAndClient,
@@ -968,8 +968,8 @@ export async function _getInvoice(invoiceId: string): Promise<InvoiceResponse> {
 
 // Get invoices with filters and pagination
 export async function _getInvoices(
-  filters?: InvoiceFiltersInput,
-  pagination?: PaginationInput
+  filters?: ZInvoiceFiltersInput,
+  pagination?: ZPaginationInput
 ): Promise<InvoiceListApiResponse> {
   try {
     const { isAuthenticated, session } = await checkAuthentication();
@@ -1244,7 +1244,7 @@ export async function _getInvoiceStats(): Promise<InvoiceStatsResponse> {
 
 // Delete an invoice
 export async function _deleteInvoice(
-  data: DeleteInvoiceInput
+  data: ZDeleteInvoiceInput
 ): Promise<InvoiceDeleteResponse> {
   try {
     const { isAuthenticated, session } = await checkAuthentication();

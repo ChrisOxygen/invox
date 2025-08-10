@@ -1,7 +1,7 @@
 "use client";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { DeleteInvoiceInput } from "@/dataSchemas/invoice";
+import { ZDeleteInvoiceInput } from "@/features/invoice/validation/invoiceSchemas";
 import { InvoiceDeleteResponse } from "@/types/api/invoice";
 import { _deleteInvoice } from "../actions";
 
@@ -15,7 +15,7 @@ export function useDeleteInvoice(options?: UseDeleteInvoiceOptions) {
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
-    mutationFn: async (data: DeleteInvoiceInput) => {
+    mutationFn: async (data: ZDeleteInvoiceInput) => {
       const result = await _deleteInvoice(data);
 
       if (!result.success) {
@@ -56,4 +56,4 @@ export function useDeleteInvoice(options?: UseDeleteInvoiceOptions) {
 }
 
 // Export the type for convenience
-export type { DeleteInvoiceInput as DeleteInvoiceData };
+export type { ZDeleteInvoiceInput as DeleteInvoiceData };

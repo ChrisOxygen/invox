@@ -8,7 +8,7 @@ import { FiTrash2 } from "react-icons/fi";
 import { useGetInvoices } from "@/features/invoice/hooks";
 import { useDeleteInvoice } from "@/features/invoice/hooks";
 import { InvoiceStatus } from "@prisma/client";
-import { InvoiceWithRelations } from "@/types/invoice";
+import { InvoiceWithRelations } from "../types/invoiceTypes";
 
 // Import the new separated components
 import { InvoiceSearch } from "./InvoiceSearch";

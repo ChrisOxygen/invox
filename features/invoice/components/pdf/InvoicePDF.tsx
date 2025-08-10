@@ -9,7 +9,7 @@ import {
   Image,
 } from "@react-pdf/renderer";
 import { InvoiceFormState } from "../../types/invoiceForm";
-import { InvoiceWithRelations } from "@/types/invoice";
+import { InvoiceWithRelations } from "../../types/invoiceTypes";
 import { formatInvoiceData } from "../../utils";
 
 // Register fonts if needed (optional)

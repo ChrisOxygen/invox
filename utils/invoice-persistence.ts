@@ -5,7 +5,7 @@ import {
   DiscountType,
 } from "@prisma/client";
 import { CalculationResult } from "@/utils/invoice-calculations";
-import { ZCreateInvoiceInput } from "@/dataSchemas/invoice";
+import { ZCreateInvoiceInput } from "@/features/invoice/validation/invoiceSchemas";
 
 const prisma = new PrismaClient();
 

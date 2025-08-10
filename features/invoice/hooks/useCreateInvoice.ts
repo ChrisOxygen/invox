@@ -1,7 +1,7 @@
 "use client";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { ZCreateInvoiceInput } from "@/dataSchemas/invoice";
+import { ZCreateInvoiceInput } from "@/features/invoice/validation/invoiceSchemas";
 
 import { _createInvoice } from "../actions";
 import { ApiResponse } from "@/types";

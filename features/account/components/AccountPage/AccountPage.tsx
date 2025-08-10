@@ -2,7 +2,6 @@
 
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { useUserWithBusiness } from "@/features/business/hooks";
-import { useGetPaymentAccounts } from "@/features/payments/hooks";
 import InBoxLoader from "@/components/InBoxLoader";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
@@ -43,9 +42,6 @@ function AccountPage() {
     refetch,
   } = useUserWithBusiness();
 
-  const { paymentAccounts, isLoading: isLoadingPaymentAccounts } =
-    useGetPaymentAccounts();
-
   // Business form
   const {
     form: businessForm,
@@ -54,7 +50,7 @@ function AccountPage() {
     handleSaveBusiness,
   } = useBusinessForm();
 
-  // Payment form
+  // Payment form - kept for modal compatibility
   const {
     form: paymentForm,
     defaultPaymentAccount,
@@ -78,7 +74,7 @@ function AccountPage() {
     closeEditBusinessModal();
   };
 
-  // Payment edit handlers
+  // Payment edit handlers - kept for modal compatibility
   const handleEditPaymentInfo = () => {
     openEditPaymentModal();
   };
@@ -128,10 +124,6 @@ function AccountPage() {
 
   const handleDeleteAccount = () => {
     console.log("Delete account clicked");
-  };
-
-  const handleConnectGateway = () => {
-    console.log("Connect another gateway clicked");
   };
 
   // Loading state
@@ -189,32 +181,7 @@ function AccountPage() {
             />
 
             {/* Payment Information */}
-            <PaymentInformationCard
-              paymentAccounts={
-                paymentAccounts as Array<{
-                  id: string;
-                  gatewayType: string;
-                  accountName: string;
-                  isActive: boolean;
-                  accountData?: Record<string, unknown> | null;
-                }>
-              }
-              defaultPaymentAccount={
-                defaultPaymentAccount as
-                  | {
-                      id: string;
-                      gatewayType: string;
-                      accountName: string;
-                      isActive: boolean;
-                      accountData?: Record<string, unknown> | null;
-                    }
-                  | undefined
-              }
-              isLoadingPaymentAccounts={isLoadingPaymentAccounts}
-              isUpdatingPaymentAccount={isUpdatingPaymentAccount}
-              onEditPaymentInfo={handleEditPaymentInfo}
-              onConnectGateway={handleConnectGateway}
-            />
+            <PaymentInformationCard />
           </div>
         </div>
 

@@ -7,32 +7,32 @@ import { RiPaypalLine } from "react-icons/ri";
 import { FiUpload } from "react-icons/fi";
 import { SiStripe } from "react-icons/si";
 import { VscCreditCard } from "react-icons/vsc";
-
-interface PaymentAccount {
-  id: string;
-  gatewayType: string;
-  accountName: string;
-  isActive: boolean;
-  accountData?: Record<string, unknown> | null;
-}
+import { useGetPaymentAccounts } from "@/features/payments/hooks";
+import { useState } from "react";
+import { toast } from "sonner";
 
 interface PaymentInformationCardProps {
-  paymentAccounts: PaymentAccount[];
-  defaultPaymentAccount?: PaymentAccount;
-  isLoadingPaymentAccounts: boolean;
-  isUpdatingPaymentAccount: boolean;
-  onEditPaymentInfo: () => void;
-  onConnectGateway: () => void;
+  // No props needed since we're handling everything locally
 }
 
-export function PaymentInformationCard({
-  paymentAccounts,
-  defaultPaymentAccount,
-  isLoadingPaymentAccounts,
-  isUpdatingPaymentAccount,
-  onEditPaymentInfo,
-  onConnectGateway,
-}: PaymentInformationCardProps) {
+export function PaymentInformationCard({}: PaymentInformationCardProps) {
+  // Local state management
+  const [isUpdatingPaymentAccount] = useState(false);
+  
+  // Fetch payment accounts locally
+  const { paymentAccounts, isLoading: isLoadingPaymentAccounts } = useGetPaymentAccounts();
+  
+  // Find default payment account
+  const defaultPaymentAccount = paymentAccounts.find((account) => account.isDefault);
+
+  // Local handlers
+  const handleEditPaymentInfo = () => {
+    toast.info("Payment editing functionality coming soon!");
+  };
+
+  const handleConnectGateway = () => {
+    toast.info("Connect gateway functionality coming soon!");
+  };
   return (
     <Card
       className={`border border-blue-100/60 h-max bg-gradient-to-br from-white/95 to-cyan-50/20 backdrop-blur-sm shadow-sm transition-opacity duration-200 ${
@@ -51,7 +51,7 @@ export function PaymentInformationCard({
             )}
           </CardTitle>
           <Button
-            onClick={onEditPaymentInfo}
+            onClick={handleEditPaymentInfo}
             variant="ghost"
             size="sm"
             className="text-blue-600 hover:text-blue-700 hover:bg-blue-50"
@@ -83,7 +83,7 @@ export function PaymentInformationCard({
               Set up a payment account to receive payments from clients.
             </p>
             <Button
-              onClick={onConnectGateway}
+              onClick={handleConnectGateway}
               className="bg-gradient-to-r from-blue-600 to-cyan-600 text-white hover:from-blue-700 hover:to-cyan-700"
             >
               Add Payment Account
@@ -95,22 +95,24 @@ export function PaymentInformationCard({
             <div className="flex items-center justify-between">
               <div className="flex gap-3 items-center">
                 <div className="size-12 lg:size-14 text-xl lg:text-2xl rounded-full bg-gradient-to-br from-blue-100 to-purple-100 text-blue-600 flex items-center justify-center shadow-sm">
-                  {defaultPaymentAccount.gatewayType === "stripe" ? (
+                  {defaultPaymentAccount.gatewayType === "PAYPAL" ? (
+                    <RiPaypalLine />
+                  ) : defaultPaymentAccount.gatewayType === "WISE" ? (
                     <SiStripe />
                   ) : (
-                    <RiPaypalLine />
+                    <VscCreditCard />
                   )}
                 </div>
                 <div className="flex flex-col">
                   <h4 className="text-base lg:text-lg font-semibold text-gray-900">
-                    {defaultPaymentAccount.gatewayType === "stripe"
-                      ? "Stripe"
-                      : defaultPaymentAccount.gatewayType === "paypal"
+                    {defaultPaymentAccount.gatewayType === "PAYPAL"
                       ? "PayPal"
+                      : defaultPaymentAccount.gatewayType === "WISE"
+                      ? "Wise"
                       : defaultPaymentAccount.gatewayType
-                          .charAt(0)
-                          .toUpperCase() +
-                        defaultPaymentAccount.gatewayType.slice(1)}
+                          .toLowerCase()
+                          .replace(/_/g, " ")
+                          .replace(/\b\w/g, l => l.toUpperCase())}
                   </h4>
                   <span className="text-xs lg:text-sm text-gray-500">
                     Payment Gateway
@@ -175,7 +177,7 @@ export function PaymentInformationCard({
 
             {/* Connect Another Gateway */}
             <Button
-              onClick={onConnectGateway}
+              onClick={handleConnectGateway}
               className="w-full bg-gradient-to-r from-blue-600 to-cyan-600 text-white hover:from-blue-700 hover:to-cyan-700 shadow-md transition-all duration-200"
             >
               <FiUpload className="h-4 w-4 mr-2" />

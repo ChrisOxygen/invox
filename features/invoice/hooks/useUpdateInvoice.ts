@@ -3,8 +3,8 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { _updateInvoice } from "../actions";
-import { ZUpdateInvoiceInput } from "@/dataSchemas";
 import { ApiResponse } from "@/types/api";
+import { ZUpdateInvoiceInput } from "../validation/invoiceSchemas";
 
 interface UseUpdateInvoiceOptions {
   onSuccess?: (response: ApiResponse<string>) => void;

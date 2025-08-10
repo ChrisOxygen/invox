@@ -284,15 +284,6 @@ export const updateInvoiceSchema = z
     }
   );
 
-// Update invoice status schema
-export const updateInvoiceStatusSchema = z.object({
-  invoiceId: z.string().min(1, "Invoice ID is required"),
-  status: z.nativeEnum(InvoiceStatus, {
-    required_error: "Status is required",
-    invalid_type_error: "Invalid status",
-  }),
-});
-
 // Invoice filters schema
 export const invoiceFiltersSchema = z
   .object({
@@ -357,7 +348,6 @@ export type ZInvoiceItemInput = z.infer<typeof invoiceItemSchema>;
 export type ZInvoiceItemsFormInput = z.infer<typeof invoiceItemsFormSchema>;
 export type ZCreateInvoiceInput = z.infer<typeof createInvoiceSchema>;
 export type ZUpdateInvoiceInput = z.infer<typeof updateInvoiceSchema>;
-export type ZUpdateInvoiceStatusInput = z.infer<typeof updateInvoiceStatusSchema>;
 export type ZInvoiceFiltersInput = z.infer<typeof invoiceFiltersSchema>;
 export type ZPaginationInput = z.infer<typeof paginationSchema>;
 export type ZDeleteInvoiceInput = z.infer<typeof deleteInvoiceSchema>;

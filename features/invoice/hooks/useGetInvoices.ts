@@ -2,7 +2,10 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { InvoiceListApiResponse } from "@/types/api/invoice";
-import { ZInvoiceFiltersInput, ZPaginationInput } from "@/features/invoice/validation/invoiceSchemas";
+import {
+  ZInvoiceFiltersInput,
+  ZPaginationInput,
+} from "@/features/invoice/validation/invoiceSchemas";
 import { _getInvoices } from "../actions";
 
 interface UseGetInvoicesParams {

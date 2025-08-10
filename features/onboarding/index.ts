@@ -11,6 +11,9 @@ export {
   useOnboardingActions as useOnboardingActionsContext,
 } from "./context/OnboardingActionsContext";
 
+// Action exports
+export * from "./actions";
+
 // Hook exports
 export * from "./hooks";
 

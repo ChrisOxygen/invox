@@ -2,7 +2,7 @@
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { _updatePaymentAccount } from "@/actions/payments";
+import { _updatePaymentAccount } from "@/features/payments/actions";
 import { UpdatePaymentAccountInput } from "@/types/schemas/payments";
 
 export const useUpdatePaymentAccount = () => {

@@ -2,7 +2,7 @@
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { _setPaymentAccountAsDefault } from "@/actions/payments";
+import { _setPaymentAccountAsDefault } from "@/features/payments/actions";
 
 export const useSetPaymentAccountAsDefault = () => {
   const queryClient = useQueryClient();

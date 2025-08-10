@@ -1,7 +1,7 @@
 "use client";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { _deleteItem } from "@/actions/items";
+import { _deleteItem } from "@/features/items/actions";
 import { BaseResponse } from "@/types/api";
 
 interface UseDeleteItemOptions {

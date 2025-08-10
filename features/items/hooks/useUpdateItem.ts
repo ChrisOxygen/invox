@@ -1,7 +1,7 @@
 "use client";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { _updateItem } from "@/actions/items";
+import { _updateItem } from "@/features/items/actions";
 import { ZUpdateItemInput } from "../validation";
 import { ApiResponse } from "@/types";
 import { Item } from "@prisma/client";

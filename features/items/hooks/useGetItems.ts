@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { _getItem, _getItems } from "@/actions/items";
+import { _getItem, _getItems } from "@/features/items/actions";
 import { Item } from "@prisma/client";
 import { ApiResponse } from "@/types";
 

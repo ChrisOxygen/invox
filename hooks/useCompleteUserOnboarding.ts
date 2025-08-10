@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { _completeOnboardingWithData } from "@/actions";
+import { _completeOnboardingWithData } from "@/features/onboarding/actions";
 import { CompleteOnboardingRequest } from "@/types/business/onboarding";
 
 // Use the CompleteOnboardingRequest type from the new type structure

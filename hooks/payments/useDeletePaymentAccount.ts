@@ -2,7 +2,7 @@
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { _deletePaymentAccount } from "@/actions/payments";
+import { _deletePaymentAccount } from "@/features/payments/actions";
 
 export const useDeletePaymentAccount = () => {
   const queryClient = useQueryClient();

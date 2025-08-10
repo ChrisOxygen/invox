@@ -3,7 +3,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { PaymentAccount } from "@prisma/client";
 import { ApiResponse } from "@/types";
-import { _getUserPaymentAccounts } from "@/actions/payments";
+import { _getUserPaymentAccounts } from "@/features/payments/actions";
 
 // Hook to fetch all payment accounts for the current user
 export function useGetPaymentAccounts() {

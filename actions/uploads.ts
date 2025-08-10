@@ -1,7 +1,7 @@
 "use server";
 
 import { v2 as cloudinary } from "cloudinary";
-import { auth } from "@/auth";
+import { _requireAuthentication } from "@/features/auth/actions";
 import { prisma } from "@/prisma/prisma";
 import { ApiResponse } from "@/types/api";
 
@@ -51,13 +51,7 @@ export async function _uploadFile(
 ): Promise<ApiResponse<string>> {
   try {
     // Check if user is logged in
-    const session = await auth();
-    if (!session || !session.user?.id) {
-      return {
-        success: false,
-        message: "User not authenticated",
-      };
-    }
+    const session = await _requireAuthentication();
 
     // Get the file from FormData
     const file = formData.get("file") as File;

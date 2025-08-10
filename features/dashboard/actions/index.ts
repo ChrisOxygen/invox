@@ -1,10 +1,13 @@
 "use server";
 
-/**
- * Dashboard actions for retrieving invoice metrics and analytics
+/**export async function _getInvoiceMetrics(): Promise<InvoiceMetricsResponse> {
+  try {
+    const session = await _requireAuthentication();
+
+    // Get the user's businessard actions for retrieving invoice metrics and analytics
  */
 
-import { auth } from "@/auth";
+import { _requireAuthentication } from "@/features/auth/actions";
 import { prisma } from "@/prisma/prisma";
 import { InvoiceStatus } from "@prisma/client";
 import type { InvoiceMetricsResponse, ClientMetricsResponse } from "../types";
@@ -20,13 +23,7 @@ import {
  */
 export async function _getInvoiceMetrics(): Promise<InvoiceMetricsResponse> {
   try {
-    const session = await auth();
-    if (!session || !session.user?.id) {
-      return {
-        success: false,
-        message: "User not authenticated",
-      };
-    }
+    const session = await _requireAuthentication();
 
     // Get user's business
     const user = await prisma.user.findUnique({
@@ -215,13 +212,7 @@ export async function _getInvoiceMetrics(): Promise<InvoiceMetricsResponse> {
  */
 export async function _getClientMetrics(): Promise<ClientMetricsResponse> {
   try {
-    const session = await auth();
-    if (!session || !session.user?.id) {
-      return {
-        success: false,
-        message: "User not authenticated",
-      };
-    }
+    const session = await _requireAuthentication();
 
     // Get user's business
     const user = await prisma.user.findUnique({

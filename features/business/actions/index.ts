@@ -1,7 +1,7 @@
 "use server";
 
 import { PrismaClient, Business } from "@prisma/client";
-import { auth } from "@/auth";
+import { _requireAuthentication } from "@/features/auth/actions";
 import {
   createBusinessApiSchema,
   updateBusinessApiSchema,
@@ -17,13 +17,7 @@ export async function _createBusiness(
   data: CreateBusinessRequest
 ): Promise<ApiResponse<Business>> {
   try {
-    const session = await auth();
-    if (!session || !session.user?.id) {
-      return {
-        success: false,
-        message: "User not authenticated",
-      };
-    }
+    const session = await _requireAuthentication();
 
     // Validate the input data
     const validatedData = createBusinessApiSchema.safeParse(data);
@@ -65,13 +59,7 @@ export async function _updateBusiness(
   data: UpdateBusinessApiInput
 ): Promise<ApiResponse<Business>> {
   try {
-    const session = await auth();
-    if (!session || !session.user?.id) {
-      return {
-        success: false,
-        message: "User not authenticated",
-      };
-    }
+    const session = await _requireAuthentication();
 
     if (!businessId) {
       return {
@@ -133,13 +121,7 @@ export async function _updateBusiness(
 // Get current user's business
 export async function _getUserBusiness(): Promise<ApiResponse<Business>> {
   try {
-    const session = await auth();
-    if (!session || !session.user?.id) {
-      return {
-        success: false,
-        message: "User not authenticated",
-      };
-    }
+    const session = await _requireAuthentication();
 
     const business = await prisma.business.findFirst({
       where: { userId: session.user.id },
@@ -172,13 +154,7 @@ export async function _deleteBusiness(
   businessId: string
 ): Promise<BaseResponse> {
   try {
-    const session = await auth();
-    if (!session || !session.user?.id) {
-      return {
-        success: false,
-        message: "User not authenticated",
-      };
-    }
+    const session = await _requireAuthentication();
 
     if (!businessId) {
       return {

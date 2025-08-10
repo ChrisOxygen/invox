@@ -1,7 +1,7 @@
 "use server";
 
 import { Item, PrismaClient } from "@prisma/client";
-import { auth } from "@/auth";
+import { _requireAuthentication } from "@/features/auth/actions";
 import { ApiResponse, BaseResponse } from "@/types/api";
 import {
   createItemSchema,
@@ -31,13 +31,8 @@ export async function _getItems(
   }>
 > {
   try {
-    const session = await auth();
-    if (!session || !session.user?.id) {
-      return {
-        success: false,
-        message: "User not authenticated",
-      };
-    } // Build where clause for search
+    const session = await _requireAuthentication();
+    // Build where clause for search
     const whereClause: {
       userId: string;
       OR?: Array<{
@@ -113,13 +108,7 @@ export async function _createItem(
   data: ZCreateItemInput
 ): Promise<ApiResponse<Item>> {
   try {
-    const session = await auth();
-    if (!session || !session.user?.id) {
-      return {
-        success: false,
-        message: "User not authenticated",
-      };
-    }
+    const session = await _requireAuthentication();
 
     // Validate the input data
     const validatedData = createItemSchema.safeParse(data);
@@ -177,13 +166,7 @@ export async function _updateItem(
   data: ZUpdateItemInput
 ): Promise<ApiResponse<Item>> {
   try {
-    const session = await auth();
-    if (!session || !session.user?.id) {
-      return {
-        success: false,
-        message: "User not authenticated",
-      };
-    }
+    const session = await _requireAuthentication();
 
     // Validate the input data
     const validatedData = updateItemSchema.safeParse(data);
@@ -274,13 +257,7 @@ export async function _updateItem(
 // Delete an item
 export async function _deleteItem(itemId: string): Promise<BaseResponse> {
   try {
-    const session = await auth();
-    if (!session || !session.user?.id) {
-      return {
-        success: false,
-        message: "User not authenticated",
-      };
-    }
+    const session = await _requireAuthentication();
 
     // Check if item exists and belongs to the user
     const existingItem = await prisma.item.findFirst({
@@ -320,13 +297,7 @@ export async function _deleteItem(itemId: string): Promise<BaseResponse> {
 // Get a single item by ID
 export async function _getItem(itemId: string): Promise<ApiResponse<Item>> {
   try {
-    const session = await auth();
-    if (!session || !session.user?.id) {
-      return {
-        success: false,
-        message: "User not authenticated",
-      };
-    }
+    const session = await _requireAuthentication();
 
     const item = await prisma.item.findFirst({
       where: {

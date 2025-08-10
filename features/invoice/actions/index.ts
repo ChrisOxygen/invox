@@ -13,7 +13,6 @@ import { ApiResponse } from "@/types/api";
 import { UserWithBusiness } from "@/types/database";
 import { InvoiceWithRelations } from "../types/invoiceTypes";
 import { _requireAuthentication } from "@/features/auth/actions";
-import { checkAuthentication } from "@/features/auth/utils";
 import {
   InvoiceResponse,
   InvoiceListApiResponse,
@@ -639,13 +638,7 @@ export async function _getUserAndBusiness(): Promise<
   ApiResponse<UserWithBusiness>
 > {
   try {
-    const { isAuthenticated, session } = await checkAuthentication();
-    if (!isAuthenticated || !session) {
-      return {
-        success: false,
-        message: "User not authenticated",
-      };
-    }
+    const session = await _requireAuthentication();
 
     // Get user with business
     const user = await prisma.user.findUnique({
@@ -920,13 +913,7 @@ export async function _updateInvoice(
 // Get single invoice
 export async function _getInvoice(invoiceId: string): Promise<InvoiceResponse> {
   try {
-    const { isAuthenticated, session } = await checkAuthentication();
-    if (!isAuthenticated || !session) {
-      return {
-        success: false,
-        message: "User not authenticated",
-      };
-    }
+    const session = await _requireAuthentication();
 
     const invoice = await prisma.invoice.findFirst({
       where: {
@@ -970,13 +957,7 @@ export async function _getInvoices(
   pagination?: ZPaginationInput
 ): Promise<InvoiceListApiResponse> {
   try {
-    const { isAuthenticated, session } = await checkAuthentication();
-    if (!isAuthenticated || !session) {
-      return {
-        success: false,
-        message: "User not authenticated",
-      };
-    }
+    const session = await _requireAuthentication();
 
     // Validate pagination
     const validatedPagination = paginationSchema.safeParse(pagination || {});
@@ -1135,13 +1116,7 @@ export async function _getInvoices(
 // Get invoice statistics
 export async function _getInvoiceStats(): Promise<InvoiceStatsResponse> {
   try {
-    const { isAuthenticated, session } = await checkAuthentication();
-    if (!isAuthenticated || !session) {
-      return {
-        success: false,
-        message: "User not authenticated",
-      };
-    }
+    const session = await _requireAuthentication();
 
     // Get user's business
     const user = await prisma.user.findUnique({
@@ -1245,13 +1220,7 @@ export async function _deleteInvoice(
   data: ZDeleteInvoiceInput
 ): Promise<InvoiceDeleteResponse> {
   try {
-    const { isAuthenticated, session } = await checkAuthentication();
-    if (!isAuthenticated || !session) {
-      return {
-        success: false,
-        message: "User not authenticated",
-      };
-    }
+    const session = await _requireAuthentication();
 
     // Validate input data
     const validatedData = deleteInvoiceSchema.safeParse(data);

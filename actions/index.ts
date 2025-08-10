@@ -6,7 +6,7 @@ import {
   changePasswordSchema,
   updateUserSchema,
 } from "@/shared/validators/user";
-import { auth } from "@/auth";
+import { _requireAuthentication } from "@/features/auth/actions";
 import { BusinessFormValues } from "@/types/business";
 import { AuthResponse, SignupRequest } from "@/types/api/auth";
 import { UpdateUserInput } from "@/types/schemas/user";
@@ -77,14 +77,7 @@ export async function _createUserWithCredentials(
 // Get user from session
 export async function _getUser(): Promise<AuthResponse> {
   try {
-    const session = await auth();
-
-    if (!session || !session.user?.id) {
-      return {
-        success: false,
-        message: "User not authenticated.",
-      };
-    }
+    const session = await _requireAuthentication();
 
     const userId = session.user.id;
 
@@ -120,13 +113,7 @@ export async function _updateCurrentUser(
   data: UpdateUserInput
 ): Promise<AuthResponse> {
   try {
-    const session = await auth();
-    if (!session || !session.user?.id) {
-      return {
-        success: false,
-        message: "User not authenticated",
-      };
-    }
+    const session = await _requireAuthentication();
 
     // Validate the update data
     const validatedData = updateUserSchema.safeParse(data);
@@ -167,13 +154,7 @@ export async function _updateCurrentUser(
 // Complete onboarding for current user
 export async function _completeOnboarding(): Promise<AuthResponse> {
   try {
-    const session = await auth();
-    if (!session || !session.user?.id) {
-      return {
-        success: false,
-        message: "User not authenticated",
-      };
-    }
+    await _requireAuthentication();
 
     // Update onboarding status
     return await _updateCurrentUser({ onboardingCompleted: true });
@@ -208,13 +189,7 @@ export async function _changePassword(
       };
     }
 
-    const session = await auth();
-    if (!session || !session.user?.id) {
-      return {
-        success: false,
-        message: "User not authenticated",
-      };
-    }
+    const session = await _requireAuthentication();
 
     // Get current user with password
     const user = await prisma.user.findUnique({
@@ -281,13 +256,7 @@ export async function _completeOnboardingWithData(data: {
   paymentMethodDetails: PaymentMethodDetails;
 }): Promise<BasicResponse> {
   try {
-    const session = await auth();
-    if (!session || !session.user?.id) {
-      return {
-        success: false,
-        message: "User not authenticated",
-      };
-    }
+    const session = await _requireAuthentication();
 
     const userId = session.user.id;
 

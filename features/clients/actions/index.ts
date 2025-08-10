@@ -1,7 +1,7 @@
 "use server";
 
 import { Client, PrismaClient } from "@prisma/client";
-import { auth } from "@/auth";
+import { _requireAuthentication } from "@/features/auth/actions";
 
 import { ApiResponse, BaseResponse } from "@/types/api";
 import { CreateClientRequest, UpdateClientRequest } from "@/types/api/client";
@@ -18,13 +18,7 @@ export async function _createClient(
   data: CreateClientRequest
 ): Promise<ApiResponse<Client>> {
   try {
-    const session = await auth();
-    if (!session || !session.user?.id) {
-      return {
-        success: false,
-        message: "User not authenticated",
-      };
-    }
+    const session = await _requireAuthentication();
 
     // Validate data using Zod schema
     const validationResult = createClientSchema.safeParse(data);
@@ -100,13 +94,7 @@ export async function _getClients(
   params: GetClientsParams = {}
 ): Promise<ApiResponse<GetClientsResponse>> {
   try {
-    const session = await auth();
-    if (!session || !session.user?.id) {
-      return {
-        success: false,
-        message: "User not authenticated",
-      };
-    }
+    const session = await _requireAuthentication();
 
     const { page = 1, limit = 10, search = "" } = params;
     const skip = (page - 1) * limit;
@@ -193,13 +181,7 @@ export async function _getClientById(
   clientId: string
 ): Promise<ApiResponse<Client>> {
   try {
-    const session = await auth();
-    if (!session || !session.user?.id) {
-      return {
-        success: false,
-        message: "User not authenticated",
-      };
-    }
+    const session = await _requireAuthentication();
 
     // Validate clientId using Zod schema
     const validationResult = clientIdSchema.safeParse(clientId);
@@ -246,13 +228,7 @@ export async function _updateClient(
 ): Promise<ApiResponse<Client>> {
   const { clientId, ...clientData } = data;
   try {
-    const session = await auth();
-    if (!session || !session.user?.id) {
-      return {
-        success: false,
-        message: "User not authenticated",
-      };
-    }
+    const session = await _requireAuthentication();
 
     // Validate clientId using Zod schema
     const clientIdValidation = clientIdSchema.safeParse(clientId);
@@ -341,13 +317,7 @@ export async function _updateClient(
 // DELETE - Delete client
 export async function _deleteClient(clientId: string): Promise<BaseResponse> {
   try {
-    const session = await auth();
-    if (!session || !session.user?.id) {
-      return {
-        success: false,
-        message: "User not authenticated",
-      };
-    }
+    const session = await _requireAuthentication();
 
     // Validate clientId using Zod schema
     const clientIdValidation = clientIdSchema.safeParse(clientId);

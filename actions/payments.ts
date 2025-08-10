@@ -1,7 +1,7 @@
 "use server";
 
 import { PaymentAccount, PrismaClient } from "@prisma/client";
-import { auth } from "@/auth";
+import { _requireAuthentication } from "@/features/auth/actions";
 import {
   createPaymentAccountSchema,
   updatePaymentAccountSchema,
@@ -18,13 +18,7 @@ export async function _createPaymentAccount(
   data: CreatePaymentAccountInput
 ): Promise<ApiResponse<PaymentAccount>> {
   try {
-    const session = await auth();
-    if (!session || !session.user?.id) {
-      return {
-        success: false,
-        message: "User not authenticated",
-      };
-    }
+    const session = await _requireAuthentication();
 
     // Validate the input data using the discriminated union schema
     const validatedData = createPaymentAccountSchema.safeParse(data);
@@ -81,13 +75,7 @@ export async function _updatePaymentAccount(
   data: UpdatePaymentAccountInput
 ): Promise<ApiResponse<PaymentAccount>> {
   try {
-    const session = await auth();
-    if (!session || !session.user?.id) {
-      return {
-        success: false,
-        message: "User not authenticated",
-      };
-    }
+    const session = await _requireAuthentication();
 
     if (!paymentAccountId) {
       return {
@@ -165,13 +153,7 @@ export async function _getUserPaymentAccounts(): Promise<
   ApiResponse<PaymentAccount[]>
 > {
   try {
-    const session = await auth();
-    if (!session || !session.user?.id) {
-      return {
-        success: false,
-        message: "User not authenticated",
-      };
-    }
+    const session = await _requireAuthentication();
 
     const paymentAccounts = await prisma.paymentAccount.findMany({
       where: { userId: session.user.id },
@@ -202,13 +184,7 @@ export async function _getPaymentAccountById(
   paymentAccountId: string
 ): Promise<ApiResponse<PaymentAccount>> {
   try {
-    const session = await auth();
-    if (!session || !session.user?.id) {
-      return {
-        success: false,
-        message: "User not authenticated",
-      };
-    }
+    const session = await _requireAuthentication();
 
     if (!paymentAccountId) {
       return {
@@ -251,13 +227,7 @@ export async function _deletePaymentAccount(
   paymentAccountId: string
 ): Promise<BaseResponse> {
   try {
-    const session = await auth();
-    if (!session || !session.user?.id) {
-      return {
-        success: false,
-        message: "User not authenticated",
-      };
-    }
+    const session = await _requireAuthentication();
 
     if (!paymentAccountId) {
       return {
@@ -305,13 +275,7 @@ export async function _setPaymentAccountAsDefault(
   paymentAccountId: string
 ): Promise<ApiResponse<PaymentAccount>> {
   try {
-    const session = await auth();
-    if (!session || !session.user?.id) {
-      return {
-        success: false,
-        message: "User not authenticated",
-      };
-    }
+    const session = await _requireAuthentication();
 
     if (!paymentAccountId) {
       return {

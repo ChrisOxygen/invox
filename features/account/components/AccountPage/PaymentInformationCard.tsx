@@ -7,31 +7,50 @@ import { RiPaypalLine } from "react-icons/ri";
 import { FiUpload } from "react-icons/fi";
 import { SiStripe } from "react-icons/si";
 import { VscCreditCard } from "react-icons/vsc";
-import { useGetPaymentAccounts } from "@/features/payments/hooks";
+import {
+  useGetPaymentAccounts,
+  useUpdatePaymentAccount,
+} from "@/features/payments/hooks";
+import { showSuccessToast, showInfoToast } from "@/components/toast-templates";
 import { useState } from "react";
-import { toast } from "sonner";
+import { CreatePaymentAccountModal } from "./CreatePaymentAccountModal";
 
-interface PaymentInformationCardProps {
-  // No props needed since we're handling everything locally
-}
-
-export function PaymentInformationCard({}: PaymentInformationCardProps) {
+export function PaymentInformationCard() {
   // Local state management
-  const [isUpdatingPaymentAccount] = useState(false);
-  
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+
   // Fetch payment accounts locally
-  const { paymentAccounts, isLoading: isLoadingPaymentAccounts } = useGetPaymentAccounts();
-  
+  const {
+    paymentAccounts,
+    isLoading: isLoadingPaymentAccounts,
+    refetch,
+  } = useGetPaymentAccounts();
+
+  const { isPending: isUpdatingPaymentAccount } = useUpdatePaymentAccount();
+
   // Find default payment account
-  const defaultPaymentAccount = paymentAccounts.find((account) => account.isDefault);
+  const defaultPaymentAccount = paymentAccounts.find(
+    (account) => account.isDefault
+  );
 
   // Local handlers
   const handleEditPaymentInfo = () => {
-    toast.info("Payment editing functionality coming soon!");
+    showInfoToast(
+      "Feature Coming Soon",
+      "Payment editing functionality will be available soon!"
+    );
   };
 
   const handleConnectGateway = () => {
-    toast.info("Connect gateway functionality coming soon!");
+    setIsCreateModalOpen(true);
+  };
+
+  const handleCreateSuccess = async () => {
+    await refetch();
+    showSuccessToast(
+      "Payment Account Created",
+      "Your payment account has been successfully connected!"
+    );
   };
   return (
     <Card
@@ -112,7 +131,7 @@ export function PaymentInformationCard({}: PaymentInformationCardProps) {
                       : defaultPaymentAccount.gatewayType
                           .toLowerCase()
                           .replace(/_/g, " ")
-                          .replace(/\b\w/g, l => l.toUpperCase())}
+                          .replace(/\b\w/g, (l) => l.toUpperCase())}
                   </h4>
                   <span className="text-xs lg:text-sm text-gray-500">
                     Payment Gateway
@@ -190,6 +209,13 @@ export function PaymentInformationCard({}: PaymentInformationCardProps) {
           </div>
         )}
       </CardContent>
+
+      {/* Create Payment Account Modal */}
+      <CreatePaymentAccountModal
+        isOpen={isCreateModalOpen}
+        onClose={() => setIsCreateModalOpen(false)}
+        onSuccess={handleCreateSuccess}
+      />
     </Card>
   );
 }

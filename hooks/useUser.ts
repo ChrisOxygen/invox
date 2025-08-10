@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { _getUser } from "@/actions";
+import { _getUser } from "@/shared/actions";
 import { AuthResponse } from "@/types";
 
 export function useUser() {

@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { _uploadFile } from "@/actions/uploads";
+import { _uploadFile } from "@/shared/actions/uploads";
 
 // Types for file uploads
 type FileUploadType = "businessLogo" | "userSignature";

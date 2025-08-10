@@ -2,7 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 
 import { SignupRequest } from "@/types/api/auth";
-import { _createUserWithCredentials } from "@/actions";
+import { _createUserWithCredentials } from "@/shared/actions";
 import { BaseResponse } from "@/types/api";
 import { ZSignupFormInput } from "@/features/auth/validation/authSchemas";
 

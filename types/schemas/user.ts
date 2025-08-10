@@ -1,5 +1,8 @@
 import { z } from "zod";
-import { updateUserSchema, changePasswordSchema } from "@/dataSchemas";
+import {
+  updateUserSchema,
+  changePasswordSchema,
+} from "@/shared/validators/user";
 
 // User management schema-derived types
 export type UpdateUserInput = z.infer<typeof updateUserSchema>;

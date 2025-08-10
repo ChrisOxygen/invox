@@ -12,10 +12,8 @@ import {
 import { ApiResponse } from "@/types/api";
 import { UserWithBusiness } from "@/types/database";
 import { InvoiceWithRelations } from "../types/invoiceTypes";
-import {
-  requireAuthentication,
-  checkAuthentication,
-} from "@/features/auth/utils";
+import { _requireAuthentication } from "@/features/auth/actions";
+import { checkAuthentication } from "@/features/auth/utils";
 import {
   InvoiceResponse,
   InvoiceListApiResponse,
@@ -685,7 +683,7 @@ export async function _createInvoice(
   data: ZCreateInvoiceInput
 ): Promise<ApiResponse<string>> {
   try {
-    const session = await requireAuthentication();
+    const session = await _requireAuthentication();
 
     // Validate input data
     const validatedData = createInvoiceSchema.safeParse(data);
@@ -762,7 +760,7 @@ export async function _updateInvoice(
   data: ZUpdateInvoiceInput
 ): Promise<ApiResponse<string>> {
   try {
-    const session = await requireAuthentication();
+    const session = await _requireAuthentication();
 
     // Validate input data
     const validatedData = updateInvoiceSchema.safeParse(data);

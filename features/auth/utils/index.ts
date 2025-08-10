@@ -1,18 +1,7 @@
 import { auth } from "@/auth";
-import { AuthenticationError } from "@/utils/invoice-errors";
 
-/**
- * Utility function to get authenticated session and validate user
- * @returns The authenticated session
- * @throws AuthenticationError if user is not authenticated
- */
-export async function requireAuthentication() {
-  const session = await auth();
-  if (!session?.user?.id) {
-    throw new AuthenticationError();
-  }
-  return session;
-}
+// Re-export authentication errors
+export * from "./errors";
 
 /**
  * Utility function to check if user is authenticated without throwing

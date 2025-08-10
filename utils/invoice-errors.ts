@@ -14,13 +14,6 @@ export class ValidationError extends InvoiceError {
   }
 }
 
-export class AuthenticationError extends InvoiceError {
-  constructor(message: string = "User not authenticated") {
-    super(message, "AUTH_ERROR");
-    this.name = "AuthenticationError";
-  }
-}
-
 export class BusinessError extends InvoiceError {
   constructor(message: string = "Business profile not found") {
     super(message, "BUSINESS_ERROR");

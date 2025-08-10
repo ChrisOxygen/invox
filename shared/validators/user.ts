@@ -1,14 +1,5 @@
 import { z } from "zod";
 
-// Re-export commonly used schemas for backward compatibility
-export { businessFormSchema } from "./business/profile";
-
-// Re-export new structured schemas
-export * from "./business";
-export * from "./payments";
-export * from "./base";
-export * from "./invoice";
-
 // User management schemas
 export const updateUserSchema = z
   .object({
@@ -60,3 +51,7 @@ export const changePasswordSchema = z
     message: "Passwords do not match",
     path: ["confirmPassword"],
   });
+
+// Type exports
+export type ZUpdateUserInput = z.infer<typeof updateUserSchema>;
+export type ZChangePasswordInput = z.infer<typeof changePasswordSchema>;

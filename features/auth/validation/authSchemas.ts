@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { commonFields } from "@/dataSchemas/base/common";
+import { commonFields } from "@/shared/validators/common";
 
 // Signup form validation schema (includes confirmPassword)
 export const signupFormSchema = z

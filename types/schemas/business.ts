@@ -3,7 +3,7 @@ import {
   createBusinessApiSchema,
   updateBusinessApiSchema,
   businessFormSchema,
-} from "@/dataSchemas/business";
+} from "@/shared/validators/business";
 
 // Business schema-derived types
 export type CreateBusinessApiInput = z.infer<typeof createBusinessApiSchema>;

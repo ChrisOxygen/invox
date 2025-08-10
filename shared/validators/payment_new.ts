@@ -82,11 +82,12 @@ export const legacyBasePaymentAccountSchema = z.object({
   isActive: z.boolean().optional(),
 });
 
-export const legacyCreatePaymentAccountSchema = legacyBasePaymentAccountSchema.required({
-  gatewayType: true,
-  accountName: true,
-  accountData: true,
-});
+export const legacyCreatePaymentAccountSchema =
+  legacyBasePaymentAccountSchema.required({
+    gatewayType: true,
+    accountName: true,
+    accountData: true,
+  });
 
 export const legacyUpdatePaymentAccountSchema = legacyBasePaymentAccountSchema
   .partial()
@@ -134,11 +135,25 @@ export const paymentRulesSchema = z.object({
 });
 
 // Type exports
-export type CreatePaymentAccountInput = z.infer<typeof createPaymentAccountSchema>;
-export type UpdatePaymentAccountInput = z.infer<typeof updatePaymentAccountSchema>;
-export type CreatePaymentAccountData = z.infer<typeof legacyCreatePaymentAccountSchema>;
-export type UpdatePaymentAccountData = z.infer<typeof legacyUpdatePaymentAccountSchema>;
-export type EditablePaymentAccountData = z.infer<typeof editablePaymentAccountSchema>;
-export type PaymentMethodDetailsData = z.infer<typeof paymentMethodDetailsSchema>;
+export type CreatePaymentAccountInput = z.infer<
+  typeof createPaymentAccountSchema
+>;
+export type UpdatePaymentAccountInput = z.infer<
+  typeof updatePaymentAccountSchema
+>;
+export type CreatePaymentAccountData = z.infer<
+  typeof legacyCreatePaymentAccountSchema
+>;
+export type UpdatePaymentAccountData = z.infer<
+  typeof legacyUpdatePaymentAccountSchema
+>;
+export type EditablePaymentAccountData = z.infer<
+  typeof editablePaymentAccountSchema
+>;
+export type PaymentMethodDetailsData = z.infer<
+  typeof paymentMethodDetailsSchema
+>;
 export type PaymentRulesData = z.infer<typeof paymentRulesSchema>;
-export type BasePaymentAccountData = z.infer<typeof legacyBasePaymentAccountSchema>;
+export type BasePaymentAccountData = z.infer<
+  typeof legacyBasePaymentAccountSchema
+>;

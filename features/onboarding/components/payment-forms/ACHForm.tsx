@@ -12,7 +12,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Loader2, Trash2 } from "lucide-react";
-import { achAccountSchema } from "@/dataSchemas/payments/gateways";
+import { achAccountSchema } from "@/shared/validators/payment";
 import { AchAccount } from "@/types/schemas/payments";
 
 interface ACHFormProps {

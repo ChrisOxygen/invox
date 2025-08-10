@@ -2,7 +2,10 @@
 
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
-import { changePasswordSchema, updateUserSchema } from "@/dataSchemas";
+import {
+  changePasswordSchema,
+  updateUserSchema,
+} from "@/shared/validators/user";
 import { auth } from "@/auth";
 import { BusinessFormValues } from "@/types/business";
 import { AuthResponse, SignupRequest } from "@/types/api/auth";

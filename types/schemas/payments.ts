@@ -6,7 +6,7 @@ import {
   paypalAccountSchema,
   wiseAccountSchema,
   achAccountSchema,
-} from "@/dataSchemas/payments";
+} from "@/shared/validators/payment";
 
 // Payment account schema-derived types
 export type CreatePaymentAccountInput = z.infer<

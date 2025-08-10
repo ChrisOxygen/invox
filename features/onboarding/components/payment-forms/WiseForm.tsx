@@ -12,7 +12,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Loader2, Trash2 } from "lucide-react";
-import { wiseAccountSchema } from "@/dataSchemas/payments";
+import { wiseAccountSchema } from "@/shared/validators/payment";
 import { WiseAccount } from "@/types/schemas/payments";
 
 interface WiseFormProps {

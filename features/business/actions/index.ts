@@ -5,7 +5,7 @@ import { auth } from "@/auth";
 import {
   createBusinessApiSchema,
   updateBusinessApiSchema,
-} from "@/dataSchemas/business/creation";
+} from "@/shared/validators/business";
 import { CreateBusinessRequest } from "@/types/api/business";
 import { ApiResponse, BaseResponse } from "@/types/api";
 import { UpdateBusinessApiInput } from "@/types";

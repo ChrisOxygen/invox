@@ -5,7 +5,7 @@ import { auth } from "@/auth";
 import {
   createPaymentAccountSchema,
   updatePaymentAccountSchema,
-} from "@/dataSchemas/payments";
+} from "@/shared/validators/payment";
 import {
   CreatePaymentAccountInput,
   UpdatePaymentAccountInput,

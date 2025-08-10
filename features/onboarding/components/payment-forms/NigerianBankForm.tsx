@@ -12,7 +12,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Loader2 } from "lucide-react";
-import { nigerianBankAccountSchema } from "@/dataSchemas/payments";
+import { nigerianBankAccountSchema } from "@/shared/validators/payment";
 import { NigerianBankAccount } from "@/types/schemas/payments";
 
 interface NigerianBankFormProps {

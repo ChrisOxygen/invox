@@ -12,7 +12,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Loader2, Trash2 } from "lucide-react";
-import { paypalAccountSchema } from "@/dataSchemas/payments";
+import { paypalAccountSchema } from "@/shared/validators/payment";
 import { PaypalAccount } from "@/types/schemas/payments";
 
 interface PayPalFormProps {

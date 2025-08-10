@@ -1,91 +1,61 @@
 "use client";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
-import { _updatePaymentAccount } from "@/features/payments/actions";
-import { UpdatePaymentAccountInput } from "@/types/schemas/payments";
+import { PaymentAccount } from "@prisma/client";
+import { ZUpdatePaymentAccountInput } from "@/shared/validators/payment";
 
-export const useUpdatePaymentAccount = () => {
+import { _updatePaymentAccount } from "../actions";
+import { ApiResponse } from "@/types";
+
+interface UseUpdatePaymentAccountOptions {
+  onSuccess?: (response: ApiResponse<PaymentAccount>) => void;
+  onError?: (error: string) => void;
+}
+
+// Hook to update a payment account
+export function useUpdatePaymentAccount(
+  options?: UseUpdatePaymentAccountOptions
+) {
   const queryClient = useQueryClient();
 
-  return useMutation<
-    unknown,
-    Error,
-    { paymentAccountId: string; data: UpdatePaymentAccountInput },
-    { previousPaymentAccounts: unknown }
-  >({
+  const mutation = useMutation({
     mutationFn: async ({
       paymentAccountId,
       data,
     }: {
       paymentAccountId: string;
-      data: UpdatePaymentAccountInput;
-    }) => {
-      const response = await _updatePaymentAccount(paymentAccountId, data);
+      data: ZUpdatePaymentAccountInput;
+    }): Promise<ApiResponse<PaymentAccount>> => {
+      const result = await _updatePaymentAccount(paymentAccountId, data);
 
-      if (!response.success) {
-        throw new Error(response.message);
+      if (!result.success) {
+        throw new Error(result.message);
       }
 
-      return response;
+      return result;
     },
-
-    // Optimistic update: Update cache immediately before API call
-    onMutate: async ({ paymentAccountId, data }) => {
-      // Cancel any outgoing refetches so they don't overwrite our optimistic update
-      await queryClient.cancelQueries({ queryKey: ["payment-accounts"] });
-
-      // Snapshot the previous value
-      const previousPaymentAccounts = queryClient.getQueryData([
-        "payment-accounts",
-      ]);
-
-      // Optimistically update to the new value
-      queryClient.setQueryData(["payment-accounts"], (old: unknown) => {
-        if (!Array.isArray(old)) return old;
-
-        return old.map((account: { id: string }) => {
-          if (account.id === paymentAccountId) {
-            return {
-              ...account,
-              ...data,
-            };
-          }
-          return account;
-        });
-      });
-
-      // Return a context object with the snapshotted value
-      return { previousPaymentAccounts };
-    },
-
-    // If the mutation fails, use the context returned from onMutate to rollback
-    onError: (err, variables, context) => {
-      if (context?.previousPaymentAccounts) {
-        queryClient.setQueryData(
-          ["payment-accounts"],
-          context.previousPaymentAccounts
-        );
-      }
-      console.error("Error updating payment account:", err);
-      toast.error(
-        err.message ||
-          "An unexpected error occurred while updating the payment account"
-      );
-    },
-
-    onSuccess: (response) => {
-      // Type guard to check if response has message property
-      if (response && typeof response === "object" && "message" in response) {
-        toast.success((response as { message: string }).message);
-      } else {
-        toast.success("Payment account updated successfully");
-      }
-    },
-
-    // Always refetch after error or success to ensure we have the latest data
-    onSettled: () => {
+    onSuccess: (result) => {
+      // Invalidate and refetch payment account-related queries
       queryClient.invalidateQueries({ queryKey: ["payment-accounts"] });
+
+      // Call the success callback with the API response
+      if (result) {
+        options?.onSuccess?.(result);
+      }
+    },
+    onError: (error: Error) => {
+      options?.onError?.(error.message);
     },
   });
-};
+
+  return {
+    mutate: mutation.mutate,
+    mutateAsync: mutation.mutateAsync,
+    isPending: mutation.isPending,
+    isError: mutation.isError,
+    error: mutation.error?.message || null,
+    isSuccess: mutation.isSuccess,
+    data: mutation.data?.data || null, // Extract the payment account from the response
+    reset: mutation.reset,
+  };
+}

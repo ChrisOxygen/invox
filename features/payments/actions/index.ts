@@ -5,17 +5,15 @@ import { _requireAuthentication } from "@/features/auth/actions";
 import {
   createPaymentAccountSchema,
   updatePaymentAccountSchema,
+  ZCreatePaymentAccountInput,
+  ZUpdatePaymentAccountInput,
 } from "@/shared/validators/payment";
-import {
-  CreatePaymentAccountInput,
-  UpdatePaymentAccountInput,
-} from "@/types/schemas/payments";
 import { ApiResponse, BaseResponse } from "@/types/api";
 
 const prisma = new PrismaClient();
 
 export async function _createPaymentAccount(
-  data: CreatePaymentAccountInput
+  data: ZCreatePaymentAccountInput
 ): Promise<ApiResponse<PaymentAccount>> {
   try {
     const session = await _requireAuthentication();
@@ -72,7 +70,7 @@ export async function _createPaymentAccount(
 
 export async function _updatePaymentAccount(
   paymentAccountId: string,
-  data: UpdatePaymentAccountInput
+  data: ZUpdatePaymentAccountInput
 ): Promise<ApiResponse<PaymentAccount>> {
   try {
     const session = await _requireAuthentication();

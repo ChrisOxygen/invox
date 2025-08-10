@@ -32,6 +32,14 @@ enum TaxType {
   PERCENTAGE
 }
 
+enum PaymentGatewayType {
+  PAYPAL
+  NIGERIAN_BANK
+  ACH
+  WISE
+  BANK_TRANSFER
+}
+
 
 
 model User {
@@ -166,10 +174,10 @@ model Business {
 }
 
 model PaymentAccount {
-  id          String  @id @default(auto()) @map("_id") @db.ObjectId
-  userId      String  @db.ObjectId
-  gatewayType String // "paypal", "nigerian_bank", "ach", "wise"
-  accountName String // "Main PayPal", "GTBank Business"
+  id          String             @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String             @db.ObjectId
+  gatewayType PaymentGatewayType // "paypal", "nigerian_bank", "ach", "wise"
+  accountName String             // "Main PayPal", "GTBank Business"
   accountData Json // Gateway-specific details
   isActive    Boolean @default(true)
   isDefault   Boolean @default(false) // Only one should be true per user

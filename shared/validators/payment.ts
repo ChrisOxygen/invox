@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { PaymentGatewayType } from "@prisma/client";
 
 // Gateway-specific validation schemas
 export const nigerianBankAccountSchema = z.object({
@@ -42,22 +43,22 @@ const basePaymentAccountSchema = z.object({
   isDefault: z.boolean().optional(),
 });
 
-// Discriminated union for create operation
+// Discriminated union for create operation using Prisma enum values
 export const createPaymentAccountSchema = z.discriminatedUnion("gatewayType", [
   basePaymentAccountSchema.extend({
-    gatewayType: z.literal("paypal"),
+    gatewayType: z.literal(PaymentGatewayType.PAYPAL),
     accountData: paypalAccountSchema,
   }),
   basePaymentAccountSchema.extend({
-    gatewayType: z.literal("wise"),
+    gatewayType: z.literal(PaymentGatewayType.WISE),
     accountData: wiseAccountSchema,
   }),
   basePaymentAccountSchema.extend({
-    gatewayType: z.literal("nigerian-bank"),
+    gatewayType: z.literal(PaymentGatewayType.NIGERIAN_BANK),
     accountData: nigerianBankAccountSchema,
   }),
   basePaymentAccountSchema.extend({
-    gatewayType: z.literal("bank-transfer"),
+    gatewayType: z.literal(PaymentGatewayType.ACH),
     accountData: achAccountSchema,
   }),
 ]);
@@ -74,71 +75,32 @@ export const updatePaymentAccountSchema = z.object({
   accountData: z.record(z.any()).optional(),
 });
 
-// Legacy compatibility schemas (keeping for backward compatibility)
-export const legacyBasePaymentAccountSchema = z.object({
-  gatewayType: z.enum(["stripe", "paypal", "bank"]),
-  accountName: z.string().min(2, "Account name must be at least 2 characters"),
-  accountData: z.record(z.string()),
-  isActive: z.boolean().optional(),
-});
+// Gateway type validation using Prisma enum
+export const gatewayTypeSchema = z.nativeEnum(PaymentGatewayType);
 
-export const legacyCreatePaymentAccountSchema = legacyBasePaymentAccountSchema.required({
-  gatewayType: true,
-  accountName: true,
-  accountData: true,
-});
-
-export const legacyUpdatePaymentAccountSchema = legacyBasePaymentAccountSchema
-  .partial()
-  .refine((data) => Object.keys(data).length > 0, {
-    message: "At least one field must be provided for update",
-  });
-
+// Editable payment account schema for updates
 export const editablePaymentAccountSchema = z.object({
   accountName: z.string().min(2, "Account name must be at least 2 characters"),
-  accountData: z.record(z.string()),
-});
-
-export const paymentMethodDetailsSchema = z.object({
-  stripe: z
-    .object({
-      publicKey: z.string().optional(),
-      secretKey: z.string().optional(),
-      webhookSecret: z.string().optional(),
-    })
-    .optional(),
-  paypal: z
-    .object({
-      clientId: z.string().optional(),
-      clientSecret: z.string().optional(),
-      environment: z.enum(["sandbox", "production"]).optional(),
-    })
-    .optional(),
-  bank: z
-    .object({
-      accountName: z.string().optional(),
-      accountNumber: z.string().optional(),
-      routingNumber: z.string().optional(),
-      bankName: z.string().optional(),
-    })
-    .optional(),
-});
-
-export const paymentRulesSchema = z.object({
-  acceptCreditCards: z.boolean().optional(),
-  acceptPayPal: z.boolean().optional(),
-  acceptBankTransfers: z.boolean().optional(),
-  defaultPaymentTerms: z.string().optional(),
-  lateFeePercentage: z.number().min(0).max(100).optional(),
-  gracePeriodDays: z.number().min(0).optional(),
+  accountData: z.record(z.any()),
 });
 
 // Type exports
-export type CreatePaymentAccountInput = z.infer<typeof createPaymentAccountSchema>;
-export type UpdatePaymentAccountInput = z.infer<typeof updatePaymentAccountSchema>;
-export type CreatePaymentAccountData = z.infer<typeof legacyCreatePaymentAccountSchema>;
-export type UpdatePaymentAccountData = z.infer<typeof legacyUpdatePaymentAccountSchema>;
-export type EditablePaymentAccountData = z.infer<typeof editablePaymentAccountSchema>;
-export type PaymentMethodDetailsData = z.infer<typeof paymentMethodDetailsSchema>;
-export type PaymentRulesData = z.infer<typeof paymentRulesSchema>;
-export type BasePaymentAccountData = z.infer<typeof legacyBasePaymentAccountSchema>;
+export type ZCreatePaymentAccountInput = z.infer<
+  typeof createPaymentAccountSchema
+>;
+export type ZUpdatePaymentAccountInput = z.infer<
+  typeof updatePaymentAccountSchema
+>;
+export type EditablePaymentAccountData = z.infer<
+  typeof editablePaymentAccountSchema
+>;
+
+export type GatewayTypeInput = z.infer<typeof gatewayTypeSchema>;
+
+// Gateway-specific data types
+export type ZNigerianBankAccountData = z.infer<
+  typeof nigerianBankAccountSchema
+>;
+export type ZPaypalAccountData = z.infer<typeof paypalAccountSchema>;
+export type ZWiseAccountData = z.infer<typeof wiseAccountSchema>;
+export type ZAchAccountData = z.infer<typeof achAccountSchema>;

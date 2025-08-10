@@ -4,7 +4,6 @@ import {
   PaymentAccount,
   PrismaClient,
   PaymentGatewayType,
-  Prisma,
 } from "@prisma/client";
 import { _requireAuthentication } from "@/features/auth/actions";
 import {

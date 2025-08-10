@@ -2,6 +2,7 @@
 
 import { PrismaClient } from "@prisma/client";
 import { _requireAuthentication } from "@/features/auth/actions";
+import { _createPaymentAccountInTransaction } from "@/features/payments/actions";
 import { BusinessFormValues } from "@/types/business";
 import { AuthResponse } from "@/types/api/auth";
 import {
@@ -11,6 +12,10 @@ import {
 import { BaseResponse } from "@/types/api";
 import { UpdateUserInput } from "@/types/schemas/user";
 import { updateUserSchema } from "@/shared/validators/user";
+import {
+  mapPaymentMethodStringToEnum,
+  generateAccountName,
+} from "@/shared/utils/paymentGatewayUtils";
 
 const prisma = new PrismaClient();
 
@@ -73,6 +78,119 @@ export async function _completeOnboarding(): Promise<AuthResponse> {
   }
 }
 
+// Helper function to update user for onboarding
+async function _updateUserForOnboarding(
+  userId: string,
+  currency: CurrencyType,
+  tx: Omit<
+    PrismaClient,
+    "$connect" | "$disconnect" | "$on" | "$transaction" | "$use" | "$extends"
+  >
+) {
+  return await tx.user.update({
+    where: { id: userId },
+    data: {
+      currency,
+      onboardingCompleted: true,
+      updatedAt: new Date(),
+    },
+  });
+}
+
+// Helper function to create business profile
+async function _createBusinessProfile(
+  userId: string,
+  businessInfo: BusinessFormValues,
+  tx: Omit<
+    PrismaClient,
+    "$connect" | "$disconnect" | "$on" | "$transaction" | "$use" | "$extends"
+  >
+) {
+  return await tx.business.create({
+    data: {
+      userId,
+      businessName: businessInfo.businessName,
+      businessType: businessInfo.businessType,
+      email: businessInfo.email,
+      addressLine1: businessInfo.addressLine1,
+      addressLine2: businessInfo.addressLine2,
+      city: businessInfo.city,
+      state: businessInfo.state,
+      zipCode: businessInfo.zipCode,
+      phone: businessInfo.phone,
+    },
+  });
+}
+
+// Helper function to create payment accounts for onboarding
+async function _createPaymentAccountsForOnboarding(
+  userId: string,
+  paymentMethods: string[],
+  paymentMethodDetails: PaymentMethodDetails,
+  tx: Omit<
+    PrismaClient,
+    "$connect" | "$disconnect" | "$on" | "$transaction" | "$use" | "$extends"
+  >
+) {
+  const accounts = [];
+
+  for (const method of paymentMethods) {
+    const gatewayType = mapPaymentMethodStringToEnum(method);
+    if (!gatewayType) {
+      console.warn(`Unknown payment method: ${method}`);
+      continue;
+    }
+
+    let accountData = {};
+
+    // Map payment method details to account data
+    switch (method) {
+      case "nigerian-bank":
+        if (paymentMethodDetails.nigerianBank) {
+          accountData = paymentMethodDetails.nigerianBank;
+        }
+        break;
+      case "paypal":
+        if (paymentMethodDetails.paypal) {
+          accountData = paymentMethodDetails.paypal;
+        }
+        break;
+      case "wise":
+        if (paymentMethodDetails.wise) {
+          accountData = paymentMethodDetails.wise;
+        }
+        break;
+      case "bank-transfer":
+        if (paymentMethodDetails.bankTransfer) {
+          accountData = paymentMethodDetails.bankTransfer;
+        }
+        break;
+    }
+
+    if (Object.keys(accountData).length === 0) {
+      console.warn(`No data provided for payment method: ${method}`);
+      continue;
+    }
+
+    const accountName = generateAccountName(gatewayType, accountData);
+
+    // Create payment account using the reusable function
+    const account = await _createPaymentAccountInTransaction(
+      userId,
+      gatewayType,
+      accountName,
+      accountData,
+      true, // isActive
+      true, // isDefault (set as default since it's from onboarding)
+      tx
+    );
+
+    accounts.push(account);
+  }
+
+  return accounts;
+}
+
 // Complete onboarding with all data
 export async function _completeOnboardingWithData(data: {
   currency: CurrencyType;
@@ -82,82 +200,23 @@ export async function _completeOnboardingWithData(data: {
 }): Promise<BaseResponse> {
   try {
     const session = await _requireAuthentication();
-
     const userId = session.user.id;
 
     // Use transaction to ensure all operations succeed or all fail
     await prisma.$transaction(async (tx) => {
-      // 1. Update user with currency and completion status (remove country)
-      await tx.user.update({
-        where: { id: userId },
-        data: {
-          currency: data.currency,
-          onboardingCompleted: true,
-          updatedAt: new Date(),
-        },
-      });
+      // 1. Update user with currency and completion status
+      await _updateUserForOnboarding(userId, data.currency, tx);
 
       // 2. Create business profile
-      await tx.business.create({
-        data: {
-          userId: userId,
-          businessName: data.businessInfo.businessName,
-          businessType: data.businessInfo.businessType,
-          email: data.businessInfo.email,
-          addressLine1: data.businessInfo.addressLine1,
-          addressLine2: data.businessInfo.addressLine2,
-          city: data.businessInfo.city,
-          state: data.businessInfo.state,
-          zipCode: data.businessInfo.zipCode,
-          phone: data.businessInfo.phone,
-        },
-      });
+      await _createBusinessProfile(userId, data.businessInfo, tx);
 
-      // 3. Create payment accounts (unchanged)
-      for (const method of data.paymentMethods) {
-        let accountData = {};
-        let accountName = "";
-
-        // Map payment method details to account data
-        switch (method) {
-          case "nigerian-bank":
-            if (data.paymentMethodDetails.nigerianBank) {
-              accountData = data.paymentMethodDetails.nigerianBank;
-              accountName = `${data.paymentMethodDetails.nigerianBank.bankName} - ${data.paymentMethodDetails.nigerianBank.accountName}`;
-            }
-            break;
-          case "paypal":
-            if (data.paymentMethodDetails.paypal) {
-              accountData = data.paymentMethodDetails.paypal;
-              accountName = `PayPal - ${data.paymentMethodDetails.paypal.email}`;
-            }
-            break;
-          case "wise":
-            if (data.paymentMethodDetails.wise) {
-              accountData = data.paymentMethodDetails.wise;
-              accountName = `Wise - ${data.paymentMethodDetails.wise.email}`;
-            }
-            break;
-          case "bank-transfer":
-            if (data.paymentMethodDetails.bankTransfer) {
-              accountData = data.paymentMethodDetails.bankTransfer;
-              accountName = `${data.paymentMethodDetails.bankTransfer.bankName} - ${data.paymentMethodDetails.bankTransfer.accountHolderName}`;
-            }
-            break;
-        }
-
-        // Create payment account (set as default since it's from onboarding)
-        await tx.paymentAccount.create({
-          data: {
-            userId: userId,
-            gatewayType: method,
-            accountName: accountName,
-            accountData: accountData,
-            isActive: true,
-            isDefault: true, // Set as default since it's from onboarding
-          },
-        });
-      }
+      // 3. Create payment accounts using reusable logic
+      await _createPaymentAccountsForOnboarding(
+        userId,
+        data.paymentMethods,
+        data.paymentMethodDetails,
+        tx
+      );
     });
 
     return {
@@ -170,7 +229,5 @@ export async function _completeOnboardingWithData(data: {
       success: false,
       message: "Failed to complete onboarding. Please try again.",
     };
-  } finally {
-    await prisma.$disconnect();
   }
 }

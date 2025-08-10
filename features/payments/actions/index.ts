@@ -1,6 +1,11 @@
 "use server";
 
-import { PaymentAccount, PrismaClient } from "@prisma/client";
+import {
+  PaymentAccount,
+  PrismaClient,
+  PaymentGatewayType,
+  Prisma,
+} from "@prisma/client";
 import { _requireAuthentication } from "@/features/auth/actions";
 import {
   createPaymentAccountSchema,
@@ -78,6 +83,37 @@ function _createValidationErrorResponse(
     success: false,
     message: `Validation error: ${errors.map((e) => e.message).join(", ")}`,
   };
+}
+
+// Helper function to create payment account within existing transaction
+export async function _createPaymentAccountInTransaction(
+  userId: string,
+  gatewayType: PaymentGatewayType,
+  accountName: string,
+  accountData: Record<string, unknown>,
+  isActive = true,
+  isDefault = false,
+  tx: Omit<
+    PrismaClient,
+    "$connect" | "$disconnect" | "$on" | "$transaction" | "$use" | "$extends"
+  >
+) {
+  // If this is set as default, unset other defaults for this user
+  if (isDefault) {
+    await _unsetOtherDefaults(userId, undefined, tx);
+  }
+
+  // Create payment account
+  return await tx.paymentAccount.create({
+    data: {
+      userId,
+      gatewayType,
+      accountName,
+      accountData: accountData as object, // Prisma JsonValue accepts object
+      isActive,
+      isDefault,
+    },
+  });
 }
 
 export async function _createPaymentAccount(

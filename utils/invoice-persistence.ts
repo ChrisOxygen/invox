@@ -73,8 +73,10 @@ export function buildInvoiceData(
 ): CreateInvoiceData {
   return {
     invoiceNumber,
-    invoiceDate: validatedData.invoiceDate,
-    paymentDueDate: validatedData.paymentDueDate,
+    invoiceDate: validatedData.invoiceDate || new Date(),
+    paymentDueDate:
+      validatedData.paymentDueDate ||
+      new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // Default to 30 days from now
     subtotal: calculations.subtotal,
     tax: calculations.taxAmount,
     taxType: validatedData.taxType || "PERCENTAGE",

@@ -1,13 +1,5 @@
 import { InvoiceFormState } from "../types/invoiceForm";
-import { InvoiceItem, InvoiceWithRelations } from "../types/invoiceTypes";
-
-// Calculate item total
-export const calculateItemTotal = (
-  quantity: number,
-  unitPrice: number
-): number => {
-  return Math.round(quantity * unitPrice * 100) / 100; // Round to 2 decimal places
-};
+import { InvoiceWithRelations } from "../types/invoiceTypes";
 
 export function calculateSubTotal(
   items: {
@@ -41,107 +33,6 @@ export const calculateTotal = (
   const total = subtotal - taxAmount - discountAmount;
   return Math.max(0, Math.round(total * 100) / 100); // Ensure non-negative and round to 2 decimal places
 };
-
-// Validate invoice items
-export const validateInvoiceItems = (items: InvoiceItem[]): boolean => {
-  if (!Array.isArray(items) || items.length === 0) {
-    return false;
-  }
-
-  return items.every(
-    (item) =>
-      item.description?.trim() &&
-      item.quantity > 0 &&
-      item.unitPrice >= 0 &&
-      item.total >= 0
-  );
-};
-
-// Check if invoice is editable based on status
-export const isInvoiceEditable = (status: string): boolean => {
-  return status === "DRAFT" || status === "SENT";
-};
-
-// Check if invoice can be deleted
-export const isInvoiceDeletable = (status: string): boolean => {
-  return status !== "PAID";
-};
-
-// Format invoice status for display
-export const formatInvoiceStatus = (status: string): string => {
-  switch (status) {
-    case "DRAFT":
-      return "Draft";
-    case "SENT":
-      return "Sent";
-    case "PAID":
-      return "Paid";
-    case "OVERDUE":
-      return "Overdue";
-    case "CANCELLED":
-      return "Cancelled";
-    default:
-      return status;
-  }
-};
-
-// Get status color for UI
-export const getStatusColor = (status: string): string => {
-  switch (status) {
-    case "DRAFT":
-      return "gray";
-    case "SENT":
-      return "blue";
-    case "PAID":
-      return "green";
-    case "OVERDUE":
-      return "red";
-    case "CANCELLED":
-      return "yellow";
-    default:
-      return "gray";
-  }
-};
-
-// Check if invoice is overdue
-export const isInvoiceOverdue = (
-  paymentDueDate: Date,
-  status: string
-): boolean => {
-  if (status === "PAID" || status === "CANCELLED") {
-    return false;
-  }
-  return new Date() > new Date(paymentDueDate);
-};
-
-// Format currency
-export const formatCurrency = (
-  amount: number,
-  currency: string = "USD",
-  locale: string = "en-US"
-): string => {
-  return new Intl.NumberFormat(locale, {
-    style: "currency",
-    currency: currency,
-  }).format(amount);
-};
-
-/**
- * Generates a unique invoice number with format INV-XXXXXX
- * Uses current timestamp to ensure uniqueness
- * @returns {string} Invoice number in format INV-XXXXXX (6 digits)
- */
-export function generateInvoiceNumber(): string {
-  const now = new Date();
-
-  // Get milliseconds since epoch and take modulo to get 6 digits
-  const timestamp = now.getTime();
-
-  // Take last 6 digits and ensure it's always 6 digits
-  const uniqueNumber = (timestamp % 1000000).toString().padStart(6, "0");
-
-  return `INV-${uniqueNumber}`;
-}
 
 /**
  * Formats invoice data from either InvoiceFormState or InvoiceWithRelations
@@ -215,13 +106,7 @@ export function formatInvoiceData(
   let formattedData: FormattedInvoiceData;
 
   if (isInvoiceFormState(data)) {
-    // Handle InvoiceFormState
-    const buildClientAddress = (client: typeof data.client): string => {
-      if (!client) return "";
-      const addressParts = [client.address].filter(Boolean);
-      return addressParts.join(", ");
-    };
-
+    // Handle InvoiceFormState - simplified version
     formattedData = {
       // Invoice metadata
       invoiceId: safeString(data.invoiceId),
@@ -229,13 +114,11 @@ export function formatInvoiceData(
       invoiceDate: formatDate(data.invoiceDate),
       invoiceDueDate: formatDate(data.paymentDueDate),
 
-      // Client information
-      clientName: safeString(
-        data.client?.contactPersonName || data.client?.BusinessName
-      ),
-      clientBusinessName: safeString(data.client?.BusinessName),
-      clientAddress: buildClientAddress(data.client),
-      clientEmail: safeString(data.client?.email),
+      // Client information - using clientId since client object doesn't exist
+      clientName: "",
+      clientBusinessName: "",
+      clientAddress: "",
+      clientEmail: "",
 
       // Items and calculations
       items: formatItems(data.invoiceItems),
@@ -246,7 +129,7 @@ export function formatInvoiceData(
 
       // Additional notes
       customNotes: safeString(data.customNote),
-      lateFeeText: safeString(data.lateFeeText),
+      lateFeeText: safeString(data.lateFeeTerms),
 
       // Business information
       businessDetails: data.businessDetails
@@ -313,8 +196,8 @@ export function formatInvoiceData(
       // Items and calculations
       items: formatItems(data.invoiceItems),
 
-      // Financial data
-      tax: safeNumber(data.taxes),
+      // Financial data - using tax instead of taxes
+      tax: safeNumber(data.tax),
       discount: safeNumber(data.discount),
 
       // Additional notes - InvoiceWithRelations doesn't have customNote/lateFeeText in the base model

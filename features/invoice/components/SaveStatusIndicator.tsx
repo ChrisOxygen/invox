@@ -36,7 +36,7 @@ const statusConfig = {
 };
 
 export function SaveStatusIndicator({ className }: SaveStatusIndicatorProps) {
-  const { state, isSaving } = useInvoiceForm();
+  const { state } = useInvoiceForm();
   const [status, setStatus] = useState<SaveStatus>("unsaved");
 
   // Initialize form state fingerprint
@@ -47,12 +47,12 @@ export function SaveStatusIndicator({ className }: SaveStatusIndicatorProps) {
     const newFingerprint = createFingerprint(state);
 
     // If there's a previous fingerprint and it's different, form has changed
-    if (formFingerprint && formFingerprint !== newFingerprint && !isSaving) {
+    if (formFingerprint && formFingerprint !== newFingerprint) {
       setStatus("unsaved");
     }
 
     setFormFingerprint(newFingerprint);
-  }, [state, formFingerprint, isSaving]);
+  }, [state, formFingerprint]);
 
   // Track saving state
   useEffect(() => {

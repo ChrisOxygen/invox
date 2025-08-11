@@ -15,14 +15,12 @@ export function createFingerprint(state: InvoiceFormState): string {
   // that should trigger auto-save
   const relevantData = {
     // Client information
-    clientId: state.client?.id,
+    clientId: state.clientId,
 
     // Invoice details
     invoiceNumber: state.invoiceNumber,
     invoiceDate: state.invoiceDate?.getTime(), // Use timestamp for stable comparison
     paymentDueDate: state.paymentDueDate?.getTime(), // Use timestamp for stable comparison
-    paymentTerms: state.paymentTerms,
-    acceptedPaymentMethods: state.acceptedPaymentMethods,
 
     // Invoice items - we need to normalize these to ensure consistent comparison
     items:
@@ -35,11 +33,14 @@ export function createFingerprint(state: InvoiceFormState): string {
     // Financial details
     tax: state.tax,
     discount: state.discount,
+    taxType: state.taxType,
+    discountType: state.discountType,
 
     // Additional information
     customNote: state.customNote,
-    lateFeeText: state.lateFeeText,
+    lateFeeTerms: state.lateFeeTerms,
     isFavorite: state.isFavorite,
+    invoiceStatus: state.invoiceStatus,
 
     // Payment details
     paymentAccountId: state.paymentAccount?.id,
@@ -53,25 +54,4 @@ export function createFingerprint(state: InvoiceFormState): string {
   );
 
   return fingerprint;
-}
-
-/**
- * Determines if the form state has changed significantly compared to the previous fingerprint
- *
- * @param currentState Current invoice form state
- * @param previousFingerprint Previous fingerprint to compare against
- * @returns true if the form has meaningful changes, false otherwise
- */
-export function hasFormChanged(
-  currentState: InvoiceFormState,
-  previousFingerprint: string | null
-): boolean {
-  // If there's no previous fingerprint, consider it changed
-  if (!previousFingerprint) {
-    return true;
-  }
-
-  // Generate current fingerprint and compare
-  const currentFingerprint = createFingerprint(currentState);
-  return currentFingerprint !== previousFingerprint;
 }

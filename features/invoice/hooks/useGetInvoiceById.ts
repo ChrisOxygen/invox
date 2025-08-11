@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { InvoiceResponse } from "@/types/api/invoice";
+import { InvoiceResponse } from "../types/invoiceTypes";
 import { _getInvoice } from "../actions";
 
 // Hook to fetch a single invoice by ID

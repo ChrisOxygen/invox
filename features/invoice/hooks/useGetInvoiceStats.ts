@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { InvoiceStatsResponse } from "@/types/api/invoice";
+import { InvoiceStatsResponse } from "../types/invoiceTypes";
 import { _getInvoiceStats } from "../actions";
 
 interface UseGetInvoiceStatsParams {

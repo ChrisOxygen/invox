@@ -11,14 +11,14 @@ import {
 } from "@prisma/client";
 import { ApiResponse } from "@/types/api";
 import { UserWithBusiness } from "@/types/database";
-import { InvoiceWithRelations } from "../types/invoiceTypes";
-import { _requireAuthentication } from "@/features/auth/actions";
 import {
+  InvoiceWithRelations,
   InvoiceResponse,
   InvoiceListApiResponse,
   InvoiceStatsResponse,
   InvoiceDeleteResponse,
-} from "@/types/api/invoice";
+} from "../types/invoiceTypes";
+import { _requireAuthentication } from "@/features/auth/actions";
 import {
   createInvoiceSchema,
   updateInvoiceSchema,

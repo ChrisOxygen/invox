@@ -25,4 +25,3 @@ export * from "./auth";
 export * from "./business";
 export * from "./payments";
 export * from "./onboarding";
-export * from "./invoice";

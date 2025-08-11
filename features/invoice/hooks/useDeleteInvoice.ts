@@ -2,7 +2,7 @@
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ZDeleteInvoiceInput } from "@/features/invoice/validation/invoiceSchemas";
-import { InvoiceDeleteResponse } from "@/types/api/invoice";
+import { InvoiceDeleteResponse } from "../types/invoiceTypes";
 import { _deleteInvoice } from "../actions";
 
 interface UseDeleteInvoiceOptions {

@@ -1,4 +1,5 @@
 import { Invoice, Client, Business } from "@prisma/client";
+import { ApiResponse } from "../../../types/api";
 
 // Raw invoice item type (from JSON storage)
 export interface RawInvoiceItem {
@@ -42,3 +43,14 @@ export interface InvoiceStats {
   overdueInvoices: number;
   draftInvoices: number;
 }
+
+// Invoice API response types
+export interface InvoiceResponse extends ApiResponse<InvoiceWithRelations> {}
+
+export interface InvoiceListApiResponse
+  extends ApiResponse<InvoiceListResponse> {}
+
+export interface InvoiceStatsResponse extends ApiResponse<InvoiceStats> {}
+
+export interface InvoiceDeleteResponse
+  extends ApiResponse<{ deletedId: string }> {}

@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { InvoiceListApiResponse } from "@/types/api/invoice";
+import { InvoiceListApiResponse } from "../types/invoiceTypes";
 import {
   ZInvoiceFiltersInput,
   ZPaginationInput,

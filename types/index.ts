@@ -4,7 +4,6 @@ export type { UpdateUserInput as UpdateUserData } from "./schemas/user";
 
 // Re-export new organized types
 export * from "./schemas";
-export * from "./forms";
 export * from "./api";
 
 // Explicitly re-export business types to resolve naming conflicts

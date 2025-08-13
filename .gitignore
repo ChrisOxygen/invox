@@ -47,16 +47,16 @@ next-env.d.ts
 /lib/generated/prisma
 
 # React Email specific files
-/react-email-starter/node_modules/
-/react-email-starter/.next/
-/react-email-starter/.react-email/
-/react-email-starter/dist/
-/react-email-starter/.env
-/react-email-starter/.env.local
+/react-email-starter/node_modules
+# /react-email-starter/.next/
+# /react-email-starter/.react-email/
+# /react-email-starter/dist/
+# /react-email-starter/.env
+# /react-email-starter/.env.local
 
-# Email templates build output
-/emails/dist/
-/emails/.next/
+# # Email templates build output
+# /emails/dist/
+# /emails/.next/
 
 # IDE and Editor files
 .vscode/

@@ -57,7 +57,9 @@ function InvoiceFormHeader() {
           />
 
           {/* Save Actions */}
-          <InvoiceSaveActions />
+          <div className="hidden [800px]:block">
+            <InvoiceSaveActions />
+          </div>
         </div>
       </div>
     </div>

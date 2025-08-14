@@ -64,7 +64,7 @@ function InvoiceEditor() {
             <Button
               variant="outline"
               size="sm"
-              className="border-2 border-blue-600 text-blue-600 hover:bg-gradient-to-r hover:from-blue-600 hover:to-cyan-500 hover:text-white font-medium py-1 px-2 sm:py-1.5 sm:px-3 md:py-2.5 md:px-5 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105 bg-white text-xs sm:text-sm"
+              className="h-8 px-3 border border-blue-600 text-blue-600 bg-white hover:bg-gradient-to-r hover:from-blue-600 hover:to-cyan-500 hover:text-white hover:border-transparent font-medium rounded-md shadow-sm hover:shadow-md transition-all duration-200 text-xs"
               onClick={() => {
                 setActiveTab(
                   activeTab === "invoice-details"
@@ -75,7 +75,7 @@ function InvoiceEditor() {
             >
               {activeTab === "invoice-details" ? "Preview" : "Edit"}
             </Button>
-            <div className="scale-75 sm:scale-90 md:scale-100">
+            <div className="flex-shrink-0">
               <InvoiceSaveActions />
             </div>
           </div>

@@ -145,19 +145,19 @@ const InvoiceTemplatePreview: React.FC = () => {
       ref={containerRef}
     >
       {/* Zoom Controls Header */}
-      <div className="sticky top-0 z-10 bg-white border-b border-blue-100 px-5 py-3 flex items-center justify-between shadow-sm">
-        <div className="flex items-center gap-3">
+      <div className="sticky top-0 z-10 bg-white border-b border-blue-100 px-2 sm:px-5 py-2 sm:py-3 flex items-center justify-between shadow-sm">
+        <div className="flex items-center gap-2 sm:gap-3">
           <Button
             variant="outline"
             size="sm"
             onClick={zoomOut}
             disabled={zoomState.currentZoom <= zoomState.minZoom}
-            className="h-9 w-9 p-0 border-2 border-blue-200 hover:border-blue-400 hover:bg-blue-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+            className="h-7 w-7 sm:h-9 sm:w-9 p-0 border-2 border-blue-200 hover:border-blue-400 hover:bg-blue-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
           >
-            <Minus className="h-4 w-4 text-blue-600" />
+            <Minus className="h-3 w-3 sm:h-4 sm:w-4 text-blue-600" />
           </Button>
 
-          <span className="text-sm font-semibold min-w-[60px] text-center text-gray-700 bg-blue-50 px-3 py-1 rounded-lg">
+          <span className="text-xs sm:text-sm font-semibold min-w-[50px] sm:min-w-[60px] text-center text-gray-700 bg-blue-50 px-2 sm:px-3 py-1 rounded-lg">
             {zoomState.currentZoom}%
           </span>
 
@@ -166,9 +166,9 @@ const InvoiceTemplatePreview: React.FC = () => {
             size="sm"
             onClick={zoomIn}
             disabled={zoomState.currentZoom >= zoomState.maxZoom}
-            className="h-9 w-9 p-0 border-2 border-blue-200 hover:border-blue-400 hover:bg-blue-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+            className="h-7 w-7 sm:h-9 sm:w-9 p-0 border-2 border-blue-200 hover:border-blue-400 hover:bg-blue-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
           >
-            <Plus className="h-4 w-4 text-blue-600" />
+            <Plus className="h-3 w-3 sm:h-4 sm:w-4 text-blue-600" />
           </Button>
         </div>
 
@@ -176,15 +176,16 @@ const InvoiceTemplatePreview: React.FC = () => {
           variant="outline"
           size="sm"
           onClick={resetToAutoFit}
-          className="flex items-center gap-2 border-2 border-blue-200 hover:border-blue-400 hover:bg-blue-50 text-blue-600 transition-all duration-200"
+          className="flex items-center gap-1 sm:gap-2 border-2 border-blue-200 hover:border-blue-400 hover:bg-blue-50 text-blue-600 transition-all duration-200 text-xs sm:text-sm px-2 sm:px-3 py-1 sm:py-2"
         >
-          <RotateCcw className="h-4 w-4" />
-          Auto Fit
+          <RotateCcw className="h-3 w-3 sm:h-4 sm:w-4" />
+          <span className="hidden sm:inline">Auto Fit</span>
+          <span className="sm:hidden">Fit</span>
         </Button>
       </div>
 
       {/* Template Preview */}
-      <ScrollArea className="h-[calc(100vh-200px)] w-full pl-5 pr-10">
+      <ScrollArea className="h-[calc(100vh-160px)] sm:h-[calc(100vh-200px)] w-full pl-2 sm:pl-5 pr-4 sm:pr-10">
         <div
           className="py-6 overflow-hidden transition-all duration-300 ease-out"
           style={{

@@ -12,24 +12,24 @@ import DiscountTypeInput from "./DiscountTypeInput";
 
 function InvoiceDetails() {
   return (
-    <div className="flex flex-col gap-6 p-6 sm:p-8">
+    <div className="flex flex-col gap-4 sm:gap-6 p-3 sm:p-6 md:p-8">
       {/* Header Section */}
-      <div className="flex flex-col gap-2">
-        <h2 className="text-2xl sm:text-3xl font-bold tracking-tight bg-gradient-to-r from-blue-600 via-cyan-500 to-blue-500 bg-clip-text text-transparent">
+      <div className="flex flex-col gap-1 sm:gap-2">
+        <h2 className="text-lg sm:text-2xl md:text-3xl font-bold tracking-tight bg-gradient-to-r from-blue-600 via-cyan-500 to-blue-500 bg-clip-text text-transparent">
           Invoice Details
         </h2>
-        <p className="text-sm text-gray-600">
+        <p className="text-xs sm:text-sm text-gray-600">
           Complete the form below to create your invoice
         </p>
       </div>
 
       {/* Form Section */}
-      <div className="flex flex-col gap-6">
+      <div className="flex flex-col gap-4 sm:gap-6">
         {/* Client Selection */}
-        <div className="flex flex-col gap-3">
-          <label className="text-sm font-semibold text-gray-900 flex items-center gap-2">
+        <div className="flex flex-col gap-2 sm:gap-3">
+          <label className="text-xs sm:text-sm font-semibold text-gray-900 flex items-center gap-1 sm:gap-2">
             Select a client/customer
-            <span className="text-red-500 text-base">*</span>
+            <span className="text-red-500 text-sm sm:text-base">*</span>
           </label>
           <div className="relative">
             <ClientSelect />
@@ -37,15 +37,15 @@ function InvoiceDetails() {
         </div>
 
         {/* Due Date */}
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-2 sm:gap-3">
           <DueDateInput />
         </div>
 
         {/* Items Section */}
-        <div className="flex flex-col gap-3">
-          <label className="text-sm font-semibold text-gray-900 flex items-center gap-2">
+        <div className="flex flex-col gap-2 sm:gap-3">
+          <label className="text-xs sm:text-sm font-semibold text-gray-900 flex items-center gap-1 sm:gap-2">
             Items
-            <span className="text-red-500 text-base">*</span>
+            <span className="text-red-500 text-sm sm:text-base">*</span>
           </label>
           <div className="relative">
             <ItemsInput />
@@ -53,7 +53,7 @@ function InvoiceDetails() {
         </div>
 
         {/* Discount Type and Discount Amount */}
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-4 sm:gap-6">
           <div className="relative">
             <DiscountTypeInput />
           </div>
@@ -63,7 +63,7 @@ function InvoiceDetails() {
         </div>
 
         {/* Tax Structure and Tax Amount */}
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-4 sm:gap-6">
           <div className="relative">
             <TaxTypeInput />
           </div>

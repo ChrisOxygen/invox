@@ -286,18 +286,19 @@ export function InvoiceSaveActions() {
   };
 
   return (
-    <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+    <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-1 sm:gap-2">
       {/* Save as Draft Button */}
       <Button
         variant="outline"
+        size="sm"
         onClick={handleSaveAsDraft}
         disabled={isButtonDisabled("draft")}
-        className="flex items-center gap-2 border-2 border-gray-300 text-gray-700 hover:border-blue-400 hover:text-blue-600 hover:bg-blue-50 hover:shadow-md transition-all duration-200 transform hover:scale-105 min-w-0"
+        className="flex items-center gap-1 sm:gap-2 border-2 border-gray-300 text-gray-700 hover:border-blue-400 hover:text-blue-600 hover:bg-blue-50 hover:shadow-md transition-all duration-200 transform hover:scale-105 min-w-0 text-xs sm:text-sm px-2 sm:px-3 py-1 sm:py-2"
       >
         {isButtonLoading("draft") ? (
-          <div className="w-4 h-4 border-2 border-gray-400 border-t-transparent rounded-full animate-spin" />
+          <div className="w-3 h-3 sm:w-4 sm:h-4 border-2 border-gray-400 border-t-transparent rounded-full animate-spin" />
         ) : (
-          <IoSaveOutline className="w-4 h-4 flex-shrink-0" />
+          <IoSaveOutline className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0" />
         )}
         <span className="hidden sm:inline">Save as Draft</span>
         <span className="sm:hidden">Draft</span>
@@ -307,14 +308,15 @@ export function InvoiceSaveActions() {
       <div className="flex">
         {/* Primary Save & Send Button */}
         <Button
+          size="sm"
           onClick={handleSaveAndSend}
           disabled={isButtonDisabled("send")}
-          className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105 rounded-r-none min-w-0"
+          className="flex items-center gap-1 sm:gap-2 bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105 rounded-r-none min-w-0 text-xs sm:text-sm px-2 sm:px-3 py-1 sm:py-2"
         >
           {isButtonLoading("send") ? (
-            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+            <div className="w-3 h-3 sm:w-4 sm:h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
           ) : (
-            <IoSend className="w-4 h-4 flex-shrink-0" />
+            <IoSend className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0" />
           )}
           <span className="hidden sm:inline">Save & Send</span>
           <span className="sm:hidden">Send</span>
@@ -324,39 +326,42 @@ export function InvoiceSaveActions() {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
+              size="sm"
               disabled={isLoading}
-              className="px-2 bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105 rounded-l-none border-l border-blue-700"
+              className="px-1 sm:px-2 bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105 rounded-l-none border-l border-blue-700"
             >
-              <IoChevronDown className="w-4 h-4" />
+              <IoChevronDown className="w-3 h-3 sm:w-4 sm:h-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent
             align="end"
-            className="w-48 bg-white border border-gray-200"
+            className="w-40 sm:w-48 bg-white border border-gray-200"
           >
             <DropdownMenuItem
               onClick={handleSaveAndDownload}
               disabled={isLoading}
-              className="flex items-center gap-2 text-gray-700 hover:bg-gray-50 cursor-pointer"
+              className="flex items-center gap-1 sm:gap-2 text-gray-700 hover:bg-gray-50 cursor-pointer text-xs sm:text-sm px-2 sm:px-3 py-1 sm:py-2"
             >
               {isButtonLoading("download") ? (
-                <div className="w-4 h-4 border-2 border-gray-400 border-t-transparent rounded-full animate-spin" />
+                <div className="w-3 h-3 sm:w-4 sm:h-4 border-2 border-gray-400 border-t-transparent rounded-full animate-spin" />
               ) : (
-                <IoDownloadOutline className="w-4 h-4" />
+                <IoDownloadOutline className="w-3 h-3 sm:w-4 sm:h-4" />
               )}
-              Save and Download
+              <span className="hidden sm:inline">Save and Download</span>
+              <span className="sm:hidden">Download</span>
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={handleSaveAndExit}
               disabled={isLoading}
-              className="flex items-center gap-2 text-gray-700 hover:bg-gray-50 cursor-pointer"
+              className="flex items-center gap-1 sm:gap-2 text-gray-700 hover:bg-gray-50 cursor-pointer text-xs sm:text-sm px-2 sm:px-3 py-1 sm:py-2"
             >
               {isButtonLoading("exit") ? (
-                <div className="w-4 h-4 border-2 border-gray-400 border-t-transparent rounded-full animate-spin" />
+                <div className="w-3 h-3 sm:w-4 sm:h-4 border-2 border-gray-400 border-t-transparent rounded-full animate-spin" />
               ) : (
-                <IoExitOutline className="w-4 h-4" />
+                <IoExitOutline className="w-3 h-3 sm:w-4 sm:h-4" />
               )}
-              Save and Exit
+              <span className="hidden sm:inline">Save and Exit</span>
+              <span className="sm:hidden">Exit</span>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

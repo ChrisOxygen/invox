@@ -26,7 +26,7 @@ function DiscountTypeInput() {
   return (
     <div className="w-full">
       {/* Label */}
-      <label className="text-sm font-semibold text-gray-900 block mb-3">
+      <label className="text-xs sm:text-sm font-semibold text-gray-900 block mb-2 sm:mb-3">
         Discount Type
       </label>
 
@@ -35,13 +35,13 @@ function DiscountTypeInput() {
         <RadioGroup
           value={discountType}
           onValueChange={handleValueChange}
-          className="flex flex-row gap-6 w-full"
+          className="flex flex-row gap-4 sm:gap-6 w-full"
         >
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-1 sm:space-x-2">
             <RadioGroupItem
               value={DiscountType.FIXED}
               id="discount-fixed"
-              className={`border-2 transition-all duration-200 ${
+              className={`border-2 transition-all duration-200 w-4 h-4 sm:w-5 sm:h-5 ${
                 hasError
                   ? "border-red-300 hover:border-red-400 focus:border-red-500"
                   : "border-blue-200 hover:border-blue-400 focus:border-blue-600"
@@ -49,16 +49,17 @@ function DiscountTypeInput() {
             />
             <Label
               htmlFor="discount-fixed"
-              className="text-sm font-medium text-gray-700 cursor-pointer hover:text-blue-600 transition-colors duration-200"
+              className="text-xs sm:text-sm font-medium text-gray-700 cursor-pointer hover:text-blue-600 transition-colors duration-200"
             >
-              Fixed Amount
+              <span className="hidden sm:inline">Fixed Amount</span>
+              <span className="sm:hidden">Fixed</span>
             </Label>
           </div>
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-1 sm:space-x-2">
             <RadioGroupItem
               value={DiscountType.PERCENTAGE}
               id="discount-percentage"
-              className={`border-2 transition-all duration-200 ${
+              className={`border-2 transition-all duration-200 w-4 h-4 sm:w-5 sm:h-5 ${
                 hasError
                   ? "border-red-300 hover:border-red-400 focus:border-red-500"
                   : "border-blue-200 hover:border-blue-400 focus:border-blue-600"
@@ -66,7 +67,7 @@ function DiscountTypeInput() {
             />
             <Label
               htmlFor="discount-percentage"
-              className="text-sm font-medium text-gray-700 cursor-pointer hover:text-blue-600 transition-colors duration-200"
+              className="text-xs sm:text-sm font-medium text-gray-700 cursor-pointer hover:text-blue-600 transition-colors duration-200"
             >
               Percentage
             </Label>
@@ -76,7 +77,7 @@ function DiscountTypeInput() {
 
       {/* Error Message */}
       {hasError && (
-        <p className="text-red-500 text-sm mt-2 font-medium">
+        <p className="text-red-500 text-xs sm:text-sm mt-2 font-medium">
           {validation.errors.discount}
         </p>
       )}

@@ -40,7 +40,7 @@ function CustomerNotesInput() {
       {/* Internal Label */}
       <label
         htmlFor="custom-notes"
-        className="text-sm font-semibold text-gray-900 block mb-3"
+        className="text-xs sm:text-sm font-semibold text-gray-900 block mb-2 sm:mb-3"
       >
         Customer Notes
       </label>
@@ -52,9 +52,9 @@ function CustomerNotesInput() {
           value={customNote}
           onChange={handleChange}
           placeholder="Thanks for trusting us with your business..."
-          rows={4}
+          rows={3}
           className={cn(
-            "resize-none min-h-[100px] border-2 transition-all duration-200",
+            "resize-none min-h-[80px] sm:min-h-[100px] border-2 transition-all duration-200 text-xs sm:text-sm",
             "placeholder:text-gray-500",
             "text-gray-900",
             "bg-white",
@@ -72,7 +72,7 @@ function CustomerNotesInput() {
         <div
           id="notes-character-count"
           className={cn(
-            "absolute bottom-3 right-3 text-xs bg-white px-2 py-1 rounded",
+            "absolute bottom-2 sm:bottom-3 right-2 sm:right-3 text-xs bg-white px-1 sm:px-2 py-1 rounded",
             isAtLimit
               ? "text-red-600"
               : isNearLimit
@@ -88,7 +88,7 @@ function CustomerNotesInput() {
       {hasError && (
         <p
           id="custom-notes-error"
-          className="text-red-500 text-sm mt-1"
+          className="text-red-500 text-xs sm:text-sm mt-1"
           role="alert"
         >
           {validation.errors.customNote}
@@ -98,8 +98,13 @@ function CustomerNotesInput() {
       {/* Helper Text */}
       {!hasError && (
         <p id="notes-helper" className="text-xs text-gray-500 mt-1">
-          Add a personalized message to your invoice. This will appear at the
-          bottom of your invoice.
+          <span className="hidden sm:inline">
+            Add a personalized message to your invoice. This will appear at the
+            bottom of your invoice.
+          </span>
+          <span className="sm:hidden">
+            Add a personalized message for your invoice.
+          </span>
         </p>
       )}
     </div>

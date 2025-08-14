@@ -85,14 +85,14 @@ function LatenessFeeInput() {
   return (
     <div className="w-full">
       {/* Internal Label */}
-      <label className="text-sm font-semibold text-gray-900 block mb-3">
+      <label className="text-xs sm:text-sm font-semibold text-gray-900 block mb-2 sm:mb-3">
         Late Fee Options
       </label>
 
-      <div className="space-y-2">
+      <div className="space-y-1 sm:space-y-2">
         <Select onValueChange={handleLateFeeSelect} value={selectedLateFee}>
           <SelectTrigger
-            className={`w-full h-11 border-2 transition-all duration-200 ${
+            className={`w-full h-9 sm:h-11 border-2 transition-all duration-200 text-xs sm:text-sm ${
               hasError
                 ? "border-red-500 hover:border-red-600 focus:border-red-600 focus:ring-2 focus:ring-red-100"
                 : "border-blue-200 hover:border-blue-400 focus:border-blue-600 focus:ring-2 focus:ring-blue-100"
@@ -107,7 +107,7 @@ function LatenessFeeInput() {
               <SelectItem
                 key={option.value}
                 value={option.value}
-                className="hover:bg-blue-50 focus:bg-blue-50 cursor-pointer transition-colors duration-200"
+                className="hover:bg-blue-50 focus:bg-blue-50 cursor-pointer transition-colors duration-200 text-xs sm:text-sm"
               >
                 {option.label}
               </SelectItem>
@@ -119,7 +119,7 @@ function LatenessFeeInput() {
         {hasError && (
           <p
             id="late-fee-error"
-            className="text-red-500 text-sm mt-1"
+            className="text-red-500 text-xs sm:text-sm mt-1"
             role="alert"
           >
             {validation.errors.lateFeeTerms}
@@ -128,13 +128,13 @@ function LatenessFeeInput() {
 
         {/* Custom late fee input */}
         {showCustomLateFeeInput && (
-          <div className="space-y-2">
+          <div className="space-y-1 sm:space-y-2">
             <Input
               placeholder="Enter custom late fee terms (e.g., $50 flat fee, 3% per month)"
               value={customLateFee}
               onChange={(e) => handleCustomLateFeeChange(e.target.value)}
               maxLength={200}
-              className={`h-11 border-2 transition-all duration-200 ${
+              className={`h-9 sm:h-11 border-2 transition-all duration-200 text-xs sm:text-sm ${
                 hasError
                   ? "border-red-500 hover:border-red-600 focus:border-red-600 focus:ring-2 focus:ring-red-100"
                   : "border-blue-200 hover:border-blue-400 focus:border-blue-600 focus:ring-2 focus:ring-blue-100"

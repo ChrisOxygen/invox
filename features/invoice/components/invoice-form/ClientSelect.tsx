@@ -131,7 +131,7 @@ export function ClientSelect() {
           onClick={handleToggleDropdown}
           disabled={disabled}
           className={cn(
-            "w-full justify-between h-11 px-4 text-left font-normal border-2 transition-all duration-200",
+            "w-full justify-between h-9 sm:h-11 px-3 sm:px-4 text-left font-normal border-2 transition-all duration-200 text-xs sm:text-sm",
             !selectedClient && "text-gray-500",
             hasError
               ? "border-red-500 hover:border-red-600 focus:border-red-600 focus:ring-2 focus:ring-red-100"
@@ -145,7 +145,7 @@ export function ClientSelect() {
           </span>
           <ChevronDown
             className={cn(
-              "h-4 w-4 text-blue-500 transition-transform duration-200",
+              "h-3 w-3 sm:h-4 sm:w-4 text-blue-500 transition-transform duration-200",
               isOpen && "rotate-180"
             )}
           />
@@ -153,13 +153,13 @@ export function ClientSelect() {
 
         {/* Dropdown */}
         {isOpen && (
-          <Card className="absolute z-50 w-full mt-2 border-2 border-blue-200 shadow-xl rounded-lg">
+          <Card className="absolute z-50 w-full mt-1 sm:mt-2 border-2 border-blue-200 shadow-xl rounded-lg">
             <CardContent className="p-0">
               {/* Search Input */}
               {clients && clients.length > 1 && (
-                <div className="p-4 border-b border-blue-100">
+                <div className="p-2 sm:p-4 border-b border-blue-100">
                   <div className="relative">
-                    <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-blue-400" />
+                    <Search className="absolute left-2 sm:left-3 top-1/2 h-3 w-3 sm:h-4 sm:w-4 -translate-y-1/2 text-blue-400" />
                     <Input
                       ref={searchInputRef}
                       type="text"
@@ -167,13 +167,13 @@ export function ClientSelect() {
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
                       onKeyDown={handleKeyDown}
-                      className="pl-10 h-10 border-blue-200 focus:border-blue-600 focus:ring-2 focus:ring-blue-100"
+                      className="pl-8 sm:pl-10 h-8 sm:h-10 border-blue-200 focus:border-blue-600 focus:ring-2 focus:ring-blue-100 text-xs sm:text-sm"
                     />
                   </div>
                 </div>
               )}
               {/* Client List */}
-              <div className="max-h-60 overflow-y-auto">
+              <div className="max-h-48 sm:max-h-60 overflow-y-auto">
                 {filteredClients.length > 0 ? (
                   <div className="py-1">
                     {filteredClients.map((client) => (
@@ -182,14 +182,14 @@ export function ClientSelect() {
                         type="button"
                         onClick={() => handleClientSelect(client)}
                         className={cn(
-                          "w-full px-4 py-3 text-left hover:bg-blue-50 focus:bg-blue-50 focus:outline-none transition-all duration-200",
+                          "w-full px-3 sm:px-4 py-2 sm:py-3 text-left hover:bg-blue-50 focus:bg-blue-50 focus:outline-none transition-all duration-200",
                           selectedClient?.id === client.id &&
                             "bg-blue-50 border-l-4 border-blue-500"
                         )}
                       >
                         <div className="flex items-center justify-between">
                           <div className="flex-1 min-w-0">
-                            <div className="font-medium text-sm truncate">
+                            <div className="font-medium text-xs sm:text-sm truncate">
                               {client.BusinessName}
                             </div>
                             {client.contactPersonName && (
@@ -202,14 +202,14 @@ export function ClientSelect() {
                             </div>{" "}
                           </div>{" "}
                           {selectedClient?.id === client.id && (
-                            <Check className="h-4 w-4 text-blue-600 ml-2 flex-shrink-0" />
+                            <Check className="h-3 w-3 sm:h-4 sm:w-4 text-blue-600 ml-1 sm:ml-2 flex-shrink-0" />
                           )}
                         </div>
                       </button>
                     ))}
                   </div>
                 ) : (
-                  <div className="py-8 text-center text-sm text-gray-500">
+                  <div className="py-6 sm:py-8 text-center text-xs sm:text-sm text-gray-500">
                     {debouncedSearchTerm ? (
                       <>
                         No clients found for &quot;{debouncedSearchTerm}&quot;
@@ -232,15 +232,15 @@ export function ClientSelect() {
                   </div>
                 )}
                 {clients.length === 0 && (
-                  <div className="flex justify-center pb-4">
+                  <div className="flex justify-center pb-3 sm:pb-4">
                     <Button
                       type="button"
-                      className="bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105 h-9 text-sm"
+                      className="bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105 h-8 sm:h-9 text-xs sm:text-sm"
                       onClick={() => {
                         handleAddClient();
                       }}
                     >
-                      <Plus className="h-4 w-4 mr-2" />
+                      <Plus className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
                       Add New Client
                     </Button>
                   </div>
@@ -248,15 +248,15 @@ export function ClientSelect() {
               </div>
               {/* Add New Client Button */}
               {clients.length > 0 && (
-                <div className="border-t border-blue-100 p-3">
+                <div className="border-t border-blue-100 p-2 sm:p-3">
                   <Button
                     type="button"
-                    className="w-full justify-start h-9 text-sm bg-transparent text-blue-600 hover:bg-blue-50 hover:text-blue-700 transition-all duration-200"
+                    className="w-full justify-start h-8 sm:h-9 text-xs sm:text-sm bg-transparent text-blue-600 hover:bg-blue-50 hover:text-blue-700 transition-all duration-200"
                     onClick={() => {
                       handleAddClient();
                     }}
                   >
-                    <Plus className="h-4 w-4 mr-2" />
+                    <Plus className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
                     Add New Client
                   </Button>
                 </div>
@@ -268,7 +268,7 @@ export function ClientSelect() {
 
       {/* Error Message */}
       {hasError && (
-        <p className="text-red-500 text-sm mt-1">
+        <p className="text-red-500 text-xs sm:text-sm mt-1">
           {validation.errors.clientId}
         </p>
       )}

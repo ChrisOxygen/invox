@@ -121,8 +121,8 @@ export function DueDateInput() {
     return (
       <div className="w-full">
         {/* Header with label and toggle button */}
-        <div className="flex items-center justify-between mb-3">
-          <label className="text-sm font-medium text-gray-900">
+        <div className="flex items-center justify-between mb-2 sm:mb-3">
+          <label className="text-xs sm:text-sm font-medium text-gray-900">
             Payment Terms
           </label>
           <Button
@@ -133,7 +133,8 @@ export function DueDateInput() {
             disabled={disabled}
             className="h-auto p-0 text-xs text-blue-600 hover:text-blue-700 hover:bg-transparent transition-colors duration-200"
           >
-            Enter custom due date
+            <span className="hidden sm:inline">Enter custom due date</span>
+            <span className="sm:hidden">Custom date</span>
           </Button>
         </div>{" "}
         <Select
@@ -142,7 +143,7 @@ export function DueDateInput() {
           disabled={disabled}
         >
           <SelectTrigger
-            className={`w-full h-11 border-2 transition-all duration-200 ${
+            className={`w-full h-9 sm:h-11 border-2 transition-all duration-200 text-xs sm:text-sm ${
               hasError
                 ? "border-red-500 hover:border-red-600 focus:border-red-600 focus:ring-2 focus:ring-red-100"
                 : "border-blue-200 hover:border-blue-400 focus:border-blue-600 focus:ring-2 focus:ring-blue-100"
@@ -158,7 +159,7 @@ export function DueDateInput() {
                 className="hover:bg-blue-50 focus:bg-blue-50 cursor-pointer transition-colors duration-200"
               >
                 <div className="flex flex-col items-start">
-                  <span className="font-medium text-gray-900">
+                  <span className="font-medium text-gray-900 text-xs sm:text-sm">
                     {preset.label}
                   </span>
                   <span className="text-xs text-gray-500">
@@ -170,7 +171,7 @@ export function DueDateInput() {
           </SelectContent>
         </Select>
         {hasError && (
-          <p className="text-red-500 text-sm mt-1">
+          <p className="text-red-500 text-xs sm:text-sm mt-1">
             {validation.errors.paymentDueDate}
           </p>
         )}
@@ -181,8 +182,10 @@ export function DueDateInput() {
   return (
     <div className="w-full">
       {/* Header with label and toggle button */}
-      <div className="flex items-center justify-between mb-3">
-        <label className="text-sm font-medium text-gray-900">Due Date</label>
+      <div className="flex items-center justify-between mb-2 sm:mb-3">
+        <label className="text-xs sm:text-sm font-medium text-gray-900">
+          Due Date
+        </label>
         <Button
           type="button"
           variant="ghost"
@@ -191,7 +194,8 @@ export function DueDateInput() {
           disabled={disabled}
           className="h-auto p-0 text-xs text-blue-600 hover:text-blue-700 hover:bg-transparent transition-colors duration-200"
         >
-          Set payment terms
+          <span className="hidden sm:inline">Set payment terms</span>
+          <span className="sm:hidden">Terms</span>
         </Button>
       </div>
       {/* Custom date picker */}
@@ -202,14 +206,14 @@ export function DueDateInput() {
             variant="outline"
             disabled={disabled}
             className={cn(
-              "w-full justify-start text-left font-normal h-11 border-2 transition-all duration-200",
+              "w-full justify-start text-left font-normal h-9 sm:h-11 border-2 transition-all duration-200 text-xs sm:text-sm",
               !value && "text-gray-500",
               hasError
                 ? "border-red-500 hover:border-red-600 focus:border-red-600 focus:ring-2 focus:ring-red-100"
                 : "border-blue-200 hover:border-blue-400 focus:border-blue-600 focus:ring-2 focus:ring-blue-100"
             )}
           >
-            <CalendarDays className="mr-2 h-4 w-4 text-blue-500" />
+            <CalendarDays className="mr-1 sm:mr-2 h-3 w-3 sm:h-4 sm:w-4 text-blue-500" />
             {value instanceof Date ? format(value, "PPP") : "Pick a date..."}
           </Button>
         </PopoverTrigger>
@@ -229,14 +233,17 @@ export function DueDateInput() {
       </Popover>
 
       {hasError && (
-        <p className="text-red-500 text-sm mt-1">
+        <p className="text-red-500 text-xs sm:text-sm mt-1">
           {validation.errors.paymentDueDate}
         </p>
       )}
 
       {/* Custom date help text */}
-      <div className="mt-2 text-xs text-gray-500">
-        Select a custom due date or use the toggle above to set payment terms
+      <div className="mt-1 sm:mt-2 text-xs text-gray-500">
+        <span className="hidden sm:inline">
+          Select a custom due date or use the toggle above to set payment terms
+        </span>
+        <span className="sm:hidden">Select a custom due date</span>
       </div>
     </div>
   );

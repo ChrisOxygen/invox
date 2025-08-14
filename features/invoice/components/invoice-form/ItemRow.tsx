@@ -82,8 +82,8 @@ function ItemRow({ item, index }: ItemRowProps) {
   };
 
   return (
-    <div className=" py-1 w-full items-center grid grid-cols-[minmax(200px,1fr)_minmax(20px,60px)_minmax(50px,90px)_minmax(50px,90px)_30px] gap-4">
-      <div className=" relative">
+    <div className="py-1 w-full items-center grid grid-cols-[minmax(120px,1fr)_40px_60px_60px_24px] sm:grid-cols-[minmax(200px,1fr)_minmax(20px,60px)_minmax(50px,90px)_minmax(50px,90px)_30px] gap-2 sm:gap-4">
+      <div className="relative">
         <div className="relative">
           <Input
             ref={descInputRef}
@@ -91,7 +91,7 @@ function ItemRow({ item, index }: ItemRowProps) {
             onFocus={() => {
               setPopoverOpen(true);
             }}
-            className="w-full border-2 border-blue-200 hover:border-blue-400 focus:border-blue-600 focus:ring-2 focus:ring-blue-100 transition-all duration-200 disabled:bg-gray-50 disabled:border-gray-200"
+            className="w-full border-2 border-blue-200 hover:border-blue-400 focus:border-blue-600 focus:ring-2 focus:ring-blue-100 transition-all duration-200 disabled:bg-gray-50 disabled:border-gray-200 text-xs sm:text-sm h-8 sm:h-10"
             value={item.description}
             onChange={(e) => {
               updateInvoiceItem(index, { description: e.target.value });
@@ -100,7 +100,7 @@ function ItemRow({ item, index }: ItemRowProps) {
           />
           {hasSelectedItem && (
             <button
-              className="absolute top-1/2 right-2 cursor-pointer -translate-y-1/2 text-xl text-gray-500 hover:text-red-700"
+              className="absolute top-1/2 right-1 sm:right-2 cursor-pointer -translate-y-1/2 text-lg sm:text-xl text-gray-500 hover:text-red-700"
               onClick={clearSelectedItem}
             >
               <IoIosCloseCircleOutline />
@@ -112,37 +112,43 @@ function ItemRow({ item, index }: ItemRowProps) {
             ref={itemsPopoverRef}
             className="w-full absolute top-[calc(100%+8px)] z-20 bg-white rounded-lg border shadow p-2 h-50"
           >
-            <div className=" flex flex-col h-full">
+            <div className="flex flex-col h-full">
               {isGettingItems ? (
                 <InBoxLoader />
               ) : itemsExist ? (
-                <div className="flex flex-col h-full justify-between gap-4">
+                <div className="flex flex-col h-full justify-between gap-3 sm:gap-4">
                   <ItemsDropdownList
                     items={items}
                     onSelectItem={onSelectItem}
                   />
-                  <div className=" border-t mt-auto pt-2">
+                  <div className="border-t mt-auto pt-2">
                     <Button
                       variant="ghost"
-                      className=""
+                      size="sm"
+                      className="text-xs sm:text-sm"
                       onClick={() => {
                         setIsFormOpen(true);
                       }}
                     >
-                      <span className="">
+                      <span className="text-sm sm:text-base">
                         <MdAddCircleOutline />
                       </span>
-                      Add New Item
+                      <span className="hidden sm:inline">Add New Item</span>
+                      <span className="sm:hidden">Add Item</span>
                     </Button>
                   </div>
                 </div>
               ) : (
-                <div className=" flex flex-col items-center p-4 gap-5">
-                  <span className="text-gray-500">
-                    You haven&apos;t added any items
+                <div className="flex flex-col items-center p-3 sm:p-4 gap-3 sm:gap-5">
+                  <span className="text-gray-500 text-xs sm:text-sm">
+                    <span className="hidden sm:inline">
+                      You haven&apos;t added any items
+                    </span>
+                    <span className="sm:hidden">No items added</span>
                   </span>
                   <Button
-                    className="bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
+                    size="sm"
+                    className="bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105 text-xs sm:text-sm"
                     onClick={() => {
                       setIsFormOpen(true);
                     }}
@@ -158,27 +164,27 @@ function ItemRow({ item, index }: ItemRowProps) {
 
       <Input
         type="number"
-        className="w-full text-center border-2 border-blue-200 hover:border-blue-400 focus:border-blue-600 focus:ring-2 focus:ring-blue-100 transition-all duration-200"
+        className="w-full text-center border-2 border-blue-200 hover:border-blue-400 focus:border-blue-600 focus:ring-2 focus:ring-blue-100 transition-all duration-200 text-xs sm:text-sm h-8 sm:h-10"
         value={item.quantity}
         onChange={(e) =>
           updateInvoiceItem(index, {
             quantity: parseFloat(e.target.value),
           })
         }
-        placeholder="Quantity"
+        placeholder="Qty"
       />
       <Input
         type="number"
-        className="w-full border-2 border-blue-200 hover:border-blue-400 focus:border-blue-600 focus:ring-2 focus:ring-blue-100 transition-all duration-200"
+        className="w-full border-2 border-blue-200 hover:border-blue-400 focus:border-blue-600 focus:ring-2 focus:ring-blue-100 transition-all duration-200 text-xs sm:text-sm h-8 sm:h-10"
         value={item.unitPrice}
         onChange={(e) =>
           updateInvoiceItem(index, {
             unitPrice: parseFloat(e.target.value),
           })
         }
-        placeholder="Unit Price"
+        placeholder="Price"
       />
-      <span className="capitalize  font-bold text-gray-400">
+      <span className="capitalize font-bold text-gray-400 text-xs sm:text-sm">
         {toDollar(
           item.quantity && item.unitPrice ? item.quantity * item.unitPrice : 0
         )}
@@ -187,10 +193,10 @@ function ItemRow({ item, index }: ItemRowProps) {
       <span className="flex justify-self-center transition-all items-center">
         {index >= 1 && (
           <button
-            className="text-blue-600 hover:text-red-600 transition-colors duration-200 p-2 rounded-lg hover:bg-red-50"
+            className="text-blue-600 hover:text-red-600 transition-colors duration-200 p-1 sm:p-2 rounded-lg hover:bg-red-50"
             onClick={() => removeInvoiceItem(index)}
           >
-            <FaRegTrashCan />
+            <FaRegTrashCan className="text-xs sm:text-sm" />
           </button>
         )}
       </span>

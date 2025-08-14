@@ -47,7 +47,7 @@ function TaxInput() {
   return (
     <div className="w-full">
       {/* Dynamic Label */}
-      <label className="text-sm font-semibold text-gray-900 block mb-3">
+      <label className="text-xs sm:text-sm font-semibold text-gray-900 block mb-2 sm:mb-3">
         {label}
       </label>
 
@@ -65,14 +65,18 @@ function TaxInput() {
         }`}
         aria-invalid={hasError ? "true" : "false"}
         aria-describedby={hasError ? "tax-error" : undefined}
-        className={`h-11 border-2 transition-all duration-200 ${
+        className={`h-9 sm:h-11 border-2 transition-all duration-200 text-xs sm:text-sm ${
           hasError
             ? "border-red-500 hover:border-red-600 focus:border-red-600 focus:ring-2 focus:ring-red-100"
             : "border-blue-200 hover:border-blue-400 focus:border-blue-600 focus:ring-2 focus:ring-blue-100"
         }`}
       />
       {hasError && (
-        <p id="tax-error" className="text-red-500 text-sm mt-1" role="alert">
+        <p
+          id="tax-error"
+          className="text-red-500 text-xs sm:text-sm mt-1"
+          role="alert"
+        >
           {validation.errors.tax}
         </p>
       )}

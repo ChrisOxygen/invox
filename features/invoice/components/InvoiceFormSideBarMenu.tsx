@@ -134,7 +134,7 @@ function InvoiceFormSideBarMenu({ trigger }: InvoiceFormSideBarMenuProps) {
       variant="ghost"
       size="sm"
       className={cn(
-        "h-8 w-8 sm:h-9 sm:w-9 p-0 rounded-lg",
+        "h-8 w-8 sm:h-9 sm:w-9 p-0 text-2xl rounded-lg",
         "lg:hidden", // Only show on mobile/tablet
         "text-gray-600 hover:text-blue-600",
         "hover:bg-gradient-to-r hover:from-blue-50 hover:to-cyan-50",
@@ -142,7 +142,7 @@ function InvoiceFormSideBarMenu({ trigger }: InvoiceFormSideBarMenuProps) {
       )}
       aria-label="Open navigation menu"
     >
-      <Menu className="h-4 w-4 sm:h-5 sm:w-5" />
+      <Menu className="size-6" />
     </Button>
   );
 

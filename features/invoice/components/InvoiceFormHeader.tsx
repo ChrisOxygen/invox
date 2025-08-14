@@ -35,7 +35,7 @@ function InvoiceFormHeader() {
 
   return (
     <div className="border-b bg-white shadow-sm">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between p-3 sm:p-4 md:p-6 gap-3 sm:gap-4 md:gap-2">
+      <div className="flex sm:flex-row sm:items-center justify-between p-3 sm:p-4 md:p-6 gap-3 sm:gap-4 md:gap-2">
         {/* Left Section - Mobile Menu & Title */}
         <div className="flex items-center gap-2 sm:gap-4">
           {/* Mobile Navigation Menu - Only visible on mobile/tablet */}
@@ -43,7 +43,7 @@ function InvoiceFormHeader() {
             <InvoiceFormSideBarMenu />
           </div>
 
-          <h1 className="text-lg sm:text-2xl md:text-3xl font-bold tracking-tight bg-gradient-to-r from-blue-600 via-cyan-500 to-blue-500 bg-clip-text text-transparent capitalize">
+          <h1 className="text-lg sm:text-2xl md:text-3xl font-semibold tracking-tight bg-gradient-to-r from-blue-600 via-cyan-500 to-blue-500 bg-clip-text text-transparent capitalize">
             <span className="hidden sm:inline">
               {formMode} Invoice {invoiceNumber ? `#${invoiceNumber}` : ""}
             </span>

@@ -74,14 +74,14 @@ export function SaveStatusIndicator({ className }: SaveStatusIndicatorProps) {
   return (
     <div
       className={cn(
-        "flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 shadow-sm",
+        "flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 rounded-md text-xs sm:text-sm font-medium transition-all duration-200 shadow-sm",
         config.className,
         className
       )}
     >
       <Icon
         className={cn(
-          "h-3 w-3 sm:h-4 sm:w-4 transition-transform duration-200",
+          "h-[17px] w-4 transition-transform duration-200",
           status === "saving" && "animate-spin"
         )}
       />

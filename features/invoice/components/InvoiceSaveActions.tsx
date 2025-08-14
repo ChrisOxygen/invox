@@ -286,7 +286,7 @@ export function InvoiceSaveActions() {
   };
 
   return (
-    <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-1 sm:gap-2">
+    <div className="flex flex-row items-stretch sm:items-center gap-1 sm:gap-2">
       {/* Save as Draft Button */}
       <Button
         variant="outline"
@@ -300,8 +300,7 @@ export function InvoiceSaveActions() {
         ) : (
           <IoSaveOutline className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0" />
         )}
-        <span className="hidden sm:inline">Save as Draft</span>
-        <span className="sm:hidden">Draft</span>
+        <span className="inline">Save as Draft</span>
       </Button>
 
       {/* Save & Send Button with Dropdown */}
@@ -318,8 +317,7 @@ export function InvoiceSaveActions() {
           ) : (
             <IoSend className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0" />
           )}
-          <span className="hidden sm:inline">Save & Send</span>
-          <span className="sm:hidden">Send</span>
+          <span className="inline">Save & Send</span>
         </Button>
 
         {/* Dropdown Trigger */}

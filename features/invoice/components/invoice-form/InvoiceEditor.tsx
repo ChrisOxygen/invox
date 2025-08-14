@@ -60,7 +60,7 @@ function InvoiceEditor() {
           </TabsContent>
         </Tabs>
         <div className="fixed block [800px]:hidden bottom-0 left-0 w-full border-t border-gray-200 shadow-xl backdrop-blur-sm bg-white/95">
-          <div className="flex items-center justify-between px-2 sm:px-3 md:px-5 py-2 sm:py-3 md:py-4 max-w-screen-xl mx-auto">
+          <div className="flex items-center justify-between px-5 py-4 max-w-screen-xl mx-auto">
             <Button
               variant="outline"
               size="sm"

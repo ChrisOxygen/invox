@@ -66,29 +66,31 @@ export function ActionsDropdown({
             size="sm"
             disabled={disabled}
             className={cn(
-              "h-9 w-9 p-0 border-2 border-gray-300 text-gray-600 hover:border-blue-400 hover:text-blue-600 hover:bg-blue-50 hover:shadow-md transition-all duration-200 transform hover:scale-105",
+              "h-8 w-8 sm:h-9 sm:w-9 p-0 border-2 border-gray-300 text-gray-600 hover:border-blue-400 hover:text-blue-600 hover:bg-blue-50 hover:shadow-md transition-all duration-200 transform hover:scale-105",
               disabled && "opacity-50 cursor-not-allowed hover:scale-100",
               className
             )}
           >
-            <MoreVertical className="h-4 w-4" />
+            <MoreVertical className="h-3 w-3 sm:h-4 sm:w-4" />
             <span className="sr-only">Open actions menu</span>
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-48">
+        <DropdownMenuContent align="end" className="w-40 sm:w-48">
           <DropdownMenuItem
             onClick={() => setResetDialogOpen(true)}
-            className="cursor-pointer hover:bg-gray-50 focus:bg-gray-50"
+            className="cursor-pointer hover:bg-gray-50 focus:bg-gray-50 text-xs sm:text-sm"
           >
-            <RotateCcw className="mr-2 h-4 w-4" />
-            Reset Form
+            <RotateCcw className="mr-1 sm:mr-2 h-3 w-3 sm:h-4 sm:w-4" />
+            <span className="hidden sm:inline">Reset Form</span>
+            <span className="sm:hidden">Reset</span>
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={() => setDeleteDialogOpen(true)}
-            className="cursor-pointer text-red-600 hover:bg-red-50 focus:bg-red-50 hover:text-red-700"
+            className="cursor-pointer text-red-600 hover:bg-red-50 focus:bg-red-50 hover:text-red-700 text-xs sm:text-sm"
           >
-            <Trash2 className="mr-2 h-4 w-4" />
-            Delete Invoice
+            <Trash2 className="mr-1 sm:mr-2 h-3 w-3 sm:h-4 sm:w-4" />
+            <span className="hidden sm:inline">Delete Invoice</span>
+            <span className="sm:hidden">Delete</span>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

@@ -5,6 +5,7 @@ import { SaveStatusIndicator } from "./SaveStatusIndicator";
 import { ActionsDropdown } from "./ActionsDropdown";
 import { FavoriteButton } from "./FavoriteButton";
 import { InvoiceSaveActions } from "./InvoiceSaveActions";
+import InvoiceFormSideBarMenu from "./InvoiceFormSideBarMenu";
 import { useInvoiceForm } from "../index";
 
 function InvoiceFormHeader() {
@@ -35,8 +36,13 @@ function InvoiceFormHeader() {
   return (
     <div className="border-b bg-white shadow-sm">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between p-3 sm:p-4 md:p-6 gap-3 sm:gap-4 md:gap-2">
-        {/* Left Section - Title */}
+        {/* Left Section - Mobile Menu & Title */}
         <div className="flex items-center gap-2 sm:gap-4">
+          {/* Mobile Navigation Menu - Only visible on mobile/tablet */}
+          <div className="lg:hidden">
+            <InvoiceFormSideBarMenu />
+          </div>
+
           <h1 className="text-lg sm:text-2xl md:text-3xl font-bold tracking-tight bg-gradient-to-r from-blue-600 via-cyan-500 to-blue-500 bg-clip-text text-transparent capitalize">
             <span className="hidden sm:inline">
               {formMode} Invoice {invoiceNumber ? `#${invoiceNumber}` : ""}

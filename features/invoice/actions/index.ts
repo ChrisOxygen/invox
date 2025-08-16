@@ -924,7 +924,7 @@ export async function _getInvoice(invoiceId: string): Promise<InvoiceResponse> {
       },
       include: {
         client: true,
-        business: true,
+        business: true, // Include user for relations
       },
     });
 

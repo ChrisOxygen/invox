@@ -10,125 +10,12 @@ import {
   View,
 } from "@react-pdf/renderer";
 
-import { DUMMY_SENT_INVOICE } from "@/features/invoice/constants/";
 import { Client, Invoice, PaymentAccount } from "@prisma/client";
 import { UserWithBusiness } from "@/types";
-import { validateAndConvertInvoiceItems } from "../../utils";
-
-// Format DUMMY_SENT_INVOICE data for PDF template
-const formatInvoiceData = (invoice: typeof DUMMY_SENT_INVOICE) => {
-  const formatCurrency = (amount: number) => `$${amount.toFixed(2)}`;
-
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
-  };
-
-  return {
-    invoiceNumber: invoice.invoiceNumber || "N/A",
-    invoiceDate: invoice.invoiceDate ? formatDate(invoice.invoiceDate) : "N/A",
-    paymentDueDate: invoice.paymentDueDate
-      ? formatDate(invoice.paymentDueDate)
-      : "N/A",
-    subtotal: formatCurrency(invoice.subtotal || 0),
-    tax: formatCurrency(invoice.tax || 0),
-    discount: formatCurrency(invoice.discount || 0),
-    total: formatCurrency(invoice.total || 0),
-    items: invoice.invoiceItems || [],
-    customNote: invoice.customNote || "",
-    lateFeeTerms: invoice.lateFeeTerms || "",
-    // Extract data from related business/client objects
-    clientName: invoice.client?.BusinessName || "Client Name",
-    clientAddress: invoice.client?.address || "Client Address",
-    clientContactPerson: invoice.client?.contactPersonName || "",
-    clientEmail: invoice.client?.email || "",
-    businessName: invoice.business?.businessName || "Business Name",
-    businessEmail: invoice.business?.email || "business@email.com",
-    businessAddress:
-      [
-        invoice.business?.addressLine1,
-        invoice.business?.addressLine2,
-        invoice.business?.city,
-        invoice.business?.state,
-        invoice.business?.zipCode,
-      ]
-        .filter(Boolean)
-        .join(", ") || "Business Address",
-    businessPhone: invoice.business?.phone || "",
-    businessLogo: invoice.business?.logo || "/assets/invox-v-logo.png",
-    paymentInfo: {
-      gatewayType: invoice.paymentAccount?.gatewayType || "BANK_TRANSFER",
-      accountName: invoice.paymentAccount?.accountName || "Payment Account",
-      // Handle different gateway types with their specific data structures
-      ...(invoice.paymentAccount?.gatewayType === "PAYPAL" && {
-        paypalEmail:
-          (invoice.paymentAccount?.accountData as any)?.email ||
-          "paypal@business.com",
-        merchantId:
-          (invoice.paymentAccount?.accountData as any)?.merchantId || "",
-      }),
-      ...(invoice.paymentAccount?.gatewayType === "NIGERIAN_BANK" && {
-        bankName:
-          (invoice.paymentAccount?.accountData as any)?.bankName || "Bank Name",
-        accountNumber:
-          (invoice.paymentAccount?.accountData as any)?.accountNumber ||
-          "0000000000",
-        accountType:
-          (invoice.paymentAccount?.accountData as any)?.accountType ||
-          "Current",
-        sortCode: (invoice.paymentAccount?.accountData as any)?.sortCode || "",
-      }),
-      ...(invoice.paymentAccount?.gatewayType === "ACH" && {
-        bankName:
-          (invoice.paymentAccount?.accountData as any)?.bankName || "Bank Name",
-        routingNumber:
-          (invoice.paymentAccount?.accountData as any)?.routingNumber ||
-          "000000000",
-        accountNumber:
-          (invoice.paymentAccount?.accountData as any)?.accountNumber ||
-          "0000000000",
-        accountType:
-          (invoice.paymentAccount?.accountData as any)?.accountType ||
-          "Checking",
-      }),
-      ...(invoice.paymentAccount?.gatewayType === "WISE" && {
-        wiseEmail:
-          (invoice.paymentAccount?.accountData as any)?.email ||
-          "wise@business.com",
-        accountNumber:
-          (invoice.paymentAccount?.accountData as any)?.accountNumber || "",
-        currency:
-          (invoice.paymentAccount?.accountData as any)?.currency || "USD",
-      }),
-      ...(invoice.paymentAccount?.gatewayType === "BANK_TRANSFER" && {
-        bankName:
-          (invoice.paymentAccount?.accountData as any)?.bankName || "Bank Name",
-        accountNumber:
-          (invoice.paymentAccount?.accountData as any)?.accountNumber ||
-          "0000000000",
-        swiftCode:
-          (invoice.paymentAccount?.accountData as any)?.swiftCode || "",
-        iban: (invoice.paymentAccount?.accountData as any)?.iban || "",
-      }),
-      // Fallback for any gateway type
-      fallbackInfo: {
-        bankName:
-          (invoice.paymentAccount?.accountData as any)?.bankName ||
-          invoice.paymentAccount?.accountName ||
-          "Payment Provider",
-        accountNumber:
-          (invoice.paymentAccount?.accountData as any)?.accountNumber ||
-          (invoice.paymentAccount?.accountData as any)?.email ||
-          "Account Details",
-      },
-    },
-  };
-};
-
-// first break should happen after the 13th item, second break, and subsiquent breaks should happen after 26 items
+import {
+  validateAndConvertInvoiceItems,
+  extractPaymentAccountDisplayData,
+} from "../../utils";
 
 const styles = StyleSheet.create({
   page: {
@@ -250,7 +137,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     gap: 10,
   },
-
   totalView: {
     display: "flex",
     flexDirection: "column",
@@ -278,6 +164,121 @@ const styles = StyleSheet.create({
     backgroundColor: "#000",
     gap: 10,
   },
+  // New styles for previously inline styles
+  sectionTitle: {
+    fontSize: 13,
+    fontWeight: "bold",
+    textTransform: "uppercase",
+    marginBottom: 5,
+  },
+  clientText: {
+    fontSize: 13,
+  },
+  clientBusinessName: {
+    fontSize: 13,
+    fontWeight: "bold",
+    textTransform: "uppercase",
+  },
+  invoiceLabel: {
+    fontSize: 13,
+    fontWeight: "bold",
+    textTransform: "uppercase",
+  },
+  invoiceValue: {
+    fontSize: 13,
+  },
+  tableHeader: {
+    fontSize: 16,
+    fontWeight: "bold",
+    textTransform: "uppercase",
+  },
+  itemDescription: {
+    fontSize: 13,
+    flexBasis: "50%",
+    paddingLeft: 5,
+  },
+  itemPrice: {
+    fontSize: 13,
+    textAlign: "center",
+    flexBasis: "20%",
+  },
+  itemQuantity: {
+    fontSize: 13,
+    textAlign: "center",
+    flexBasis: "10%",
+  },
+  itemTotal: {
+    fontSize: 13,
+    textAlign: "right",
+    paddingRight: 5,
+    flexBasis: "20%",
+  },
+  termsTitle: {
+    fontSize: 13,
+    fontWeight: "semibold",
+    textTransform: "capitalize",
+  },
+  termsText: {
+    fontSize: 12,
+  },
+  paymentInfoHeader: {
+    position: "relative",
+    paddingVertical: 5,
+    backgroundColor: "#000",
+  },
+  paymentInfoTitle: {
+    fontSize: 12,
+    fontWeight: "semibold",
+    textTransform: "capitalize",
+    color: "#fff",
+  },
+  totalLabel: {
+    fontSize: 13,
+    fontWeight: "bold",
+    textTransform: "uppercase",
+    textAlign: "right",
+    flexBasis: "60%",
+  },
+  totalValue: {
+    fontSize: 13,
+    textAlign: "right",
+    fontWeight: "semibold",
+    flexBasis: "40%",
+  },
+  grandTotalLabel: {
+    fontSize: 15,
+    fontWeight: "bold",
+    textTransform: "uppercase",
+    textAlign: "right",
+    flexBasis: "60%",
+  },
+  grandTotalValue: {
+    fontSize: 15,
+    textAlign: "right",
+    fontWeight: "semibold",
+    flexBasis: "40%",
+  },
+  divider: {
+    backgroundColor: "#000",
+    width: "100%",
+    height: 1,
+  },
+  footerText: {
+    fontSize: 13,
+    color: "#fff",
+    fontWeight: "bold",
+  },
+  footerEmail: {
+    fontSize: 13,
+    color: "#fff",
+    paddingLeft: 10,
+    borderLeft: "1px solid #fff",
+  },
+  footerPageNumber: {
+    fontSize: 13,
+    color: "#fff",
+    marginLeft: "auto",
+  },
 });
 
 type ReactPDFTemplateProps = {
@@ -293,8 +294,6 @@ function ReactPDFTemplate1({
   userAndBusiness,
   paymentAccount,
 }: ReactPDFTemplateProps) {
-  const invoiceData = formatInvoiceData(DUMMY_SENT_INVOICE);
-
   if (!userAndBusiness?.business) {
     return null;
   }
@@ -304,9 +303,9 @@ function ReactPDFTemplate1({
   }
 
   const { business } = userAndBusiness;
-
   const { email, logo, businessName } = business;
 
+  // Data preparation and formatting
   const formatDate = (date: Date) =>
     new Date(date).toLocaleDateString("en-US", {
       year: "numeric",
@@ -314,18 +313,69 @@ function ReactPDFTemplate1({
       day: "numeric",
     });
 
+  const formatCurrency = (amount: number | null): string => {
+    if (amount === null || amount === undefined) return "$0.00";
+    return `$${Number(amount).toFixed(2)}`;
+  };
+
   const validatedItems = validateAndConvertInvoiceItems(invoice.invoiceItems);
 
   if (!validatedItems || validatedItems.length === 0) {
     return null;
   }
 
-  const paypalGateway = (paymentAccount: PaymentAccount) => {
+  // Calculate totals from validated items
+  const subtotal = validatedItems.reduce((sum, item) => sum + item.total, 0);
+  const taxAmount = Number(invoice.tax) || 0;
+  const discountAmount = Number(invoice.discount) || 0;
+  const finalTotal = subtotal + taxAmount - discountAmount;
+
+  const renderPaymentAccountData = (paymentAccount: PaymentAccount) => {
+    if (!paymentAccount.gatewayType || !paymentAccount.accountData) {
+      return (
+        <View style={styles.paymentInfoRowView}>
+          <Text style={{ fontSize: 13 }}>Account Name:</Text>
+          <Text style={{ fontSize: 13 }}>{paymentAccount.accountName}</Text>
+        </View>
+      );
+    }
+
+    const displayData = extractPaymentAccountDisplayData(
+      paymentAccount.gatewayType,
+      paymentAccount.accountData
+    );
+
+    // If there's an error in validation, show basic info
+    if (displayData.error) {
+      return (
+        <>
+          <View style={styles.paymentInfoRowView}>
+            <Text style={{ fontSize: 13 }}>Account Name:</Text>
+            <Text style={{ fontSize: 13 }}>{paymentAccount.accountName}</Text>
+          </View>
+          <View style={styles.paymentInfoRowView}>
+            <Text style={{ fontSize: 11, color: "red" }}>
+              Data validation error
+            </Text>
+          </View>
+        </>
+      );
+    }
+
+    // Render validated account data
     return (
-      <View style={styles.paymentInfoRowView}>
-        <Text style={{ fontSize: 13 }}>Account Name:</Text>
-        <Text style={{ fontSize: 13 }}>{paymentAccount.accountName}</Text>
-      </View>
+      <>
+        <View style={styles.paymentInfoRowView}>
+          <Text style={{ fontSize: 13 }}>Account Name:</Text>
+          <Text style={{ fontSize: 13 }}>{paymentAccount.accountName}</Text>
+        </View>
+        {Object.entries(displayData).map(([key, value], index) => (
+          <View key={index} style={styles.paymentInfoRowView}>
+            <Text style={{ fontSize: 13 }}>{key}:</Text>
+            <Text style={{ fontSize: 13 }}>{value}</Text>
+          </View>
+        ))}
+      </>
     );
   };
 
@@ -345,82 +395,33 @@ function ReactPDFTemplate1({
         <View style={styles.bodyView}>
           <View style={styles.detailsSectionView}>
             <View style={styles.invoiceToView}>
-              <Text
-                style={{
-                  fontSize: 13,
-                  fontWeight: "bold",
-                  textTransform: "uppercase",
-                  marginBottom: 5,
-                }}
-              >
-                Invoice to:
-              </Text>
+              <Text style={styles.sectionTitle}>Invoice to:</Text>
               {client.contactPersonName && (
-                <Text
-                  style={{
-                    fontSize: 13,
-                  }}
-                >
+                <Text style={styles.clientText}>
                   {client.contactPersonName}
                 </Text>
               )}
-              <Text
-                style={{
-                  fontSize: 13,
-                  fontWeight: "bold",
-                  textTransform: "uppercase",
-                }}
-              >
+              <Text style={styles.clientBusinessName}>
                 {client.BusinessName}
               </Text>
               {client.address && (
-                <Text
-                  style={{
-                    fontSize: 13,
-                  }}
-                >
-                  {client.address}
-                </Text>
+                <Text style={styles.clientText}>{client.address}</Text>
               )}
             </View>
             <View style={styles.invoiceDetailsView}>
               <View style={styles.invoiceDetailsRowView}>
-                <Text
-                  style={{
-                    fontSize: 13,
-                    fontWeight: "bold",
-                    textTransform: "uppercase",
-                  }}
-                >
-                  Invoice #
-                </Text>
-                <Text style={{ fontSize: 13 }}>{invoice.invoiceNumber}</Text>
+                <Text style={styles.invoiceLabel}>Invoice #</Text>
+                <Text style={styles.invoiceValue}>{invoice.invoiceNumber}</Text>
               </View>
               <View style={styles.invoiceDetailsRowView}>
-                <Text
-                  style={{
-                    fontSize: 13,
-                    fontWeight: "bold",
-                    textTransform: "uppercase",
-                  }}
-                >
-                  Invoice Date
-                </Text>
-                <Text style={{ fontSize: 13 }}>
+                <Text style={styles.invoiceLabel}>Invoice Date</Text>
+                <Text style={styles.invoiceValue}>
                   {formatDate(invoice.createdAt)}
                 </Text>
               </View>
               <View style={styles.invoiceDetailsRowView}>
-                <Text
-                  style={{
-                    fontSize: 13,
-                    fontWeight: "bold",
-                    textTransform: "uppercase",
-                  }}
-                >
-                  Due Date
-                </Text>
-                <Text style={{ fontSize: 13 }}>
+                <Text style={styles.invoiceLabel}>Due Date</Text>
+                <Text style={styles.invoiceValue}>
                   {formatDate(invoice.paymentDueDate!)}
                 </Text>
               </View>
@@ -430,9 +431,7 @@ function ReactPDFTemplate1({
             <View style={styles.tableHeaderView}>
               <Text
                 style={{
-                  fontSize: 16,
-                  fontWeight: "bold",
-                  textTransform: "uppercase",
+                  ...styles.tableHeader,
                   flexBasis: "50%",
                 }}
               >
@@ -440,10 +439,8 @@ function ReactPDFTemplate1({
               </Text>
               <Text
                 style={{
-                  fontSize: 16,
+                  ...styles.tableHeader,
                   textAlign: "center",
-                  fontWeight: "bold",
-                  textTransform: "uppercase",
                   flexBasis: "20%",
                 }}
               >
@@ -451,10 +448,8 @@ function ReactPDFTemplate1({
               </Text>
               <Text
                 style={{
-                  fontSize: 16,
+                  ...styles.tableHeader,
                   textAlign: "center",
-                  fontWeight: "bold",
-                  textTransform: "uppercase",
                   flexBasis: "10%",
                 }}
               >
@@ -462,10 +457,8 @@ function ReactPDFTemplate1({
               </Text>
               <Text
                 style={{
-                  fontSize: 16,
+                  ...styles.tableHeader,
                   textAlign: "right",
-                  fontWeight: "bold",
-                  textTransform: "uppercase",
                   flexBasis: "20%",
                 }}
               >
@@ -481,7 +474,7 @@ function ReactPDFTemplate1({
                   const shouldBreak =
                     index === 10 || (index > 10 && (index - 10) % 15 === 0);
 
-                  const notLastItem = index !== invoiceData.items.length - 1;
+                  const notLastItem = index !== validatedItems.length - 1;
 
                   const borderStyle = notLastItem
                     ? { borderBottom: "1px solid #ccc" }
@@ -493,42 +486,15 @@ function ReactPDFTemplate1({
                       break={shouldBreak}
                       style={{ ...styles.tableRowView, ...borderStyle }}
                     >
-                      <Text
-                        style={{
-                          fontSize: 13,
-                          flexBasis: "50%",
-                          paddingLeft: 5,
-                        }}
-                      >
+                      <Text style={styles.itemDescription}>
                         {item.description}
                       </Text>
-                      <Text
-                        style={{
-                          fontSize: 13,
-                          textAlign: "center",
-                          flexBasis: "20%",
-                        }}
-                      >
-                        ${item.unitPrice}
+                      <Text style={styles.itemPrice}>
+                        {formatCurrency(item.unitPrice)}
                       </Text>
-                      <Text
-                        style={{
-                          fontSize: 13,
-                          textAlign: "center",
-                          flexBasis: "10%",
-                        }}
-                      >
-                        {item.quantity}
-                      </Text>
-                      <Text
-                        style={{
-                          fontSize: 13,
-                          textAlign: "right",
-                          paddingRight: 5,
-                          flexBasis: "20%",
-                        }}
-                      >
-                        {item.total}
+                      <Text style={styles.itemQuantity}>{item.quantity}</Text>
+                      <Text style={styles.itemTotal}>
+                        {formatCurrency(item.total)}
                       </Text>
                     </View>
                   );
@@ -539,31 +505,14 @@ function ReactPDFTemplate1({
             <View style={styles.termsView}>
               {invoice.lateFeeTerms && (
                 <View style={styles.TermsRowView}>
-                  <Text
-                    style={{
-                      fontSize: 13,
-                      fontWeight: "semibold",
-                      textTransform: "capitalize",
-                    }}
-                  >
-                    Late Payment Terms:
-                  </Text>
-
-                  <Text style={{ fontSize: 12 }}>{invoice.lateFeeTerms}</Text>
+                  <Text style={styles.termsTitle}>Late Payment Terms:</Text>
+                  <Text style={styles.termsText}>{invoice.lateFeeTerms}</Text>
                 </View>
               )}
               {invoice.customNote && (
                 <View style={styles.TermsRowView}>
-                  <Text
-                    style={{
-                      fontSize: 13,
-                      fontWeight: "semibold",
-                      textTransform: "capitalize",
-                    }}
-                  >
-                    custom note:
-                  </Text>
-                  <Text style={{ fontSize: 12 }}>{invoice.customNote}</Text>
+                  <Text style={styles.termsTitle}>custom note:</Text>
+                  <Text style={styles.termsText}>{invoice.customNote}</Text>
                 </View>
               )}
               <View
@@ -572,13 +521,7 @@ function ReactPDFTemplate1({
                   marginTop: 20,
                 }}
               >
-                <View
-                  style={{
-                    position: "relative",
-                    paddingVertical: 5,
-                    backgroundColor: "#000",
-                  }}
-                >
+                <View style={styles.paymentInfoHeader}>
                   <View
                     style={{
                       position: "absolute",
@@ -590,17 +533,7 @@ function ReactPDFTemplate1({
                       zIndex: -1,
                     }}
                   ></View>
-                  <Text
-                    style={{
-                      fontSize: 12,
-                      fontWeight: "semibold",
-                      textTransform: "capitalize",
-
-                      color: "#fff",
-                    }}
-                  >
-                    Payment Info:
-                  </Text>
+                  <Text style={styles.paymentInfoTitle}>Payment Info:</Text>
                 </View>
 
                 <View style={styles.paymentInfoRowView}>
@@ -611,140 +544,45 @@ function ReactPDFTemplate1({
                     </Text>
                   )}
                 </View>
-                {paymentAccount?.gatewayType && paypalGateway(paymentAccount)}
+                {paymentAccount && renderPaymentAccountData(paymentAccount)}
               </View>
             </View>
             <View style={styles.totalView}>
               <View style={styles.totalRowView}>
-                <Text
-                  style={{
-                    fontSize: 13,
-                    fontWeight: "bold",
-                    textTransform: "uppercase",
-                    textAlign: "right",
-                    flexBasis: "60%",
-                  }}
-                >
-                  Subtotal:
-                </Text>
-                <Text
-                  style={{
-                    fontSize: 13,
-                    textAlign: "right",
-                    fontWeight: "semibold",
-                    flexBasis: "40%",
-                  }}
-                >
-                  {invoice.subtotal}
+                <Text style={styles.totalLabel}>Subtotal:</Text>
+                <Text style={styles.totalValue}>
+                  {formatCurrency(subtotal)}
                 </Text>
               </View>
               <View style={styles.totalRowView}>
-                <Text
-                  style={{
-                    fontSize: 13,
-                    fontWeight: "bold",
-                    textTransform: "uppercase",
-                    textAlign: "right",
-                    flexBasis: "60%",
-                  }}
-                >
-                  Tax:
-                </Text>
-                <Text
-                  style={{
-                    fontSize: 13,
-                    textAlign: "right",
-                    fontWeight: "semibold",
-                    flexBasis: "40%",
-                  }}
-                >
-                  {invoice.tax}
+                <Text style={styles.totalLabel}>Tax:</Text>
+                <Text style={styles.totalValue}>
+                  {formatCurrency(taxAmount)}
                 </Text>
               </View>
               <View style={styles.totalRowView}>
-                <Text
-                  style={{
-                    fontSize: 13,
-                    fontWeight: "bold",
-                    textTransform: "uppercase",
-                    textAlign: "right",
-                    flexBasis: "60%",
-                  }}
-                >
-                  Discount:
-                </Text>
-                <Text
-                  style={{
-                    fontSize: 13,
-                    textAlign: "right",
-                    fontWeight: "semibold",
-                    flexBasis: "40%",
-                  }}
-                >
-                  -{invoice.discount}
+                <Text style={styles.totalLabel}>Discount:</Text>
+                <Text style={styles.totalValue}>
+                  -{formatCurrency(discountAmount)}
                 </Text>
               </View>
-              <View
-                style={{
-                  backgroundColor: "#000",
-                  width: "100%",
-                  height: 1,
-                }}
-              ></View>
+              <View style={styles.divider}></View>
               <View style={styles.totalRowView}>
-                <Text
-                  style={{
-                    fontSize: 15,
-                    fontWeight: "bold",
-                    textTransform: "uppercase",
-                    textAlign: "right",
-                    flexBasis: "60%",
-                  }}
-                >
-                  Total:
-                </Text>
-                <Text
-                  style={{
-                    fontSize: 15,
-                    textAlign: "right",
-                    fontWeight: "semibold",
-                    flexBasis: "40%",
-                  }}
-                >
-                  {invoice.total}
+                <Text style={styles.grandTotalLabel}>Total:</Text>
+                <Text style={styles.grandTotalValue}>
+                  {formatCurrency(finalTotal)}
                 </Text>
               </View>
-              <View
-                style={{
-                  backgroundColor: "#000",
-                  width: "100%",
-                  height: 1,
-                }}
-              ></View>
+              <View style={styles.divider}></View>
             </View>
           </View>
         </View>
         {/* Footer positioned at bottom of page content */}
         <View style={styles.footerView} fixed>
-          <Text style={{ fontSize: 13, color: "#fff", fontWeight: "bold" }}>
-            {businessName}
-          </Text>
+          <Text style={styles.footerText}>{businessName}</Text>
+          <Text style={styles.footerEmail}>{email}</Text>
           <Text
-            style={{
-              fontSize: 13,
-              color: "#fff",
-              paddingLeft: 10,
-              borderLeft: "1px solid #fff",
-            }}
-          >
-            {email}
-          </Text>
-          <Text
-            style={{
-              fontSize: 13,
-              color: "#fff",
-              marginLeft: "auto",
-            }}
+            style={styles.footerPageNumber}
             render={({ pageNumber, totalPages }) =>
               `Page ${pageNumber} of ${totalPages}`
             }

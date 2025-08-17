@@ -1,5 +1,12 @@
 import { InvoiceFormState } from "../types/invoiceForm";
 import { InvoiceWithRelations } from "../types/invoiceTypes";
+import { PaymentGatewayType } from "@prisma/client";
+import {
+  nigerianBankAccountSchema,
+  paypalAccountSchema,
+  wiseAccountSchema,
+  achAccountSchema,
+} from "@/shared/validators/payment";
 
 export function calculateSubTotal(
   items: {
@@ -145,6 +152,171 @@ export function validateAndConvertInvoiceItems(
       };
     })
     .filter((item): item is InvoiceItem => item !== null); // Remove invalid items
+}
+
+// Type definitions for validated payment account data
+export interface ValidatedPaymentAccountData {
+  isValid: boolean;
+  data: unknown;
+  errors: string[];
+  gatewayType: PaymentGatewayType;
+}
+
+/**
+ * Validates payment account data based on the gateway type
+ * @param {PaymentGatewayType} gatewayType - The payment gateway type
+ * @param {unknown} accountData - The account data to validate
+ * @returns {ValidatedPaymentAccountData} Validation result with errors and validated data
+ */
+export function validatePaymentAccountData(
+  gatewayType: PaymentGatewayType,
+  accountData: unknown
+): ValidatedPaymentAccountData {
+  const result: ValidatedPaymentAccountData = {
+    isValid: false,
+    data: null,
+    errors: [],
+    gatewayType,
+  };
+
+  // Handle null or undefined accountData
+  if (!accountData) {
+    result.errors.push("Account data is required");
+    return result;
+  }
+
+  // Parse JSON string if needed
+  let parsedData = accountData;
+  if (typeof accountData === "string") {
+    try {
+      parsedData = JSON.parse(accountData);
+    } catch (error) {
+      result.errors.push("Invalid JSON format in account data");
+      return result;
+    }
+  }
+
+  // Validate based on gateway type
+  try {
+    switch (gatewayType) {
+      case PaymentGatewayType.PAYPAL:
+        const paypalResult = paypalAccountSchema.safeParse(parsedData);
+        if (paypalResult.success) {
+          result.isValid = true;
+          result.data = paypalResult.data;
+        } else {
+          result.errors = paypalResult.error.errors.map(
+            (err) => `${err.path.join(".")}: ${err.message}`
+          );
+        }
+        break;
+
+      case PaymentGatewayType.WISE:
+        const wiseResult = wiseAccountSchema.safeParse(parsedData);
+        if (wiseResult.success) {
+          result.isValid = true;
+          result.data = wiseResult.data;
+        } else {
+          result.errors = wiseResult.error.errors.map(
+            (err) => `${err.path.join(".")}: ${err.message}`
+          );
+        }
+        break;
+
+      case PaymentGatewayType.NIGERIAN_BANK:
+        const nigerianBankResult =
+          nigerianBankAccountSchema.safeParse(parsedData);
+        if (nigerianBankResult.success) {
+          result.isValid = true;
+          result.data = nigerianBankResult.data;
+        } else {
+          result.errors = nigerianBankResult.error.errors.map(
+            (err) => `${err.path.join(".")}: ${err.message}`
+          );
+        }
+        break;
+
+      case PaymentGatewayType.ACH:
+        const achResult = achAccountSchema.safeParse(parsedData);
+        if (achResult.success) {
+          result.isValid = true;
+          result.data = achResult.data;
+        } else {
+          result.errors = achResult.error.errors.map(
+            (err) => `${err.path.join(".")}: ${err.message}`
+          );
+        }
+        break;
+
+      default:
+        result.errors.push(`Unsupported gateway type: ${gatewayType}`);
+        break;
+    }
+  } catch (error) {
+    result.errors.push(
+      `Validation error: ${
+        error instanceof Error ? error.message : "Unknown error"
+      }`
+    );
+  }
+
+  return result;
+}
+
+/**
+ * Helper function to safely extract payment account data with validation
+ * @param {PaymentGatewayType} gatewayType - The payment gateway type
+ * @param {unknown} accountData - The account data to extract from
+ * @returns {Record<string, string>} Safe key-value pairs for display
+ */
+export function extractPaymentAccountDisplayData(
+  gatewayType: PaymentGatewayType,
+  accountData: unknown
+): Record<string, string> {
+  const validation = validatePaymentAccountData(gatewayType, accountData);
+
+  if (!validation.isValid || !validation.data) {
+    return {
+      error: validation.errors.join(", ") || "Invalid account data",
+    };
+  }
+
+  const data = validation.data as Record<string, unknown>;
+  const displayData: Record<string, string> = {};
+
+  switch (gatewayType) {
+    case PaymentGatewayType.PAYPAL:
+      displayData["PayPal Email"] = String(data.email || "");
+      break;
+
+    case PaymentGatewayType.WISE:
+      displayData["Wise Email"] = String(data.email || "");
+      break;
+
+    case PaymentGatewayType.NIGERIAN_BANK:
+      displayData["Bank Name"] = String(data.bankName || "");
+      displayData["Account Number"] = String(data.accountNumber || "");
+      displayData["Account Name"] = String(data.accountName || "");
+      break;
+
+    case PaymentGatewayType.ACH:
+      displayData["Bank Name"] = String(data.bankName || "");
+      displayData["Routing Number"] = String(data.routingNumber || "");
+      displayData["Account Number"] = String(data.accountNumber || "");
+      displayData["Account Type"] = String(data.accountType || "");
+      break;
+
+    default:
+      displayData["Gateway"] = gatewayType;
+      // Try to extract common fields
+      if (data.email) displayData["Email"] = String(data.email);
+      if (data.accountNumber)
+        displayData["Account Number"] = String(data.accountNumber);
+      if (data.bankName) displayData["Bank Name"] = String(data.bankName);
+      break;
+  }
+
+  return displayData;
 }
 
 /**

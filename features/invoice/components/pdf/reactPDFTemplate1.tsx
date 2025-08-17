@@ -12,280 +12,316 @@ import {
 
 import { Client, Invoice, PaymentAccount } from "@prisma/client";
 import { UserWithBusiness } from "@/types";
+import { ColorTheme, getThemeColors } from "@/constants";
 import {
   validateAndConvertInvoiceItems,
   extractPaymentAccountDisplayData,
+  formatDate,
+  formatCurrency,
 } from "../../utils";
 
-const styles = StyleSheet.create({
-  page: {
-    display: "flex",
-    flexDirection: "column",
-    paddingTop: "30px",
-  },
-  header: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  headerTitle: {
-    display: "flex",
-    flexDirection: "column",
-    flexBasis: "70%",
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    fontSize: 30,
-    backgroundColor: "#000",
-    color: "#fff",
-    letterSpacing: 10,
-    textAlign: "center",
-    fontWeight: "semibold",
-  },
-  logoView: {
-    display: "flex",
-    flexDirection: "column",
-    flexBasis: "30%",
-    alignItems: "center",
-    justifyContent: "center",
-    paddingHorizontal: 10,
-  },
-  logo: {
-    width: 100,
-    height: 80,
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    objectFit: "contain",
-  },
-  bodyView: {
-    display: "flex",
-    flexDirection: "column",
-    padding: 30,
-    gap: 30,
-    marginBottom: 300, // Ensure space for footer
-  },
-  detailsSectionView: {
-    marginTop: 30,
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "flex-end",
-    justifyContent: "space-between",
-    gap: 40,
-  },
-  invoiceToView: {
-    display: "flex",
-    flexDirection: "column",
-    flexBasis: "40%",
-    gap: 4,
-  },
-  invoiceDetailsView: {
-    display: "flex",
-    flexBasis: "40%",
-    flexDirection: "column",
-    gap: 4,
-  },
-  invoiceDetailsRowView: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    gap: 10,
-  },
-  itemsTableView: {
-    display: "flex",
-    flexDirection: "column",
-    marginTop: 20,
-  },
-  tableHeaderView: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-  },
-  tableRowContainerView: {
-    display: "flex",
-    flexDirection: "column",
-  },
-  tableRowView: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    paddingVertical: 15,
-  },
-  termsAndTotalView: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "flex-start",
-    justifyContent: "space-between",
-    gap: 40,
-  },
-  termsView: {
-    display: "flex",
-    flexDirection: "column",
-    flexBasis: "40%",
-    gap: 20,
-  },
-  TermsRowView: {
-    display: "flex",
-    flexDirection: "column",
-    gap: 4,
-  },
-  paymentInfoRowView: {
-    flexDirection: "row",
-    alignItems: "flex-start",
-    justifyContent: "space-between",
-    gap: 10,
-  },
-  totalView: {
-    display: "flex",
-    flexDirection: "column",
-    flexBasis: "40%",
-    gap: 10,
-  },
-  totalRowView: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    gap: 10,
-  },
-  footerView: {
-    position: "absolute",
-    bottom: 0,
-    left: 0,
-    right: 0,
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    padding: 30,
-    fontSize: 12,
-    color: "#fff",
-    backgroundColor: "#000",
-    gap: 10,
-  },
-  // New styles for previously inline styles
-  sectionTitle: {
-    fontSize: 13,
-    fontWeight: "bold",
-    textTransform: "uppercase",
-    marginBottom: 5,
-  },
-  clientText: {
-    fontSize: 13,
-  },
-  clientBusinessName: {
-    fontSize: 13,
-    fontWeight: "bold",
-    textTransform: "uppercase",
-  },
-  invoiceLabel: {
-    fontSize: 13,
-    fontWeight: "bold",
-    textTransform: "uppercase",
-  },
-  invoiceValue: {
-    fontSize: 13,
-  },
-  tableHeader: {
-    fontSize: 16,
-    fontWeight: "bold",
-    textTransform: "uppercase",
-  },
-  itemDescription: {
-    fontSize: 13,
-    flexBasis: "50%",
-    paddingLeft: 5,
-  },
-  itemPrice: {
-    fontSize: 13,
-    textAlign: "center",
-    flexBasis: "20%",
-  },
-  itemQuantity: {
-    fontSize: 13,
-    textAlign: "center",
-    flexBasis: "10%",
-  },
-  itemTotal: {
-    fontSize: 13,
-    textAlign: "right",
-    paddingRight: 5,
-    flexBasis: "20%",
-  },
-  termsTitle: {
-    fontSize: 13,
-    fontWeight: "semibold",
-    textTransform: "capitalize",
-  },
-  termsText: {
-    fontSize: 12,
-  },
-  paymentInfoHeader: {
-    position: "relative",
-    paddingVertical: 5,
-    backgroundColor: "#000",
-  },
-  paymentInfoTitle: {
-    fontSize: 12,
-    fontWeight: "semibold",
-    textTransform: "capitalize",
-    color: "#fff",
-  },
-  totalLabel: {
-    fontSize: 13,
-    fontWeight: "bold",
-    textTransform: "uppercase",
-    textAlign: "right",
-    flexBasis: "60%",
-  },
-  totalValue: {
-    fontSize: 13,
-    textAlign: "right",
-    fontWeight: "semibold",
-    flexBasis: "40%",
-  },
-  grandTotalLabel: {
-    fontSize: 15,
-    fontWeight: "bold",
-    textTransform: "uppercase",
-    textAlign: "right",
-    flexBasis: "60%",
-  },
-  grandTotalValue: {
-    fontSize: 15,
-    textAlign: "right",
-    fontWeight: "semibold",
-    flexBasis: "40%",
-  },
-  divider: {
-    backgroundColor: "#000",
-    width: "100%",
-    height: 1,
-  },
-  footerText: {
-    fontSize: 13,
-    color: "#fff",
-    fontWeight: "bold",
-  },
-  footerEmail: {
-    fontSize: 13,
-    color: "#fff",
-    paddingLeft: 10,
-    borderLeft: "1px solid #fff",
-  },
-  footerPageNumber: {
-    fontSize: 13,
-    color: "#fff",
-    marginLeft: "auto",
-  },
-});
+// Function to create theme-based styles
+const createThemedStyles = (theme: ColorTheme = "classic") => {
+  const colors = getThemeColors(theme);
+
+  return StyleSheet.create({
+    page: {
+      display: "flex",
+      flexDirection: "column",
+      paddingTop: "30px",
+      backgroundColor: colors.background,
+    },
+    header: {
+      display: "flex",
+      flexDirection: "row",
+      alignItems: "center",
+    },
+    headerTitle: {
+      display: "flex",
+      flexDirection: "column",
+      flexBasis: "70%",
+      paddingHorizontal: 20,
+      paddingVertical: 10,
+      fontSize: 30,
+      backgroundColor: colors.primary,
+      color: colors.background,
+      letterSpacing: 10,
+      textAlign: "center",
+      fontWeight: "semibold",
+    },
+    logoView: {
+      display: "flex",
+      flexDirection: "column",
+      flexBasis: "30%",
+      alignItems: "center",
+      justifyContent: "center",
+      paddingHorizontal: 10,
+    },
+    logo: {
+      width: 100,
+      height: 80,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      objectFit: "contain",
+    },
+    bodyView: {
+      display: "flex",
+      flexDirection: "column",
+      padding: 30,
+      gap: 30,
+      marginBottom: 300, // Ensure space for footer
+    },
+    detailsSectionView: {
+      marginTop: 30,
+      display: "flex",
+      flexDirection: "row",
+      alignItems: "flex-end",
+      justifyContent: "space-between",
+      gap: 40,
+    },
+    invoiceToView: {
+      display: "flex",
+      flexDirection: "column",
+      flexBasis: "40%",
+      gap: 4,
+    },
+    invoiceDetailsView: {
+      display: "flex",
+      flexBasis: "40%",
+      flexDirection: "column",
+      gap: 4,
+    },
+    invoiceDetailsRowView: {
+      display: "flex",
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
+      gap: 10,
+    },
+    itemsTableView: {
+      display: "flex",
+      flexDirection: "column",
+      marginTop: 20,
+    },
+    tableHeaderView: {
+      display: "flex",
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
+      backgroundColor: colors.accent,
+      paddingVertical: 8,
+      paddingHorizontal: 5,
+    },
+    tableRowContainerView: {
+      display: "flex",
+      flexDirection: "column",
+    },
+    tableRowView: {
+      display: "flex",
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
+      paddingVertical: 15,
+    },
+    termsAndTotalView: {
+      display: "flex",
+      flexDirection: "row",
+      alignItems: "flex-start",
+      justifyContent: "space-between",
+      gap: 40,
+    },
+    termsView: {
+      display: "flex",
+      flexDirection: "column",
+      flexBasis: "40%",
+      gap: 20,
+    },
+    TermsRowView: {
+      display: "flex",
+      flexDirection: "column",
+      gap: 4,
+    },
+    paymentInfoRowView: {
+      flexDirection: "row",
+      alignItems: "flex-start",
+      justifyContent: "space-between",
+      gap: 10,
+    },
+    totalView: {
+      display: "flex",
+      flexDirection: "column",
+      flexBasis: "40%",
+      gap: 10,
+    },
+    totalRowView: {
+      display: "flex",
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
+      gap: 10,
+    },
+    footerView: {
+      position: "absolute",
+      bottom: 0,
+      left: 0,
+      right: 0,
+      display: "flex",
+      flexDirection: "row",
+      alignItems: "center",
+      padding: 30,
+      fontSize: 12,
+      color: colors.background,
+      backgroundColor: colors.primary,
+      gap: 10,
+    },
+    // Text styles with theme colors
+    sectionTitle: {
+      fontSize: 13,
+      fontWeight: "bold",
+      textTransform: "uppercase",
+      marginBottom: 5,
+      color: colors.primary,
+    },
+    clientText: {
+      fontSize: 13,
+      color: colors.text,
+    },
+    clientBusinessName: {
+      fontSize: 13,
+      fontWeight: "bold",
+      textTransform: "uppercase",
+      color: colors.text,
+    },
+    invoiceLabel: {
+      fontSize: 13,
+      fontWeight: "bold",
+      textTransform: "uppercase",
+      color: colors.primary,
+    },
+    invoiceValue: {
+      fontSize: 13,
+      color: colors.text,
+    },
+    tableHeader: {
+      fontSize: 16,
+      fontWeight: "bold",
+      textTransform: "uppercase",
+      color: colors.primary,
+    },
+    itemDescription: {
+      fontSize: 13,
+      flexBasis: "50%",
+      paddingLeft: 5,
+      color: colors.text,
+    },
+    itemPrice: {
+      fontSize: 13,
+      textAlign: "center",
+      flexBasis: "20%",
+      color: colors.text,
+    },
+    itemQuantity: {
+      fontSize: 13,
+      textAlign: "center",
+      flexBasis: "10%",
+      color: colors.text,
+    },
+    itemTotal: {
+      fontSize: 13,
+      textAlign: "right",
+      paddingRight: 5,
+      flexBasis: "20%",
+      color: colors.text,
+    },
+    termsTitle: {
+      fontSize: 13,
+      fontWeight: "semibold",
+      textTransform: "capitalize",
+      color: colors.primary,
+    },
+    termsText: {
+      fontSize: 12,
+      color: colors.textLight,
+    },
+    paymentInfoHeader: {
+      position: "relative",
+      paddingVertical: 5,
+      backgroundColor: colors.primary,
+    },
+    paymentInfoTitle: {
+      fontSize: 12,
+      fontWeight: "semibold",
+      textTransform: "capitalize",
+      color: colors.background,
+    },
+    paymentInfoText: {
+      fontSize: 13,
+      color: colors.text,
+    },
+    totalLabel: {
+      fontSize: 13,
+      fontWeight: "bold",
+      textTransform: "uppercase",
+      textAlign: "right",
+      flexBasis: "60%",
+      color: colors.primary,
+    },
+    totalValue: {
+      fontSize: 13,
+      textAlign: "right",
+      fontWeight: "semibold",
+      flexBasis: "40%",
+      color: colors.text,
+    },
+    grandTotalLabel: {
+      fontSize: 15,
+      fontWeight: "bold",
+      textTransform: "uppercase",
+      textAlign: "right",
+      flexBasis: "60%",
+      color: colors.primary,
+    },
+    grandTotalValue: {
+      fontSize: 15,
+      textAlign: "right",
+      fontWeight: "semibold",
+      flexBasis: "40%",
+      color: colors.primary,
+    },
+    divider: {
+      backgroundColor: colors.primary,
+      width: "100%",
+      height: 1,
+    },
+    itemBorder: {
+      borderBottom: `1px solid ${colors.border}`,
+    },
+    footerText: {
+      fontSize: 13,
+      color: colors.background,
+      fontWeight: "bold",
+    },
+    footerEmail: {
+      fontSize: 13,
+      color: colors.background,
+      paddingLeft: 10,
+      borderLeft: `1px solid ${colors.background}`,
+    },
+    footerPageNumber: {
+      fontSize: 13,
+      color: colors.background,
+      marginLeft: "auto",
+    },
+  });
+};
 
 type ReactPDFTemplateProps = {
   invoice: Invoice;
   client: Client | null;
   userAndBusiness: UserWithBusiness | null;
   paymentAccount: PaymentAccount | null;
+  theme?: ColorTheme;
 };
 
 function ReactPDFTemplate1({
@@ -293,6 +329,7 @@ function ReactPDFTemplate1({
   client,
   userAndBusiness,
   paymentAccount,
+  theme = "classic",
 }: ReactPDFTemplateProps) {
   if (!userAndBusiness?.business) {
     return null;
@@ -302,21 +339,12 @@ function ReactPDFTemplate1({
     return null;
   }
 
+  // Generate theme-based styles
+  const styles = createThemedStyles(theme);
+  const colors = getThemeColors(theme);
+
   const { business } = userAndBusiness;
   const { email, logo, businessName } = business;
-
-  // Data preparation and formatting
-  const formatDate = (date: Date) =>
-    new Date(date).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
-
-  const formatCurrency = (amount: number | null): string => {
-    if (amount === null || amount === undefined) return "$0.00";
-    return `$${Number(amount).toFixed(2)}`;
-  };
 
   const validatedItems = validateAndConvertInvoiceItems(invoice.invoiceItems);
 
@@ -324,18 +352,24 @@ function ReactPDFTemplate1({
     return null;
   }
 
-  // Calculate totals from validated items
-  const subtotal = validatedItems.reduce((sum, item) => sum + item.total, 0);
-  const taxAmount = Number(invoice.tax) || 0;
-  const discountAmount = Number(invoice.discount) || 0;
-  const finalTotal = subtotal + taxAmount - discountAmount;
+  // Calculate totals from validated items, with fallback to stored values
+  const calculatedSubtotal = validatedItems.reduce(
+    (sum, item) => sum + item.total,
+    0
+  );
+  const subtotal = invoice.subtotal ?? calculatedSubtotal;
+  const taxAmount = invoice.tax ?? 0;
+  const discountAmount = invoice.discount ?? 0;
+  const finalTotal = invoice.total ?? subtotal + taxAmount - discountAmount;
 
   const renderPaymentAccountData = (paymentAccount: PaymentAccount) => {
     if (!paymentAccount.gatewayType || !paymentAccount.accountData) {
       return (
         <View style={styles.paymentInfoRowView}>
-          <Text style={{ fontSize: 13 }}>Account Name:</Text>
-          <Text style={{ fontSize: 13 }}>{paymentAccount.accountName}</Text>
+          <Text style={styles.paymentInfoText}>Account Name:</Text>
+          <Text style={styles.paymentInfoText}>
+            {paymentAccount.accountName}
+          </Text>
         </View>
       );
     }
@@ -350,11 +384,13 @@ function ReactPDFTemplate1({
       return (
         <>
           <View style={styles.paymentInfoRowView}>
-            <Text style={{ fontSize: 13 }}>Account Name:</Text>
-            <Text style={{ fontSize: 13 }}>{paymentAccount.accountName}</Text>
+            <Text style={styles.paymentInfoText}>Account Name:</Text>
+            <Text style={styles.paymentInfoText}>
+              {paymentAccount.accountName}
+            </Text>
           </View>
           <View style={styles.paymentInfoRowView}>
-            <Text style={{ fontSize: 11, color: "red" }}>
+            <Text style={{ fontSize: 11, color: colors.textLight }}>
               Data validation error
             </Text>
           </View>
@@ -366,13 +402,15 @@ function ReactPDFTemplate1({
     return (
       <>
         <View style={styles.paymentInfoRowView}>
-          <Text style={{ fontSize: 13 }}>Account Name:</Text>
-          <Text style={{ fontSize: 13 }}>{paymentAccount.accountName}</Text>
+          <Text style={styles.paymentInfoText}>Account Name:</Text>
+          <Text style={styles.paymentInfoText}>
+            {paymentAccount.accountName}
+          </Text>
         </View>
         {Object.entries(displayData).map(([key, value], index) => (
           <View key={index} style={styles.paymentInfoRowView}>
-            <Text style={{ fontSize: 13 }}>{key}:</Text>
-            <Text style={{ fontSize: 13 }}>{value}</Text>
+            <Text style={styles.paymentInfoText}>{key}:</Text>
+            <Text style={styles.paymentInfoText}>{value}</Text>
           </View>
         ))}
       </>
@@ -476,9 +514,7 @@ function ReactPDFTemplate1({
 
                   const notLastItem = index !== validatedItems.length - 1;
 
-                  const borderStyle = notLastItem
-                    ? { borderBottom: "1px solid #ccc" }
-                    : {};
+                  const borderStyle = notLastItem ? styles.itemBorder : {};
 
                   return (
                     <View
@@ -537,9 +573,9 @@ function ReactPDFTemplate1({
                 </View>
 
                 <View style={styles.paymentInfoRowView}>
-                  <Text style={{ fontSize: 13 }}>Gateway:</Text>
+                  <Text style={styles.paymentInfoText}>Gateway:</Text>
                   {paymentAccount?.gatewayType && (
-                    <Text style={{ fontSize: 13 }}>
+                    <Text style={styles.paymentInfoText}>
                       {paymentAccount.gatewayType}
                     </Text>
                   )}

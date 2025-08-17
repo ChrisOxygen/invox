@@ -49,6 +49,20 @@ export interface InvoiceItem {
   total: number;
 }
 
+// Date formatting utility
+export const formatDate = (date: Date): string =>
+  new Date(date).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+
+// Currency formatting utility
+export const formatCurrency = (amount: number | null): string => {
+  if (amount === null || amount === undefined) return "$0.00";
+  return `$${Number(amount).toFixed(2)}`;
+};
+
 /**
  * Validates and converts invoice items from JSON/object format to typed array
  * @param {unknown} invoiceItems - The invoice items data (can be JSON, object, or array)

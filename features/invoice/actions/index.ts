@@ -8,6 +8,7 @@ import {
   Business,
   TaxType,
   DiscountType,
+  Invoice,
 } from "@prisma/client";
 import { ApiResponse } from "@/types/api";
 import { UserWithBusiness } from "@/types/database";
@@ -911,7 +912,9 @@ export async function _updateInvoice(
 }
 
 // Get single invoice
-export async function _getInvoice(invoiceId: string): Promise<InvoiceResponse> {
+export async function _getInvoiceById(
+  invoiceId: string
+): Promise<ApiResponse<Invoice>> {
   try {
     const session = await _requireAuthentication();
 
@@ -922,32 +925,19 @@ export async function _getInvoice(invoiceId: string): Promise<InvoiceResponse> {
           userId: session.user.id,
         },
       },
-      include: {
-        client: true,
-        business: true, // Include user for relations
-      },
     });
 
     if (!invoice) {
-      return {
-        success: false,
-        message: "Invoice not found or access denied",
-      };
+      throw new Error("Invoice not found or access denied");
     }
 
     return {
       success: true,
       message: "Invoice retrieved successfully",
-      data: transformInvoiceToWithRelations(invoice),
+      data: invoice,
     };
   } catch (error) {
-    console.error("Error getting invoice:", error);
-    return {
-      success: false,
-      message: "Failed to retrieve invoice",
-    };
-  } finally {
-    await prisma.$disconnect();
+    return handleInvoiceError(error);
   }
 }
 

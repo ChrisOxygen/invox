@@ -21,6 +21,12 @@ async function _verifyAccountOwnership(
   accountId: string,
   userId: string
 ): Promise<PaymentAccount | null> {
+  console.log(
+    "Verifying account ownership for ID:",
+    accountId,
+    "User ID:",
+    userId
+  );
   return await prisma.paymentAccount.findFirst({
     where: {
       id: accountId,
@@ -266,6 +272,7 @@ export async function _getPaymentAccountById(
   paymentAccountId: string
 ): Promise<ApiResponse<PaymentAccount>> {
   try {
+    console.log("Payment Account id:", paymentAccountId);
     const session = await _requireAuthentication();
 
     if (!paymentAccountId) {
@@ -276,6 +283,8 @@ export async function _getPaymentAccountById(
       paymentAccountId,
       session.user.id
     );
+
+    console.log("Payment Account from server funtion:", paymentAccount);
     if (!paymentAccount) {
       return _createErrorResponse("Payment account not found or access denied");
     }

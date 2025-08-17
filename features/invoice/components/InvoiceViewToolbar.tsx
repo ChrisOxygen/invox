@@ -6,7 +6,6 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { FiEdit2, FiMail, FiCheck, FiCreditCard } from "react-icons/fi";
 
 import { PDFDownloadLink } from "@react-pdf/renderer";
-import { InvoicePDF } from "./pdf/InvoicePDF";
 import { useGetInvoiceById } from "../hooks/useGetInvoiceById";
 import Link from "next/link";
 // import { toast } from "sonner"; // Uncomment when available

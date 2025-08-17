@@ -3,7 +3,7 @@
 import { useParams } from "next/navigation";
 import { Skeleton } from "@/components/ui/skeleton";
 import { formatInvoiceData } from "../utils";
-import { useGetInvoiceById } from "../hooks/useGetInvoiceById";
+import { useInvoiceWithRelations } from "../hooks/useInvoiceWithRelations";
 import Image from "next/image";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { PDFViewer } from "@react-pdf/renderer";
@@ -15,7 +15,16 @@ export function InvoiceViewer() {
 
   const invoiceId = params?.invoiceId as string;
 
-  const { invoice, isPending: gettingInvoice } = useGetInvoiceById(invoiceId);
+  const {
+    invoice,
+    user,
+    business,
+    client,
+    paymentAccount,
+    isPending: gettingInvoice,
+    hasError,
+    errorMessage,
+  } = useInvoiceWithRelations(invoiceId);
 
   if (gettingInvoice) {
     return (
@@ -37,46 +46,57 @@ export function InvoiceViewer() {
     return null;
   }
 
-  console.log("InvoiceViewer", invoice);
+  console.log(
+    "Invoice",
+    invoice,
+    "user",
+    user,
+    "business",
+    business,
+    "client",
+    client,
+    "paymentAccount",
+    paymentAccount
+  );
 
-  const formattedData = formatInvoiceData(invoice);
+  // const formattedData = formatInvoiceData(invoice);
 
-  const {
-    invoiceNumber,
-    invoiceDate,
-    invoiceDueDate,
-    clientName,
-    clientBusinessName,
-    clientAddress,
-    items,
-    paymentAccount,
-    businessDetails,
-    calculations,
-    discount,
-    tax,
-    lateFeeText,
-    customNotes,
-  } = formattedData;
+  // const {
+  //   invoiceNumber,
+  //   invoiceDate,
+  //   invoiceDueDate,
+  //   clientName,
+  //   clientBusinessName,
+  //   clientAddress,
+  //   items,
+  //   paymentAccount,
+  //   businessDetails,
+  //   calculations,
+  //   discount,
+  //   tax,
+  //   lateFeeText,
+  //   customNotes,
+  // } = formattedData;
 
-  const { subtotal, finalTotal } = calculations;
-  const { accountData, gatewayType } = paymentAccount || {
-    accountData: {},
-    gatewayType: "",
-  };
-  const { businessName, email } = businessDetails || {};
+  // const { subtotal, finalTotal } = calculations;
+  // const { accountData, gatewayType } = paymentAccount || {
+  //   accountData: {},
+  //   gatewayType: "",
+  // };
+  // const { businessName, email } = businessDetails || {};
 
-  // Convert accountData to array for easier rendering
-  const accountDataArray = accountData
-    ? Object.entries(accountData).map(([key, value]) => ({
-        key,
-        value: String(value),
-      }))
-    : [];
+  // // Convert accountData to array for easier rendering
+  // const accountDataArray = accountData
+  //   ? Object.entries(accountData).map(([key, value]) => ({
+  //       key,
+  //       value: String(value),
+  //     }))
+  //   : [];
 
-  // Default signature to business name if no signature available
-  const signatureName = businessDetails?.signature
-    ? businessDetails?.signature
-    : businessDetails?.businessName || "";
+  // // Default signature to business name if no signature available
+  // const signatureName = businessDetails?.signature
+  //   ? businessDetails?.signature
+  //   : businessDetails?.businessName || "";
 
   return (
     // <ScrollArea className="h-[calc(100vh-200px)] w-full bg-gradient-to-br from-blue-50 via-cyan-50 to-blue-100 p-6">

@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/alt-text */
 "use client";
 
 import {
@@ -10,6 +11,9 @@ import {
 } from "@react-pdf/renderer";
 
 import { DUMMY_SENT_INVOICE } from "@/features/invoice/constants/";
+import { Client, Invoice, PaymentAccount } from "@prisma/client";
+import { UserWithBusiness } from "@/types";
+import { validateAndConvertInvoiceItems } from "../../utils";
 
 // Format DUMMY_SENT_INVOICE data for PDF template
 const formatInvoiceData = (invoice: typeof DUMMY_SENT_INVOICE) => {
@@ -159,11 +163,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   logo: {
-    width: 80,
+    width: 100,
     height: 80,
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
+    objectFit: "contain",
   },
   bodyView: {
     display: "flex",
@@ -173,6 +178,7 @@ const styles = StyleSheet.create({
     marginBottom: 300, // Ensure space for footer
   },
   detailsSectionView: {
+    marginTop: 30,
     display: "flex",
     flexDirection: "row",
     alignItems: "flex-end",
@@ -274,8 +280,54 @@ const styles = StyleSheet.create({
   },
 });
 
-function ReactPDFTemplate1() {
+type ReactPDFTemplateProps = {
+  invoice: Invoice;
+  client: Client | null;
+  userAndBusiness: UserWithBusiness | null;
+  paymentAccount: PaymentAccount | null;
+};
+
+function ReactPDFTemplate1({
+  invoice,
+  client,
+  userAndBusiness,
+  paymentAccount,
+}: ReactPDFTemplateProps) {
   const invoiceData = formatInvoiceData(DUMMY_SENT_INVOICE);
+
+  if (!userAndBusiness?.business) {
+    return null;
+  }
+
+  if (!client) {
+    return null;
+  }
+
+  const { business } = userAndBusiness;
+
+  const { email, logo, businessName } = business;
+
+  const formatDate = (date: Date) =>
+    new Date(date).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+
+  const validatedItems = validateAndConvertInvoiceItems(invoice.invoiceItems);
+
+  if (!validatedItems || validatedItems.length === 0) {
+    return null;
+  }
+
+  const paypalGateway = (paymentAccount: PaymentAccount) => {
+    return (
+      <View style={styles.paymentInfoRowView}>
+        <Text style={{ fontSize: 13 }}>Account Name:</Text>
+        <Text style={{ fontSize: 13 }}>{paymentAccount.accountName}</Text>
+      </View>
+    );
+  };
 
   return (
     <Document>
@@ -284,9 +336,11 @@ function ReactPDFTemplate1() {
           <View style={styles.headerTitle}>
             <Text>INVOICE</Text>
           </View>
-          <View style={styles.logoView}>
-            <Image style={styles.logo} src="/assets/invox-v-logo.png" />
-          </View>
+          {logo && (
+            <View style={styles.logoView}>
+              <Image style={styles.logo} src={logo} />
+            </View>
+          )}
         </View>
         <View style={styles.bodyView}>
           <View style={styles.detailsSectionView}>
@@ -301,20 +355,33 @@ function ReactPDFTemplate1() {
               >
                 Invoice to:
               </Text>
+              {client.contactPersonName && (
+                <Text
+                  style={{
+                    fontSize: 13,
+                  }}
+                >
+                  {client.contactPersonName}
+                </Text>
+              )}
               <Text
                 style={{
                   fontSize: 13,
+                  fontWeight: "bold",
+                  textTransform: "uppercase",
                 }}
               >
-                Okafor Maduabuchi
+                {client.BusinessName}
               </Text>
-              <Text
-                style={{
-                  fontSize: 13,
-                }}
-              >
-                No1 Wokeah Street, Eliowhani Village, Off Okporo Road
-              </Text>
+              {client.address && (
+                <Text
+                  style={{
+                    fontSize: 13,
+                  }}
+                >
+                  {client.address}
+                </Text>
+              )}
             </View>
             <View style={styles.invoiceDetailsView}>
               <View style={styles.invoiceDetailsRowView}>
@@ -327,9 +394,7 @@ function ReactPDFTemplate1() {
                 >
                   Invoice #
                 </Text>
-                <Text style={{ fontSize: 13 }}>
-                  {invoiceData.invoiceNumber}
-                </Text>
+                <Text style={{ fontSize: 13 }}>{invoice.invoiceNumber}</Text>
               </View>
               <View style={styles.invoiceDetailsRowView}>
                 <Text
@@ -341,7 +406,9 @@ function ReactPDFTemplate1() {
                 >
                   Invoice Date
                 </Text>
-                <Text style={{ fontSize: 13 }}>{invoiceData.invoiceDate}</Text>
+                <Text style={{ fontSize: 13 }}>
+                  {formatDate(invoice.createdAt)}
+                </Text>
               </View>
               <View style={styles.invoiceDetailsRowView}>
                 <Text
@@ -354,7 +421,7 @@ function ReactPDFTemplate1() {
                   Due Date
                 </Text>
                 <Text style={{ fontSize: 13 }}>
-                  {invoiceData.paymentDueDate}
+                  {formatDate(invoice.paymentDueDate!)}
                 </Text>
               </View>
             </View>
@@ -408,16 +475,8 @@ function ReactPDFTemplate1() {
 
             {/* Dynamic items rows */}
             <View style={styles.tableRowContainerView}>
-              {invoiceData.items.map(
-                (
-                  item: {
-                    name?: string;
-                    description?: string;
-                    price?: number;
-                    quantity?: number;
-                  },
-                  index: number
-                ) => {
+              {validatedItems &&
+                validatedItems.map((item, index) => {
                   // Determine if this item should trigger a page break
                   const shouldBreak =
                     index === 10 || (index > 10 && (index - 10) % 15 === 0);
@@ -441,7 +500,7 @@ function ReactPDFTemplate1() {
                           paddingLeft: 5,
                         }}
                       >
-                        {item.name || item.description || "Item"}
+                        {item.description}
                       </Text>
                       <Text
                         style={{
@@ -450,7 +509,7 @@ function ReactPDFTemplate1() {
                           flexBasis: "20%",
                         }}
                       >
-                        ${item.price || 0}
+                        ${item.unitPrice}
                       </Text>
                       <Text
                         style={{
@@ -459,7 +518,7 @@ function ReactPDFTemplate1() {
                           flexBasis: "10%",
                         }}
                       >
-                        {item.quantity || 1}
+                        {item.quantity}
                       </Text>
                       <Text
                         style={{
@@ -469,46 +528,44 @@ function ReactPDFTemplate1() {
                           flexBasis: "20%",
                         }}
                       >
-                        ${((item.price || 0) * (item.quantity || 1)).toFixed(2)}
+                        {item.total}
                       </Text>
                     </View>
                   );
-                }
-              )}
+                })}
             </View>
           </View>
           <View break style={styles.termsAndTotalView}>
             <View style={styles.termsView}>
-              <View style={styles.TermsRowView}>
-                <Text
-                  style={{
-                    fontSize: 13,
-                    fontWeight: "semibold",
-                    textTransform: "capitalize",
-                  }}
-                >
-                  Late Payment Terms:
-                </Text>
-                <Text style={{ fontSize: 12 }}>
-                  Payment is due within 30 days of receipt. Late payments may
-                  incur a fee.
-                </Text>
-              </View>
-              <View style={styles.TermsRowView}>
-                <Text
-                  style={{
-                    fontSize: 13,
-                    fontWeight: "semibold",
-                    textTransform: "capitalize",
-                  }}
-                >
-                  custom note:
-                </Text>
-                <Text style={{ fontSize: 12 }}>
-                  Payment is due within 30 days of receipt. Late payments may
-                  incur a fee.
-                </Text>
-              </View>
+              {invoice.lateFeeTerms && (
+                <View style={styles.TermsRowView}>
+                  <Text
+                    style={{
+                      fontSize: 13,
+                      fontWeight: "semibold",
+                      textTransform: "capitalize",
+                    }}
+                  >
+                    Late Payment Terms:
+                  </Text>
+
+                  <Text style={{ fontSize: 12 }}>{invoice.lateFeeTerms}</Text>
+                </View>
+              )}
+              {invoice.customNote && (
+                <View style={styles.TermsRowView}>
+                  <Text
+                    style={{
+                      fontSize: 13,
+                      fontWeight: "semibold",
+                      textTransform: "capitalize",
+                    }}
+                  >
+                    custom note:
+                  </Text>
+                  <Text style={{ fontSize: 12 }}>{invoice.customNote}</Text>
+                </View>
+              )}
               <View
                 style={{
                   ...styles.TermsRowView,
@@ -547,17 +604,14 @@ function ReactPDFTemplate1() {
                 </View>
 
                 <View style={styles.paymentInfoRowView}>
-                  <Text style={{ fontSize: 13 }}>Bank Name:</Text>
-                  <Text style={{ fontSize: 13 }}>
-                    {invoiceData.paymentInfo.bankName}
-                  </Text>
+                  <Text style={{ fontSize: 13 }}>Gateway:</Text>
+                  {paymentAccount?.gatewayType && (
+                    <Text style={{ fontSize: 13 }}>
+                      {paymentAccount.gatewayType}
+                    </Text>
+                  )}
                 </View>
-                <View style={styles.paymentInfoRowView}>
-                  <Text style={{ fontSize: 13 }}>Account number:</Text>
-                  <Text style={{ fontSize: 13 }}>
-                    {invoiceData.paymentInfo.accountNumber}
-                  </Text>
-                </View>
+                {paymentAccount?.gatewayType && paypalGateway(paymentAccount)}
               </View>
             </View>
             <View style={styles.totalView}>
@@ -581,7 +635,7 @@ function ReactPDFTemplate1() {
                     flexBasis: "40%",
                   }}
                 >
-                  {invoiceData.subtotal}
+                  {invoice.subtotal}
                 </Text>
               </View>
               <View style={styles.totalRowView}>
@@ -604,7 +658,7 @@ function ReactPDFTemplate1() {
                     flexBasis: "40%",
                   }}
                 >
-                  {invoiceData.tax}
+                  {invoice.tax}
                 </Text>
               </View>
               <View style={styles.totalRowView}>
@@ -627,7 +681,7 @@ function ReactPDFTemplate1() {
                     flexBasis: "40%",
                   }}
                 >
-                  -{invoiceData.discount}
+                  -{invoice.discount}
                 </Text>
               </View>
               <View
@@ -657,7 +711,7 @@ function ReactPDFTemplate1() {
                     flexBasis: "40%",
                   }}
                 >
-                  {invoiceData.total}
+                  {invoice.total}
                 </Text>
               </View>
               <View
@@ -673,7 +727,7 @@ function ReactPDFTemplate1() {
         {/* Footer positioned at bottom of page content */}
         <View style={styles.footerView} fixed>
           <Text style={{ fontSize: 13, color: "#fff", fontWeight: "bold" }}>
-            {invoiceData.businessName}
+            {businessName}
           </Text>
           <Text
             style={{
@@ -683,7 +737,7 @@ function ReactPDFTemplate1() {
               borderLeft: "1px solid #fff",
             }}
           >
-            {invoiceData.businessEmail}
+            {email}
           </Text>
           <Text
             style={{

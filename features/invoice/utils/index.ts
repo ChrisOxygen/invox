@@ -34,6 +34,119 @@ export const calculateTotal = (
   return Math.max(0, Math.round(total * 100) / 100); // Ensure non-negative and round to 2 decimal places
 };
 
+// Type definition for invoice item
+export interface InvoiceItem {
+  description: string;
+  quantity: number;
+  unitPrice: number;
+  total: number;
+}
+
+/**
+ * Validates and converts invoice items from JSON/object format to typed array
+ * @param {unknown} invoiceItems - The invoice items data (can be JSON, object, or array)
+ * @returns {InvoiceItem[]} Array of validated invoice items
+ */
+export function validateAndConvertInvoiceItems(
+  invoiceItems: unknown
+): InvoiceItem[] {
+  // Handle null, undefined, or empty values
+  if (!invoiceItems) {
+    return [];
+  }
+
+  // If it's a string, try to parse as JSON
+  if (typeof invoiceItems === "string") {
+    try {
+      invoiceItems = JSON.parse(invoiceItems);
+    } catch (error) {
+      console.error("Failed to parse invoice items JSON:", error);
+      return [];
+    }
+  }
+
+  // Convert object with numeric keys to array
+  if (
+    typeof invoiceItems === "object" &&
+    invoiceItems !== null &&
+    !Array.isArray(invoiceItems)
+  ) {
+    // Check if it's an object with numeric keys (like {0: {...}, 1: {...}})
+    const keys = Object.keys(invoiceItems);
+    const isNumericKeys = keys.every((key) => !isNaN(Number(key)));
+
+    if (isNumericKeys && keys.length > 0) {
+      // Convert to array by sorting numeric keys
+      const itemsObject = invoiceItems as Record<string, unknown>;
+      invoiceItems = keys
+        .sort((a, b) => Number(a) - Number(b))
+        .map((key) => itemsObject[key]);
+    } else {
+      // Single item object, wrap in array
+      invoiceItems = [invoiceItems];
+    }
+  }
+
+  // Ensure it's an array
+  if (!Array.isArray(invoiceItems)) {
+    console.error(
+      "Invoice items is not an array after conversion:",
+      invoiceItems
+    );
+    return [];
+  }
+
+  // Validate and convert each item
+  return invoiceItems
+    .map((item, index) => {
+      // Validate item structure
+      if (!item || typeof item !== "object") {
+        console.warn(`Invalid invoice item at index ${index}:`, item);
+        return null;
+      }
+
+      const { description, quantity, unitPrice, total } = item;
+
+      // Validate required fields
+      if (typeof description !== "string" || !description.trim()) {
+        console.warn(`Invalid description at index ${index}:`, description);
+        return null;
+      }
+
+      if (typeof quantity !== "number" || quantity <= 0) {
+        console.warn(`Invalid quantity at index ${index}:`, quantity);
+        return null;
+      }
+
+      if (typeof unitPrice !== "number" || unitPrice < 0) {
+        console.warn(`Invalid unitPrice at index ${index}:`, unitPrice);
+        return null;
+      }
+
+      // Calculate total if not provided or incorrect
+      const calculatedTotal = quantity * unitPrice;
+      const finalTotal = typeof total === "number" ? total : calculatedTotal;
+
+      // Warn if provided total doesn't match calculated total
+      if (
+        typeof total === "number" &&
+        Math.abs(total - calculatedTotal) > 0.01
+      ) {
+        console.warn(
+          `Total mismatch at index ${index}: provided ${total}, calculated ${calculatedTotal}`
+        );
+      }
+
+      return {
+        description: description.trim(),
+        quantity: Number(quantity),
+        unitPrice: Number(unitPrice),
+        total: Number(finalTotal),
+      };
+    })
+    .filter((item): item is InvoiceItem => item !== null); // Remove invalid items
+}
+
 /**
  * Formats invoice data from either InvoiceFormState or InvoiceWithRelations
  * @param {InvoiceFormState | InvoiceWithRelations} data - The invoice data

@@ -2,7 +2,7 @@
 
 import { useParams } from "next/navigation";
 import { Skeleton } from "@/components/ui/skeleton";
-import { formatInvoiceData } from "../utils";
+import { formatInvoiceData, validateAndConvertInvoiceItems } from "../utils";
 import { useInvoiceWithRelations } from "../hooks/useInvoiceWithRelations";
 import Image from "next/image";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -17,7 +17,7 @@ export function InvoiceViewer() {
 
   const {
     invoice,
-    user,
+    user: userAndBusiness,
     business,
     client,
     paymentAccount,
@@ -49,15 +49,16 @@ export function InvoiceViewer() {
   console.log(
     "Invoice",
     invoice,
-    "user",
-    user,
     "business",
-    business,
+    userAndBusiness,
     "client",
     client,
     "paymentAccount",
     paymentAccount
   );
+
+  // Example: Convert invoice items from JSON/object format to typed array
+  const validatedItems = validateAndConvertInvoiceItems(invoice.invoiceItems);
 
   // const formattedData = formatInvoiceData(invoice);
 
@@ -311,7 +312,12 @@ export function InvoiceViewer() {
         width="1000px"
         className="bg-gray-100"
       >
-        <ReactPDFTemplate1 />
+        <ReactPDFTemplate1
+          invoice={invoice}
+          userAndBusiness={userAndBusiness}
+          client={client}
+          paymentAccount={paymentAccount}
+        />
       </PDFViewer>
     </div>
   );

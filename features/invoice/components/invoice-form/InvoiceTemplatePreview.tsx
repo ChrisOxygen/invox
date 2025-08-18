@@ -4,7 +4,6 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import { Minus, Plus, RotateCcw } from "lucide-react";
-import MainTemplate from "../templates/MainTemplate";
 
 interface ZoomState {
   currentZoom: number;
@@ -16,7 +15,11 @@ interface ZoomState {
   baseFontSize: number; // Base font size in pixels for em calculation
 }
 
-const InvoiceTemplatePreview: React.FC = () => {
+interface InvoiceTemplatePreviewProps {
+  children: React.ReactNode;
+}
+
+const InvoiceTemplatePreview: React.FC<InvoiceTemplatePreviewProps> = ({ children }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [zoomState, setZoomState] = useState<ZoomState>({
     currentZoom: 90,
@@ -201,7 +204,7 @@ const InvoiceTemplatePreview: React.FC = () => {
               // All spacing and sizing will now scale with font-size
             }}
           >
-            <MainTemplate />
+            {children}
           </div>
         </div>
       </ScrollArea>

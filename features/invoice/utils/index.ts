@@ -676,7 +676,8 @@ export const createWebStyles = (theme: ColorTheme = "classic"): WebStyles => {
     signatureImageView: "flex flex-row items-center justify-between mt-5",
     signature: "flex flex-col items-center object-contain -mb-1.5",
     bodyView: "flex flex-col p-[30px] gap-[30px]",
-    detailsSectionView: "mt-[30px] flex flex-row items-end justify-between gap-10",
+    detailsSectionView:
+      "mt-[30px] flex flex-row items-end justify-between gap-10",
     invoiceToView: "flex flex-col basis-[40%] gap-1",
     invoiceDetailsView: "flex basis-[40%] flex-col gap-1",
     invoiceDetailsRowView: "flex flex-row items-center justify-between gap-2.5",

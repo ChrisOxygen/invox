@@ -9,6 +9,7 @@ import { PDFViewer } from "@react-pdf/renderer";
 import ReactPDFTemplate1 from "./pdf/reactPDFTemplate1";
 import { ColorTheme } from "../types/invoiceTypes";
 import { COLOR_THEMES } from "../constants";
+import { InvoiceViewToolbar } from "./InvoiceViewToolbar";
 
 export function InvoiceViewer() {
   const params = useParams();
@@ -58,8 +59,9 @@ export function InvoiceViewer() {
 
   return (
     <div className="flex flex-col h-full">
+      <InvoiceViewToolbar invoiceId={invoiceId} />
       {/* Theme Selector */}
-      <div className="bg-white border-b border-gray-200 p-4">
+      {/* <div className="bg-white border-b border-gray-200 p-4">
         <div className="flex items-center gap-4">
           <label className="text-sm font-medium text-gray-700">
             Invoice Theme:
@@ -83,7 +85,7 @@ export function InvoiceViewer() {
             <span className="text-xs text-gray-500">Primary Color</span>
           </div>
         </div>
-      </div>
+      </div> */}
 
       {/* PDF Viewer */}
       <div className="flex-1 bg-gray-100">

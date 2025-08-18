@@ -10,6 +10,7 @@ import InvoiceDetails from "./InvoiceDetails";
 import InvoiceTemplate from "./InvoiceTemplate";
 import InvoiceTheme from "./InvoiceTheme";
 import InvoiceTemplatePreview from "./InvoiceTemplatePreview";
+import MainTemplate from "../templates/MainTemplate";
 import { InvoiceSaveActions } from "../InvoiceSaveActions";
 import { Button } from "@/components/ui/button";
 
@@ -27,7 +28,9 @@ function InvoiceEditor() {
             {viewMode === "theme" && <InvoiceTheme />}
           </ScrollArea>
         </div>
-        <InvoiceTemplatePreview />
+        <InvoiceTemplatePreview>
+          <MainTemplate />
+        </InvoiceTemplatePreview>
       </div>
       <div className="lg:hidden w-full h-full p-2 sm:p-3 md:p-5 bg-gray-50">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
@@ -55,7 +58,9 @@ function InvoiceEditor() {
           </TabsContent>
           <TabsContent value="invoice-preview" className="mt-3 sm:mt-4 md:mt-6">
             <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-1 sm:p-2 md:p-4">
-              <InvoiceTemplatePreview />
+              <InvoiceTemplatePreview>
+                <MainTemplate />
+              </InvoiceTemplatePreview>
             </div>
           </TabsContent>
         </Tabs>

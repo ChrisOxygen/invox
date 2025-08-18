@@ -661,12 +661,15 @@ export interface WebStyles {
   footerPageNumber: string;
 }
 
-// Helper function to create web styles from theme
+// Helper function to create web styles with theme support
+// Note: Theme colors are applied via inline styles in components for dynamic theming
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const createWebStyles = (theme: ColorTheme = "classic"): WebStyles => {
+  // Future enhancement: Could use theme to modify layout classes if needed
   return {
-    page: "flex flex-col w-[794px] mx-auto bg-white shadow-lg",
+    page: `flex flex-col w-[794px] mx-auto bg-white shadow-lg`,
     header: "flex flex-row items-center",
-    headerTitle: "flex flex-col basis-[70%] px-5 py-2.5 text-[30px] text-center font-semibold tracking-[10px]",
+    headerTitle: `flex flex-col basis-[70%] px-5 py-2.5 text-[30px] text-center font-semibold tracking-[10px]`,
     logoView: "flex flex-col basis-[30%] items-center justify-center px-2.5",
     logo: "w-[100px] h-[80px] object-contain",
     signatureView: "flex flex-col items-center justify-center mt-10",
@@ -678,7 +681,7 @@ export const createWebStyles = (theme: ColorTheme = "classic"): WebStyles => {
     invoiceDetailsView: "flex basis-[40%] flex-col gap-1",
     invoiceDetailsRowView: "flex flex-row items-center justify-between gap-2.5",
     itemsTableView: "flex flex-col mt-5",
-    tableHeaderView: "flex flex-row items-center justify-between py-2 px-1.5",
+    tableHeaderView: `flex flex-row items-center justify-between py-2 px-1.5`,
     tableRowContainerView: "flex flex-col",
     tableRowView: "flex flex-row items-center justify-between py-[15px]",
     termsAndTotalView: "flex flex-row items-start justify-between gap-10",
@@ -687,30 +690,30 @@ export const createWebStyles = (theme: ColorTheme = "classic"): WebStyles => {
     paymentInfoRowView: "flex-row items-start justify-between gap-2.5",
     totalView: "flex flex-col basis-[40%] gap-2.5",
     totalRowView: "flex flex-row items-center justify-between gap-2.5",
-    footerView: "flex flex-row items-center p-[30px] text-xs gap-2.5",
-    sectionTitle: "text-[13px] font-bold uppercase mb-1.5",
+    footerView: `flex flex-row items-center p-[30px] text-xs gap-2.5`,
+    sectionTitle: `text-[13px] font-bold uppercase mb-1.5`,
     clientText: "text-[13px]",
     clientBusinessName: "text-[13px] font-bold uppercase",
     invoiceLabel: "text-[13px] font-bold uppercase",
     invoiceValue: "text-[13px]",
-    tableHeader: "text-base font-bold uppercase",
+    tableHeader: `text-base font-bold uppercase`,
     itemDescription: "text-[13px] basis-[50%] pl-1.5",
     itemPrice: "text-[13px] text-center basis-[20%]",
     itemQuantity: "text-[13px] text-center basis-[10%]",
     itemTotal: "text-[13px] text-right pr-1.5 basis-[20%]",
-    termsTitle: "text-[13px] font-semibold capitalize",
+    termsTitle: `text-[13px] font-semibold capitalize`,
     termsText: "text-xs",
-    paymentInfoHeader: "relative py-1.5",
-    paymentInfoTitle: "text-xs font-semibold capitalize",
+    paymentInfoHeader: `relative py-1.5`,
+    paymentInfoTitle: `text-xs font-semibold capitalize`,
     paymentInfoText: "text-[13px]",
-    totalLabel: "text-[13px] font-bold uppercase text-right basis-[60%]",
+    totalLabel: `text-[13px] font-bold uppercase text-right basis-[60%]`,
     totalValue: "text-[13px] text-right font-semibold basis-[40%]",
-    grandTotalLabel: "text-[15px] font-bold uppercase text-right basis-[60%]",
-    grandTotalValue: "text-[15px] text-right font-semibold basis-[40%]",
-    divider: "w-full h-px",
-    itemBorder: "border-b",
-    footerText: "text-[13px] font-bold",
-    footerEmail: "text-[13px] pl-2.5 border-l",
+    grandTotalLabel: `text-[15px] font-bold uppercase text-right basis-[60%]`,
+    grandTotalValue: `text-[15px] text-right font-semibold basis-[40%]`,
+    divider: `w-full h-px`,
+    itemBorder: `border-b`,
+    footerText: `text-[13px] font-bold`,
+    footerEmail: `text-[13px] pl-2.5 border-l`,
     footerPageNumber: "text-[13px] ml-auto",
   };
 };

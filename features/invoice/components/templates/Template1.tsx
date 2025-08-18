@@ -52,10 +52,16 @@ function Template1({
     if (!paymentAccount.gatewayType || !paymentAccount.accountData) {
       return (
         <div className={`flex ${styles.paymentInfoRowView}`}>
-          <span className={styles.paymentInfoText} style={{ color: colors.text }}>
+          <span
+            className={styles.paymentInfoText}
+            style={{ color: colors.text }}
+          >
             Account Name:
           </span>
-          <span className={styles.paymentInfoText} style={{ color: colors.text }}>
+          <span
+            className={styles.paymentInfoText}
+            style={{ color: colors.text }}
+          >
             {paymentAccount.accountName}
           </span>
         </div>
@@ -72,18 +78,21 @@ function Template1({
       return (
         <>
           <div className={`flex ${styles.paymentInfoRowView}`}>
-            <span className={styles.paymentInfoText} style={{ color: colors.text }}>
+            <span
+              className={styles.paymentInfoText}
+              style={{ color: colors.text }}
+            >
               Account Name:
             </span>
-            <span className={styles.paymentInfoText} style={{ color: colors.text }}>
+            <span
+              className={styles.paymentInfoText}
+              style={{ color: colors.text }}
+            >
               {paymentAccount.accountName}
             </span>
           </div>
           <div className={`flex ${styles.paymentInfoRowView}`}>
-            <span
-              className="text-[11px]"
-              style={{ color: colors.textLight }}
-            >
+            <span className="text-[11px]" style={{ color: colors.textLight }}>
               Data validation error
             </span>
           </div>
@@ -95,19 +104,31 @@ function Template1({
     return (
       <>
         <div className={`flex ${styles.paymentInfoRowView}`}>
-          <span className={styles.paymentInfoText} style={{ color: colors.text }}>
+          <span
+            className={styles.paymentInfoText}
+            style={{ color: colors.text }}
+          >
             Account Name:
           </span>
-          <span className={styles.paymentInfoText} style={{ color: colors.text }}>
+          <span
+            className={styles.paymentInfoText}
+            style={{ color: colors.text }}
+          >
             {paymentAccount.accountName}
           </span>
         </div>
         {Object.entries(displayData).map(([key, value], index) => (
           <div key={index} className={`flex ${styles.paymentInfoRowView}`}>
-            <span className={styles.paymentInfoText} style={{ color: colors.text }}>
+            <span
+              className={styles.paymentInfoText}
+              style={{ color: colors.text }}
+            >
               {key}:
             </span>
-            <span className={styles.paymentInfoText} style={{ color: colors.text }}>
+            <span
+              className={styles.paymentInfoText}
+              style={{ color: colors.text }}
+            >
               {value}
             </span>
           </div>
@@ -142,7 +163,10 @@ function Template1({
         {/* Details Section */}
         <div className={styles.detailsSectionView}>
           <div className={styles.invoiceToView}>
-            <h2 className={styles.sectionTitle} style={{ color: colors.primary }}>
+            <h2
+              className={styles.sectionTitle}
+              style={{ color: colors.primary }}
+            >
               Invoice to:
             </h2>
             {client.contactPersonName && (
@@ -150,7 +174,10 @@ function Template1({
                 {client.contactPersonName}
               </p>
             )}
-            <p className={styles.clientBusinessName} style={{ color: colors.text }}>
+            <p
+              className={styles.clientBusinessName}
+              style={{ color: colors.text }}
+            >
               {client.BusinessName}
             </p>
             {client.address && (
@@ -161,26 +188,44 @@ function Template1({
           </div>
           <div className={styles.invoiceDetailsView}>
             <div className={styles.invoiceDetailsRowView}>
-              <span className={styles.invoiceLabel} style={{ color: colors.primary }}>
+              <span
+                className={styles.invoiceLabel}
+                style={{ color: colors.primary }}
+              >
                 Invoice #
               </span>
-              <span className={styles.invoiceValue} style={{ color: colors.text }}>
+              <span
+                className={styles.invoiceValue}
+                style={{ color: colors.text }}
+              >
                 {invoice.invoiceNumber}
               </span>
             </div>
             <div className={styles.invoiceDetailsRowView}>
-              <span className={styles.invoiceLabel} style={{ color: colors.primary }}>
+              <span
+                className={styles.invoiceLabel}
+                style={{ color: colors.primary }}
+              >
                 Invoice Date
               </span>
-              <span className={styles.invoiceValue} style={{ color: colors.text }}>
+              <span
+                className={styles.invoiceValue}
+                style={{ color: colors.text }}
+              >
                 {formatDate(invoice.createdAt)}
               </span>
             </div>
             <div className={styles.invoiceDetailsRowView}>
-              <span className={styles.invoiceLabel} style={{ color: colors.primary }}>
+              <span
+                className={styles.invoiceLabel}
+                style={{ color: colors.primary }}
+              >
                 Due Date
               </span>
-              <span className={styles.invoiceValue} style={{ color: colors.text }}>
+              <span
+                className={styles.invoiceValue}
+                style={{ color: colors.text }}
+              >
                 {formatDate(invoice.paymentDueDate!)}
               </span>
             </div>
@@ -225,7 +270,9 @@ function Template1({
               validatedItems.map((item, index) => {
                 const notLastItem = index !== validatedItems.length - 1;
                 const borderClass = notLastItem ? styles.itemBorder : "";
-                const borderStyle = notLastItem ? { borderColor: colors.border } : {};
+                const borderStyle = notLastItem
+                  ? { borderColor: colors.border }
+                  : {};
 
                 return (
                   <div
@@ -268,20 +315,32 @@ function Template1({
           <div className={styles.termsView}>
             {invoice.lateFeeTerms && (
               <div className={styles.TermsRowView}>
-                <h3 className={styles.termsTitle} style={{ color: colors.primary }}>
+                <h3
+                  className={styles.termsTitle}
+                  style={{ color: colors.primary }}
+                >
                   Late Payment Terms:
                 </h3>
-                <p className={styles.termsText} style={{ color: colors.textLight }}>
+                <p
+                  className={styles.termsText}
+                  style={{ color: colors.textLight }}
+                >
                   {invoice.lateFeeTerms}
                 </p>
               </div>
             )}
             {invoice.customNote && (
               <div className={styles.TermsRowView}>
-                <h3 className={styles.termsTitle} style={{ color: colors.primary }}>
+                <h3
+                  className={styles.termsTitle}
+                  style={{ color: colors.primary }}
+                >
                   custom note:
                 </h3>
-                <p className={styles.termsText} style={{ color: colors.textLight }}>
+                <p
+                  className={styles.termsText}
+                  style={{ color: colors.textLight }}
+                >
                   {invoice.customNote}
                 </p>
               </div>
@@ -291,17 +350,26 @@ function Template1({
                 className={styles.paymentInfoHeader}
                 style={{ backgroundColor: colors.primary }}
               >
-                <h3 className={styles.paymentInfoTitle} style={{ color: colors.background }}>
+                <h3
+                  className={styles.paymentInfoTitle}
+                  style={{ color: colors.background }}
+                >
                   Payment Info:
                 </h3>
               </div>
 
               <div className={`flex ${styles.paymentInfoRowView}`}>
-                <span className={styles.paymentInfoText} style={{ color: colors.text }}>
+                <span
+                  className={styles.paymentInfoText}
+                  style={{ color: colors.text }}
+                >
                   Gateway:
                 </span>
                 {paymentAccount?.gatewayType && (
-                  <span className={styles.paymentInfoText} style={{ color: colors.text }}>
+                  <span
+                    className={styles.paymentInfoText}
+                    style={{ color: colors.text }}
+                  >
                     {paymentAccount.gatewayType}
                   </span>
                 )}
@@ -312,47 +380,84 @@ function Template1({
 
           <div className={styles.totalView}>
             <div className={styles.totalRowView}>
-              <span className={styles.totalLabel} style={{ color: colors.primary }}>
+              <span
+                className={styles.totalLabel}
+                style={{ color: colors.primary }}
+              >
                 Subtotal:
               </span>
-              <span className={styles.totalValue} style={{ color: colors.text }}>
+              <span
+                className={styles.totalValue}
+                style={{ color: colors.text }}
+              >
                 {formatCurrency(subtotal)}
               </span>
             </div>
             <div className={styles.totalRowView}>
-              <span className={styles.totalLabel} style={{ color: colors.primary }}>
+              <span
+                className={styles.totalLabel}
+                style={{ color: colors.primary }}
+              >
                 Tax:
               </span>
-              <span className={styles.totalValue} style={{ color: colors.text }}>
+              <span
+                className={styles.totalValue}
+                style={{ color: colors.text }}
+              >
                 {formatCurrency(taxAmount)}
               </span>
             </div>
             <div className={styles.totalRowView}>
-              <span className={styles.totalLabel} style={{ color: colors.primary }}>
+              <span
+                className={styles.totalLabel}
+                style={{ color: colors.primary }}
+              >
                 Discount:
               </span>
-              <span className={styles.totalValue} style={{ color: colors.text }}>
+              <span
+                className={styles.totalValue}
+                style={{ color: colors.text }}
+              >
                 -{formatCurrency(discountAmount)}
               </span>
             </div>
-            <div className={styles.divider} style={{ backgroundColor: colors.primary }}></div>
+            <div
+              className={styles.divider}
+              style={{ backgroundColor: colors.primary }}
+            ></div>
             <div className={styles.totalRowView}>
-              <span className={styles.grandTotalLabel} style={{ color: colors.primary }}>
+              <span
+                className={styles.grandTotalLabel}
+                style={{ color: colors.primary }}
+              >
                 Total:
               </span>
-              <span className={styles.grandTotalValue} style={{ color: colors.primary }}>
+              <span
+                className={styles.grandTotalValue}
+                style={{ color: colors.primary }}
+              >
                 {formatCurrency(finalTotal)}
               </span>
             </div>
-            <div className={styles.divider} style={{ backgroundColor: colors.primary }}></div>
+            <div
+              className={styles.divider}
+              style={{ backgroundColor: colors.primary }}
+            ></div>
 
             {signature && (
               <div className={styles.signatureView}>
                 <div className={styles.signatureImageView}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img className={styles.signature} src={signature} alt="Signature" />
+                  <img
+                    className={styles.signature}
+                    src={signature}
+                    alt="Signature"
+                  />
                 </div>
-                <div className={styles.divider} style={{ backgroundColor: colors.primary }}></div>
+                <div
+                  className={styles.divider}
+                  style={{ backgroundColor: colors.primary }}
+                ></div>
                 <p
                   className="text-xs text-center italic mt-1.5"
                   style={{ color: colors.textLight }}

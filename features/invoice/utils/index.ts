@@ -605,3 +605,112 @@ export interface FormattedInvoiceData {
 // Helper function to get theme colors
 export const getThemeColors = (theme: ColorTheme = "classic") =>
   COLOR_THEMES[theme];
+
+// Type definitions for render targets
+export type RenderTarget = "pdf" | "web";
+
+// Web styling interface
+export interface WebStyles {
+  page: string;
+  header: string;
+  headerTitle: string;
+  logoView: string;
+  logo: string;
+  signatureView: string;
+  signatureImageView: string;
+  signature: string;
+  bodyView: string;
+  detailsSectionView: string;
+  invoiceToView: string;
+  invoiceDetailsView: string;
+  invoiceDetailsRowView: string;
+  itemsTableView: string;
+  tableHeaderView: string;
+  tableRowContainerView: string;
+  tableRowView: string;
+  termsAndTotalView: string;
+  termsView: string;
+  TermsRowView: string;
+  paymentInfoRowView: string;
+  totalView: string;
+  totalRowView: string;
+  footerView: string;
+  sectionTitle: string;
+  clientText: string;
+  clientBusinessName: string;
+  invoiceLabel: string;
+  invoiceValue: string;
+  tableHeader: string;
+  itemDescription: string;
+  itemPrice: string;
+  itemQuantity: string;
+  itemTotal: string;
+  termsTitle: string;
+  termsText: string;
+  paymentInfoHeader: string;
+  paymentInfoTitle: string;
+  paymentInfoText: string;
+  totalLabel: string;
+  totalValue: string;
+  grandTotalLabel: string;
+  grandTotalValue: string;
+  divider: string;
+  itemBorder: string;
+  footerText: string;
+  footerEmail: string;
+  footerPageNumber: string;
+}
+
+// Helper function to create web styles from theme
+export const createWebStyles = (theme: ColorTheme = "classic"): WebStyles => {
+  return {
+    page: "flex flex-col w-[794px] mx-auto bg-white shadow-lg",
+    header: "flex flex-row items-center",
+    headerTitle: "flex flex-col basis-[70%] px-5 py-2.5 text-[30px] text-center font-semibold tracking-[10px]",
+    logoView: "flex flex-col basis-[30%] items-center justify-center px-2.5",
+    logo: "w-[100px] h-[80px] object-contain",
+    signatureView: "flex flex-col items-center justify-center mt-10",
+    signatureImageView: "flex flex-row items-center justify-between mt-5",
+    signature: "flex flex-col items-center object-contain -mb-1.5",
+    bodyView: "flex flex-col p-[30px] gap-[30px]",
+    detailsSectionView: "mt-[30px] flex flex-row items-end justify-between gap-10",
+    invoiceToView: "flex flex-col basis-[40%] gap-1",
+    invoiceDetailsView: "flex basis-[40%] flex-col gap-1",
+    invoiceDetailsRowView: "flex flex-row items-center justify-between gap-2.5",
+    itemsTableView: "flex flex-col mt-5",
+    tableHeaderView: "flex flex-row items-center justify-between py-2 px-1.5",
+    tableRowContainerView: "flex flex-col",
+    tableRowView: "flex flex-row items-center justify-between py-[15px]",
+    termsAndTotalView: "flex flex-row items-start justify-between gap-10",
+    termsView: "flex flex-col basis-[40%] gap-5",
+    TermsRowView: "flex flex-col gap-1",
+    paymentInfoRowView: "flex-row items-start justify-between gap-2.5",
+    totalView: "flex flex-col basis-[40%] gap-2.5",
+    totalRowView: "flex flex-row items-center justify-between gap-2.5",
+    footerView: "flex flex-row items-center p-[30px] text-xs gap-2.5",
+    sectionTitle: "text-[13px] font-bold uppercase mb-1.5",
+    clientText: "text-[13px]",
+    clientBusinessName: "text-[13px] font-bold uppercase",
+    invoiceLabel: "text-[13px] font-bold uppercase",
+    invoiceValue: "text-[13px]",
+    tableHeader: "text-base font-bold uppercase",
+    itemDescription: "text-[13px] basis-[50%] pl-1.5",
+    itemPrice: "text-[13px] text-center basis-[20%]",
+    itemQuantity: "text-[13px] text-center basis-[10%]",
+    itemTotal: "text-[13px] text-right pr-1.5 basis-[20%]",
+    termsTitle: "text-[13px] font-semibold capitalize",
+    termsText: "text-xs",
+    paymentInfoHeader: "relative py-1.5",
+    paymentInfoTitle: "text-xs font-semibold capitalize",
+    paymentInfoText: "text-[13px]",
+    totalLabel: "text-[13px] font-bold uppercase text-right basis-[60%]",
+    totalValue: "text-[13px] text-right font-semibold basis-[40%]",
+    grandTotalLabel: "text-[15px] font-bold uppercase text-right basis-[60%]",
+    grandTotalValue: "text-[15px] text-right font-semibold basis-[40%]",
+    divider: "w-full h-px",
+    itemBorder: "border-b",
+    footerText: "text-[13px] font-bold",
+    footerEmail: "text-[13px] pl-2.5 border-l",
+    footerPageNumber: "text-[13px] ml-auto",
+  };
+};

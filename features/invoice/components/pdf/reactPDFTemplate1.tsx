@@ -66,6 +66,27 @@ const createThemedStyles = (theme: ColorTheme = "classic") => {
       justifyContent: "center",
       objectFit: "contain",
     },
+    signatureView: {
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      justifyContent: "center",
+      marginTop: 40,
+    },
+    signatureImageView: {
+      display: "flex",
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
+      marginTop: 20,
+    },
+    signature: {
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      objectFit: "contain",
+      marginBottom: -5,
+    },
     bodyView: {
       display: "flex",
       flexDirection: "column",
@@ -344,7 +365,7 @@ function ReactPDFTemplate1({
   const styles = createThemedStyles(theme);
   const colors = getThemeColors(theme);
 
-  const { business } = userAndBusiness;
+  const { business, signature } = userAndBusiness;
   const { email, logo, businessName } = business;
 
   const validatedItems = validateAndConvertInvoiceItems(invoice.invoiceItems);
@@ -612,7 +633,25 @@ function ReactPDFTemplate1({
               </View>
               <View style={styles.divider}></View>
 
-              <View></View>
+              {signature && (
+                <View style={styles.signatureView}>
+                  <View style={styles.signatureImageView}>
+                    <Image style={styles.signature} src={signature} />
+                  </View>
+                  <View style={styles.divider}></View>
+                  <Text
+                    style={{
+                      fontSize: 12,
+                      color: colors.textLight,
+                      textAlign: "center",
+                      fontStyle: "italic",
+                      marginTop: 5,
+                    }}
+                  >
+                    authorized signatory
+                  </Text>
+                </View>
+              )}
             </View>
           </View>
         </View>

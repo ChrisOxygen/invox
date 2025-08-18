@@ -6,8 +6,9 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { FiEdit2, FiMail, FiCheck, FiCreditCard } from "react-icons/fi";
 
 import { PDFDownloadLink } from "@react-pdf/renderer";
-import { useGetInvoiceById } from "../hooks/useGetInvoiceById";
 import Link from "next/link";
+import ReactPDFTemplate1 from "./pdf/reactPDFTemplate1";
+import { useInvoiceWithRelations } from "../hooks/useInvoiceWithRelations";
 // import { toast } from "sonner"; // Uncomment when available
 
 interface InvoiceViewToolbarProps {
@@ -15,7 +16,13 @@ interface InvoiceViewToolbarProps {
 }
 
 export function InvoiceViewToolbar({ invoiceId }: InvoiceViewToolbarProps) {
-  const { invoice, isPending: gettingInvoice } = useGetInvoiceById(invoiceId);
+  const {
+    invoice,
+    user: userAndBusiness,
+    client,
+    paymentAccount,
+    isPending: gettingInvoice,
+  } = useInvoiceWithRelations(invoiceId);
 
   const handleSendEmail = () => {
     // Placeholder function for sending email
@@ -80,7 +87,15 @@ export function InvoiceViewToolbar({ invoiceId }: InvoiceViewToolbarProps) {
           className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
         >
           <PDFDownloadLink
-            document={<InvoicePDF invoiceData={invoice} />}
+            document={
+              <ReactPDFTemplate1
+                invoice={invoice}
+                userAndBusiness={userAndBusiness}
+                client={client}
+                paymentAccount={paymentAccount}
+                theme={"classic"} // Assuming 'classic' is the default theme
+              />
+            }
             fileName={
               invoice.invoiceNumber
                 ? `invoice-${invoice.invoiceNumber}.pdf`

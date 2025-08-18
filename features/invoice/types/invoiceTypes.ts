@@ -54,3 +54,6 @@ export interface InvoiceStatsResponse extends ApiResponse<InvoiceStats> {}
 
 export interface InvoiceDeleteResponse
   extends ApiResponse<{ deletedId: string }> {}
+
+// Color theme definitions for professional invoices
+export type ColorTheme = "classic" | "navy" | "forest" | "burgundy";

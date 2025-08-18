@@ -3,11 +3,12 @@
 import { useParams } from "next/navigation";
 import { useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ColorTheme, COLOR_THEMES } from "@/constants";
 
 import { useInvoiceWithRelations } from "../hooks/useInvoiceWithRelations";
 import { PDFViewer } from "@react-pdf/renderer";
 import ReactPDFTemplate1 from "./pdf/reactPDFTemplate1";
+import { ColorTheme } from "../types/invoiceTypes";
+import { COLOR_THEMES } from "../constants";
 
 export function InvoiceViewer() {
   const params = useParams();

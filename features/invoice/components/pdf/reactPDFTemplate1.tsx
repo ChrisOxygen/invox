@@ -12,13 +12,14 @@ import {
 
 import { Client, Invoice, PaymentAccount } from "@prisma/client";
 import { UserWithBusiness } from "@/types";
-import { ColorTheme, getThemeColors } from "@/constants";
 import {
   validateAndConvertInvoiceItems,
   extractPaymentAccountDisplayData,
   formatDate,
   formatCurrency,
+  getThemeColors,
 } from "../../utils";
+import { ColorTheme } from "../../types/invoiceTypes";
 
 // Function to create theme-based styles
 const createThemedStyles = (theme: ColorTheme = "classic") => {
@@ -316,7 +317,7 @@ const createThemedStyles = (theme: ColorTheme = "classic") => {
   });
 };
 
-type ReactPDFTemplateProps = {
+export type InvoiceTemplateProps = {
   invoice: Invoice;
   client: Client | null;
   userAndBusiness: UserWithBusiness | null;
@@ -330,7 +331,7 @@ function ReactPDFTemplate1({
   userAndBusiness,
   paymentAccount,
   theme = "classic",
-}: ReactPDFTemplateProps) {
+}: InvoiceTemplateProps) {
   if (!userAndBusiness?.business) {
     return null;
   }
@@ -610,6 +611,8 @@ function ReactPDFTemplate1({
                 </Text>
               </View>
               <View style={styles.divider}></View>
+
+              <View></View>
             </View>
           </View>
         </View>

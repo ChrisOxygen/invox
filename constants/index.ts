@@ -6,56 +6,6 @@ import { BiMoneyWithdraw } from "react-icons/bi";
 import { PiLifebuoy } from "react-icons/pi";
 import { VscFeedback } from "react-icons/vsc";
 
-// Color theme definitions for professional invoices
-export type ColorTheme = "classic" | "navy" | "forest" | "burgundy";
-
-export const COLOR_THEMES = {
-  classic: {
-    primary: "#000000", // Black
-    primaryLight: "#333333", // Dark gray
-    secondary: "#666666", // Medium gray
-    background: "#ffffff", // White
-    text: "#000000", // Black
-    textLight: "#666666", // Medium gray
-    border: "#cccccc", // Light gray
-    accent: "#f8f9fa", // Very light gray
-  },
-  navy: {
-    primary: "#1e3a8a", // Navy blue
-    primaryLight: "#3b82f6", // Lighter blue
-    secondary: "#64748b", // Slate gray
-    background: "#ffffff", // White
-    text: "#1e293b", // Dark slate
-    textLight: "#64748b", // Slate gray
-    border: "#cbd5e1", // Light slate
-    accent: "#f1f5f9", // Very light slate
-  },
-  forest: {
-    primary: "#166534", // Forest green
-    primaryLight: "#22c55e", // Lighter green
-    secondary: "#6b7280", // Cool gray
-    background: "#ffffff", // White
-    text: "#1f2937", // Dark gray
-    textLight: "#6b7280", // Cool gray
-    border: "#d1d5db", // Light gray
-    accent: "#f9fafb", // Very light gray
-  },
-  burgundy: {
-    primary: "#7c2d12", // Burgundy
-    primaryLight: "#dc2626", // Lighter red
-    secondary: "#78716c", // Warm gray
-    background: "#ffffff", // White
-    text: "#292524", // Dark warm gray
-    textLight: "#78716c", // Warm gray
-    border: "#d6d3d1", // Light warm gray
-    accent: "#fafaf9", // Very light warm gray
-  },
-} as const;
-
-// Helper function to get theme colors
-export const getThemeColors = (theme: ColorTheme = "classic") =>
-  COLOR_THEMES[theme];
-
 export const DASHBOARD_MAIN_NAV = [
   {
     title: "Home",

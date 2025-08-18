@@ -1,5 +1,5 @@
 import { InvoiceFormState } from "../types/invoiceForm";
-import { InvoiceWithRelations } from "../types/invoiceTypes";
+import { ColorTheme, InvoiceWithRelations } from "../types/invoiceTypes";
 import { PaymentGatewayType } from "@prisma/client";
 import {
   nigerianBankAccountSchema,
@@ -7,6 +7,7 @@ import {
   wiseAccountSchema,
   achAccountSchema,
 } from "@/shared/validators/payment";
+import { COLOR_THEMES } from "../constants";
 
 export function calculateSubTotal(
   items: {
@@ -600,3 +601,7 @@ export interface FormattedInvoiceData {
     finalTotal: number;
   };
 }
+
+// Helper function to get theme colors
+export const getThemeColors = (theme: ColorTheme = "classic") =>
+  COLOR_THEMES[theme];

@@ -190,7 +190,7 @@ const InvoiceTemplatePreview: React.FC<InvoiceTemplatePreviewProps> = ({
       </div>
 
       {/* Template Preview */}
-      <ScrollArea className="h-[calc(100vh-160px)] sm:h-[calc(100vh-200px)] w-full pl-2 sm:pl-5 pr-4 sm:pr-10">
+      <ScrollArea className="h-[calc(100vh-260px)] sm:h-[calc(100vh-250px)] w-full pl-2 sm:pl-5 pr-4 sm:pr-10">
         <div
           className="py-6 overflow-hidden transition-all duration-300 ease-out"
           style={{

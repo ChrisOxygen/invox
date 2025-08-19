@@ -667,7 +667,7 @@ export interface WebStyles {
 export const createWebStyles = (theme: ColorTheme = "classic"): WebStyles => {
   // Future enhancement: Could use theme to modify layout classes if needed
   return {
-    page: `flex flex-col w-[49.625em] mx-auto bg-white shadow-lg`,
+    page: `flex flex-col pt-[2em] w-[49.625em] mx-auto bg-white shadow-lg overflow-hidden`,
     header: "flex flex-row items-center",
     headerTitle: `flex flex-col basis-[70%] px-[1.25em] py-[0.625em] text-[1.875em] text-center font-semibold tracking-[0.625em]`,
     logoView:
@@ -707,8 +707,8 @@ export const createWebStyles = (theme: ColorTheme = "classic"): WebStyles => {
     itemTotal: "text-[0.8125em] text-right pr-[0.375em] basis-[20%]",
     termsTitle: `text-[0.8125em] font-semibold capitalize`,
     termsText: "text-[0.75em]",
-    paymentInfoHeader: `relative py-[0.375em]`,
-    paymentInfoTitle: `text-[0.75em] font-semibold capitalize`,
+    paymentInfoHeader: `relative py-[0.375em] after:absolute after:content-[''] after:w-full after:h-full after:bg-black after:-left-[50%] after:top-0 `,
+    paymentInfoTitle: `text-[0.75em] font-semibold relative z-3 capitalize`,
     paymentInfoText: "text-[0.8125em]",
     totalLabel: `text-[0.8125em] font-bold uppercase text-right basis-[60%]`,
     totalValue: "text-[0.8125em] text-right font-semibold basis-[40%]",

@@ -110,18 +110,21 @@ export function useInvoiceFormLogic({
         Array.isArray(existingInvoice.invoiceItems) &&
         existingInvoice.invoiceItems.length > 0
       ) {
-        loadedItems = existingInvoice.invoiceItems.map(
-          (item: {
+        loadedItems = existingInvoice.invoiceItems.map((item) => {
+          // Type assertion for JsonValue to expected item structure
+          const typedItem = item as {
             description?: string;
             quantity?: number;
             unitPrice?: number;
             total?: number;
-          }) => ({
-            description: item.description || "",
-            quantity: Number(item.quantity) || 1,
-            unitPrice: Number(item.unitPrice) || 0,
-          })
-        );
+          };
+
+          return {
+            description: typedItem.description || "",
+            quantity: Number(typedItem.quantity) || 1,
+            unitPrice: Number(typedItem.unitPrice) || 0,
+          };
+        });
       } else {
         // Ensure at least one empty item exists if no items are loaded from the database
         loadedItems = [
@@ -137,7 +140,7 @@ export function useInvoiceFormLogic({
       dispatch({
         type: "LOAD_EXISTING_INVOICE",
         payload: {
-          clientId: existingInvoice.client.id,
+          clientId: existingInvoice.clientId,
           invoiceNumber: existingInvoice.invoiceNumber || "",
           invoiceDate: existingInvoice.invoiceDate || new Date(),
           paymentDueDate: existingInvoice.paymentDueDate || new Date(),

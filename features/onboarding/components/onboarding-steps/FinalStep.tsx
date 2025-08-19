@@ -96,7 +96,7 @@ function FinalStep() {
             className="w-full h-12 sm:h-14 text-sm sm:text-base font-semibold bg-gradient-to-r from-blue-600 to-cyan-400 hover:from-blue-700 hover:to-cyan-500 text-white transition-all duration-300 hover:scale-105 active:scale-95 shadow-lg shadow-blue-200/50 hover:shadow-xl hover:shadow-blue-300/50 rounded-xl"
           >
             <Link
-              href="/app/dashboard/invoice/create"
+              href="/app/invoice/create"
               className="flex items-center justify-center gap-2 sm:gap-3"
             >
               <FaFileInvoice className="w-4 h-4 sm:w-5 sm:h-5" />
@@ -112,7 +112,7 @@ function FinalStep() {
               className="h-10 sm:h-12 text-xs sm:text-sm font-medium border-2 border-gray-300 hover:border-blue-400 hover:bg-gradient-to-r hover:from-blue-50 hover:to-cyan-50 hover:text-blue-700 transition-all duration-300 hover:scale-105 active:scale-95 rounded-xl"
             >
               <Link
-                href="/app/dashboard/clients"
+                href="/app/clients"
                 className="flex items-center justify-center gap-2"
               >
                 <FaUsers className="w-3 h-3 sm:w-4 sm:h-4" />
@@ -126,7 +126,7 @@ function FinalStep() {
               className="h-10 sm:h-12 text-xs sm:text-sm font-medium border-2 border-gray-300 hover:border-blue-400 hover:bg-gradient-to-r hover:from-blue-50 hover:to-cyan-50 hover:text-blue-700 transition-all duration-300 hover:scale-105 active:scale-95 rounded-xl"
             >
               <Link
-                href="/app/dashboard"
+                href="/app"
                 className="flex items-center justify-center gap-2"
               >
                 <FaTachometerAlt className="w-3 h-3 sm:w-4 sm:h-4" />

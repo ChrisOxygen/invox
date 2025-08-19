@@ -96,7 +96,7 @@ function FinalStep() {
             className="w-full h-12 sm:h-14 text-sm sm:text-base font-semibold bg-gradient-to-r from-blue-600 to-cyan-400 hover:from-blue-700 hover:to-cyan-500 text-white transition-all duration-300 hover:scale-105 active:scale-95 shadow-lg shadow-blue-200/50 hover:shadow-xl hover:shadow-blue-300/50 rounded-xl"
           >
             <Link
-              href="/app/invoice/create"
+              href="/app/invoices/create"
               className="flex items-center justify-center gap-2 sm:gap-3"
             >
               <FaFileInvoice className="w-4 h-4 sm:w-5 sm:h-5" />

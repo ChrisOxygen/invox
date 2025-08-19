@@ -19,7 +19,9 @@ interface InvoiceTemplatePreviewProps {
   children: React.ReactNode;
 }
 
-const InvoiceTemplatePreview: React.FC<InvoiceTemplatePreviewProps> = ({ children }) => {
+const InvoiceTemplatePreview: React.FC<InvoiceTemplatePreviewProps> = ({
+  children,
+}) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [zoomState, setZoomState] = useState<ZoomState>({
     currentZoom: 90,
@@ -197,7 +199,7 @@ const InvoiceTemplatePreview: React.FC<InvoiceTemplatePreviewProps> = ({ childre
         >
           {/* Template Container with em-based styling */}
           <div
-            className="bg-white border-2 border-gray-200 rounded-lg shadow-lg max-w-none overflow-hidden"
+            className=""
             style={{
               width: "49.625em", // A4 width in em units (794px ÷ 16px)
               margin: "0 auto",

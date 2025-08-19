@@ -10,6 +10,8 @@ import ReactPDFTemplate1 from "./pdf/reactPDFTemplate1";
 import { ColorTheme } from "../types/invoiceTypes";
 import { COLOR_THEMES } from "../constants";
 import { InvoiceViewToolbar } from "./InvoiceViewToolbar";
+import InvoiceTemplatePreview from "./invoice-form/InvoiceTemplatePreview";
+import Template1 from "./templates/Template1";
 
 export function InvoiceViewer() {
   const params = useParams();
@@ -86,9 +88,18 @@ export function InvoiceViewer() {
           </div>
         </div>
       </div> */}
+      <InvoiceTemplatePreview>
+        <Template1
+          invoice={invoice}
+          userAndBusiness={userAndBusiness}
+          client={client}
+          paymentAccount={paymentAccount}
+          theme={selectedTheme}
+        />
+      </InvoiceTemplatePreview>
 
       {/* PDF Viewer */}
-      <div className="flex-1 bg-gray-100">
+      {/* <div className="flex-1 bg-gray-100">
         <PDFViewer
           showToolbar={false}
           height="100%"
@@ -103,7 +114,7 @@ export function InvoiceViewer() {
             theme={selectedTheme}
           />
         </PDFViewer>
-      </div>
+      </div> */}
     </div>
   );
 }

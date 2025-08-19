@@ -92,7 +92,10 @@ function Template1({
             </span>
           </div>
           <div className={`flex ${styles.paymentInfoRowView}`}>
-            <span className="text-[11px]" style={{ color: colors.textLight }}>
+            <span
+              className="text-[0.6875em]"
+              style={{ color: colors.textLight }}
+            >
               Data validation error
             </span>
           </div>
@@ -345,7 +348,7 @@ function Template1({
                 </p>
               </div>
             )}
-            <div className={`${styles.TermsRowView} mt-5`}>
+            <div className={`${styles.TermsRowView} mt-[1.25em]`}>
               <div
                 className={styles.paymentInfoHeader}
                 style={{ backgroundColor: colors.primary }}
@@ -459,7 +462,7 @@ function Template1({
                   style={{ backgroundColor: colors.primary }}
                 ></div>
                 <p
-                  className="text-xs text-center italic mt-1.5"
+                  className="text-[0.75em] text-center italic mt-[0.375em]"
                   style={{ color: colors.textLight }}
                 >
                   authorized signatory

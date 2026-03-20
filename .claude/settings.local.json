@@ -2,7 +2,11 @@
   "permissions": {
     "allow": [
       "Bash(npm install:*)",
-      "Bash(npx shadcn@latest init --defaults --force)"
+      "Bash(npx shadcn@latest init --defaults --force)",
+      "Bash(mkdir -p \"/c/Users/LENOVO/Desktop/_Resources-Stuff-That-Works/portfolio-works/Next.js-Projects/invox/app/api/v1/invoices/[id]/payments\")",
+      "Bash(mkdir -p \"/c/Users/LENOVO/Desktop/_Resources-Stuff-That-Works/portfolio-works/Next.js-Projects/invox/app/api/v1/invoices/[id]/share\")",
+      "Bash(mkdir -p \"/c/Users/LENOVO/Desktop/_Resources-Stuff-That-Works/portfolio-works/Next.js-Projects/invox/app/api/v1/invoices/[id]/status\")",
+      "Bash(mkdir -p \"/c/Users/LENOVO/Desktop/_Resources-Stuff-That-Works/portfolio-works/Next.js-Projects/invox/app/api/v1/invoices/[id]/duplicate\")"
     ]
   }
 }

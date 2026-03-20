@@ -48,7 +48,7 @@ export function AppHeader() {
     >
       {/* Sidebar toggle + separator */}
       <SidebarTrigger
-        className="-ml-1 size-8 text-[var(--ink-400)] transition-colors hover:bg-[var(--surface-overlay)] hover:text-[var(--ink-700)]"
+        className="-ml-1 size-8 rounded-md text-[var(--ink-400)] transition-colors hover:bg-[var(--surface-overlay)] hover:text-[var(--ink-700)]"
       />
       <Separator orientation="vertical" className="h-4 opacity-60" />
 
@@ -70,7 +70,7 @@ export function AppHeader() {
       <Button
         variant="ghost"
         size="icon"
-        className="size-8 rounded-lg text-[var(--ink-400)] hover:bg-[var(--surface-overlay)] hover:text-[var(--ink-700)]"
+        className="size-8 rounded-md text-[var(--ink-400)] hover:bg-[var(--surface-overlay)] hover:text-[var(--ink-700)]"
         aria-label="Notifications"
       >
         <Bell className="size-4" />

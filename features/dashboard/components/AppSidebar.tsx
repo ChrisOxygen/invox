@@ -131,7 +131,7 @@ function NavItem({ href, label, icon: Icon }: NavItemProps) {
         render={<Link href={href} />}
         isActive={isActive}
         tooltip={label}
-        className="h-9 gap-3 rounded-lg px-3 text-[13.5px] font-medium"
+        className="h-9 gap-3 rounded-md px-3 text-[13.5px] font-semibold"
       >
         <Icon className="size-4 shrink-0" />
         <span>{label}</span>
@@ -165,7 +165,7 @@ function UserFooter({ name, email, initials }: UserFooterProps) {
               <SidebarMenuButton
                 size="lg"
                 tooltip={name}
-                className="h-11 gap-3 rounded-lg px-3"
+                className="h-11 gap-3 rounded-md px-3"
               />
             }
           >

@@ -1,9 +1,13 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
-export async function updateSession(request: NextRequest) {
+export function createMiddlewareClient(request: NextRequest) {
+  // Forward the current pathname so server layouts can read it via headers()
+  const requestHeaders = new Headers(request.headers)
+  requestHeaders.set('x-pathname', request.nextUrl.pathname)
+
   let supabaseResponse = NextResponse.next({
-    request,
+    request: { headers: requestHeaders },
   })
 
   const supabase = createServerClient(
@@ -18,8 +22,9 @@ export async function updateSession(request: NextRequest) {
           cookiesToSet.forEach(({ name, value }) =>
             request.cookies.set(name, value)
           )
+          // Rebuild with requestHeaders so x-pathname is preserved
           supabaseResponse = NextResponse.next({
-            request,
+            request: { headers: requestHeaders },
           })
           cookiesToSet.forEach(({ name, value, options }) =>
             supabaseResponse.cookies.set(name, value, options)
@@ -29,35 +34,5 @@ export async function updateSession(request: NextRequest) {
     }
   )
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-
-  const { pathname } = request.nextUrl
-
-  const isAuthRoute =
-    pathname.startsWith('/login') ||
-    pathname.startsWith('/register') ||
-    pathname.startsWith('/forgot-password') ||
-    pathname.startsWith('/reset-password')
-
-  const isAppRoute = pathname.startsWith('/dashboard') ||
-    pathname.startsWith('/invoices') ||
-    pathname.startsWith('/clients') ||
-    pathname.startsWith('/settings') ||
-    pathname.startsWith('/onboarding')
-
-  if (!user && isAppRoute) {
-    const url = request.nextUrl.clone()
-    url.pathname = '/login'
-    return NextResponse.redirect(url)
-  }
-
-  if (user && isAuthRoute) {
-    const url = request.nextUrl.clone()
-    url.pathname = '/dashboard'
-    return NextResponse.redirect(url)
-  }
-
-  return supabaseResponse
+  return { supabase, supabaseResponse }
 }

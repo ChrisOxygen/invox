@@ -5,11 +5,13 @@ Invoice management SaaS for Nigerian freelancers and small businesses. Users cre
 ## Tech Stack
 
 - **Next.js 16.2** · App Router · TypeScript strict mode
-- **Tailwind CSS v4** · shadcn/ui (CLI latest)
+- **Tailwind CSS v4** · shadcn/ui (CLI v3.8.5)
 - **Prisma ORM 7.x** → Supabase PostgreSQL
 - **Supabase Auth** + Supabase SSR (auth only — all data queries go through Prisma)
 - **@react-pdf/renderer 4.x** · Invoice PDF generation
+- **Vercel AI SDK v6** (`ai`) + `@ai-sdk/openai` · streaming (if applicable)
 - **TanStack Query v5** · React Hook Form · Zod v4
+- **PostHog** (analytics) · **Stripe** (billing, if applicable)
 - **Vercel** deployment
 
 ## Commands
@@ -20,9 +22,9 @@ npm run build                                 # production build
 npx tsc --noEmit                              # type check
 npm run lint                                  # lint
 
-npm run prisma:migrate -- --name <name>       # create + apply migration
-npm run prisma:generate                       # regenerate client after schema changes
-npm run prisma:studio                         # visual DB browser
+npx prisma migrate dev --name <name>          # create + apply migration
+npx prisma generate                           # regenerate client after schema changes
+npx prisma studio                             # visual DB browser
 
 npx shadcn@latest add <component>             # add shadcn component
 npx shadcn@latest add button input form label select dialog sheet tabs card badge table skeleton avatar dropdown-menu popover separator
@@ -32,7 +34,7 @@ npx shadcn@latest add button input form label select dialog sheet tabs card badg
 
 - **Zod schemas + inferred types** → prefix with capital `Z`
   - e.g. `ZCreateInvoiceSchema`, `ZCreateInvoice`, `ZCreateClientSchema`
-- **Server-only functions** (Server Actions, Prisma queries) → prefix with `_`
+- **Server-only functions** (API route handlers, Prisma queries) → prefix with `_`
   - e.g. `_getInvoicesByProfileId`, `_createInvoice`, `_getClientById`
 - **Components** → PascalCase (`InvoiceStatusBadge`, `ClientForm`)
 - **Hooks** → camelCase prefixed with `use` (`useInvoices`, `useCreateInvoice`)
@@ -43,7 +45,7 @@ npx shadcn@latest add button input form label select dialog sheet tabs card badg
 
 ## Folder Structure
 
-Feature-based. No `src/` directory. All app code at project root. Cross-feature code in `shared/`. New features in `features/<feature>/` with sub-folders: `components/`, `hooks/`, `schemas/`, `server/`, `types.ts`.
+Feature-based. No `src/` directory. All app code at project root. Cross-feature code in `shared/`. New features in `features/<feature>/` with sub-folders: `components/`, `hooks/`, `schemas/`, `server/`, `types.ts`, `constants/`.
 
 ```
 /
@@ -70,6 +72,13 @@ Feature-based. No `src/` directory. All app code at project root. Cross-feature 
 │   │   │   ├── new/page.tsx
 │   │   │   └── [id]/page.tsx
 │   │   └── settings/page.tsx
+│   ├── api/v1/                       # Versioned REST API route handlers
+│   │   ├── auth/sync/route.ts        # POST — upsert Prisma User from Supabase session
+│   │   ├── [resource]/
+│   │   │   ├── route.ts              # GET (list), POST (create)
+│   │   │   └── [id]/route.ts         # GET (one), PATCH (update), DELETE
+│   │   └── invoices/[id]/pdf/route.ts # PDF generation
+│   ├── auth/callback/route.ts        # Supabase OAuth code exchange
 │   ├── i/[token]/page.tsx            # Public invoice share — no auth required
 │   └── layout.tsx                    # root layout
 │
@@ -103,21 +112,24 @@ Feature-based. No `src/` directory. All app code at project root. Cross-feature 
 │   ├── components/
 │   │   └── ui/                       # shadcn/ui — DO NOT edit manually
 │   ├── lib/
-│   │   ├── prisma.ts                 # Prisma singleton client
+│   │   ├── prisma.ts                 # Prisma singleton client (PrismaPg adapter)
 │   │   ├── supabase/
-│   │   │   ├── server.ts             # createClient() — Server Components + Actions
-│   │   │   ├── client.ts             # createBrowserClient() — Client Components
-│   │   │   └── middleware.ts         # updateSession() helper
+│   │   │   ├── server.ts             # createClient() — Server Components + API routes
+│   │   │   ├── client.ts             # createClient() — browser
+│   │   │   ├── middleware.ts         # createMiddlewareClient() — used in proxy.ts
+│   │   │   └── admin.ts              # createAdminClient() — service role (use sparingly)
+│   │   ├── api-error.ts              # apiError(), apiValidationError(), AppError, NotFoundError
 │   │   ├── env.ts                    # Zod-validated env vars
 │   │   └── utils.ts                  # cn() and shared utilities
 │   └── types/                        # global shared types
 │
 ├── providers/
-│   └── query-provider.tsx            # TanStack QueryClientProvider (wraps root layout)
+│   ├── query-provider.tsx            # TanStack QueryClientProvider (wraps root layout)
+│   └── posthog-provider.tsx          # PostHog analytics provider (if applicable)
 ├── proxy.ts                          # protects /(app) routes (Next.js 16: middleware → proxy)
 ├── prisma/
-│   ├── schema.prisma
-│   └── prisma.config.ts              # Prisma 7 datasource config (replaces datasource block in schema.prisma)
+│   └── schema.prisma
+└── prisma.config.ts                  # Prisma 7 config at project root (replaces datasource block in schema.prisma)
 ```
 
 ## Version-Specific Notes
@@ -132,11 +144,31 @@ Feature-based. No `src/` directory. All app code at project root. Cross-feature 
 
 ```typescript
 // proxy.ts — NOT middleware.ts
-import { updateSession } from '@/shared/lib/supabase/middleware'
-import type { NextRequest } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
+import { createMiddlewareClient } from '@/shared/lib/supabase/middleware'
 
 export async function proxy(request: NextRequest) {
-  return await updateSession(request)
+  const { pathname } = request.nextUrl
+  const { supabase, supabaseResponse } = createMiddlewareClient(request)
+
+  // Refresh session on every request
+  const { data: { user } } = await supabase.auth.getUser()
+
+  // Protect authenticated routes
+  if (!user && (pathname.startsWith('/(app)') || pathname.startsWith('/dashboard') || pathname.startsWith('/onboarding'))) {
+    const url = request.nextUrl.clone()
+    url.pathname = '/login'
+    return NextResponse.redirect(url)
+  }
+
+  // Redirect signed-in users away from auth pages
+  if (user && (pathname.startsWith('/login') || pathname.startsWith('/register'))) {
+    const url = request.nextUrl.clone()
+    url.pathname = '/dashboard'
+    return NextResponse.redirect(url)
+  }
+
+  return supabaseResponse
 }
 
 export const config = {
@@ -153,25 +185,43 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
 
 ### Prisma 7.x
 - Ships as **ES module** — imports use `import`, not `require`
-- Database config moves to **`prisma/prisma.config.ts`** instead of inline `datasource` block in `schema.prisma`
-- Run `npm run prisma:generate` after **every** schema or config change — the client will silently be out of sync otherwise
+- Database config moves to **`prisma.config.ts`** at the project root instead of inline `datasource` block in `schema.prisma`
+- Run `npx prisma generate` after **every** schema or config change — the client will silently be out of sync otherwise
 - MongoDB is not supported in Prisma 7 — PostgreSQL only (Supabase)
+- Prisma model types import from `@/shared/lib/generated/prisma/models`
+- `DATABASE_URL` = Supabase pooled connection (for app queries); `DIRECT_URL` = Supabase direct connection (for migrations only)
 
 ```typescript
-// prisma/prisma.config.ts
-import path from 'path'
+// prisma.config.ts (project root)
 import { defineConfig } from 'prisma/config'
 
 export default defineConfig({
-  earlyAccess: true,
-  schema: path.join('prisma', 'schema.prisma'),
-  datasources: {
-    db: {
-      url: process.env.DATABASE_URL!,
-      directUrl: process.env.DIRECT_URL!,
-    },
+  schema: 'prisma/schema.prisma',
+  migrations: { path: 'prisma/migrations' },
+  datasource: {
+    url: process.env['DIRECT_URL'], // Direct URL for migrations only
   },
 })
+```
+
+**Prisma singleton (shared/lib/prisma.ts):**
+```typescript
+import { PrismaClient } from '@/shared/lib/generated/prisma'
+import { PrismaPg } from '@prisma/adapter-pg'
+
+const createPrismaClient = () => {
+  const adapter = new PrismaPg({
+    connectionString: process.env.DATABASE_URL!,
+    max: 1, // 1 connection per serverless instance
+  })
+  return new PrismaClient({ adapter })
+}
+
+const globalForPrisma = globalThis as unknown as {
+  prisma: ReturnType<typeof createPrismaClient> | undefined
+}
+export const prisma = globalForPrisma.prisma ?? createPrismaClient()
+if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma
 ```
 
 ### Zod v4
@@ -198,30 +248,36 @@ export default defineConfig({
 ## Architecture
 
 ### Auth Flow
-Supabase manages sessions. `proxy.ts` protects `/(app)` routes via `updateSession()`. On first sign-up, a Supabase database trigger auto-creates a `profiles` row with `id = auth.users.id`. On first OAuth login, the same trigger fires. All Server Actions call `supabase.auth.getUser()` first — never trust `userId` from a request body or URL param.
+Supabase manages sessions. `proxy.ts` protects `/(app)` routes via `createMiddlewareClient()`. All API routes extract `userId` from the Supabase session — never from request body or URL params.
 
-```sql
--- Auto-create profile on new user (run in Supabase SQL Editor)
-CREATE OR REPLACE FUNCTION public.handle_new_user()
-RETURNS trigger AS $$
-BEGIN
-  INSERT INTO public.profiles (id)
-  VALUES (new.id)
-  ON CONFLICT (id) DO NOTHING;
-  RETURN new;
-END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
+1. User signs in/up → Supabase handles credentials → sets session cookie
+2. OAuth: `app/auth/callback/route.ts` exchanges code → calls `POST /api/v1/auth/sync`
+3. `auth/sync` route upserts the Prisma profile row: `prisma.profile.upsert({ where: { id: user.id }, ... })`
+4. All subsequent data requests use `user.id` extracted from session
 
-CREATE TRIGGER on_auth_user_created
-  AFTER INSERT ON auth.users
-  FOR EACH ROW EXECUTE PROCEDURE public.handle_new_user();
+**Auth Sync Route:**
+```typescript
+// app/api/v1/auth/sync/route.ts
+export async function POST() {
+  const supabase = await createClient()
+  const { data: { user }, error } = await supabase.auth.getUser()
+  if (error || !user) return apiError('unauthorized', 'Unauthorized', 401)
+
+  await prisma.profile.upsert({
+    where: { id: user.id },
+    create: { id: user.id },
+    update: {},
+  })
+
+  return NextResponse.json({ ok: true })
+}
 ```
 
 ### Data Flow
 Supabase is **auth only**. All database reads and writes go through **Prisma**. Never use the Supabase JS client to query data. The pattern is:
 
 ```
-Client Component → TanStack Query hook → Server Action (_prefixed) → Prisma → PostgreSQL
+Client Component → TanStack Query hook → API route (/api/v1/) → _prefixed server function → Prisma → PostgreSQL
 ```
 
 ### Invoice Number Generation
@@ -233,27 +289,207 @@ Auto-generated on the server: `{invoicePrefix}-{year}-{zero-padded-count}`. Exam
 ### Share Tokens
 Public invoice share links use a `shareToken` (nanoid, 21 chars) stored on the invoice with a 30-day expiry. The `/i/[token]` route is fully public — no auth required. RLS policy allows SELECT on invoices where `share_token IS NOT NULL AND share_token_exp > now()`.
 
+## API Routes
+
+All routes live under `app/api/v1/`. Every route follows this structure:
+
+1. Extract `userId` from Supabase session — **never from request body**
+2. Parse and validate request body with Zod `safeParse`
+3. Call a `_prefixed` server function with validated data
+4. Catch `AppError` → return structured error response
+5. Catch unknown errors → return 500
+
+```typescript
+// app/api/v1/invoices/route.ts
+import { NextResponse } from 'next/server'
+import { createClient } from '@/shared/lib/supabase/server'
+import { apiError, apiValidationError, AppError } from '@/shared/lib/api-error'
+import { ZCreateInvoiceSchema } from '@/features/invoices/schemas'
+import { _createInvoice } from '@/features/invoices/server/_create-invoice'
+
+export async function POST(request: Request) {
+  const supabase = await createClient()
+  const { data: { user }, error } = await supabase.auth.getUser()
+  if (error || !user) return apiError('unauthorized', 'Unauthorized', 401)
+
+  const body = await request.json()
+  const parsed = ZCreateInvoiceSchema.safeParse(body)
+  if (!parsed.success) return apiValidationError(parsed.error)
+
+  try {
+    const invoice = await _createInvoice(user.id, parsed.data)
+    return NextResponse.json(invoice, { status: 201 })
+  } catch (err) {
+    if (err instanceof AppError) return apiError(err.code, err.message, err.statusCode ?? 403)
+    return apiError('internal_error', 'Internal server error', 500)
+  }
+}
+
+// [id]/route.ts — always await params in Next.js 16
+export async function GET(
+  request: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const { id } = await params
+  // ...
+}
+```
+
+**Error Response Shape:**
+```json
+{ "error": { "code": "not_found", "message": "Invoice not found" } }
+{ "error": { "code": "validation_error", "message": "...", "details": { "fieldErrors": {} } } }
+```
+
+**HTTP Status Reference:**
+| Status | Code |
+|--------|------|
+| 401 | `unauthorized` |
+| 403 | `<feature>_limit_reached`, `forbidden` |
+| 404 | `not_found` |
+| 422 | `validation_error` |
+| 429 | `rate_limited` |
+| 500 | `internal_error` |
+
+## Error Handling
+
+### api-error.ts
+
+```typescript
+// shared/lib/api-error.ts
+import { NextResponse } from 'next/server'
+import type { ZodError } from 'zod'
+
+export interface ApiErrorBody {
+  error: { code: string; message: string; details?: unknown }
+}
+
+export function apiError(code: string, message: string, status: number) {
+  return NextResponse.json<ApiErrorBody>({ error: { code, message } }, { status })
+}
+
+export function apiValidationError(err: ZodError) {
+  return NextResponse.json<ApiErrorBody>(
+    { error: { code: 'validation_error', message: 'Validation failed', details: err.flatten() } },
+    { status: 422 }
+  )
+}
+
+export class AppError extends Error {
+  constructor(
+    public readonly code: string,
+    message: string,
+    public readonly statusCode = 403
+  ) {
+    super(message)
+  }
+}
+
+export class NotFoundError extends AppError {
+  constructor(message = 'Not found') {
+    super('not_found', message, 404)
+  }
+}
+```
+
+### Server Function Pattern
+
+Server functions live in `features/<feature>/server/`. They contain all Prisma queries and business logic. They **throw** errors — they never return HTTP responses. One function per file, file name matches function name (e.g. `_create-invoice.ts`).
+
+```typescript
+// features/invoices/server/_create-invoice.ts
+import { prisma } from '@/shared/lib/prisma'
+import { AppError } from '@/shared/lib/api-error'
+import type { ZCreateInvoice } from '@/features/invoices/schemas'
+
+export async function _createInvoice(profileId: string, data: ZCreateInvoice) {
+  // Use Promise.all() for independent parallel queries
+  const [count, profile] = await Promise.all([
+    prisma.invoice.count({ where: { profileId } }),
+    prisma.profile.findUnique({ where: { id: profileId }, select: { invoicePrefix: true } }),
+  ])
+
+  if (!profile) throw new AppError('not_found', 'Profile not found', 404)
+
+  return prisma.invoice.create({
+    data: { profileId, ...data },
+    select: { id: true, invoiceNumber: true },
+  })
+}
+```
+
+**Rules:**
+- Auth check happens in the API route — server functions receive `profileId` as a trusted parameter
+- Use `Promise.all()` for independent parallel queries
+- Always use `.select()` to limit returned fields
+- Throw `AppError` or `NotFoundError` for expected failures — let unexpected errors bubble up to the API route
+
+### Hook Pattern
+
+```typescript
+// features/invoices/hooks/use-create-invoice.ts
+'use client'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import type { ZCreateInvoice } from '@/features/invoices/schemas'
+
+interface InvoiceApiError extends Error {
+  code?: string
+}
+
+export function useCreateInvoice(options?: { onSuccess?: () => void }) {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async (data: ZCreateInvoice) => {
+      const res = await fetch('/api/v1/invoices', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      })
+      if (!res.ok) {
+        const json = await res.json()
+        const error: InvoiceApiError = new Error(json.error?.message ?? 'Failed to create invoice')
+        error.code = json.error?.code
+        throw error
+      }
+      return res.json()
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['invoices'] })
+      options?.onSuccess?.()
+    },
+    onError: (err: InvoiceApiError) => {
+      if (err.code === 'invoice_limit_reached') {
+        // Handle limit UI
+      }
+    },
+  })
+}
+```
+
 ## Workflow
 
-- **Before any task**: check available skills (via the Skill tool) — if a skill matches the task, invoke it before doing anything else. Current skills:
-  - `frontend-design` — building or styling UI components, pages, layouts, or any web interface work
-  - `keybindings-help` — customizing keyboard shortcuts or keybindings
+- **Before any UI task**: invoke the `frontend-design` skill
+- **Before writing React/Next.js code**: invoke the `vercel-react-best-practices` skill (if available)
+- **Before writing TanStack Query hooks**: invoke the `tanstack-query-best-practices` skill (if available)
+- **When writing Prisma queries**: invoke the `prisma-client-api` skill
+- **When optimizing DB/schema**: invoke the `supabase-postgres-best-practices` skill
 - **Before writing code**: check if there's an existing pattern in `features/` to follow
-- **After schema changes**: run `npm run prisma:generate` then `npx tsc --noEmit` to verify types
+- **After schema changes**: run `npx prisma generate` then `npx tsc --noEmit` to verify types
 - **After building a feature**: run `npx tsc --noEmit` and `npm run lint` before considering it done
 - **New shadcn component needed**: `npx shadcn@latest add <component>` — never hand-write primitives
 - **UI icons**: always use `lucide-react` — never inline SVG, never other icon libraries
-- **New feature**: create `features/<name>/` with `components/`, `hooks/`, `schemas/`, `server/`, `types.ts`
+- **New feature**: create `features/<name>/` with `components/`, `hooks/`, `schemas/`, `server/`, `types.ts`, `constants/`
 
 ## Critical Rules
 
-IMPORTANT: Run `npm run prisma:generate` after every schema change — the client will silently be out of sync otherwise.
+IMPORTANT: Run `npx prisma generate` after every schema change — the client will silently be out of sync otherwise.
 
 IMPORTANT: Never edit files in `shared/components/ui/` directly. Add components with `npx shadcn@latest add <component>`.
 
 IMPORTANT: Never use the Supabase JS client for data queries. Supabase is auth-only. All DB reads/writes go through Prisma via `@/shared/lib/prisma`.
 
-IMPORTANT: Never trust `userId` from a request body or URL param. Always extract it from the Supabase session using `supabase.auth.getUser()` in the Server Action.
+IMPORTANT: Never trust `userId` from a request body or URL param. Always extract it from the Supabase session using `supabase.auth.getUser()` in the API route.
 
 IMPORTANT: Never use `middleware.ts` — use `proxy.ts` with `export function proxy(...)`. Next.js 16 deprecated `middleware.ts`.
 
@@ -261,7 +497,7 @@ IMPORTANT: All styling must be done with Tailwind utility classes or Invox CSS t
 
 IMPORTANT: Never hardcode hex values in components. Always use the semantic CSS tokens defined in `globals.css`.
 
-IMPORTANT: `proxy.ts` is the only place that handles session refresh. Never call `updateSession()` anywhere else.
+IMPORTANT: `proxy.ts` is the only place that handles session refresh via `createMiddlewareClient()`. Never call it anywhere else.
 
 ---
 
@@ -494,14 +730,77 @@ const form = useForm<ZCreateClient>({
 | Building modals, dialogs, sheets from scratch | shadcn Dialog / Sheet |
 | `<table>` elements built manually | `@tanstack/react-table` + DataTable |
 | Cyan logo on white/light backgrounds | Cyan on dark only |
-| `middleware.ts` | `proxy.ts` with `export function proxy(...)` |
+| `middleware.ts` | `proxy.ts` with `export function proxy(...)` using `createMiddlewareClient()` |
 | Supabase client for DB queries | Prisma only |
+
+---
+
+## Streaming AI (Vercel AI SDK v6)
+
+Use `useChat()` from `@ai-sdk/react` — `useCompletion()` is deprecated in v6.
+
+**Route Handler:**
+```typescript
+// app/api/v1/generations/route.ts
+import { streamText } from 'ai'
+import { openai } from '@ai-sdk/openai'
+import { createClient } from '@/shared/lib/supabase/server'
+import { apiError } from '@/shared/lib/api-error'
+
+export const maxDuration = 60
+
+export async function POST(request: Request) {
+  const supabase = await createClient()
+  const { data: { user }, error } = await supabase.auth.getUser()
+  if (error || !user) return apiError('unauthorized', 'Unauthorized', 401)
+
+  const body = await request.json()
+
+  const result = streamText({
+    model: openai('gpt-4o-mini'),
+    messages: body.messages,
+    onFinish: async ({ text }) => {
+      // Save to DB after stream completes
+    },
+  })
+
+  return result.toDataStreamResponse()
+}
+```
+
+**Client Hook (must be in a Client Component):**
+```typescript
+'use client'
+import { useChat } from '@ai-sdk/react'
+
+export function GenerationPanel() {
+  const { messages, append, isLoading } = useChat({
+    api: '/api/v1/generations',
+  })
+
+  // Extract text from message parts
+  const outputText = messages
+    .filter(m => m.role === 'assistant')
+    .flatMap(m => m.parts.filter((p: { type: string }) => p.type === 'text').map((p: { text: string }) => p.text))
+    .join('')
+
+  return <div>{isLoading ? 'Generating...' : outputText}</div>
+}
+```
 
 ---
 
 ## Supabase Patterns
 
-### Server Client (Server Components & Actions)
+**Client Selection:**
+| Context | Import |
+|---------|--------|
+| Browser component | `createClient` from `@/shared/lib/supabase/client` |
+| Server component / API route | `createClient` from `@/shared/lib/supabase/server` |
+| proxy.ts | `createMiddlewareClient` from `@/shared/lib/supabase/middleware` |
+| Service-level ops | `createAdminClient` from `@/shared/lib/supabase/admin` |
+
+### Server Client (Server Components & API Routes)
 
 ```typescript
 // shared/lib/supabase/server.ts
@@ -527,12 +826,12 @@ export async function createClient() {
 }
 ```
 
-### Auth Check Pattern (every Server Action must start with this)
+### Auth Check Pattern (every API route must start with this)
 
 ```typescript
 const supabase = await createClient()
 const { data: { user }, error } = await supabase.auth.getUser()
-if (error || !user) throw new Error('Unauthorized')
+if (error || !user) return apiError('unauthorized', 'Unauthorized', 401)
 // user.id === profileId for all Prisma queries
 ```
 
@@ -548,7 +847,7 @@ if (error || !user) throw new Error('Unauthorized')
 - Invoice numbers are unique per profile: `@@unique([profileId, invoiceNumber])`
 - Monetary values stored as `Float` — display formatting happens in the UI layer only
 - Always use `@@index` on foreign keys and frequently filtered columns
-- Prisma datasource config lives in `prisma/prisma.config.ts` — not inside `schema.prisma`
+- Prisma datasource config lives in `prisma.config.ts` at the project root — not inside `schema.prisma`
 
 ---
 
@@ -587,15 +886,18 @@ All env vars are validated via Zod in `shared/lib/env.ts`. Never access `process
 import { z } from 'zod'
 
 const envSchema = z.object({
+  DATABASE_URL: z.string().min(1),
+  DIRECT_URL: z.string().min(1),
   NEXT_PUBLIC_SUPABASE_URL: z.url(),
   NEXT_PUBLIC_SUPABASE_ANON_KEY: z.string().min(1),
   SUPABASE_SERVICE_ROLE_KEY: z.string().min(1),
-  DATABASE_URL: z.string().min(1),
-  DIRECT_URL: z.string().min(1),
   NEXT_PUBLIC_APP_URL: z.url(),
+  OPENAI_API_KEY: z.string().optional(),
+  STRIPE_SECRET_KEY: z.string().optional(),
+  STRIPE_WEBHOOK_SECRET: z.string().optional(),
+  NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: z.string().optional(),
   RESEND_API_KEY: z.string().optional(),
   RESEND_FROM_EMAIL: z.string().optional(),
-  ANTHROPIC_API_KEY: z.string().optional(),
   NEXT_PUBLIC_POSTHOG_KEY: z.string().optional(),
   NEXT_PUBLIC_POSTHOG_HOST: z.string().optional(),
 })
@@ -605,21 +907,26 @@ export const env = envSchema.parse(process.env)
 
 ```env
 # .env.local (never commit)
+DATABASE_URL=                         # Supabase pooler connection string (app queries)
+DIRECT_URL=                           # Supabase direct connection (migrations only)
 NEXT_PUBLIC_SUPABASE_URL=
 NEXT_PUBLIC_SUPABASE_ANON_KEY=
 SUPABASE_SERVICE_ROLE_KEY=
-DATABASE_URL=
-DIRECT_URL=
 NEXT_PUBLIC_APP_URL=http://localhost:3000
+
+# AI (if using Vercel AI SDK)
+OPENAI_API_KEY=
+
+# Billing (if using Stripe)
+STRIPE_SECRET_KEY=
+STRIPE_WEBHOOK_SECRET=
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=
 
 # Email (Phase 10+)
 RESEND_API_KEY=
 RESEND_FROM_EMAIL=
 
-# AI Tier (Phase 11)
-ANTHROPIC_API_KEY=
-
-# Analytics (Phase 10)
+# Analytics
 NEXT_PUBLIC_POSTHOG_KEY=
 NEXT_PUBLIC_POSTHOG_HOST=https://eu.posthog.com
 ```

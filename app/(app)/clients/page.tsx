@@ -1,7 +1,5 @@
+import { ClientsPageClient } from '@/features/clients/components/list/ClientsPageClient'
+
 export default function ClientsPage() {
-  return (
-    <div>
-      <h1>Clients</h1>
-    </div>
-  )
+  return <ClientsPageClient />
 }

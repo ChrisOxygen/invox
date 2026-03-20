@@ -15,12 +15,14 @@ export async function GET(request: NextRequest) {
       const { data: { user } } = await supabase.auth.getUser()
 
       if (user) {
-        const profile = await prisma.profile.findUnique({
+        const profile = await prisma.profile.upsert({
           where: { id: user.id },
+          create: { id: user.id },
+          update: {},
           select: { onboardingDone: true },
         })
 
-        const destination = profile?.onboardingDone === false ? '/onboarding' : next
+        const destination = profile.onboardingDone === false ? '/onboarding' : next
         return NextResponse.redirect(new URL(destination, origin))
       }
     }

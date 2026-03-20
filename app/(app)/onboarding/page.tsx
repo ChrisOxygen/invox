@@ -1,7 +1,13 @@
+import { OnboardingProvider } from '@/features/onboarding/context/OnboardingContext'
+import { OnboardingShell } from '@/features/onboarding/components/OnboardingShell'
+import { OnboardingWizard } from '@/features/onboarding/components/OnboardingWizard'
+
 export default function OnboardingPage() {
   return (
-    <div>
-      <h1>Set up your business</h1>
-    </div>
+    <OnboardingProvider>
+      <OnboardingShell>
+        <OnboardingWizard />
+      </OnboardingShell>
+    </OnboardingProvider>
   )
 }

@@ -36,7 +36,7 @@ export function RegisterForm() {
 
   async function onSubmit(data: ZRegister) {
     setServerError(null)
-    const result = await _signUp(data.email, data.password, data.name)
+    const result = await _signUp(data.name, data.email, data.password)
     if (result?.error) {
       setServerError(result.error)
     } else {

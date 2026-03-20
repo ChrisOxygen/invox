@@ -1,0 +1,158 @@
+// prisma/schema.prisma
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/client"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// Profiles — extends Supabase auth.users (1-to-1)
+model Profile {
+  id             String    @id @db.Uuid  // matches auth.users.id
+  businessName   String?
+  address        String?
+  city           String?
+  state          String?
+  zipCode        String?
+  country        String?   @default("Nigeria")
+  phone          String?
+  email          String?
+  website        String?
+  logoUrl        String?
+  brandColor     String?   @default("#000000")
+  currency       String    @default("NGN")
+  invoicePrefix  String    @default("INV")
+  taxNumber      String?
+  rcNumber       String?
+  onboardingDone Boolean   @default(false)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  clients        Client[]
+  invoices       Invoice[]
+
+  @@map("profiles")
+}
+
+model Client {
+  id          String    @id @default(cuid())
+  profileId   String    @db.Uuid
+  profile     Profile   @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  name        String
+  email       String?
+  phone       String?
+  address     String?
+  city        String?
+  state       String?
+  country     String?
+  company     String?
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  invoices    Invoice[]
+
+  @@index([profileId])
+  @@index([email])
+  @@map("clients")
+}
+
+model Invoice {
+  id             String        @id @default(cuid())
+  profileId      String        @db.Uuid
+  profile        Profile       @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  clientId       String
+  client         Client        @relation(fields: [clientId], references: [id])
+  invoiceNumber  String
+  status         InvoiceStatus @default(DRAFT)
+  issueDate      DateTime
+  dueDate        DateTime
+  currency       String        @default("NGN")
+  taxRate        Float         @default(0)
+  taxType        TaxType       @default(PERCENTAGE)
+  discount       Float         @default(0)
+  discountType   DiscountType  @default(PERCENTAGE)
+  subtotal       Float         @default(0)
+  taxAmount      Float         @default(0)
+  discountAmount Float         @default(0)
+  total          Float         @default(0)
+  notes          String?
+  internalNotes  String?
+  shareToken     String?       @unique
+  shareTokenExp  DateTime?
+  sentAt         DateTime?
+  paidAt         DateTime?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  items          InvoiceItem[]
+  payments       Payment[]
+
+  @@unique([profileId, invoiceNumber])
+  @@index([profileId])
+  @@index([status])
+  @@index([clientId])
+  @@index([dueDate])
+  @@index([shareToken])
+  @@map("invoices")
+}
+
+model InvoiceItem {
+  id          String  @id @default(cuid())
+  invoiceId   String
+  invoice     Invoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  description String
+  quantity    Float
+  unitPrice   Float
+  subtotal    Float
+
+  @@index([invoiceId])
+  @@map("invoice_items")
+}
+
+model Payment {
+  id        String        @id @default(cuid())
+  invoiceId String
+  invoice   Invoice       @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  profileId String        @db.Uuid
+  amount    Float
+  datePaid  DateTime
+  method    PaymentMethod
+  note      String?
+  createdAt DateTime      @default(now())
+
+  @@index([invoiceId])
+  @@index([profileId])
+  @@map("payments")
+}
+
+enum InvoiceStatus {
+  DRAFT
+  SENT
+  PAID
+  PARTIAL
+  OVERDUE
+  CANCELLED
+}
+
+enum TaxType {
+  PERCENTAGE
+  FIXED
+}
+
+enum DiscountType {
+  PERCENTAGE
+  FIXED
+}
+
+enum PaymentMethod {
+  BANK_TRANSFER
+  CASH
+  PAYPAL
+  WISE
+  PAYSTACK
+  FLUTTERWAVE
+  OTHER
+}

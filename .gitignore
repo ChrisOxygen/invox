@@ -87,3 +87,11 @@ pnpm-lock.yaml
 *.tmp
 *.temp
 .cache/
+generated/
+
+# Local planning and reference docs
+REBUILD.md
+COMMIT_MESSAGE.md
+PDF_IMPLEMENTATION.md
+mutation-hooks.instructions.md
+toast-conventions.instructions.md

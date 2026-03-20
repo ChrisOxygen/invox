@@ -91,18 +91,18 @@ function InvoxLogo() {
             fill="white"
             fillOpacity="0.6"
           />
-          <circle cx="14" cy="13.25" r="2.5" fill="var(--cyan-400)" />
+          <circle cx="14" cy="13.25" r="2.5" fill="var(--blue-400)" />
         </svg>
       </div>
 
       {/* Wordmark — hidden when collapsed */}
       {!isCollapsed && (
         <span
-          className="text-[17px] font-bold tracking-[-0.03em] text-white"
-          style={{ fontFamily: 'var(--font-display)' }}
+          className="text-[17px] font-bold tracking-[-0.03em]"
+          style={{ fontFamily: 'var(--font-display)', color: 'var(--ink-900)' }}
         >
           Inv
-          <span style={{ color: 'var(--cyan-400)' }}>ox</span>
+          <span style={{ color: 'var(--blue-600)' }}>ox</span>
         </span>
       )}
     </div>
@@ -173,8 +173,8 @@ function UserFooter({ name, email, initials }: UserFooterProps) {
               <AvatarFallback
                 className="rounded-md text-[11px] font-semibold"
                 style={{
-                  backgroundColor: 'var(--blue-800)',
-                  color: 'var(--blue-100)',
+                  backgroundColor: 'var(--blue-50)',
+                  color: 'var(--blue-700)',
                   fontFamily: 'var(--font-display)',
                 }}
               >
@@ -185,8 +185,8 @@ function UserFooter({ name, email, initials }: UserFooterProps) {
             {!isCollapsed && (
               <div className="flex min-w-0 flex-1 flex-col text-left">
                 <span
-                  className="truncate text-[13px] font-semibold leading-tight text-white"
-                  style={{ fontFamily: 'var(--font-display)' }}
+                  className="truncate text-[13px] font-semibold leading-tight"
+                  style={{ fontFamily: 'var(--font-display)', color: 'var(--ink-900)' }}
                 >
                   {name}
                 </span>
@@ -272,13 +272,13 @@ export function AppSidebar({ user }: AppSidebarProps) {
     user?.initials ?? displayName.slice(0, 2).toUpperCase()
 
   return (
-    <Sidebar collapsible="icon" className="border-r-0">
+    <Sidebar collapsible="icon">
       {/* ── Header ── */}
       <SidebarHeader className="px-3 pb-2 pt-4">
         <InvoxLogo />
       </SidebarHeader>
 
-      <SidebarSeparator className="opacity-20" />
+      <SidebarSeparator />
 
       {/* ── Navigation ── */}
       <SidebarContent className="px-2 py-2">
@@ -323,7 +323,7 @@ export function AppSidebar({ user }: AppSidebarProps) {
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarSeparator className="opacity-20" />
+      <SidebarSeparator />
 
       {/* ── User footer ── */}
       <SidebarRail />

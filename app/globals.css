@@ -73,14 +73,14 @@
   --motion-base: 200ms ease;
   --motion-deliberate: 350ms ease;
 
-  /* Sidebar tokens — dark surface */
-  --sidebar: var(--ink-950);
-  --sidebar-foreground: var(--ink-200);
+  /* Sidebar tokens — light surface */
+  --sidebar: var(--surface-base);
+  --sidebar-foreground: var(--ink-700);
   --sidebar-primary: var(--blue-600);
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: var(--ink-900);
-  --sidebar-accent-foreground: var(--ink-50);
-  --sidebar-border: var(--ink-700);
+  --sidebar-accent: var(--surface-overlay);
+  --sidebar-accent-foreground: var(--ink-900);
+  --sidebar-border: var(--border-default);
   --sidebar-ring: var(--blue-600);
 
   /* shadcn compatibility tokens */

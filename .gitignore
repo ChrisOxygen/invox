@@ -44,7 +44,7 @@ next-env.d.ts
 # Prisma
 # Keep schema.prisma but ignore generated files
 /prisma/migrations/
-/lib/generated/prisma
+/prisma/generated/
 
 # React Email specific files
 /react-email-starter/node_modules
@@ -87,7 +87,6 @@ pnpm-lock.yaml
 *.tmp
 *.temp
 .cache/
-generated/
 
 # Local planning and reference docs
 REBUILD.md

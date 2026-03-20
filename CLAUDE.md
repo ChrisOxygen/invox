@@ -20,9 +20,9 @@ npm run build                                 # production build
 npx tsc --noEmit                              # type check
 npm run lint                                  # lint
 
-npx prisma migrate dev --name <name>          # create + apply migration
-npx prisma generate                           # regenerate client after schema changes
-npx prisma studio                             # visual DB browser
+npm run prisma:migrate -- --name <name>       # create + apply migration
+npm run prisma:generate                       # regenerate client after schema changes
+npm run prisma:studio                         # visual DB browser
 
 npx shadcn@latest add <component>             # add shadcn component
 npx shadcn@latest add button input form label select dialog sheet tabs card badge table skeleton avatar dropdown-menu popover separator
@@ -116,8 +116,8 @@ Feature-based. No `src/` directory. All app code at project root. Cross-feature 
 │   └── query-provider.tsx            # TanStack QueryClientProvider (wraps root layout)
 ├── proxy.ts                          # protects /(app) routes (Next.js 16: middleware → proxy)
 ├── prisma/
-│   └── schema.prisma
-└── prisma.config.ts                  # Prisma 7 datasource config (replaces datasource block in schema.prisma)
+│   ├── schema.prisma
+│   └── prisma.config.ts              # Prisma 7 datasource config (replaces datasource block in schema.prisma)
 ```
 
 ## Version-Specific Notes
@@ -153,12 +153,12 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
 
 ### Prisma 7.x
 - Ships as **ES module** — imports use `import`, not `require`
-- Database config moves to **`prisma.config.ts`** (project root) instead of inline `datasource` block in `schema.prisma`
-- Run `npx prisma generate` after **every** schema or config change — the client will silently be out of sync otherwise
+- Database config moves to **`prisma/prisma.config.ts`** instead of inline `datasource` block in `schema.prisma`
+- Run `npm run prisma:generate` after **every** schema or config change — the client will silently be out of sync otherwise
 - MongoDB is not supported in Prisma 7 — PostgreSQL only (Supabase)
 
 ```typescript
-// prisma.config.ts (project root)
+// prisma/prisma.config.ts
 import path from 'path'
 import { defineConfig } from 'prisma/config'
 
@@ -239,7 +239,7 @@ Public invoice share links use a `shareToken` (nanoid, 21 chars) stored on the i
   - `frontend-design` — building or styling UI components, pages, layouts, or any web interface work
   - `keybindings-help` — customizing keyboard shortcuts or keybindings
 - **Before writing code**: check if there's an existing pattern in `features/` to follow
-- **After schema changes**: run `npx prisma generate` then `npx tsc --noEmit` to verify types
+- **After schema changes**: run `npm run prisma:generate` then `npx tsc --noEmit` to verify types
 - **After building a feature**: run `npx tsc --noEmit` and `npm run lint` before considering it done
 - **New shadcn component needed**: `npx shadcn@latest add <component>` — never hand-write primitives
 - **UI icons**: always use `lucide-react` — never inline SVG, never other icon libraries
@@ -247,7 +247,7 @@ Public invoice share links use a `shareToken` (nanoid, 21 chars) stored on the i
 
 ## Critical Rules
 
-IMPORTANT: Run `npx prisma generate` after every schema change — the client will silently be out of sync otherwise.
+IMPORTANT: Run `npm run prisma:generate` after every schema change — the client will silently be out of sync otherwise.
 
 IMPORTANT: Never edit files in `shared/components/ui/` directly. Add components with `npx shadcn@latest add <component>`.
 
@@ -548,7 +548,7 @@ if (error || !user) throw new Error('Unauthorized')
 - Invoice numbers are unique per profile: `@@unique([profileId, invoiceNumber])`
 - Monetary values stored as `Float` — display formatting happens in the UI layer only
 - Always use `@@index` on foreign keys and frequently filtered columns
-- Prisma datasource config lives in `prisma.config.ts` — not inside `schema.prisma`
+- Prisma datasource config lives in `prisma/prisma.config.ts` — not inside `schema.prisma`
 
 ---
 

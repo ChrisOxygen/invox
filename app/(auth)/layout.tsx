@@ -1,3 +1,5 @@
+import Link from 'next/link'
+import { ArrowLeft } from 'lucide-react'
 import type { ReactNode } from 'react'
 
 export default function AuthLayout({ children }: { children: ReactNode }) {
@@ -7,8 +9,8 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
       <div
         className="relative flex flex-col w-full md:w-[45%] min-h-screen bg-[var(--surface-base)] px-8 py-10"
       >
-        {/* Logo */}
-        <div className="flex items-center gap-2.5 mb-auto">
+        {/* Logo + back link */}
+        <div className="flex items-center justify-between mb-auto">
           {/* Invox logo mark — 3 ascending cyan bars */}
           <svg
             width="28"
@@ -27,6 +29,13 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
           >
             Invox<span className="text-[var(--blue-600)]">.</span>
           </span>
+          <Link
+            href="/"
+            className="flex items-center gap-1.5 text-[12px] font-[family-name:var(--font-body)] text-[var(--ink-300)] hover:text-[var(--ink-500)] transition-colors duration-100"
+          >
+            <ArrowLeft className="w-3 h-3" />
+            Home
+          </Link>
         </div>
 
         {/* Form content */}

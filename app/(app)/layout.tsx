@@ -1,5 +1,4 @@
 import { redirect } from 'next/navigation'
-import { headers } from 'next/headers'
 import { SidebarInset, SidebarProvider } from '@/shared/components/ui/sidebar'
 import { QueryProvider } from '@/providers/query-provider'
 import { AppSidebar } from '@/features/dashboard/components/AppSidebar'
@@ -17,17 +16,12 @@ export default async function AppLayout({
 
   if (!user) redirect('/login')
 
-  const headersList = await headers()
-  const pathname = headersList.get('x-pathname') ?? ''
+  const profile = await prisma.profile.findUnique({
+    where: { id: user.id },
+    select: { onboardingDone: true },
+  })
 
-  if (pathname !== '/onboarding') {
-    const profile = await prisma.profile.findUnique({
-      where: { id: user.id },
-      select: { onboardingDone: true },
-    })
-
-    if (!profile?.onboardingDone) redirect('/onboarding')
-  }
+  if (!profile?.onboardingDone) redirect('/onboarding')
 
   return (
     <QueryProvider>

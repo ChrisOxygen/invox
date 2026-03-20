@@ -1,7 +1,5 @@
+import { LoginForm } from '@/features/auth/components/LoginForm'
+
 export default function LoginPage() {
-  return (
-    <div>
-      <h1>Log in to Invox</h1>
-    </div>
-  )
+  return <LoginForm />
 }

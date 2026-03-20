@@ -31,7 +31,7 @@ export async function _signUp(
     password,
     options: {
       data: { full_name: name },
-      emailRedirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/auth/callback`,
+      emailRedirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/api/v1/auth/callback`,
     },
   })
   if (error) return { error: error.message }
@@ -43,7 +43,7 @@ export async function _signInWithGoogle(): Promise<{ error?: string }> {
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: 'google',
     options: {
-      redirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/auth/callback`,
+      redirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/api/v1/auth/callback`,
     },
   })
   if (error) return { error: error.message }

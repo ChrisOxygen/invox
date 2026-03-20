@@ -3,6 +3,7 @@
 import { createClient } from '@/shared/lib/supabase/server'
 import { prisma } from '@/shared/lib/prisma'
 import { redirect } from 'next/navigation'
+import { UnauthorizedError, toErrorMessage } from '@/shared/lib/errors'
 
 export async function _saveOnboardingStep(data: {
   businessName?: string
@@ -17,9 +18,7 @@ export async function _saveOnboardingStep(data: {
       error: authError,
     } = await supabase.auth.getUser()
 
-    if (authError || !user) {
-      throw new Error('Unauthorized')
-    }
+    if (authError || !user) throw new UnauthorizedError()
 
     await prisma.profile.update({
       where: { id: user.id },
@@ -33,8 +32,7 @@ export async function _saveOnboardingStep(data: {
 
     return {}
   } catch (err) {
-    const message = err instanceof Error ? err.message : 'Something went wrong'
-    return { error: message }
+    return { error: toErrorMessage(err) }
   }
 }
 
@@ -51,9 +49,7 @@ export async function _createFirstClient(data: {
       error: authError,
     } = await supabase.auth.getUser()
 
-    if (authError || !user) {
-      throw new Error('Unauthorized')
-    }
+    if (authError || !user) throw new UnauthorizedError()
 
     const client = await prisma.client.create({
       data: {
@@ -67,8 +63,7 @@ export async function _createFirstClient(data: {
 
     return { clientId: client.id }
   } catch (err) {
-    const message = err instanceof Error ? err.message : 'Something went wrong'
-    return { error: message }
+    return { error: toErrorMessage(err) }
   }
 }
 
@@ -79,9 +74,7 @@ export async function _completeOnboarding(): Promise<void> {
     error: authError,
   } = await supabase.auth.getUser()
 
-  if (authError || !user) {
-    throw new Error('Unauthorized')
-  }
+  if (authError || !user) throw new UnauthorizedError()
 
   await prisma.profile.update({
     where: { id: user.id },

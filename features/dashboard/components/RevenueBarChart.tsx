@@ -34,34 +34,13 @@ function CustomTooltip({ active, payload, label }: TooltipProps) {
   const value = payload[0].value ?? 0
   return (
     <div
-      style={{
-        backgroundColor: 'var(--surface-base)',
-        border: '1px solid var(--border-default)',
-        borderRadius: 'var(--r-md)',
-        padding: '8px 14px',
-        boxShadow: '0 4px 16px rgba(13,13,26,0.08)',
-      }}
+      className="bg-(--surface-base) border border-(--border-default) px-[14px] py-2"
+      style={{ borderRadius: 'var(--r-md)', boxShadow: '0 4px 16px rgba(13,13,26,0.08)' }}
     >
-      <p
-        style={{
-          fontFamily: 'var(--font-display)',
-          fontSize: 11,
-          color: 'var(--ink-400)',
-          marginBottom: 3,
-          letterSpacing: '0.04em',
-          textTransform: 'uppercase',
-        }}
-      >
+      <p className="[font-family:var(--font-display)] text-[11px] text-(--ink-400) mb-[3px] tracking-[0.04em] uppercase">
         {label}
       </p>
-      <p
-        style={{
-          fontFamily: 'var(--font-mono)',
-          fontSize: 15,
-          fontWeight: 500,
-          color: 'var(--ink-900)',
-        }}
-      >
+      <p className="[font-family:var(--font-mono)] text-[15px] font-medium text-(--ink-900)">
         ₦{value.toLocaleString('en-NG', { minimumFractionDigits: 2 })}
       </p>
     </div>
@@ -72,26 +51,10 @@ export function RevenueBarChart({ data }: RevenueBarChartProps) {
   const hasData = data.some((d) => d.revenue > 0)
 
   return (
-    <div style={{ position: 'relative', height: 220 }}>
+    <div className="relative h-[220px]">
       {!hasData && (
-        <div
-          style={{
-            position: 'absolute',
-            inset: 0,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            pointerEvents: 'none',
-            zIndex: 1,
-          }}
-        >
-          <p
-            style={{
-              fontFamily: 'var(--font-body)',
-              fontSize: 13,
-              color: 'var(--ink-300)',
-            }}
-          >
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-[1]">
+          <p className="[font-family:var(--font-body)] text-[13px] text-(--ink-300)">
             No revenue data yet
           </p>
         </div>

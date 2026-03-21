@@ -2,29 +2,17 @@ import { InvoicesPageClient } from '@/features/invoices/components/list/Invoices
 
 export default function InvoicesPage() {
   return (
-    <div className="flex flex-col" style={{ minHeight: '100%' }}>
+    <div className="flex flex-col min-h-full">
       <div
-        className="border-b px-6 py-5"
-        style={{ borderColor: 'var(--border-default)', background: 'var(--surface-base)' }}
+        className="border-b px-6 py-5 border-(--border-default) bg-(--surface-base)"
       >
         <h1
-          style={{
-            fontFamily: 'var(--font-display)',
-            fontSize: '22px',
-            fontWeight: 700,
-            color: 'var(--ink-900)',
-            letterSpacing: '-0.025em',
-          }}
+          className="[font-family:var(--font-display)] text-[22px] font-bold text-(--ink-900) tracking-[-0.025em]"
         >
           Invoices
         </h1>
         <p
-          style={{
-            fontFamily: 'var(--font-body)',
-            color: 'var(--ink-400)',
-            fontSize: '13px',
-            marginTop: '2px',
-          }}
+          className="[font-family:var(--font-body)] text-(--ink-400) text-[13px] mt-0.5"
         >
           Manage and track all your invoices
         </p>

@@ -3,17 +3,16 @@ import { InvoiceDetailPageClient } from '@/features/invoices/components/detail/I
 export default async function InvoiceDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
   return (
-    <div className="flex flex-col" style={{ minHeight: '100%' }}>
+    <div className="flex flex-col min-h-full">
       <div
-        className="border-b px-6 py-4"
-        style={{ borderColor: 'var(--border-default)', background: 'var(--surface-base)' }}
+        className="border-b px-6 py-4 border-(--border-default) bg-(--surface-base)"
       >
-        <nav style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: 'var(--ink-400)' }}>
-          <a href="/invoices" style={{ color: 'var(--ink-400)' }}>
+        <nav className="[font-family:var(--font-body)] text-[13px] text-(--ink-400)">
+          <a href="/invoices" className="text-(--ink-400)">
             Invoices
           </a>
           <span className="mx-2">/</span>
-          <span style={{ color: 'var(--ink-900)' }}>Invoice Detail</span>
+          <span className="text-(--ink-900)">Invoice Detail</span>
         </nav>
       </div>
       <div className="px-6 py-6">

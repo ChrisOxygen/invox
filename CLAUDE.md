@@ -515,19 +515,19 @@ Always use these CSS variable names in `globals.css`. **Never use raw Tailwind d
 
 ```css
 /* Brand Blue — primary action color */
---blue-50:  #EEF1FF;
---blue-100: #D8DCFF;
---blue-200: #B3BCFF;
---blue-400: #5B72FF;
---blue-500: #2B4BF2;
---blue-600: #1740F5;   /* PRIMARY — buttons, links, focus rings */
---blue-700: #1232D0;   /* hover state */
---blue-800: #0D24A3;
---blue-900: #091880;
+--blue-50:  #ECEFFE;
+--blue-100: #D5D9FC;
+--blue-200: #ACB5F8;
+--blue-400: #6678EF;
+--blue-500: #4A5EEB;
+--blue-600: #3D52E8;   /* PRIMARY — buttons, links, focus rings */
+--blue-700: #3246D4;   /* hover state */
+--blue-800: #2438B8;
+--blue-900: #1E2D99;
 
 /* Cyan — alternate accent, dark-bg only */
---cyan-400: #00E5F5;
---cyan-500: #00D4E8;
+--cyan-400: #22B8CC;
+--cyan-500: #1AA6B8;
 
 /* Ink — neutral text/surface scale */
 --ink-50:  #F0F0F8;
@@ -541,9 +541,9 @@ Always use these CSS variable names in `globals.css`. **Never use raw Tailwind d
 --ink-950: #08080F;   /* dark surfaces, nav bg */
 
 /* Semantic — always use these for status */
---success: #0ECB7A;   /* Paid, complete */
---warning: #F5A623;   /* Pending, overdue warning */
---error:   #F53A3A;   /* Overdue, failed, destructive */
+--success: #0DB974;   /* Paid, complete */
+--warning: #F0A020;   /* Pending, overdue warning */
+--error:   #E84040;   /* Overdue, failed, destructive */
 
 /* Surfaces */
 --surface-page:    #F7F7FB;

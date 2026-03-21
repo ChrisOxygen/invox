@@ -5,19 +5,19 @@
 
 :root {
   /* Brand Blue */
-  --blue-50: #EEF1FF;
-  --blue-100: #D8DCFF;
-  --blue-200: #B3BCFF;
-  --blue-400: #5B72FF;
-  --blue-500: #2B4BF2;
-  --blue-600: #1740F5;
-  --blue-700: #1232D0;
-  --blue-800: #0D24A3;
-  --blue-900: #091880;
+  --blue-50: #ECEFFE;
+  --blue-100: #D5D9FC;
+  --blue-200: #ACB5F8;
+  --blue-400: #6678EF;
+  --blue-500: #4A5EEB;
+  --blue-600: #3D52E8;
+  --blue-700: #3246D4;
+  --blue-800: #2438B8;
+  --blue-900: #1E2D99;
 
   /* Cyan — dark-bg only */
-  --cyan-400: #00E5F5;
-  --cyan-500: #00D4E8;
+  --cyan-400: #22B8CC;
+  --cyan-500: #1AA6B8;
 
   /* Ink — neutral scale */
   --ink-50: #F0F0F8;
@@ -31,9 +31,9 @@
   --ink-950: #08080F;
 
   /* Semantic */
-  --success: #0ECB7A;
-  --warning: #F5A623;
-  --error: #F53A3A;
+  --success: #0DB974;
+  --warning: #F0A020;
+  --error: #E84040;
 
   /* Surfaces */
   --surface-page: #F7F7FB;

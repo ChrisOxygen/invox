@@ -2,12 +2,10 @@
 
 import { usePathname } from 'next/navigation'
 import { Bell } from 'lucide-react'
-import { SidebarTrigger } from '@/shared/components/ui/sidebar'
-import { Separator } from '@/shared/components/ui/separator'
 import { Button } from '@/shared/components/ui/button'
 
 // ---------------------------------------------------------------------------
-// Breadcrumb config — maps route prefixes to page titles
+// Route → page title map
 // ---------------------------------------------------------------------------
 
 const routeLabels: Record<string, string> = {
@@ -19,14 +17,10 @@ const routeLabels: Record<string, string> = {
 }
 
 function getPageTitle(pathname: string): string {
-  // exact match first
   if (routeLabels[pathname]) return routeLabels[pathname]
-
-  // prefix match for nested routes
   for (const [prefix, label] of Object.entries(routeLabels)) {
     if (pathname.startsWith(prefix + '/')) return label
   }
-
   return 'Invox'
 }
 
@@ -40,18 +34,12 @@ export function AppHeader() {
 
   return (
     <header
-      className="sticky top-0 z-10 flex h-14 shrink-0 items-center gap-3 border-b px-4"
+      className="sticky top-0 z-10 flex h-14 shrink-0 items-center gap-3 border-b px-5"
       style={{
         backgroundColor: 'var(--surface-base)',
         borderColor: 'var(--border-default)',
       }}
     >
-      {/* Sidebar toggle + separator */}
-      <SidebarTrigger
-        className="-ml-1 size-8 rounded-md text-[var(--ink-400)] transition-colors hover:bg-[var(--surface-overlay)] hover:text-[var(--ink-700)]"
-      />
-      <Separator orientation="vertical" className="h-4 opacity-60" />
-
       {/* Page title */}
       <h1
         className="text-[15px] font-semibold leading-none tracking-[-0.01em]"
@@ -63,14 +51,14 @@ export function AppHeader() {
         {pageTitle}
       </h1>
 
-      {/* Spacer */}
       <div className="flex-1" />
 
-      {/* Right-side actions */}
+      {/* Notifications */}
       <Button
         variant="ghost"
         size="icon"
-        className="size-8 rounded-md text-[var(--ink-400)] hover:bg-[var(--surface-overlay)] hover:text-[var(--ink-700)]"
+        className="size-8 rounded-md"
+        style={{ color: 'var(--ink-400)' }}
         aria-label="Notifications"
       >
         <Bell className="size-4" />

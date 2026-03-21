@@ -42,6 +42,17 @@ export async function _getInvoiceById(profileId: string, id: string): Promise<In
       profile: {
         select: {
           businessName: true,
+          address: true,
+          city: true,
+          state: true,
+          country: true,
+          phone: true,
+          email: true,
+          website: true,
+          logoUrl: true,
+          brandColor: true,
+          taxNumber: true,
+          rcNumber: true,
           invoicePrefix: true,
           currency: true,
         },

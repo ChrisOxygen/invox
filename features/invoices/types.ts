@@ -75,6 +75,17 @@ export type InvoiceDetail = {
   payments: InvoicePayment[]
   profile: {
     businessName: string | null
+    address: string | null
+    city: string | null
+    state: string | null
+    country: string | null
+    phone: string | null
+    email: string | null
+    website: string | null
+    logoUrl: string | null
+    brandColor: string | null
+    taxNumber: string | null
+    rcNumber: string | null
     invoicePrefix: string
     currency: string
   }

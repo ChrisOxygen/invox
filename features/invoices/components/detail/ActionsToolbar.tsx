@@ -8,6 +8,7 @@ import {
   MoreHorizontal,
   Copy,
   FileDown,
+  Eye,
   CopyPlus,
   XCircle,
   Trash2,
@@ -263,17 +264,23 @@ export function ActionsToolbar({ invoice, onRecordPayment }: ActionsToolbarProps
           >
             <DropdownMenuItem
               className="gap-2 cursor-pointer"
+              onClick={() => window.open(`/invoices/${invoice.id}/preview`, '_self')}
               style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: 'var(--ink-900)' }}
             >
-              <CopyPlus className="h-4 w-4" style={{ color: 'var(--ink-400)' }} />
-              Duplicate
+              <Eye className="h-4 w-4" style={{ color: 'var(--ink-400)' }} />
+              Preview PDF
             </DropdownMenuItem>
             <DropdownMenuItem
               className="gap-2 cursor-pointer"
+              onClick={() => window.location.assign(`/api/v1/invoices/${invoice.id}/pdf`)}
               style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: 'var(--ink-900)' }}
             >
               <FileDown className="h-4 w-4" style={{ color: 'var(--ink-400)' }} />
               Download PDF
+            </DropdownMenuItem>
+            <DropdownMenuItem className="gap-2 cursor-pointer">
+              <CopyPlus className="h-4 w-4" style={{ color: 'var(--ink-400)' }} />
+              Duplicate
             </DropdownMenuItem>
             <DropdownMenuSeparator style={{ background: 'var(--border-default)' }} />
             {invoice.status !== 'CANCELLED' && (

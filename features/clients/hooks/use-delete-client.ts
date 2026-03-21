@@ -14,8 +14,9 @@ export function useDeleteClient() {
       }
       return res.json()
     },
-    onSuccess: () => {
+    onSuccess: (_data, id) => {
       queryClient.invalidateQueries({ queryKey: ['clients'] })
+      queryClient.invalidateQueries({ queryKey: ['client', id] })
     },
   })
 }

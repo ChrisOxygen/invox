@@ -28,6 +28,7 @@ export function useUpdateInvoiceStatus() {
     onSuccess: (_data, { invoiceId }) => {
       queryClient.invalidateQueries({ queryKey: ['invoice', invoiceId] })
       queryClient.invalidateQueries({ queryKey: ['invoices'] })
+      queryClient.invalidateQueries({ queryKey: ['dashboard', 'stats'] })
     },
   })
 }

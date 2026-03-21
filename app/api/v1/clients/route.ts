@@ -15,7 +15,7 @@ export async function GET(request: Request) {
   const pageSize = Number(searchParams.get('pageSize') ?? '20')
 
   try {
-    const result = await _getClients({ search, page, pageSize })
+    const result = await _getClients(user.id, { search, page, pageSize })
     return NextResponse.json(result)
   } catch (err) {
     if (err instanceof AppError) return apiError(err.code, err.message, err.statusCode)
@@ -33,7 +33,7 @@ export async function POST(request: Request) {
   if (!parsed.success) return apiValidationError(parsed.error)
 
   try {
-    const result = await _createClient(parsed.data)
+    const result = await _createClient(user.id, parsed.data)
     return NextResponse.json(result, { status: 201 })
   } catch (err) {
     if (err instanceof AppError) return apiError(err.code, err.message, err.statusCode)

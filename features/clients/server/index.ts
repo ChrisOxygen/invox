@@ -1,26 +1,21 @@
 import { prisma } from '@/shared/lib/prisma'
-import { createClient } from '@/shared/lib/supabase/server'
-import { UnauthorizedError, NotFoundError } from '@/shared/lib/api-error'
+import { NotFoundError } from '@/shared/lib/api-error'
 import type { ZCreateClient, ZUpdateClient } from '../schemas'
 import type { ClientWithStats, ClientWithInvoices } from '../types'
 
-export async function _getClients(params: {
-  search?: string
-  page?: number
-  pageSize?: number
-}): Promise<{ clients: ClientWithStats[]; total: number }> {
-  const supabase = await createClient()
-  const {
-    data: { user },
-    error,
-  } = await supabase.auth.getUser()
-  if (error || !user) throw new UnauthorizedError()
-
+export async function _getClients(
+  profileId: string,
+  params: {
+    search?: string
+    page?: number
+    pageSize?: number
+  }
+): Promise<{ clients: ClientWithStats[]; total: number }> {
   const { search, page = 1, pageSize = 20 } = params
   const skip = (page - 1) * pageSize
 
   const where = {
-    profileId: user.id,
+    profileId,
     deletedAt: null,
     ...(search
       ? {
@@ -62,16 +57,9 @@ export async function _getClients(params: {
   return { clients, total }
 }
 
-export async function _getClientById(id: string): Promise<ClientWithInvoices> {
-  const supabase = await createClient()
-  const {
-    data: { user },
-    error,
-  } = await supabase.auth.getUser()
-  if (error || !user) throw new UnauthorizedError()
-
+export async function _getClientById(profileId: string, id: string): Promise<ClientWithInvoices> {
   const client = await prisma.client.findFirst({
-    where: { id, profileId: user.id, deletedAt: null },
+    where: { id, profileId, deletedAt: null },
     include: {
       invoices: {
         select: {
@@ -93,27 +81,21 @@ export async function _getClientById(id: string): Promise<ClientWithInvoices> {
 }
 
 export async function _createClient(
+  profileId: string,
   data: ZCreateClient
 ): Promise<{ client: { id: string; name: string }; warning?: 'duplicate_email' }> {
-  const supabase = await createClient()
-  const {
-    data: { user },
-    error,
-  } = await supabase.auth.getUser()
-  if (error || !user) throw new UnauthorizedError()
-
   let warning: 'duplicate_email' | undefined
 
   if (data.email) {
     const existing = await prisma.client.findFirst({
-      where: { profileId: user.id, email: data.email, deletedAt: null },
+      where: { profileId, email: data.email, deletedAt: null },
     })
     if (existing) warning = 'duplicate_email'
   }
 
   const client = await prisma.client.create({
     data: {
-      profileId: user.id,
+      profileId,
       name: data.name,
       email: data.email ?? null,
       phone: data.phone ?? null,
@@ -130,17 +112,11 @@ export async function _createClient(
 }
 
 export async function _updateClient(
+  profileId: string,
   data: ZUpdateClient
 ): Promise<{ client: { id: string; name: string }; warning?: 'duplicate_email' }> {
-  const supabase = await createClient()
-  const {
-    data: { user },
-    error,
-  } = await supabase.auth.getUser()
-  if (error || !user) throw new UnauthorizedError()
-
   const existing = await prisma.client.findFirst({
-    where: { id: data.id, profileId: user.id, deletedAt: null },
+    where: { id: data.id, profileId, deletedAt: null },
   })
   if (!existing) throw new NotFoundError('Client not found')
 
@@ -149,7 +125,7 @@ export async function _updateClient(
   if (data.email) {
     const duplicate = await prisma.client.findFirst({
       where: {
-        profileId: user.id,
+        profileId,
         email: data.email,
         deletedAt: null,
         NOT: { id: data.id },
@@ -176,16 +152,9 @@ export async function _updateClient(
   return { client, ...(warning ? { warning } : {}) }
 }
 
-export async function _deleteClient(id: string): Promise<void> {
-  const supabase = await createClient()
-  const {
-    data: { user },
-    error,
-  } = await supabase.auth.getUser()
-  if (error || !user) throw new UnauthorizedError()
-
+export async function _deleteClient(profileId: string, id: string): Promise<void> {
   const existing = await prisma.client.findFirst({
-    where: { id, profileId: user.id, deletedAt: null },
+    where: { id, profileId, deletedAt: null },
   })
   if (!existing) throw new NotFoundError('Client not found')
 

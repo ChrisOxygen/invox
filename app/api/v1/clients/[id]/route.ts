@@ -14,7 +14,7 @@ export async function GET(
   if (error || !user) return apiError('unauthorized', 'Unauthorized', 401)
 
   try {
-    const client = await _getClientById(id)
+    const client = await _getClientById(user.id, id)
     return NextResponse.json(client)
   } catch (err) {
     if (err instanceof AppError) return apiError(err.code, err.message, err.statusCode)
@@ -36,7 +36,7 @@ export async function PATCH(
   if (!parsed.success) return apiValidationError(parsed.error)
 
   try {
-    const result = await _updateClient(parsed.data)
+    const result = await _updateClient(user.id, parsed.data)
     return NextResponse.json(result)
   } catch (err) {
     if (err instanceof AppError) return apiError(err.code, err.message, err.statusCode)
@@ -54,7 +54,7 @@ export async function DELETE(
   if (error || !user) return apiError('unauthorized', 'Unauthorized', 401)
 
   try {
-    await _deleteClient(id)
+    await _deleteClient(user.id, id)
     return NextResponse.json({ ok: true })
   } catch (err) {
     if (err instanceof AppError) return apiError(err.code, err.message, err.statusCode)

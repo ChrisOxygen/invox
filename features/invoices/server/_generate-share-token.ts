@@ -1,14 +1,6 @@
 import { prisma } from '@/shared/lib/prisma'
 import { NotFoundError } from '@/shared/lib/api-error'
-
-function generateToken(): string {
-  const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
-  let token = ''
-  for (let i = 0; i < 21; i++) {
-    token += chars[Math.floor(Math.random() * chars.length)]
-  }
-  return token
-}
+import { generateShareToken } from '@/shared/lib/utils'
 
 export async function _generateShareToken(
   profileId: string,
@@ -21,7 +13,7 @@ export async function _generateShareToken(
 
   if (!existing) throw new NotFoundError('Invoice not found')
 
-  const shareToken = generateToken()
+  const shareToken = generateShareToken()
   const shareTokenExp = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // +30 days
 
   await prisma.invoice.update({

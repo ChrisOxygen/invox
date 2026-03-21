@@ -29,6 +29,7 @@ export function useCreateInvoice(options?: {
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ['invoices'] })
+      queryClient.invalidateQueries({ queryKey: ['dashboard', 'stats'] })
       options?.onSuccess?.(data)
     },
   })

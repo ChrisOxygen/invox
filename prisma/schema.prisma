@@ -55,6 +55,7 @@ model Client {
   invoices    Invoice[]
 
   @@index([profileId])
+  @@index([profileId, deletedAt])
   @@index([email])
   @@map("clients")
 }
@@ -92,6 +93,7 @@ model Invoice {
 
   @@unique([profileId, invoiceNumber])
   @@index([profileId])
+  @@index([profileId, status])
   @@index([status])
   @@index([clientId])
   @@index([dueDate])

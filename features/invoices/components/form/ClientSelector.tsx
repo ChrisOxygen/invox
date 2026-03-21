@@ -73,25 +73,22 @@ export function ClientSelector({ value, onChange, disabled }: ClientSelectorProp
           type="button"
           onClick={() => !disabled && setOpen((v) => !v)}
           disabled={disabled}
-          className="flex w-full items-center justify-between rounded-lg border px-3 py-2.5 text-sm transition-colors"
+          className="flex w-full items-center justify-between rounded-md border px-3 py-2.5 text-sm transition-colors [font-family:var(--font-body)] bg-(--surface-base) min-h-10.5"
           style={{
             borderColor: open ? 'var(--blue-600)' : 'var(--border-default)',
-            background: 'var(--surface-base)',
             color: selectedClient ? 'var(--ink-900)' : 'var(--ink-300)',
-            fontFamily: 'var(--font-body)',
             outline: open ? `2px solid var(--blue-100)` : 'none',
             outlineOffset: '0px',
             cursor: disabled ? 'not-allowed' : 'pointer',
             opacity: disabled ? 0.6 : 1,
-            minHeight: '42px',
           }}
         >
           <span className="truncate">
             {selectedClient ? (
-              <span style={{ color: 'var(--ink-900)' }}>
+              <span className="text-(--ink-900)">
                 {selectedClient.name}
                 {selectedClient.company && (
-                  <span style={{ color: 'var(--ink-400)', marginLeft: '6px', fontSize: '12px' }}>
+                  <span className="text-(--ink-400) ml-1.5 text-[12px]">
                     {selectedClient.company}
                   </span>
                 )}
@@ -100,43 +97,32 @@ export function ClientSelector({ value, onChange, disabled }: ClientSelectorProp
               'Select a client...'
             )}
           </span>
-          <ChevronsUpDown size={14} style={{ color: 'var(--ink-300)', flexShrink: 0 }} />
+          <ChevronsUpDown size={14} className="text-(--ink-300) shrink-0" />
         </button>
 
         {open && (
           <div
-            className="absolute z-50 w-full rounded-lg border shadow-sm"
-            style={{
-              top: 'calc(100% + 4px)',
-              background: 'var(--surface-base)',
-              borderColor: 'var(--border-default)',
-            }}
+            className="absolute z-50 w-full rounded-lg border shadow-sm bg-(--surface-base) border-(--border-default)"
+            style={{ top: 'calc(100% + 4px)' }}
           >
             {/* Search */}
-            <div
-              className="flex items-center gap-2 border-b px-3 py-2"
-              style={{ borderColor: 'var(--border-default)' }}
-            >
-              <Search size={13} style={{ color: 'var(--ink-300)', flexShrink: 0 }} />
+            <div className="flex items-center gap-2 border-b px-3 py-2 border-(--border-default)">
+              <Search size={13} className="text-(--ink-300) shrink-0" />
               <input
                 autoFocus
                 type="text"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search clients..."
-                className="flex-1 bg-transparent text-sm outline-none"
-                style={{ fontFamily: 'var(--font-body)', color: 'var(--ink-900)' }}
+                className="flex-1 bg-transparent text-sm outline-none [font-family:var(--font-body)] text-(--ink-900)"
               />
-              {isPending && <Loader2 size={12} className="animate-spin" style={{ color: 'var(--ink-300)' }} />}
+              {isPending && <Loader2 size={12} className="animate-spin text-(--ink-300)" />}
             </div>
 
             {/* List */}
             <div className="max-h-52 overflow-y-auto py-1">
               {clients.length === 0 && !isPending && (
-                <p
-                  className="px-3 py-4 text-center text-sm"
-                  style={{ color: 'var(--ink-400)', fontFamily: 'var(--font-body)' }}
-                >
+                <p className="px-3 py-4 text-center text-sm text-(--ink-400) [font-family:var(--font-body)]">
                   {search ? 'No clients found' : 'No clients yet'}
                 </p>
               )}
@@ -145,28 +131,19 @@ export function ClientSelector({ value, onChange, disabled }: ClientSelectorProp
                   key={client.id}
                   type="button"
                   onClick={() => handleSelect(client)}
-                  className="flex w-full items-center gap-3 px-3 py-2.5 text-left transition-colors hover:bg-[var(--surface-overlay)]"
+                  className="flex w-full items-center gap-3 px-3 py-2.5 text-left transition-colors hover:bg-(--surface-overlay)"
                 >
                   <Check
                     size={13}
-                    style={{
-                      color: 'var(--blue-600)',
-                      opacity: value === client.id ? 1 : 0,
-                      flexShrink: 0,
-                    }}
+                    className="text-(--blue-600) shrink-0"
+                    style={{ opacity: value === client.id ? 1 : 0 }}
                   />
                   <div className="min-w-0">
-                    <p
-                      className="truncate text-sm font-medium"
-                      style={{ color: 'var(--ink-900)', fontFamily: 'var(--font-body)' }}
-                    >
+                    <p className="truncate text-sm font-medium text-(--ink-900) [font-family:var(--font-body)]">
                       {client.name}
                     </p>
                     {(client.company || client.email) && (
-                      <p
-                        className="truncate text-xs"
-                        style={{ color: 'var(--ink-400)', fontFamily: 'var(--font-body)' }}
-                      >
+                      <p className="truncate text-xs text-(--ink-400) [font-family:var(--font-body)]">
                         {client.company ?? client.email}
                       </p>
                     )}
@@ -176,18 +153,14 @@ export function ClientSelector({ value, onChange, disabled }: ClientSelectorProp
             </div>
 
             {/* Add new */}
-            <div
-              className="border-t"
-              style={{ borderColor: 'var(--border-default)' }}
-            >
+            <div className="border-t border-(--border-default)">
               <button
                 type="button"
                 onClick={() => {
                   setOpen(false)
                   setClientSheetOpen(true)
                 }}
-                className="flex w-full items-center gap-2 px-3 py-2.5 text-sm transition-colors hover:bg-[var(--surface-overlay)]"
-                style={{ color: 'var(--blue-600)', fontFamily: 'var(--font-body)' }}
+                className="flex w-full items-center gap-2 px-3 py-2.5 text-sm transition-colors hover:bg-(--surface-overlay) text-(--blue-600) [font-family:var(--font-body)]"
               >
                 <Plus size={13} />
                 Add new client

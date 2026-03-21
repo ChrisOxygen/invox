@@ -197,34 +197,20 @@ export function InvoiceForm({ invoice, onSuccess }: InvoiceFormProps) {
           <div className="space-y-8">
 
             {/* Section: Header */}
-            <div
-              className="rounded-xl border p-6"
-              style={{ borderColor: 'var(--border-default)', background: 'var(--surface-base)' }}
-            >
-              <p
-                className="mb-5 text-sm font-semibold"
-                style={{ fontFamily: 'var(--font-display)', color: 'var(--ink-900)' }}
-              >
+            <div className="rounded-lg border p-6 border-(--border-default) bg-(--surface-base)">
+              <p className="mb-5 text-sm font-semibold [font-family:var(--font-display)] text-(--ink-900)">
                 Invoice Details
               </p>
 
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
                 {/* Invoice number preview */}
                 <div className="space-y-1.5">
-                  <label
-                    className="block text-xs font-semibold uppercase"
-                    style={{ fontFamily: 'var(--font-display)', color: 'var(--ink-400)', letterSpacing: '0.08em' }}
-                  >
+                  <label className="block text-xs font-semibold uppercase [font-family:var(--font-display)] text-(--ink-400) tracking-[0.08em]">
                     Invoice #
                   </label>
                   <div
-                    className="flex h-10 items-center rounded-lg px-3 text-sm"
-                    style={{
-                      border: '1px solid var(--border-default)',
-                      background: 'var(--surface-raised)',
-                      fontFamily: 'var(--font-mono)',
-                      color: invoice ? 'var(--blue-600)' : 'var(--ink-300)',
-                    }}
+                    className="flex h-10 items-center rounded-lg px-3 text-sm border border-(--border-default) bg-(--surface-raised) font-mono"
+                    style={{ color: invoice ? 'var(--blue-600)' : 'var(--ink-300)' }}
                   >
                     {invoice?.invoiceNumber ?? 'Auto-generated'}
                   </div>
@@ -236,10 +222,7 @@ export function InvoiceForm({ invoice, onSuccess }: InvoiceFormProps) {
                   name="issueDate"
                   render={({ field }) => (
                     <FormItem className="space-y-1.5">
-                      <FormLabel
-                        className="text-xs font-semibold uppercase"
-                        style={{ fontFamily: 'var(--font-display)', color: 'var(--ink-400)', letterSpacing: '0.08em' }}
-                      >
+                      <FormLabel className="text-xs font-semibold uppercase [font-family:var(--font-display)] text-(--ink-400) tracking-[0.08em]">
                         Issue Date
                       </FormLabel>
                       <FormControl>
@@ -247,10 +230,10 @@ export function InvoiceForm({ invoice, onSuccess }: InvoiceFormProps) {
                           {...field}
                           type="date"
                           disabled={isPending}
-                          style={{ fontFamily: 'var(--font-body)' }}
+                          className="[font-family:var(--font-body)]"
                         />
                       </FormControl>
-                      <FormMessage className="text-xs" style={{ color: 'var(--error)' }} />
+                      <FormMessage className="text-xs text-(--error)" />
                     </FormItem>
                   )}
                 />
@@ -262,10 +245,7 @@ export function InvoiceForm({ invoice, onSuccess }: InvoiceFormProps) {
                     name="dueDate"
                     render={({ field }) => (
                       <FormItem className="space-y-1.5">
-                        <FormLabel
-                          className="text-xs font-semibold uppercase"
-                          style={{ fontFamily: 'var(--font-display)', color: 'var(--ink-400)', letterSpacing: '0.08em' }}
-                        >
+                        <FormLabel className="text-xs font-semibold uppercase [font-family:var(--font-display)] text-(--ink-400) tracking-[0.08em]">
                           Due Date
                         </FormLabel>
                         <FormControl>
@@ -273,10 +253,10 @@ export function InvoiceForm({ invoice, onSuccess }: InvoiceFormProps) {
                             {...field}
                             type="date"
                             disabled={isPending}
-                            style={{ fontFamily: 'var(--font-body)' }}
+                            className="[font-family:var(--font-body)]"
                           />
                         </FormControl>
-                        <FormMessage className="text-xs" style={{ color: 'var(--error)' }} />
+                        <FormMessage className="text-xs text-(--error)" />
                       </FormItem>
                     )}
                   />
@@ -287,13 +267,7 @@ export function InvoiceForm({ invoice, onSuccess }: InvoiceFormProps) {
                         key={preset.label}
                         type="button"
                         onClick={() => setDueDatePreset(preset.days)}
-                        className="rounded px-2 py-0.5 text-xs transition-colors hover:bg-[var(--blue-50)] hover:text-[var(--blue-600)]"
-                        style={{
-                          fontFamily: 'var(--font-body)',
-                          color: 'var(--ink-400)',
-                          border: '1px solid var(--border-default)',
-                          background: 'var(--surface-base)',
-                        }}
+                        className="rounded px-2 py-0.5 text-xs transition-colors hover:bg-(--blue-50) hover:text-(--blue-600) [font-family:var(--font-body)] text-(--ink-400) border border-(--border-default) bg-(--surface-base)"
                       >
                         {preset.label}
                       </button>
@@ -304,14 +278,8 @@ export function InvoiceForm({ invoice, onSuccess }: InvoiceFormProps) {
             </div>
 
             {/* Section: Bill To */}
-            <div
-              className="rounded-xl border p-6"
-              style={{ borderColor: 'var(--border-default)', background: 'var(--surface-base)' }}
-            >
-              <p
-                className="mb-5 text-sm font-semibold"
-                style={{ fontFamily: 'var(--font-display)', color: 'var(--ink-900)' }}
-              >
+            <div className="rounded-lg border p-6 border-(--border-default) bg-(--surface-base)">
+              <p className="mb-5 text-sm font-semibold [font-family:var(--font-display)] text-(--ink-900)">
                 Bill To
               </p>
               <FormField
@@ -319,10 +287,7 @@ export function InvoiceForm({ invoice, onSuccess }: InvoiceFormProps) {
                 name="clientId"
                 render={({ field }) => (
                   <FormItem className="space-y-1.5">
-                    <FormLabel
-                      className="text-xs font-semibold uppercase"
-                      style={{ fontFamily: 'var(--font-display)', color: 'var(--ink-400)', letterSpacing: '0.08em' }}
-                    >
+                    <FormLabel className="text-xs font-semibold uppercase [font-family:var(--font-display)] text-(--ink-400) tracking-[0.08em]">
                       Client *
                     </FormLabel>
                     <FormControl>
@@ -332,44 +297,26 @@ export function InvoiceForm({ invoice, onSuccess }: InvoiceFormProps) {
                         disabled={isPending}
                       />
                     </FormControl>
-                    <FormMessage className="text-xs" style={{ color: 'var(--error)' }} />
+                    <FormMessage className="text-xs text-(--error)" />
                   </FormItem>
                 )}
               />
             </div>
 
             {/* Section: Line Items */}
-            <div
-              className="rounded-xl border"
-              style={{ borderColor: 'var(--border-default)', background: 'var(--surface-base)' }}
-            >
+            <div className="rounded-lg border border-(--border-default) bg-(--surface-base)">
               {/* Table header */}
-              <div
-                className="flex items-center gap-2 border-b px-4 py-3"
-                style={{ borderColor: 'var(--border-default)' }}
-              >
-                <span
-                  className="flex-1 text-xs font-semibold uppercase"
-                  style={{ color: 'var(--ink-400)', fontFamily: 'var(--font-display)', letterSpacing: '0.08em' }}
-                >
+              <div className="flex items-center gap-2 border-b px-4 py-3 border-(--border-default)">
+                <span className="flex-1 text-xs font-semibold uppercase text-(--ink-400) [font-family:var(--font-display)] tracking-[0.08em]">
                   Description
                 </span>
-                <span
-                  className="text-xs font-semibold uppercase text-center"
-                  style={{ width: '72px', color: 'var(--ink-400)', fontFamily: 'var(--font-display)', letterSpacing: '0.08em' }}
-                >
+                <span className="text-xs font-semibold uppercase text-center text-(--ink-400) [font-family:var(--font-display)] tracking-[0.08em]" style={{ width: '72px' }}>
                   Qty
                 </span>
-                <span
-                  className="text-xs font-semibold uppercase text-right"
-                  style={{ width: '110px', color: 'var(--ink-400)', fontFamily: 'var(--font-display)', letterSpacing: '0.08em' }}
-                >
+                <span className="text-xs font-semibold uppercase text-right text-(--ink-400) [font-family:var(--font-display)] tracking-[0.08em]" style={{ width: '110px' }}>
                   Unit Price
                 </span>
-                <span
-                  className="text-xs font-semibold uppercase text-right"
-                  style={{ width: '110px', color: 'var(--ink-400)', fontFamily: 'var(--font-display)', letterSpacing: '0.08em', paddingRight: '8px' }}
-                >
+                <span className="text-xs font-semibold uppercase text-right text-(--ink-400) [font-family:var(--font-display)] tracking-[0.08em] pr-2" style={{ width: '110px' }}>
                   Amount
                 </span>
                 <div style={{ width: '28px' }} />
@@ -378,12 +325,9 @@ export function InvoiceForm({ invoice, onSuccess }: InvoiceFormProps) {
               {/* Line item rows */}
               <div className="px-2 py-2 space-y-0.5">
                 {fields.length === 0 && (
-                  <div
-                    className="flex flex-col items-center gap-2 py-10"
-                    style={{ color: 'var(--ink-300)' }}
-                  >
+                  <div className="flex flex-col items-center gap-2 py-10 text-(--ink-300)">
                     <FileText size={32} />
-                    <p className="text-sm" style={{ fontFamily: 'var(--font-body)' }}>
+                    <p className="text-sm [font-family:var(--font-body)]">
                       Add your first line item
                     </p>
                   </div>
@@ -402,17 +346,13 @@ export function InvoiceForm({ invoice, onSuccess }: InvoiceFormProps) {
               </div>
 
               {/* Add item button */}
-              <div
-                className="border-t px-4 py-3"
-                style={{ borderColor: 'var(--border-default)' }}
-              >
+              <div className="border-t px-4 py-3 border-(--border-default)">
                 <Button
                   type="button"
                   variant="ghost"
                   size="sm"
                   onClick={() => append({ description: '', quantity: 1, unitPrice: 0, subtotal: 0 })}
-                  className="h-8 gap-1.5 text-sm"
-                  style={{ color: 'var(--blue-600)', fontFamily: 'var(--font-body)' }}
+                  className="h-8 gap-1.5 text-sm text-(--blue-600) [font-family:var(--font-body)]"
                 >
                   <Plus size={13} />
                   Add item
@@ -420,10 +360,7 @@ export function InvoiceForm({ invoice, onSuccess }: InvoiceFormProps) {
               </div>
 
               {/* Totals */}
-              <div
-                className="border-t px-6 py-4"
-                style={{ borderColor: 'var(--border-default)' }}
-              >
+              <div className="border-t px-6 py-4 border-(--border-default)">
                 <TotalsPanel
                   control={form.control}
                   subtotal={totals.subtotal}
@@ -436,14 +373,8 @@ export function InvoiceForm({ invoice, onSuccess }: InvoiceFormProps) {
             </div>
 
             {/* Section: Notes */}
-            <div
-              className="rounded-xl border p-6"
-              style={{ borderColor: 'var(--border-default)', background: 'var(--surface-base)' }}
-            >
-              <p
-                className="mb-5 text-sm font-semibold"
-                style={{ fontFamily: 'var(--font-display)', color: 'var(--ink-900)' }}
-              >
+            <div className="rounded-lg border p-6 border-(--border-default) bg-(--surface-base)">
+              <p className="mb-5 text-sm font-semibold [font-family:var(--font-display)] text-(--ink-900)">
                 Notes
               </p>
               <div className="space-y-4">
@@ -452,10 +383,7 @@ export function InvoiceForm({ invoice, onSuccess }: InvoiceFormProps) {
                   name="notes"
                   render={({ field }) => (
                     <FormItem className="space-y-1.5">
-                      <FormLabel
-                        className="text-xs font-semibold uppercase"
-                        style={{ fontFamily: 'var(--font-display)', color: 'var(--ink-400)', letterSpacing: '0.08em' }}
-                      >
+                      <FormLabel className="text-xs font-semibold uppercase [font-family:var(--font-display)] text-(--ink-400) tracking-[0.08em]">
                         Notes to Client
                       </FormLabel>
                       <FormControl>
@@ -464,12 +392,11 @@ export function InvoiceForm({ invoice, onSuccess }: InvoiceFormProps) {
                           value={field.value ?? ''}
                           placeholder="Payment terms, bank account details, thank you note..."
                           rows={3}
-                          className="resize-none"
+                          className="resize-none [font-family:var(--font-body)]"
                           disabled={isPending}
-                          style={{ fontFamily: 'var(--font-body)' }}
                         />
                       </FormControl>
-                      <p className="text-xs" style={{ color: 'var(--ink-300)', fontFamily: 'var(--font-body)' }}>
+                      <p className="text-xs text-(--ink-300) [font-family:var(--font-body)]">
                         Visible on the PDF invoice
                       </p>
                     </FormItem>
@@ -480,10 +407,7 @@ export function InvoiceForm({ invoice, onSuccess }: InvoiceFormProps) {
                   name="internalNotes"
                   render={({ field }) => (
                     <FormItem className="space-y-1.5">
-                      <FormLabel
-                        className="text-xs font-semibold uppercase"
-                        style={{ fontFamily: 'var(--font-display)', color: 'var(--ink-400)', letterSpacing: '0.08em' }}
-                      >
+                      <FormLabel className="text-xs font-semibold uppercase [font-family:var(--font-display)] text-(--ink-400) tracking-[0.08em]">
                         Internal Notes
                       </FormLabel>
                       <FormControl>
@@ -492,12 +416,11 @@ export function InvoiceForm({ invoice, onSuccess }: InvoiceFormProps) {
                           value={field.value ?? ''}
                           placeholder="Private notes — not shown on the invoice..."
                           rows={2}
-                          className="resize-none"
+                          className="resize-none [font-family:var(--font-body)]"
                           disabled={isPending}
-                          style={{ fontFamily: 'var(--font-body)' }}
                         />
                       </FormControl>
-                      <p className="text-xs" style={{ color: 'var(--ink-300)', fontFamily: 'var(--font-body)' }}>
+                      <p className="text-xs text-(--ink-300) [font-family:var(--font-body)]">
                         Hidden from the client and PDF
                       </p>
                     </FormItem>
@@ -513,7 +436,7 @@ export function InvoiceForm({ invoice, onSuccess }: InvoiceFormProps) {
                 variant="ghost"
                 onClick={() => router.back()}
                 disabled={isPending}
-                style={{ fontFamily: 'var(--font-display)' }}
+                className="[font-family:var(--font-display)]"
               >
                 Cancel
               </Button>
@@ -522,7 +445,7 @@ export function InvoiceForm({ invoice, onSuccess }: InvoiceFormProps) {
                   type="submit"
                   variant="outline"
                   disabled={isPending}
-                  style={{ fontFamily: 'var(--font-display)' }}
+                  className="[font-family:var(--font-display)]"
                 >
                   {isPending && createMutation.isPending ? (
                     <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Saving...</>
@@ -534,7 +457,7 @@ export function InvoiceForm({ invoice, onSuccess }: InvoiceFormProps) {
                   type="button"
                   disabled={isPending}
                   onClick={form.handleSubmit((v) => onSubmit(v, true))}
-                  style={{ background: 'var(--blue-600)', fontFamily: 'var(--font-display)' }}
+                  className="bg-(--blue-600) [font-family:var(--font-display)]"
                 >
                   {isPending && updateMutation.isPending ? (
                     <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Saving...</>
@@ -548,67 +471,49 @@ export function InvoiceForm({ invoice, onSuccess }: InvoiceFormProps) {
 
           {/* ── Right column: live summary ── */}
           <div className="hidden lg:block">
-            <div
-              className="sticky top-6 rounded-xl border p-5"
-              style={{ borderColor: 'var(--border-default)', background: 'var(--surface-raised)' }}
-            >
-              <p
-                className="mb-4 text-xs font-semibold uppercase"
-                style={{ fontFamily: 'var(--font-display)', color: 'var(--ink-400)', letterSpacing: '0.08em' }}
-              >
+            <div className="sticky top-6 rounded-lg border p-5 border-(--border-default) bg-(--surface-raised)">
+              <p className="mb-4 text-xs font-semibold uppercase [font-family:var(--font-display)] text-(--ink-400) tracking-[0.08em]">
                 Summary
               </p>
 
               {/* Total amount */}
               <div className="mb-4">
                 <div
-                  style={{
-                    fontFamily: 'var(--font-mono)',
-                    fontSize: '28px',
-                    fontWeight: 600,
-                    color: 'var(--ink-900)',
-                    letterSpacing: '-0.04em',
-                  }}
+                  className="font-mono font-semibold text-(--ink-900) tracking-[-0.04em]"
+                  style={{ fontSize: '28px' }}
                 >
                   {formatCurrency(totals.total, watchedCurrency ?? 'NGN')}
                 </div>
-                <p className="mt-1 text-xs" style={{ color: 'var(--ink-400)', fontFamily: 'var(--font-body)' }}>
+                <p className="mt-1 text-xs text-(--ink-400) [font-family:var(--font-body)]">
                   {fields.length} line item{fields.length !== 1 ? 's' : ''}
                 </p>
               </div>
 
-              <Separator style={{ background: 'var(--border-default)' }} />
+              <Separator className="bg-(--border-default)" />
 
               {/* Mini breakdown */}
               <div className="mt-4 space-y-2">
-                <div className="flex justify-between text-xs" style={{ color: 'var(--ink-400)', fontFamily: 'var(--font-body)' }}>
+                <div className="flex justify-between text-xs text-(--ink-400) [font-family:var(--font-body)]">
                   <span>Subtotal</span>
-                  <span style={{ fontFamily: 'var(--font-mono)' }}>{formatCurrency(totals.subtotal, watchedCurrency ?? 'NGN')}</span>
+                  <span className="font-mono">{formatCurrency(totals.subtotal, watchedCurrency ?? 'NGN')}</span>
                 </div>
                 {totals.discountAmount > 0 && (
-                  <div className="flex justify-between text-xs" style={{ color: 'var(--error)', fontFamily: 'var(--font-body)' }}>
+                  <div className="flex justify-between text-xs text-(--error) [font-family:var(--font-body)]">
                     <span>Discount</span>
-                    <span style={{ fontFamily: 'var(--font-mono)' }}>-{formatCurrency(totals.discountAmount, watchedCurrency ?? 'NGN')}</span>
+                    <span className="font-mono">-{formatCurrency(totals.discountAmount, watchedCurrency ?? 'NGN')}</span>
                   </div>
                 )}
                 {totals.taxAmount > 0 && (
-                  <div className="flex justify-between text-xs" style={{ color: 'var(--ink-900)', fontFamily: 'var(--font-body)' }}>
+                  <div className="flex justify-between text-xs text-(--ink-900) [font-family:var(--font-body)]">
                     <span>Tax</span>
-                    <span style={{ fontFamily: 'var(--font-mono)' }}>+{formatCurrency(totals.taxAmount, watchedCurrency ?? 'NGN')}</span>
+                    <span className="font-mono">+{formatCurrency(totals.taxAmount, watchedCurrency ?? 'NGN')}</span>
                   </div>
                 )}
               </div>
 
               {/* Draft badge */}
               <div className="mt-5">
-                <span
-                  className="rounded-full px-3 py-1 text-xs font-semibold"
-                  style={{
-                    background: 'var(--blue-50)',
-                    color: 'var(--blue-700)',
-                    fontFamily: 'var(--font-display)',
-                  }}
-                >
+                <span className="rounded-full px-3 py-1 text-xs font-semibold bg-(--blue-50) text-(--blue-700) [font-family:var(--font-display)]">
                   {isEditing ? invoice?.status : 'DRAFT'}
                 </span>
               </div>

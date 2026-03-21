@@ -19,18 +19,15 @@ import { ZUpdatePasswordSchema, type ZUpdatePassword } from '@/features/settings
 import { useUpdatePassword } from '@/features/settings/hooks/use-update-password'
 import { useDeleteAccount } from '@/features/settings/hooks/use-delete-account'
 
-const labelClass = 'text-[12px] font-[600] uppercase tracking-[0.06em] text-[var(--ink-700)]'
+const labelClass =
+  'text-[12px] font-semibold uppercase tracking-[0.06em] text-(--ink-700) [font-family:var(--font-display)]'
 const inputClass =
-  'h-[44px] w-full rounded-[var(--r-md)] border border-[var(--border-default)] bg-[var(--surface-base)] px-3.5 text-[14px] text-[var(--ink-900)] placeholder:text-[var(--ink-300)] transition-colors duration-200 focus:border-[var(--blue-600)] focus:outline-none focus:ring-2 focus:ring-[var(--blue-600)]/20'
+  'h-11 w-full rounded-md border border-(--border-default) bg-(--surface-base) px-3.5 text-[14px] text-(--ink-900) placeholder:text-(--ink-300) transition-colors duration-200 focus:border-(--blue-600) focus:outline-none focus:ring-2 focus:ring-(--blue-600)/20 [font-family:var(--font-body)]'
 
 function FieldError({ message }: { message?: string }) {
   if (!message) return null
   return (
-    <p
-      className="text-[11px] text-[var(--error)]"
-      style={{ fontFamily: 'var(--font-body)' }}
-      role="alert"
-    >
+    <p className="text-[11px] text-(--error) [font-family:var(--font-body)]" role="alert">
       {message}
     </p>
   )
@@ -71,17 +68,11 @@ function ChangePasswordSection() {
   }
 
   return (
-    <div className="rounded-[var(--r-xl)] border border-[var(--border-default)] bg-[var(--surface-base)] p-6">
-      <h3
-        className="text-[16px] font-[700] tracking-[-0.02em] text-[var(--ink-900)]"
-        style={{ fontFamily: 'var(--font-display)' }}
-      >
+    <div className="rounded-lg border border-(--border-default) bg-(--surface-base) p-6">
+      <h3 className="text-[16px] font-bold tracking-[-0.02em] text-(--ink-900) [font-family:var(--font-display)]">
         Change Password
       </h3>
-      <p
-        className="mt-1 text-[13px] text-[var(--ink-400)]"
-        style={{ fontFamily: 'var(--font-body)' }}
-      >
+      <p className="mt-1 text-[13px] text-(--ink-400) [font-family:var(--font-body)]">
         Update your account password. Minimum 8 characters.
       </p>
 
@@ -89,11 +80,7 @@ function ChangePasswordSection() {
         <div className="mt-5 flex flex-col gap-4">
           {/* Current password */}
           <div className="flex flex-col gap-1.5">
-            <label
-              htmlFor="currentPassword"
-              className={labelClass}
-              style={{ fontFamily: 'var(--font-display)' }}
-            >
+            <label htmlFor="currentPassword" className={labelClass}>
               Current Password
             </label>
             <div className="relative">
@@ -103,19 +90,14 @@ function ChangePasswordSection() {
                 placeholder="••••••••"
                 {...register('currentPassword')}
                 className={`${inputClass} pr-10`}
-                style={{ fontFamily: 'var(--font-body)' }}
               />
               <button
                 type="button"
                 onClick={() => setShowCurrentPassword((v) => !v)}
                 aria-label={showCurrentPassword ? 'Hide password' : 'Show password'}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--ink-400)] transition-colors duration-200 hover:text-[var(--ink-900)] focus-visible:outline-none"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-(--ink-400) transition-colors duration-200 hover:text-(--ink-900) focus-visible:outline-none"
               >
-                {showCurrentPassword ? (
-                  <EyeOff className="h-4 w-4" />
-                ) : (
-                  <Eye className="h-4 w-4" />
-                )}
+                {showCurrentPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
               </button>
             </div>
             <FieldError message={errors.currentPassword?.message} />
@@ -123,11 +105,7 @@ function ChangePasswordSection() {
 
           {/* New password */}
           <div className="flex flex-col gap-1.5">
-            <label
-              htmlFor="newPassword"
-              className={labelClass}
-              style={{ fontFamily: 'var(--font-display)' }}
-            >
+            <label htmlFor="newPassword" className={labelClass}>
               New Password
             </label>
             <div className="relative">
@@ -137,19 +115,14 @@ function ChangePasswordSection() {
                 placeholder="••••••••"
                 {...register('newPassword')}
                 className={`${inputClass} pr-10`}
-                style={{ fontFamily: 'var(--font-body)' }}
               />
               <button
                 type="button"
                 onClick={() => setShowNewPassword((v) => !v)}
                 aria-label={showNewPassword ? 'Hide password' : 'Show password'}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--ink-400)] transition-colors duration-200 hover:text-[var(--ink-900)] focus-visible:outline-none"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-(--ink-400) transition-colors duration-200 hover:text-(--ink-900) focus-visible:outline-none"
               >
-                {showNewPassword ? (
-                  <EyeOff className="h-4 w-4" />
-                ) : (
-                  <Eye className="h-4 w-4" />
-                )}
+                {showNewPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
               </button>
             </div>
             <FieldError message={errors.newPassword?.message} />
@@ -157,11 +130,7 @@ function ChangePasswordSection() {
 
           {/* Confirm password */}
           <div className="flex flex-col gap-1.5">
-            <label
-              htmlFor="confirmPassword"
-              className={labelClass}
-              style={{ fontFamily: 'var(--font-display)' }}
-            >
+            <label htmlFor="confirmPassword" className={labelClass}>
               Confirm New Password
             </label>
             <div className="relative">
@@ -171,19 +140,14 @@ function ChangePasswordSection() {
                 placeholder="••••••••"
                 {...register('confirmPassword')}
                 className={`${inputClass} pr-10`}
-                style={{ fontFamily: 'var(--font-body)' }}
               />
               <button
                 type="button"
                 onClick={() => setShowConfirmPassword((v) => !v)}
                 aria-label={showConfirmPassword ? 'Hide password' : 'Show password'}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--ink-400)] transition-colors duration-200 hover:text-[var(--ink-900)] focus-visible:outline-none"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-(--ink-400) transition-colors duration-200 hover:text-(--ink-900) focus-visible:outline-none"
               >
-                {showConfirmPassword ? (
-                  <EyeOff className="h-4 w-4" />
-                ) : (
-                  <Eye className="h-4 w-4" />
-                )}
+                {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
               </button>
             </div>
             <FieldError message={errors.confirmPassword?.message} />
@@ -194,8 +158,7 @@ function ChangePasswordSection() {
             <button
               type="submit"
               disabled={isPending}
-              className="flex h-[44px] items-center justify-center gap-2 rounded-[var(--r-md)] bg-[var(--blue-600)] px-6 text-[14px] font-[600] text-white transition-colors duration-200 hover:bg-[var(--blue-700)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--blue-600)] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
-              style={{ fontFamily: 'var(--font-display)' }}
+              className="flex h-11 items-center justify-center gap-2 rounded-md bg-(--blue-600) px-6 text-[14px] font-semibold text-white transition-colors duration-200 hover:bg-(--blue-700) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--blue-600) focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 [font-family:var(--font-display)]"
             >
               {isPending && <Loader2 className="h-4 w-4 animate-spin" />}
               Update password
@@ -222,22 +185,16 @@ function DeleteAccountSection() {
   }
 
   return (
-    <div className="rounded-[var(--r-xl)] border border-[var(--error)]/25 bg-[var(--surface-base)] p-6">
+    <div className="rounded-lg border border-(--error)/25 bg-(--surface-base) p-6">
       <div className="flex items-start gap-3">
-        <div className="flex-shrink-0 rounded-[var(--r-sm)] bg-[var(--error)]/10 p-2">
-          <TriangleAlert className="h-4 w-4 text-[var(--error)]" />
+        <div className="shrink-0 rounded bg-(--error)/10 p-2">
+          <TriangleAlert className="h-4 w-4 text-(--error)" />
         </div>
         <div className="flex-1">
-          <h3
-            className="text-[16px] font-[700] tracking-[-0.02em] text-[var(--ink-900)]"
-            style={{ fontFamily: 'var(--font-display)' }}
-          >
+          <h3 className="text-[16px] font-bold tracking-[-0.02em] text-(--ink-900) [font-family:var(--font-display)]">
             Delete Account
           </h3>
-          <p
-            className="mt-1 text-[13px] text-[var(--ink-400)]"
-            style={{ fontFamily: 'var(--font-body)' }}
-          >
+          <p className="mt-1 text-[13px] text-(--ink-400) [font-family:var(--font-body)]">
             Permanently delete your Invox account and all associated data, including invoices and
             clients. This action cannot be undone.
           </p>
@@ -245,24 +202,17 @@ function DeleteAccountSection() {
           <div className="mt-4">
             <AlertDialog open={dialogOpen} onOpenChange={setDialogOpen}>
               <AlertDialogTrigger
-                className="flex h-[40px] items-center justify-center gap-2 rounded-[var(--r-md)] border border-[var(--error)] bg-transparent px-5 text-[13px] font-[600] text-[var(--error)] transition-colors duration-200 hover:bg-[var(--error)] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--error)] focus-visible:ring-offset-2"
-                style={{ fontFamily: 'var(--font-display)' }}
+                className="flex h-10 items-center justify-center gap-2 rounded-md border border-(--error) bg-transparent px-5 text-[13px] font-semibold text-(--error) transition-colors duration-200 hover:bg-(--error) hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--error) focus-visible:ring-offset-2 [font-family:var(--font-display)]"
               >
                 Delete my account
               </AlertDialogTrigger>
 
               <AlertDialogContent>
                 <AlertDialogHeader>
-                  <AlertDialogTitle
-                    className="text-[18px] font-[700] tracking-[-0.02em] text-[var(--ink-900)]"
-                    style={{ fontFamily: 'var(--font-display)' }}
-                  >
+                  <AlertDialogTitle className="text-[18px] font-bold tracking-[-0.02em] text-(--ink-900) [font-family:var(--font-display)]">
                     Are you absolutely sure?
                   </AlertDialogTitle>
-                  <AlertDialogDescription
-                    className="text-[14px] text-[var(--ink-500)]"
-                    style={{ fontFamily: 'var(--font-body)' }}
-                  >
+                  <AlertDialogDescription className="text-[14px] text-(--ink-500) [font-family:var(--font-body)]">
                     This will permanently delete your account, all invoices, clients, and business
                     data. There is no way to recover your data after this.
                   </AlertDialogDescription>
@@ -272,16 +222,10 @@ function DeleteAccountSection() {
                 <div className="mt-2 flex flex-col gap-1.5">
                   <label
                     htmlFor="deleteConfirm"
-                    className="text-[12px] text-[var(--ink-700)]"
-                    style={{ fontFamily: 'var(--font-body)' }}
+                    className="text-[12px] text-(--ink-700) [font-family:var(--font-body)]"
                   >
                     Type{' '}
-                    <span
-                      className="font-[600] text-[var(--error)]"
-                      style={{ fontFamily: 'var(--font-mono)' }}
-                    >
-                      DELETE
-                    </span>{' '}
+                    <span className="font-semibold text-(--error) font-mono">DELETE</span>{' '}
                     to confirm
                   </label>
                   <input
@@ -290,8 +234,7 @@ function DeleteAccountSection() {
                     value={confirmInput}
                     onChange={(e) => setConfirmInput(e.target.value)}
                     placeholder="DELETE"
-                    className="h-[44px] w-full rounded-[var(--r-md)] border border-[var(--border-default)] bg-[var(--surface-base)] px-3.5 text-[14px] text-[var(--ink-900)] placeholder:text-[var(--ink-300)] transition-colors duration-200 focus:border-[var(--error)] focus:outline-none focus:ring-2 focus:ring-[var(--error)]/20"
-                    style={{ fontFamily: 'var(--font-mono)' }}
+                    className="h-11 w-full rounded-md border border-(--border-default) bg-(--surface-base) px-3.5 text-[14px] text-(--ink-900) placeholder:text-(--ink-300) transition-colors duration-200 focus:border-(--error) focus:outline-none focus:ring-2 focus:ring-(--error)/20 font-mono"
                     autoComplete="off"
                   />
                 </div>
@@ -299,7 +242,7 @@ function DeleteAccountSection() {
                 <AlertDialogFooter className="mt-4">
                   <AlertDialogCancel
                     onClick={() => setConfirmInput('')}
-                    style={{ fontFamily: 'var(--font-display)' }}
+                    className="[font-family:var(--font-display)]"
                   >
                     Cancel
                   </AlertDialogCancel>
@@ -307,8 +250,7 @@ function DeleteAccountSection() {
                     type="button"
                     disabled={!isConfirmed || isPending}
                     onClick={handleConfirmDelete}
-                    className="flex h-[40px] items-center justify-center gap-2 rounded-[var(--r-md)] bg-[var(--error)] px-5 text-[14px] font-[600] text-white transition-colors duration-200 hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--error)] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                    style={{ fontFamily: 'var(--font-display)' }}
+                    className="flex h-10 items-center justify-center gap-2 rounded-md bg-(--error) px-5 text-[14px] font-semibold text-white transition-colors duration-200 hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--error) focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [font-family:var(--font-display)]"
                   >
                     {isPending && <Loader2 className="h-4 w-4 animate-spin" />}
                     Delete account

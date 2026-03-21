@@ -15,15 +15,15 @@ function formatDate(date: Date): string {
 function InfoRow({ icon, label, value }: { icon: React.ReactNode; label: string; value: string | null | undefined }) {
   return (
     <div className="flex items-start gap-[var(--s3)]">
-      <div className="mt-0.5 flex-shrink-0" style={{ color: 'var(--ink-300)' }}>{icon}</div>
+      <div className="mt-0.5 shrink-0 text-(--ink-300)">{icon}</div>
       <div className="min-w-0 flex-1">
-        <p className="text-xs font-semibold uppercase mb-0.5" style={{ color: 'var(--ink-300)', fontFamily: 'var(--font-display)', letterSpacing: '0.08em' }}>
+        <p className="text-xs font-semibold uppercase mb-0.5 text-(--ink-300) [font-family:var(--font-display)] tracking-[0.08em]">
           {label}
         </p>
         {value ? (
-          <p className="text-sm break-words" style={{ color: 'var(--ink-900)', fontFamily: 'var(--font-body)' }}>{value}</p>
+          <p className="text-sm break-words text-(--ink-900) [font-family:var(--font-body)]">{value}</p>
         ) : (
-          <p className="text-sm italic" style={{ color: 'var(--ink-300)', fontFamily: 'var(--font-body)' }}>Not provided</p>
+          <p className="text-sm italic text-(--ink-300) [font-family:var(--font-body)]">Not provided</p>
         )}
       </div>
     </div>
@@ -36,31 +36,28 @@ export function ClientInfoCard({ client, onEdit, onDelete }: {
   const address = [client.address, client.city, client.state, client.country].filter(Boolean).join(', ')
 
   return (
-    <div className="rounded-[var(--r-xl)] border overflow-hidden" style={{ background: 'var(--surface-base)', borderColor: 'var(--border-default)' }}>
-      <div className="p-[var(--s5)] border-b flex items-start justify-between gap-[var(--s3)]" style={{ borderColor: 'var(--border-default)' }}>
+    <div className="rounded-lg border overflow-hidden bg-(--surface-base) border-(--border-default)">
+      <div className="p-[var(--s5)] border-b border-(--border-default) flex items-start justify-between gap-[var(--s3)]">
         <div className="flex items-center gap-[var(--s4)]">
-          <div
-            className="w-12 h-12 rounded-[var(--r-lg)] flex items-center justify-center flex-shrink-0 text-sm font-bold"
-            style={{ background: 'var(--blue-50)', color: 'var(--blue-600)', fontFamily: 'var(--font-display)', letterSpacing: '-0.02em' }}
-          >
+          <div className="w-12 h-12 rounded-lg flex items-center justify-center shrink-0 text-sm font-bold bg-(--blue-50) text-(--blue-600) [font-family:var(--font-display)] tracking-[-0.02em]">
             {getInitials(client.name)}
           </div>
           <div>
-            <h3 className="font-bold leading-tight" style={{ color: 'var(--ink-900)', fontFamily: 'var(--font-display)', fontSize: '17px', letterSpacing: '-0.02em' }}>
+            <h3 className="font-bold leading-tight text-(--ink-900) [font-family:var(--font-display)] text-[17px] tracking-[-0.02em]">
               {client.name}
             </h3>
             {client.company && (
-              <p className="text-sm mt-0.5" style={{ color: 'var(--ink-400)', fontFamily: 'var(--font-body)' }}>{client.company}</p>
+              <p className="text-sm mt-0.5 text-(--ink-400) [font-family:var(--font-body)]">{client.company}</p>
             )}
           </div>
         </div>
 
-        <div className="flex items-center gap-[var(--s2)] flex-shrink-0">
-          <Button variant="ghost" size="sm" onClick={onEdit} className="h-8 w-8 p-0" style={{ color: 'var(--ink-400)' }}>
+        <div className="flex items-center gap-[var(--s2)] shrink-0">
+          <Button variant="ghost" size="sm" onClick={onEdit} className="h-8 w-8 p-0 text-(--ink-400)">
             <Edit className="h-4 w-4" />
             <span className="sr-only">Edit client</span>
           </Button>
-          <Button variant="ghost" size="sm" onClick={onDelete} className="h-8 w-8 p-0" style={{ color: 'var(--error)' }}>
+          <Button variant="ghost" size="sm" onClick={onDelete} className="h-8 w-8 p-0 text-(--error)">
             <Trash2 className="h-4 w-4" />
             <span className="sr-only">Delete client</span>
           </Button>
@@ -72,7 +69,7 @@ export function ClientInfoCard({ client, onEdit, onDelete }: {
         <InfoRow icon={<Phone className="h-4 w-4" />} label="Phone" value={client.phone} />
         <InfoRow icon={<Building2 className="h-4 w-4" />} label="Company" value={client.company} />
         <InfoRow icon={<MapPin className="h-4 w-4" />} label="Address" value={address || null} />
-        <div className="border-t pt-[var(--s4)]" style={{ borderColor: 'var(--border-default)' }}>
+        <div className="border-t pt-[var(--s4)] border-(--border-default)">
           <InfoRow icon={<Calendar className="h-4 w-4" />} label="Client Since" value={formatDate(client.createdAt)} />
         </div>
       </div>

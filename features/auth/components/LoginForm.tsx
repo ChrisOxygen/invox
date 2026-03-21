@@ -67,7 +67,7 @@ export function LoginForm() {
       <button
         type="button"
         onClick={handleGoogleSignIn}
-        className="w-full flex items-center justify-center gap-3 h-11 rounded-[var(--r-md)] border border-[var(--border-strong)] bg-[var(--surface-base)] text-[14px] font-[family-name:var(--font-body)] font-medium text-[var(--ink-700)] transition-colors duration-[200ms] hover:bg-[var(--surface-overlay)] hover:border-[var(--ink-300)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--blue-600)] focus-visible:ring-offset-2"
+        className="w-full flex items-center justify-center gap-3 h-11 rounded-md border border-[var(--border-strong)] bg-[var(--surface-base)] text-[14px] font-[family-name:var(--font-body)] font-medium text-[var(--ink-700)] transition-colors duration-[200ms] hover:bg-[var(--surface-overlay)] hover:border-[var(--ink-300)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--blue-600)] focus-visible:ring-offset-2"
       >
         {/* Google G SVG */}
         <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">
@@ -104,7 +104,7 @@ export function LoginForm() {
 
       <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-5">
         {serverError && (
-          <div className="rounded-[var(--r-md)] bg-[color-mix(in_srgb,var(--error)_10%,transparent)] border border-[color-mix(in_srgb,var(--error)_30%,transparent)] px-4 py-3 mb-5">
+          <div className="rounded-md bg-[color-mix(in_srgb,var(--error)_10%,transparent)] border border-[color-mix(in_srgb,var(--error)_30%,transparent)] px-4 py-3 mb-5">
             <p className="text-[13px] font-[family-name:var(--font-body)] text-[var(--error)]">{serverError}</p>
           </div>
         )}
@@ -122,7 +122,7 @@ export function LoginForm() {
             autoComplete="email"
             placeholder="you@example.com"
             aria-invalid={!!errors.email}
-            className="h-11 rounded-[var(--r-md)] border-[var(--border-default)] bg-[var(--surface-base)] px-3.5 text-[14px] font-[family-name:var(--font-body)] text-[var(--ink-900)] placeholder:text-[var(--ink-300)] focus-visible:ring-[var(--blue-600)] focus-visible:border-[var(--blue-600)] transition-colors duration-[100ms]"
+            className="h-11 rounded-md border-[var(--border-default)] bg-[var(--surface-base)] px-3.5 text-[14px] font-[family-name:var(--font-body)] text-[var(--ink-900)] placeholder:text-[var(--ink-300)] focus-visible:ring-[var(--blue-600)] focus-visible:border-[var(--blue-600)] transition-colors duration-[100ms]"
             {...register('email')}
           />
           {errors.email && (
@@ -157,7 +157,7 @@ export function LoginForm() {
               autoComplete="current-password"
               placeholder="••••••••"
               aria-invalid={!!errors.password}
-              className="h-11 rounded-[var(--r-md)] border-[var(--border-default)] bg-[var(--surface-base)] px-3.5 pr-10 text-[14px] font-[family-name:var(--font-body)] text-[var(--ink-900)] placeholder:text-[var(--ink-300)] focus-visible:ring-[var(--blue-600)] focus-visible:border-[var(--blue-600)] transition-colors duration-[100ms]"
+              className="h-11 rounded-md border-[var(--border-default)] bg-[var(--surface-base)] px-3.5 pr-10 text-[14px] font-[family-name:var(--font-body)] text-[var(--ink-900)] placeholder:text-[var(--ink-300)] focus-visible:ring-[var(--blue-600)] focus-visible:border-[var(--blue-600)] transition-colors duration-[100ms]"
               {...register('password')}
             />
             <button
@@ -186,7 +186,7 @@ export function LoginForm() {
         <button
           type="submit"
           disabled={isSubmitting || isPending}
-          className="w-full h-11 rounded-[var(--r-md)] bg-[var(--blue-600)] hover:bg-[var(--blue-700)] text-white text-[14px] font-[family-name:var(--font-display)] font-semibold transition-colors duration-[200ms] disabled:opacity-60 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--blue-600)] focus-visible:ring-offset-2"
+          className="w-full h-11 rounded-md bg-[var(--blue-600)] hover:bg-[var(--blue-700)] text-white text-[14px] font-[family-name:var(--font-display)] font-semibold transition-colors duration-[200ms] disabled:opacity-60 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--blue-600)] focus-visible:ring-offset-2"
         >
           {isSubmitting ? (
             <span className="flex items-center justify-center gap-2">

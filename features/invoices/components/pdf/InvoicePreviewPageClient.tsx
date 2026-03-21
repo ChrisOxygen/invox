@@ -17,36 +17,10 @@ const PDFPreview = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          width: '100%',
-          height: '100%',
-          background: 'var(--surface-overlay)',
-          borderRadius: 'var(--r-xl)',
-        }}
-      >
-        <div style={{ textAlign: 'center' }}>
-          <div
-            style={{
-              width: '36px',
-              height: '36px',
-              border: '3px solid var(--border-default)',
-              borderTopColor: 'var(--blue-600)',
-              borderRadius: '50%',
-              animation: 'spin 1s linear infinite',
-              margin: '0 auto 12px',
-            }}
-          />
-          <p
-            style={{
-              fontFamily: 'var(--font-body)',
-              fontSize: '13px',
-              color: 'var(--ink-400)',
-            }}
-          >
+      <div className="flex items-center justify-center w-full h-full bg-(--surface-overlay) rounded-lg">
+        <div className="text-center">
+          <div className="w-9 h-9 rounded-full border-3 border-(--border-default) border-t-(--blue-600) animate-spin mx-auto mb-3" />
+          <p className="[font-family:var(--font-body)] text-[13px] text-(--ink-400)">
             Rendering PDF…
           </p>
         </div>
@@ -78,73 +52,29 @@ export function InvoicePreviewPageClient({ invoice }: InvoicePreviewPageClientPr
         }
       `}</style>
 
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          height: '100%',
-          minHeight: 0,
-        }}
-      >
+      <div className="flex flex-col h-full min-h-0">
         {/* ── Top bar ──────────────────────────────────────────────── */}
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            gap: 'var(--s3)',
-            paddingBottom: 'var(--s4)',
-            borderBottom: '1px solid var(--border-default)',
-            marginBottom: 'var(--s5)',
-            flexWrap: 'wrap',
-          }}
-        >
-          <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--s3)' }}>
+        <div className="flex items-center justify-between gap-(--s3) pb-(--s4) border-b border-(--border-default) mb-(--s5) flex-wrap">
+          <div className="flex items-center gap-(--s3)">
             <Link
               href={`/invoices/${invoice.id}`}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '6px',
-                fontFamily: 'var(--font-display)',
-                fontSize: '13px',
-                fontWeight: 500,
-                color: 'var(--ink-400)',
-                textDecoration: 'none',
-                padding: '6px 10px',
-                borderRadius: 'var(--r-md)',
-                border: '1px solid var(--border-default)',
-                transition: 'color 200ms, border-color 200ms',
-              }}
+              className="inline-flex items-center gap-1.5 [font-family:var(--font-display)] text-[13px] font-medium text-(--ink-400) no-underline px-2.5 py-1.5 rounded-md border border-(--border-default) transition-colors hover:text-(--ink-700) hover:border-(--border-strong)"
             >
-              <ArrowLeft style={{ width: '14px', height: '14px' }} />
+              <ArrowLeft className="w-3.5 h-3.5" />
               Back
             </Link>
 
-            <div
-              style={{
-                width: '1px',
-                height: '20px',
-                background: 'var(--border-default)',
-              }}
-            />
+            <div className="w-px h-5 bg-(--border-default)" />
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--s2)' }}>
-              <span
-                style={{
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: '14px',
-                  fontWeight: 500,
-                  color: 'var(--blue-600)',
-                }}
-              >
+            <div className="flex items-center gap-(--s2)">
+              <span className="font-mono text-[14px] font-medium text-(--blue-600)">
                 {invoice.invoiceNumber}
               </span>
               <InvoiceStatusBadge status={invoice.status} />
             </div>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--s2)' }}>
+          <div className="flex items-center gap-(--s2)">
             <PrintButton />
             <DownloadButton invoice={invoice} variant="default" size="sm" />
           </div>
@@ -152,27 +82,14 @@ export function InvoicePreviewPageClient({ invoice }: InvoicePreviewPageClientPr
 
         {/* ── Split pane ───────────────────────────────────────────── */}
         <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: '1fr 1fr',
-            gap: 'var(--s5)',
-            flex: 1,
-            minHeight: 0,
-          }}
-          className="preview-grid"
+          className="grid gap-(--s5) flex-1 min-h-0 preview-grid"
+          style={{ gridTemplateColumns: '1fr 1fr' }}
         >
-          <div style={{ overflowY: 'auto' }}>
+          <div className="overflow-y-auto">
             <InvoiceInfoCard invoice={invoice} />
           </div>
 
-          <div
-            style={{
-              borderRadius: 'var(--r-xl)',
-              border: '1px solid var(--border-default)',
-              overflow: 'hidden',
-              minHeight: '600px',
-            }}
-          >
+          <div className="rounded-lg border border-(--border-default) overflow-hidden min-h-150">
             <PDFPreview invoice={invoice} />
           </div>
         </div>

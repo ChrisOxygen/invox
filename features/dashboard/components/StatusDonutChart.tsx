@@ -34,22 +34,11 @@ function CustomTooltip({ active, payload }: TooltipProps) {
   if (!active || !payload?.length) return null
   return (
     <div
-      style={{
-        backgroundColor: 'var(--surface-base)',
-        border: '1px solid var(--border-default)',
-        borderRadius: 'var(--r-md)',
-        padding: '8px 12px',
-      }}
+      className="bg-(--surface-base) border border-(--border-default) px-3 py-2 rounded-md"
     >
-      <p
-        style={{
-          fontFamily: 'var(--font-body)',
-          fontSize: 13,
-          color: 'var(--ink-900)',
-        }}
-      >
+      <p className="[font-family:var(--font-body)] text-[13px] text-(--ink-900)">
         {payload[0].name}:{' '}
-        <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 500 }}>
+        <span className="[font-family:var(--font-mono)] font-medium">
           {payload[0].value}
         </span>
       </p>
@@ -62,15 +51,8 @@ export function StatusDonutChart({ data }: StatusDonutChartProps) {
 
   if (filtered.length === 0) {
     return (
-      <div
-        style={{
-          height: 220,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      >
-        <p style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: 'var(--ink-300)' }}>
+      <div className="h-[220px] flex items-center justify-center">
+        <p className="[font-family:var(--font-body)] text-[13px] text-(--ink-300)">
           No invoices yet
         </p>
       </div>
@@ -109,13 +91,7 @@ export function StatusDonutChart({ data }: StatusDonutChartProps) {
           iconSize={7}
           wrapperStyle={{ fontSize: 11, paddingTop: 8 }}
           formatter={(value) => (
-            <span
-              style={{
-                fontFamily: 'var(--font-body)',
-                fontSize: 11,
-                color: 'var(--ink-500)',
-              }}
-            >
+            <span className="[font-family:var(--font-body)] text-[11px] text-(--ink-500)">
               {value}
             </span>
           )}

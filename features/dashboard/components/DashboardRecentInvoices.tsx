@@ -41,20 +41,18 @@ function DueDateCell({ dueDate, status }: { dueDate: string; status: InvoiceStat
     const days = differenceInDays(new Date(), parseISO(dueDate))
     return (
       <div>
-        <span style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: 'var(--error)' }}>
+        <span className="[font-family:var(--font-body)] text-[13px] text-(--error)">
           {formatDisplayDate(dueDate)}
         </span>
         <br />
-        <span
-          style={{ fontFamily: 'var(--font-body)', fontSize: 11, color: 'var(--error)', opacity: 0.75 }}
-        >
+        <span className="[font-family:var(--font-body)] text-[11px] text-(--error) opacity-75">
           {days > 0 ? `${days}d overdue` : 'Due today'}
         </span>
       </div>
     )
   }
   return (
-    <span style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: 'var(--ink-400)' }}>
+    <span className="[font-family:var(--font-body)] text-[13px] text-(--ink-400)">
       {formatDisplayDate(dueDate)}
     </span>
   )
@@ -62,22 +60,13 @@ function DueDateCell({ dueDate, status }: { dueDate: string; status: InvoiceStat
 
 const columnHelper = createColumnHelper<RecentInvoice>()
 
-const thStyle = {
-  color: 'var(--ink-400)',
-  fontFamily: 'var(--font-display)',
-  fontSize: 11,
-  fontWeight: 600,
-  letterSpacing: '0.08em',
-  textTransform: 'uppercase' as const,
-  paddingTop: 10,
-  paddingBottom: 10,
-}
+const thClassName = "text-(--ink-400) [font-family:var(--font-display)] text-[11px] font-semibold tracking-[0.08em] uppercase py-[10px]"
 
 function SkeletonRows() {
   return (
     <>
       {Array.from({ length: 5 }).map((_, i) => (
-        <TableRow key={i} style={{ borderBottom: '1px solid var(--border-default)' }}>
+        <TableRow key={i} className="border-b border-(--border-default)">
           <TableCell><Skeleton className="h-3.5 w-24" /></TableCell>
           <TableCell><Skeleton className="h-3.5 w-28" /></TableCell>
           <TableCell><Skeleton className="h-3.5 w-20" /></TableCell>
@@ -99,13 +88,7 @@ export function DashboardRecentInvoices({ invoices, isPending }: DashboardRecent
         <Link
           href={`/invoices/${info.row.original.id}`}
           onClick={(e) => e.stopPropagation()}
-          style={{
-            fontFamily: 'var(--font-mono)',
-            fontSize: 13,
-            fontWeight: 500,
-            color: 'var(--blue-600)',
-            textDecoration: 'none',
-          }}
+          className="[font-family:var(--font-mono)] text-[13px] font-medium text-(--blue-600) no-underline"
         >
           {info.getValue()}
         </Link>
@@ -117,26 +100,11 @@ export function DashboardRecentInvoices({ invoices, isPending }: DashboardRecent
         const client = info.getValue()
         return (
           <div>
-            <p
-              style={{
-                fontFamily: 'var(--font-display)',
-                fontSize: 13,
-                fontWeight: 600,
-                color: 'var(--ink-900)',
-                letterSpacing: '-0.01em',
-              }}
-            >
+            <p className="[font-family:var(--font-display)] text-[13px] font-semibold text-(--ink-900) tracking-[-0.01em]">
               {client.name}
             </p>
             {client.company && (
-              <p
-                style={{
-                  fontFamily: 'var(--font-body)',
-                  fontSize: 11,
-                  color: 'var(--ink-400)',
-                  marginTop: 1,
-                }}
-              >
+              <p className="[font-family:var(--font-body)] text-[11px] text-(--ink-400) mt-[1px]">
                 {client.company}
               </p>
             )}
@@ -153,15 +121,7 @@ export function DashboardRecentInvoices({ invoices, isPending }: DashboardRecent
     columnHelper.accessor('total', {
       header: 'Amount',
       cell: (info) => (
-        <span
-          className="block text-right"
-          style={{
-            fontFamily: 'var(--font-mono)',
-            fontSize: 13,
-            fontWeight: 500,
-            color: 'var(--ink-900)',
-          }}
-        >
+        <span className="block text-right [font-family:var(--font-mono)] text-[13px] font-medium text-(--ink-900)">
           {formatCurrency(info.getValue(), info.row.original.currency)}
         </span>
       ),
@@ -179,25 +139,13 @@ export function DashboardRecentInvoices({ invoices, isPending }: DashboardRecent
   })
 
   return (
-    <div
-      style={{
-        backgroundColor: 'var(--surface-base)',
-        border: '1px solid var(--border-default)',
-        borderRadius: 'var(--r-xl)',
-        overflow: 'hidden',
-      }}
-    >
+    <div className="bg-(--surface-base) border border-(--border-default) rounded-lg overflow-hidden">
       <Table>
         <TableHeader>
-          <TableRow
-            style={{
-              backgroundColor: 'var(--surface-raised)',
-              borderBottom: '1px solid var(--border-default)',
-            }}
-          >
+          <TableRow className="bg-(--surface-raised) border-b border-(--border-default)">
             {table.getHeaderGroups().map((hg) =>
               hg.headers.map((header) => (
-                <TableHead key={header.id} style={thStyle}>
+                <TableHead key={header.id} className={thClassName}>
                   {header.isPlaceholder
                     ? null
                     : flexRender(header.column.columnDef.header, header.getContext())}
@@ -211,18 +159,8 @@ export function DashboardRecentInvoices({ invoices, isPending }: DashboardRecent
             <SkeletonRows />
           ) : invoices.length === 0 ? (
             <TableRow>
-              <TableCell
-                colSpan={5}
-                className="text-center"
-                style={{ padding: '40px 0' }}
-              >
-                <p
-                  style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: 13,
-                    color: 'var(--ink-300)',
-                  }}
-                >
+              <TableCell colSpan={5} className="text-center py-[40px]">
+                <p className="[font-family:var(--font-body)] text-[13px] text-(--ink-300)">
                   No invoices yet
                 </p>
               </TableCell>

@@ -16,7 +16,8 @@ interface BrandingFormProps {
   businessName: string | null
 }
 
-const labelClass = 'text-[12px] font-[600] uppercase tracking-[0.06em] text-[var(--ink-700)]'
+const labelClass =
+  'text-[12px] font-semibold uppercase tracking-[0.06em] text-(--ink-700) [font-family:var(--font-display)]'
 
 export function BrandingForm({ defaultValues, businessName }: BrandingFormProps) {
   const [logoUrl, setLogoUrl] = useState<string | null>(defaultValues.logoUrl)
@@ -41,16 +42,8 @@ export function BrandingForm({ defaultValues, businessName }: BrandingFormProps)
       <div className="flex flex-1 flex-col gap-6">
         {/* Logo */}
         <div className="flex flex-col gap-2">
-          <label
-            className={labelClass}
-            style={{ fontFamily: 'var(--font-display)' }}
-          >
-            Business Logo
-          </label>
-          <p
-            className="text-[13px] text-[var(--ink-400)]"
-            style={{ fontFamily: 'var(--font-body)' }}
-          >
+          <label className={labelClass}>Business Logo</label>
+          <p className="text-[13px] text-(--ink-400) [font-family:var(--font-body)]">
             Appears in the header of your PDF invoices.
           </p>
           <div className="mt-1">
@@ -64,16 +57,8 @@ export function BrandingForm({ defaultValues, businessName }: BrandingFormProps)
 
         {/* Brand color */}
         <div className="flex flex-col gap-2">
-          <label
-            className={labelClass}
-            style={{ fontFamily: 'var(--font-display)' }}
-          >
-            Brand Color
-          </label>
-          <p
-            className="text-[13px] text-[var(--ink-400)]"
-            style={{ fontFamily: 'var(--font-body)' }}
-          >
+          <label className={labelClass}>Brand Color</label>
+          <p className="text-[13px] text-(--ink-400) [font-family:var(--font-body)]">
             Used in the invoice header and accents.
           </p>
           <div className="mt-1">
@@ -87,8 +72,7 @@ export function BrandingForm({ defaultValues, businessName }: BrandingFormProps)
             type="button"
             onClick={handleSave}
             disabled={isPending}
-            className="flex h-[44px] items-center justify-center gap-2 rounded-[var(--r-md)] bg-[var(--blue-600)] px-6 text-[14px] font-[600] text-white transition-colors duration-200 hover:bg-[var(--blue-700)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--blue-600)] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
-            style={{ fontFamily: 'var(--font-display)' }}
+            className="flex h-11 items-center justify-center gap-2 rounded-md bg-(--blue-600) px-6 text-[14px] font-semibold text-white transition-colors duration-200 hover:bg-(--blue-700) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--blue-600) focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 [font-family:var(--font-display)]"
           >
             {isPending && <Loader2 className="h-4 w-4 animate-spin" />}
             Save changes
@@ -98,10 +82,7 @@ export function BrandingForm({ defaultValues, businessName }: BrandingFormProps)
 
       {/* Right: live preview */}
       <div className="flex flex-col items-center gap-3 lg:items-start">
-        <p
-          className="text-[12px] font-[600] uppercase tracking-[0.06em] text-[var(--ink-700)]"
-          style={{ fontFamily: 'var(--font-display)' }}
-        >
+        <p className="text-[12px] font-semibold uppercase tracking-[0.06em] text-(--ink-700) [font-family:var(--font-display)]">
           Preview
         </p>
         <MiniInvoicePreview
@@ -109,10 +90,7 @@ export function BrandingForm({ defaultValues, businessName }: BrandingFormProps)
           logoUrl={logoUrl}
           businessName={businessName}
         />
-        <p
-          className="text-[11px] text-[var(--ink-300)]"
-          style={{ fontFamily: 'var(--font-body)' }}
-        >
+        <p className="text-[11px] text-(--ink-300) [font-family:var(--font-body)]">
           Live preview · updates as you edit
         </p>
       </div>

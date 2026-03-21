@@ -68,30 +68,16 @@ function StatCard({ config, value, isPending, currency }: StatCardProps) {
 
   return (
     <div
-      style={{
-        backgroundColor: 'var(--surface-base)',
-        border: '1px solid var(--border-default)',
-        borderLeft: `3px solid ${config.accentColor}`,
-        borderRadius: 'var(--r-xl)',
-        padding: 'var(--s5)',
-      }}
+      className="bg-(--surface-base) border border-(--border-default) rounded-lg p-(--s5)"
+      style={{ borderLeft: `3px solid ${config.accentColor}` }}
     >
-      <div className="flex items-start justify-between" style={{ marginBottom: 12 }}>
-        <p
-          style={{
-            fontFamily: 'var(--font-display)',
-            fontSize: 11,
-            fontWeight: 600,
-            color: 'var(--ink-400)',
-            letterSpacing: '0.08em',
-            textTransform: 'uppercase',
-          }}
-        >
+      <div className="flex items-start justify-between mb-3">
+        <p className="[font-family:var(--font-display)] text-[11px] font-semibold text-(--ink-400) tracking-[0.08em] uppercase">
           {config.label}
         </p>
         <Icon
-          style={{ color: config.accentColor, opacity: 0.6, flexShrink: 0 }}
-          className="h-4 w-4"
+          className="h-4 w-4 shrink-0 opacity-60"
+          style={{ color: config.accentColor }}
         />
       </div>
 
@@ -99,27 +85,17 @@ function StatCard({ config, value, isPending, currency }: StatCardProps) {
         <Skeleton className="h-8 w-36 mb-2" />
       ) : (
         <p
+          className="[font-family:var(--font-mono)] font-medium leading-none tracking-[-0.02em] mb-2"
           style={{
-            fontFamily: 'var(--font-mono)',
             fontSize: config.isCount ? 36 : 26,
-            fontWeight: 500,
             color: config.valueColor,
-            lineHeight: 1,
-            letterSpacing: '-0.02em',
-            marginBottom: 8,
           }}
         >
           {config.isCount ? value.toLocaleString() : formatCurrency(value, currency)}
         </p>
       )}
 
-      <p
-        style={{
-          fontFamily: 'var(--font-body)',
-          fontSize: 12,
-          color: 'var(--ink-300)',
-        }}
-      >
+      <p className="[font-family:var(--font-body)] text-[12px] text-(--ink-300)">
         {config.description}
       </p>
     </div>
@@ -137,13 +113,7 @@ export function StatsCards({ stats, isPending }: StatsCardsProps) {
   }
 
   return (
-    <div
-      style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-        gap: 'var(--s4)',
-      }}
-    >
+    <div className="grid gap-[var(--s4)] grid-cols-[repeat(auto-fit,minmax(200px,1fr))]">
       {CARD_CONFIGS.map((config) => (
         <StatCard
           key={config.key}

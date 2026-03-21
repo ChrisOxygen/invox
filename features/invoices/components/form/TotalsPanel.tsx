@@ -24,24 +24,21 @@ function TypeToggle({
   disabled?: boolean
 }) {
   return (
-    <div
-      className="flex rounded overflow-hidden border"
-      style={{ borderColor: 'var(--border-default)', height: '26px' }}
-    >
+    <div className="flex rounded overflow-hidden border border-(--border-default) h-6.5">
       {(['PERCENTAGE', 'FIXED'] as const).map((opt) => (
         <button
           key={opt}
           type="button"
           disabled={disabled}
           onClick={() => onChange(opt)}
-          className="px-2 text-xs font-medium transition-colors"
-          style={{
-            fontFamily: 'var(--font-display)',
-            background: value === opt ? 'var(--blue-50)' : 'var(--surface-base)',
-            color: value === opt ? 'var(--blue-600)' : 'var(--ink-400)',
-            borderRight: opt === 'PERCENTAGE' ? `1px solid var(--border-default)` : 'none',
-            cursor: disabled ? 'not-allowed' : 'pointer',
-          }}
+          className={`px-2 text-xs font-medium transition-colors [font-family:var(--font-display)] ${
+            opt === 'PERCENTAGE' ? 'border-r border-(--border-default)' : ''
+          } ${
+            value === opt
+              ? 'bg-(--blue-50) text-(--blue-600)'
+              : 'bg-(--surface-base) text-(--ink-400)'
+          }`}
+          style={{ cursor: disabled ? 'not-allowed' : 'pointer' }}
         >
           {opt === 'PERCENTAGE' ? '%' : '₦'}
         </button>
@@ -59,31 +56,26 @@ export function TotalsPanel({
   currency,
 }: TotalsPanelProps) {
   const taxRate = useWatch({ control, name: 'taxRate' })
-  const taxType = useWatch({ control, name: 'taxType' })
   const discount = useWatch({ control, name: 'discount' })
-  const discountType = useWatch({ control, name: 'discountType' })
 
   const hasDiscount = Number(discount) > 0
   const hasTax = Number(taxRate) > 0
 
   return (
-    <div className="ml-auto mt-4" style={{ maxWidth: '340px', width: '100%' }}>
+    <div className="ml-auto mt-4 w-full max-w-85">
       {/* Subtotal */}
       <div className="flex items-center justify-between py-2">
-        <span className="text-sm" style={{ color: 'var(--ink-400)', fontFamily: 'var(--font-body)' }}>
+        <span className="text-sm [font-family:var(--font-body)] text-(--ink-400)">
           Subtotal
         </span>
-        <span
-          className="text-sm"
-          style={{ color: 'var(--ink-900)', fontFamily: 'var(--font-mono)' }}
-        >
+        <span className="text-sm font-mono text-(--ink-900)">
           {formatCurrency(subtotal, currency)}
         </span>
       </div>
 
       {/* Discount row */}
       <div className="flex items-center gap-3 py-2">
-        <span className="text-sm shrink-0" style={{ color: 'var(--ink-400)', fontFamily: 'var(--font-body)' }}>
+        <span className="text-sm shrink-0 [font-family:var(--font-body)] text-(--ink-400)">
           Discount
         </span>
         <div className="flex flex-1 items-center gap-2">
@@ -99,13 +91,7 @@ export function TotalsPanel({
                 step="any"
                 placeholder="0"
                 onChange={(e) => field.onChange(e.target.value === '' ? 0 : parseFloat(e.target.value))}
-                className="w-16 rounded px-2 py-1 text-sm text-right outline-none"
-                style={{
-                  fontFamily: 'var(--font-mono)',
-                  color: 'var(--ink-900)',
-                  border: '1px solid var(--border-default)',
-                  background: 'var(--surface-base)',
-                }}
+                className="w-16 rounded px-2 py-1 text-sm text-right outline-none font-mono text-(--ink-900) border border-(--border-default) bg-(--surface-base)"
               />
             )}
           />
@@ -118,13 +104,7 @@ export function TotalsPanel({
           />
         </div>
         <span
-          className="text-sm shrink-0"
-          style={{
-            color: hasDiscount ? 'var(--error)' : 'var(--ink-300)',
-            fontFamily: 'var(--font-mono)',
-            minWidth: '80px',
-            textAlign: 'right',
-          }}
+          className={`text-sm shrink-0 font-mono text-right min-w-20 ${hasDiscount ? 'text-(--error)' : 'text-(--ink-300)'}`}
         >
           {hasDiscount ? `-${formatCurrency(discountAmount, currency)}` : '—'}
         </span>
@@ -132,7 +112,7 @@ export function TotalsPanel({
 
       {/* Tax row */}
       <div className="flex items-center gap-3 py-2">
-        <span className="text-sm shrink-0" style={{ color: 'var(--ink-400)', fontFamily: 'var(--font-body)' }}>
+        <span className="text-sm shrink-0 [font-family:var(--font-body)] text-(--ink-400)">
           VAT / Tax
         </span>
         <div className="flex flex-1 items-center gap-2">
@@ -148,13 +128,7 @@ export function TotalsPanel({
                 step="any"
                 placeholder="0"
                 onChange={(e) => field.onChange(e.target.value === '' ? 0 : parseFloat(e.target.value))}
-                className="w-16 rounded px-2 py-1 text-sm text-right outline-none"
-                style={{
-                  fontFamily: 'var(--font-mono)',
-                  color: 'var(--ink-900)',
-                  border: '1px solid var(--border-default)',
-                  background: 'var(--surface-base)',
-                }}
+                className="w-16 rounded px-2 py-1 text-sm text-right outline-none font-mono text-(--ink-900) border border-(--border-default) bg-(--surface-base)"
               />
             )}
           />
@@ -167,45 +141,21 @@ export function TotalsPanel({
           />
         </div>
         <span
-          className="text-sm shrink-0"
-          style={{
-            color: hasTax ? 'var(--ink-900)' : 'var(--ink-300)',
-            fontFamily: 'var(--font-mono)',
-            minWidth: '80px',
-            textAlign: 'right',
-          }}
+          className={`text-sm shrink-0 font-mono text-right min-w-20 ${hasTax ? 'text-(--ink-900)' : 'text-(--ink-300)'}`}
         >
           {hasTax ? `+${formatCurrency(taxAmount, currency)}` : '—'}
         </span>
       </div>
 
       {/* Separator */}
-      <div
-        className="my-2 h-px"
-        style={{ background: 'var(--border-default)' }}
-      />
+      <div className="my-2 h-px bg-(--border-default)" />
 
       {/* Total */}
       <div className="flex items-center justify-between py-2">
-        <span
-          className="font-semibold"
-          style={{
-            color: 'var(--ink-900)',
-            fontFamily: 'var(--font-display)',
-            fontSize: '15px',
-          }}
-        >
+        <span className="font-semibold [font-family:var(--font-display)] text-[15px] text-(--ink-900)">
           Total
         </span>
-        <span
-          style={{
-            color: 'var(--ink-900)',
-            fontFamily: 'var(--font-mono)',
-            fontSize: '20px',
-            fontWeight: 600,
-            letterSpacing: '-0.02em',
-          }}
-        >
+        <span className="font-mono text-[20px] font-semibold text-(--ink-900) tracking-[-0.02em]">
           {formatCurrency(total, currency)}
         </span>
       </div>

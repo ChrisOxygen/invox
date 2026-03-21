@@ -64,22 +64,12 @@ export function InvoiceFilters({ filters, onFilterChange }: InvoiceFiltersProps)
               key={tab.value}
               type="button"
               onClick={() => handleStatusChange(tab.value)}
+              className="[font-family:var(--font-display)] text-[13px] rounded-md px-3 py-1.5 cursor-pointer transition-all leading-none whitespace-nowrap"
               style={{
-                fontFamily: 'var(--font-display)',
-                fontSize: 13,
                 fontWeight: isActive ? 600 : 500,
                 color: isActive ? 'var(--blue-600)' : 'var(--ink-400)',
                 backgroundColor: isActive ? 'var(--blue-50)' : 'transparent',
                 border: isActive ? '1px solid var(--blue-200)' : '1px solid transparent',
-                borderRadius: 'var(--r-md)',
-                paddingLeft: 12,
-                paddingRight: 12,
-                paddingTop: 6,
-                paddingBottom: 6,
-                cursor: 'pointer',
-                transition: 'all 100ms ease',
-                lineHeight: 1,
-                whiteSpace: 'nowrap',
               }}
               onMouseEnter={(e) => {
                 if (!isActive) {
@@ -105,40 +95,20 @@ export function InvoiceFilters({ filters, onFilterChange }: InvoiceFiltersProps)
       {/* Search + New Invoice row */}
       <div className="flex items-center gap-3">
         <div className="relative flex-1 max-w-sm">
-          <Search
-            className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 pointer-events-none"
-            style={{ color: 'var(--ink-300)' }}
-          />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 pointer-events-none text-(--ink-300)" />
           <Input
             type="text"
             placeholder="Search by invoice # or client..."
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
-            className="pl-9"
-            style={{
-              fontFamily: 'var(--font-body)',
-              fontSize: 14,
-              borderColor: 'var(--border-default)',
-              backgroundColor: 'var(--surface-base)',
-              color: 'var(--ink-900)',
-              borderRadius: 'var(--r-md)',
-              height: 36,
-            }}
+            className="pl-9 [font-family:var(--font-body)] text-[14px] border-(--border-default) bg-(--surface-base) text-(--ink-900) rounded-md h-9"
           />
         </div>
 
         <div className="ml-auto">
           <Link
             href="/invoices/new"
-            className="inline-flex items-center gap-1.5 rounded-lg text-sm font-semibold transition-colors hover:opacity-90"
-            style={{
-              fontFamily: 'var(--font-display)',
-              backgroundColor: 'var(--blue-600)',
-              color: '#fff',
-              height: 36,
-              paddingLeft: 14,
-              paddingRight: 14,
-            }}
+            className="inline-flex items-center gap-1.5 rounded-md text-sm font-semibold transition-colors hover:opacity-90 [font-family:var(--font-display)] bg-(--blue-600) text-white h-9 px-3.5"
           >
             <Plus className="w-3.5 h-3.5" />
             New Invoice

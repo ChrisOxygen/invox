@@ -36,30 +36,17 @@ export function Step4BankDetails() {
     <div className="flex flex-col gap-6">
       {/* Header */}
       <div className="flex flex-col gap-2">
-        <h2
-          className="font-[family-name:var(--font-display)] font-extrabold"
-          style={{ fontSize: '24px', color: 'var(--ink-900)', letterSpacing: '-0.02em' }}
-        >
+        <h2 className="[font-family:var(--font-display)] font-extrabold text-[24px] text-(--ink-900) tracking-[-0.02em]">
           Add your bank details
         </h2>
-        <p
-          className="font-[family-name:var(--font-body)]"
-          style={{ fontSize: '14px', color: 'var(--ink-400)' }}
-        >
+        <p className="[font-family:var(--font-body)] text-[14px] text-(--ink-400)">
           These appear on your invoices so clients know where to pay.
         </p>
 
         {/* Trust note */}
         <div className="flex items-center gap-1.5 mt-1">
-          <LockKeyhole
-            size={14}
-            style={{ color: 'var(--ink-300)', flexShrink: 0 }}
-            aria-hidden="true"
-          />
-          <span
-            className="font-[family-name:var(--font-body)]"
-            style={{ fontSize: '12px', color: 'var(--ink-300)' }}
-          >
+          <LockKeyhole size={14} className="text-(--ink-300) shrink-0" aria-hidden="true" />
+          <span className="[font-family:var(--font-body)] text-[12px] text-(--ink-300)">
             Your information is encrypted and never shared
           </span>
         </div>
@@ -67,82 +54,56 @@ export function Step4BankDetails() {
 
       {/* Form */}
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
-          {/* Bank name */}
-          <div className="flex flex-col gap-1.5">
-            <Label className="font-[family-name:var(--font-display)] font-semibold uppercase" style={{ fontSize: '12px', color: 'var(--ink-700)', letterSpacing: '0.06em' }}>
-              Bank Name
-            </Label>
-            <Input {...register('bankName')} placeholder="Guaranty Trust Bank" className="font-[family-name:var(--font-body)] h-11 rounded-[var(--r-md)] px-3.5 text-[14px]" />
-          </div>
+        {/* Bank name */}
+        <div className="flex flex-col gap-1.5">
+          <Label className="[font-family:var(--font-display)] font-semibold uppercase text-[12px] text-(--ink-700) tracking-[0.06em]">
+            Bank Name
+          </Label>
+          <Input {...register('bankName')} placeholder="Guaranty Trust Bank" className="[font-family:var(--font-body)] h-11 rounded-md px-3.5 text-[14px]" />
+        </div>
 
-          {/* Account name */}
-          <div className="flex flex-col gap-1.5">
-            <Label className="font-[family-name:var(--font-display)] font-semibold uppercase" style={{ fontSize: '12px', color: 'var(--ink-700)', letterSpacing: '0.06em' }}>
-              Account Name
-            </Label>
-            <Input {...register('accountName')} placeholder="Chidi Okeke Design Studio" className="font-[family-name:var(--font-body)] h-11 rounded-[var(--r-md)] px-3.5 text-[14px]" />
-          </div>
+        {/* Account name */}
+        <div className="flex flex-col gap-1.5">
+          <Label className="[font-family:var(--font-display)] font-semibold uppercase text-[12px] text-(--ink-700) tracking-[0.06em]">
+            Account Name
+          </Label>
+          <Input {...register('accountName')} placeholder="Chidi Okeke Design Studio" className="[font-family:var(--font-body)] h-11 rounded-md px-3.5 text-[14px]" />
+        </div>
 
-          {/* Account number */}
-          <div className="flex flex-col gap-1.5">
-            <Label className="font-[family-name:var(--font-display)] font-semibold uppercase" style={{ fontSize: '12px', color: 'var(--ink-700)', letterSpacing: '0.06em' }}>
-              Account Number
-            </Label>
-            <Input {...register('accountNumber')} placeholder="0123456789" inputMode="numeric" maxLength={10} className="font-[family-name:var(--font-mono)] h-11 rounded-[var(--r-md)] px-3.5 text-[14px]" />
-          </div>
+        {/* Account number */}
+        <div className="flex flex-col gap-1.5">
+          <Label className="[font-family:var(--font-display)] font-semibold uppercase text-[12px] text-(--ink-700) tracking-[0.06em]">
+            Account Number
+          </Label>
+          <Input {...register('accountNumber')} placeholder="0123456789" inputMode="numeric" maxLength={10} className="font-mono h-11 rounded-md px-3.5 text-[14px]" />
+        </div>
 
-          {/* Settings note */}
-          <p
-            className="font-[family-name:var(--font-body)]"
-            style={{
-              fontSize: '12px',
-              color: 'var(--ink-300)',
-              padding: '10px 12px',
-              backgroundColor: 'var(--surface-overlay)',
-              borderRadius: 'var(--r-md)',
-              border: '1px solid var(--border-default)',
-            }}
+        {/* Settings note */}
+        <p className="[font-family:var(--font-body)] text-[12px] text-(--ink-300) px-3 py-2.5 bg-(--surface-overlay) rounded-md border border-(--border-default)">
+          You can add or update these later in{' '}
+          <span className="text-(--ink-500) font-medium">
+            Settings → Bank Details
+          </span>
+        </p>
+
+        {/* Actions */}
+        <div className="flex flex-col gap-2 mt-2">
+          <Button
+            type="submit"
+            className="w-full h-11 [font-family:var(--font-display)] font-semibold"
           >
-            You can add or update these later in{' '}
-            <span style={{ color: 'var(--ink-500)', fontWeight: 500 }}>
-              Settings → Bank Details
-            </span>
-          </p>
+            Save &amp; Continue
+          </Button>
 
-          {/* Actions */}
-          <div className="flex flex-col gap-2 mt-2">
-            <Button
-              type="submit"
-              className="w-full font-[family-name:var(--font-display)] font-semibold"
-              style={{ height: '44px' }}
-            >
-              Save &amp; Continue
-            </Button>
-
-            <button
-              type="button"
-              onClick={nextStep}
-              className="font-[family-name:var(--font-body)] transition-colors"
-              style={{
-                fontSize: '13px',
-                color: 'var(--blue-600)',
-                background: 'none',
-                border: 'none',
-                cursor: 'pointer',
-                padding: '6px',
-                textAlign: 'center',
-              }}
-              onMouseEnter={(e) => {
-                ;(e.currentTarget as HTMLButtonElement).style.color = 'var(--blue-700)'
-              }}
-              onMouseLeave={(e) => {
-                ;(e.currentTarget as HTMLButtonElement).style.color = 'var(--blue-600)'
-              }}
-            >
-              Skip for now →
-            </button>
-          </div>
-        </form>
+          <button
+            type="button"
+            onClick={nextStep}
+            className="[font-family:var(--font-body)] text-[13px] text-(--blue-600) bg-transparent border-none cursor-pointer px-1.5 py-1 text-center transition-colors hover:text-(--blue-700) focus-visible:outline-none focus-visible:underline"
+          >
+            Skip for now →
+          </button>
+        </div>
+      </form>
     </div>
   )
 }

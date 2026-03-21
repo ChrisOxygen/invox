@@ -14,10 +14,7 @@ export function OnboardingShell({ children }: OnboardingShellProps) {
   const { step } = useOnboarding()
 
   return (
-    <div
-      className="relative flex min-h-screen w-full flex-col"
-      style={{ backgroundColor: 'var(--surface-page)' }}
-    >
+    <div className="relative flex min-h-screen w-full flex-col bg-(--surface-page)">
       {/* Top-left logo */}
       <div className="absolute left-0 top-0 p-6 flex items-center gap-2.5">
         <svg
@@ -32,26 +29,14 @@ export function OnboardingShell({ children }: OnboardingShellProps) {
           <rect x="11" y="7" width="6" height="17" rx="2" fill="var(--blue-600)" />
           <rect x="22" y="0" width="6" height="24" rx="2" fill="var(--cyan-400)" />
         </svg>
-        <span
-          className="font-[family-name:var(--font-display)] font-extrabold tracking-tight"
-          style={{ fontSize: '20px', color: 'var(--ink-900)' }}
-        >
-          Invox<span style={{ color: 'var(--blue-600)' }}>.</span>
+        <span className="[font-family:var(--font-display)] font-extrabold tracking-tight text-[20px] text-(--ink-900)">
+          Invox<span className="text-(--blue-600)">.</span>
         </span>
       </div>
 
       {/* Centered card */}
       <div className="flex flex-1 items-center justify-center px-4 py-24">
-        <div
-          className="w-full shadow-sm"
-          style={{
-            maxWidth: '512px',
-            backgroundColor: 'var(--surface-base)',
-            borderRadius: 'var(--r-2xl)',
-            border: '1px solid var(--border-default)',
-            padding: '2rem',
-          }}
-        >
+        <div className="w-full max-w-lg shadow-sm bg-(--surface-base) rounded-xl border border-(--border-default) p-8">
           {/* Only show progress bar during steps 1–4 */}
           {step >= 1 && step <= TOTAL_STEPS && (
             <ProgressBar currentStep={step} totalSteps={TOTAL_STEPS} />

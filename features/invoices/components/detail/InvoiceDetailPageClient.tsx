@@ -17,18 +17,18 @@ function DetailSkeleton() {
       <div className="flex items-center justify-between">
         <Skeleton className="h-6 w-24 rounded-full" />
         <div className="flex gap-[var(--s2)]">
-          <Skeleton className="h-8 w-28 rounded-[var(--r-md)]" />
-          <Skeleton className="h-8 w-24 rounded-[var(--r-md)]" />
-          <Skeleton className="h-8 w-8 rounded-[var(--r-md)]" />
+          <Skeleton className="h-8 w-28 rounded-md" />
+          <Skeleton className="h-8 w-24 rounded-md" />
+          <Skeleton className="h-8 w-8 rounded-md" />
         </div>
       </div>
       {/* Two-column skeleton */}
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-[var(--s5)]">
         <div className="lg:col-span-3 space-y-3">
-          <Skeleton className="h-[480px] w-full rounded-[var(--r-xl)]" />
+          <Skeleton className="h-[480px] w-full rounded-lg" />
         </div>
         <div className="lg:col-span-2">
-          <Skeleton className="h-[320px] w-full rounded-[var(--r-xl)]" />
+          <Skeleton className="h-[320px] w-full rounded-lg" />
         </div>
       </div>
     </div>
@@ -37,41 +37,19 @@ function DetailSkeleton() {
 
 function NotFound() {
   return (
-    <div
-      className="flex flex-col items-center justify-center min-h-[400px] rounded-[var(--r-xl)] border p-[var(--s10)]"
-      style={{ background: 'var(--surface-base)', borderColor: 'var(--border-default)' }}
-    >
-      <div
-        className="w-12 h-12 rounded-[var(--r-xl)] flex items-center justify-center mb-[var(--s4)]"
-        style={{ background: 'var(--surface-overlay)' }}
-      >
-        <FileX className="h-6 w-6" style={{ color: 'var(--ink-300)' }} />
+    <div className="flex flex-col items-center justify-center min-h-[400px] rounded-lg border p-(--s10) bg-(--surface-base) border-(--border-default)">
+      <div className="w-12 h-12 rounded-lg flex items-center justify-center mb-(--s4) bg-(--surface-overlay)">
+        <FileX className="h-6 w-6 text-(--ink-300)" />
       </div>
-      <h2
-        className="text-xl font-bold mb-2"
-        style={{
-          color: 'var(--ink-900)',
-          fontFamily: 'var(--font-display)',
-          letterSpacing: '-0.025em',
-        }}
-      >
+      <h2 className="text-xl font-bold mb-2 text-(--ink-900) [font-family:var(--font-display)] tracking-[-0.025em]">
         Invoice not found
       </h2>
-      <p
-        className="text-sm mb-[var(--s6)] text-center max-w-xs"
-        style={{ color: 'var(--ink-400)', fontFamily: 'var(--font-body)' }}
-      >
+      <p className="text-sm mb-[var(--s6)] text-center max-w-xs text-(--ink-400) [font-family:var(--font-body)]">
         This invoice may have been deleted or does not belong to your account.
       </p>
       <Link
         href="/invoices"
-        className="inline-flex items-center gap-1.5 rounded-[var(--r-md)] border px-3 py-1.5 text-sm font-medium transition-colors hover:bg-muted"
-        style={{
-          borderColor: 'var(--border-strong)',
-          color: 'var(--ink-900)',
-          fontFamily: 'var(--font-display)',
-          fontSize: '13px',
-        }}
+        className="inline-flex items-center gap-1.5 rounded-md border px-3 py-1.5 text-sm font-medium transition-colors hover:bg-muted border-(--border-strong) text-(--ink-900) [font-family:var(--font-display)] text-[13px]"
       >
         <ArrowLeft className="h-4 w-4" />
         Back to Invoices
@@ -91,10 +69,7 @@ export function InvoiceDetailPageClient({ id }: { id: string }) {
   return (
     <div className="space-y-[var(--s5)]">
       {/* Actions toolbar */}
-      <div
-        className="rounded-[var(--r-xl)] border px-[var(--s5)] py-[var(--s4)]"
-        style={{ background: 'var(--surface-base)', borderColor: 'var(--border-default)' }}
-      >
+      <div className="rounded-lg border px-(--s5) py-(--s4) bg-(--surface-base) border-(--border-default)">
         <ActionsToolbar invoice={invoice} onRecordPayment={() => setMarkPaidOpen(true)} />
       </div>
 

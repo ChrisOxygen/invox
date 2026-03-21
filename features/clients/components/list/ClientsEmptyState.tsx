@@ -14,17 +14,16 @@ export function ClientsEmptyState({ variant, onAdd, onClear }: ClientsEmptyState
     return (
       <div className="flex flex-col items-center justify-center py-20 text-center">
         <div
-          className="flex items-center justify-center rounded-full mb-5"
-          style={{ width: 56, height: 56, backgroundColor: 'var(--surface-overlay)', color: 'var(--ink-400)' }}
+          className="flex items-center justify-center rounded-full mb-5 bg-(--surface-overlay) text-(--ink-400) w-14 h-14"
         >
           <SearchX className="w-6 h-6" />
         </div>
 
-        <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 16, fontWeight: 700, color: 'var(--ink-900)', letterSpacing: '-0.02em', marginBottom: 6 }}>
+        <h3 className="[font-family:var(--font-display)] text-[16px] font-bold text-(--ink-900) tracking-[-0.02em] mb-[6px]">
           No results found
         </h3>
 
-        <p style={{ fontFamily: 'var(--font-body)', fontSize: 14, color: 'var(--ink-400)', maxWidth: 300, marginBottom: 20, lineHeight: 1.5 }}>
+        <p className="[font-family:var(--font-body)] text-[14px] text-(--ink-400) max-w-[300px] mb-5 leading-[1.5]">
           Try adjusting your search — no clients match your current query.
         </p>
 
@@ -33,7 +32,7 @@ export function ClientsEmptyState({ variant, onAdd, onClear }: ClientsEmptyState
             variant="outline"
             onClick={onClear}
             size="sm"
-            style={{ fontFamily: 'var(--font-display)', fontWeight: 600, fontSize: 13, borderColor: 'var(--border-strong)', color: 'var(--ink-700)', borderRadius: 'var(--r-md)' }}
+            className="[font-family:var(--font-display)] font-semibold text-[13px] border-(--border-strong) text-(--ink-700) rounded-md"
           >
             <X className="w-3.5 h-3.5 mr-1.5" />
             Clear search
@@ -46,17 +45,16 @@ export function ClientsEmptyState({ variant, onAdd, onClear }: ClientsEmptyState
   return (
     <div className="flex flex-col items-center justify-center py-20 text-center">
       <div
-        className="flex items-center justify-center rounded-full mb-5"
-        style={{ width: 56, height: 56, backgroundColor: 'var(--blue-50)', color: 'var(--blue-600)' }}
+        className="flex items-center justify-center rounded-full mb-5 bg-(--blue-50) text-(--blue-600) w-14 h-14"
       >
         <Users className="w-6 h-6" />
       </div>
 
-      <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 16, fontWeight: 700, color: 'var(--ink-900)', letterSpacing: '-0.02em', marginBottom: 6 }}>
+      <h3 className="[font-family:var(--font-display)] text-[16px] font-bold text-(--ink-900) tracking-[-0.02em] mb-[6px]">
         No clients yet
       </h3>
 
-      <p style={{ fontFamily: 'var(--font-body)', fontSize: 14, color: 'var(--ink-400)', maxWidth: 300, marginBottom: 20, lineHeight: 1.5 }}>
+      <p className="[font-family:var(--font-body)] text-[14px] text-(--ink-400) max-w-[300px] mb-5 leading-[1.5]">
         Add your first client to get started managing your business relationships.
       </p>
 
@@ -64,7 +62,7 @@ export function ClientsEmptyState({ variant, onAdd, onClear }: ClientsEmptyState
         <Button
           onClick={onAdd}
           size="sm"
-          style={{ fontFamily: 'var(--font-display)', fontWeight: 600, fontSize: 13, backgroundColor: 'var(--blue-600)', color: '#fff', borderRadius: 'var(--r-md)', border: 'none' }}
+          className="[font-family:var(--font-display)] font-semibold text-[13px] bg-(--blue-600) text-white border-0 rounded-md"
         >
           <Plus className="w-3.5 h-3.5 mr-1.5" />
           Add Client

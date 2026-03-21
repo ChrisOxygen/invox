@@ -69,7 +69,7 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
         {/* Floating invoice card */}
         <div className="relative z-10 flex flex-col items-center gap-8 px-10">
           <div
-            className="w-[340px] bg-[var(--surface-base)] rounded-[var(--r-xl)] p-6 shadow-2xl"
+            className="w-[340px] bg-[var(--surface-base)] rounded-lg p-6 shadow-2xl"
             style={{ boxShadow: '0 32px 80px rgba(0,0,0,0.45), 0 0 0 1px rgba(255,255,255,0.06)' }}
           >
             {/* Card header */}

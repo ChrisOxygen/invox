@@ -36,10 +36,10 @@ function InvoiceStatusBadge({ status }: { status: InvoiceStatus }) {
   const config = STATUS_CONFIG[status] ?? STATUS_CONFIG.DRAFT
   return (
     <span
-      className="inline-flex items-center gap-1.5 px-2.5 py-0.5 text-xs font-semibold"
-      style={{ background: config.bg, color: config.text, borderRadius: '999px', fontFamily: 'var(--font-display)' }}
+      className="inline-flex items-center gap-1.5 px-2.5 py-0.5 text-xs font-semibold [font-family:var(--font-display)] rounded-full"
+      style={{ background: config.bg, color: config.text }}
     >
-      <span className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: config.dot }} />
+      <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: config.dot }} />
       {config.label}
     </span>
   )
@@ -64,19 +64,18 @@ function SkeletonRows() {
 function EmptyState({ clientId }: { clientId: string }) {
   return (
     <div className="flex flex-col items-center justify-center py-14 text-center">
-      <div className="w-12 h-12 rounded-[var(--r-xl)] flex items-center justify-center mb-[var(--s4)]" style={{ background: 'var(--surface-overlay)' }}>
-        <FileText className="h-5 w-5" style={{ color: 'var(--ink-300)' }} />
+      <div className="w-12 h-12 rounded-lg flex items-center justify-center mb-(--s4) bg-(--surface-overlay)">
+        <FileText className="h-5 w-5 text-(--ink-300)" />
       </div>
-      <p className="font-semibold mb-1" style={{ color: 'var(--ink-900)', fontFamily: 'var(--font-display)', fontSize: '15px' }}>
+      <p className="font-semibold mb-1 text-(--ink-900) [font-family:var(--font-display)] text-[15px]">
         No invoices yet
       </p>
-      <p className="text-sm mb-[var(--s5)] max-w-xs" style={{ color: 'var(--ink-400)', fontFamily: 'var(--font-body)' }}>
+      <p className="text-sm mb-[var(--s5)] max-w-xs text-(--ink-400) [font-family:var(--font-body)]">
         Create your first invoice for this client to start tracking your billing history.
       </p>
       <Link
         href={`/invoices/new?clientId=${clientId}`}
-        className="inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-sm font-medium transition-opacity hover:opacity-90"
-        style={{ background: 'var(--blue-600)', color: 'white', fontFamily: 'var(--font-display)' }}
+        className="inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-sm font-medium transition-opacity hover:opacity-90 bg-(--blue-600) text-white [font-family:var(--font-display)]"
       >
         <Plus className="h-4 w-4" />
         Create Invoice
@@ -94,7 +93,7 @@ function SortIcon({ active, dir }: { active: boolean; dir: SortDir }) {
   return <ArrowDown className="ml-1.5 h-3.5 w-3.5" />
 }
 
-const thStyle = { color: 'var(--ink-400)', fontFamily: 'var(--font-display)', fontSize: '11px', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase' as const }
+const thClassName = "text-(--ink-400) [font-family:var(--font-display)] text-[11px] font-bold tracking-[0.08em] uppercase"
 
 export function ClientInvoiceHistory({ invoices, isLoading, clientId }: {
   invoices: InvoiceHistoryItem[]; isLoading: boolean; clientId: string
@@ -124,8 +123,12 @@ export function ClientInvoiceHistory({ invoices, isLoading, clientId }: {
   }, [invoices, sortKey, sortDir])
 
   const SortableHead = ({ col, children }: { col: SortKey; children: React.ReactNode }) => (
-    <TableHead style={thStyle}>
-      <button className="flex items-center cursor-pointer opacity-80 hover:opacity-100 transition-opacity" onClick={() => handleSort(col)} style={{ color: sortKey === col ? 'var(--ink-900)' : 'var(--ink-400)' }}>
+    <TableHead className={thClassName}>
+      <button
+        className="flex items-center cursor-pointer opacity-80 hover:opacity-100 transition-opacity"
+        onClick={() => handleSort(col)}
+        style={{ color: sortKey === col ? 'var(--ink-900)' : 'var(--ink-400)' }}
+      >
         {children}
         <SortIcon active={sortKey === col} dir={sortDir} />
       </button>
@@ -133,22 +136,21 @@ export function ClientInvoiceHistory({ invoices, isLoading, clientId }: {
   )
 
   return (
-    <div className="rounded-[var(--r-xl)] border overflow-hidden" style={{ background: 'var(--surface-base)', borderColor: 'var(--border-default)' }}>
-      <div className="px-[var(--s5)] py-[var(--s4)] border-b flex items-center justify-between" style={{ borderColor: 'var(--border-default)' }}>
+    <div className="rounded-lg border overflow-hidden bg-(--surface-base) border-(--border-default)">
+      <div className="px-[var(--s5)] py-[var(--s4)] border-b border-(--border-default) flex items-center justify-between">
         <div>
-          <h3 className="font-bold" style={{ color: 'var(--ink-900)', fontFamily: 'var(--font-display)', fontSize: '15px', letterSpacing: '-0.02em' }}>
+          <h3 className="font-bold text-(--ink-900) [font-family:var(--font-display)] text-[15px] tracking-[-0.02em]">
             Invoice History
           </h3>
           {!isLoading && (
-            <p className="text-xs mt-0.5" style={{ color: 'var(--ink-400)', fontFamily: 'var(--font-body)' }}>
+            <p className="text-xs mt-0.5 text-(--ink-400) [font-family:var(--font-body)]">
               {invoices.length} invoice{invoices.length !== 1 ? 's' : ''} total
             </p>
           )}
         </div>
         <Link
           href={`/invoices/new?clientId=${clientId}`}
-          className="inline-flex items-center gap-1.5 rounded-lg border px-2.5 py-1 text-[0.8rem] font-medium transition-colors hover:bg-muted"
-          style={{ borderColor: 'var(--border-strong)', color: 'var(--ink-900)', fontFamily: 'var(--font-display)', fontSize: '13px' }}
+          className="inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1 text-[0.8rem] font-medium transition-colors hover:bg-muted border-(--border-strong) text-(--ink-900) [font-family:var(--font-display)] text-[13px]"
         >
           <Plus className="h-3.5 w-3.5" />
           New Invoice
@@ -157,12 +159,12 @@ export function ClientInvoiceHistory({ invoices, isLoading, clientId }: {
 
       <Table>
         <TableHeader>
-          <TableRow style={{ background: 'var(--surface-raised)' }}>
+          <TableRow className="bg-(--surface-raised)">
             <SortableHead col="invoiceNumber">Invoice #</SortableHead>
             <SortableHead col="issueDate">Issue Date</SortableHead>
             <SortableHead col="dueDate">Due Date</SortableHead>
             <SortableHead col="total">Amount</SortableHead>
-            <TableHead style={thStyle}>Status</TableHead>
+            <TableHead className={thClassName}>Status</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -174,20 +176,20 @@ export function ClientInvoiceHistory({ invoices, isLoading, clientId }: {
             </TableRow>
           ) : (
             sorted.map((invoice) => (
-              <TableRow key={invoice.id} style={{ borderColor: 'var(--border-default)' }}>
+              <TableRow key={invoice.id} className="border-(--border-default)">
                 <TableCell>
-                  <Link href={`/invoices/${invoice.id}`} className="hover:underline underline-offset-2 font-medium transition-colors" style={{ color: 'var(--blue-600)', fontFamily: 'var(--font-mono)', fontSize: '13px' }}>
+                  <Link href={`/invoices/${invoice.id}`} className="hover:underline underline-offset-2 font-medium transition-colors text-(--blue-600) [font-family:var(--font-mono)] text-[13px]">
                     {invoice.invoiceNumber}
                   </Link>
                 </TableCell>
                 <TableCell>
-                  <span style={{ color: 'var(--ink-900)', fontFamily: 'var(--font-body)', fontSize: '14px' }}>{formatDate(invoice.issueDate)}</span>
+                  <span className="text-(--ink-900) [font-family:var(--font-body)] text-[14px]">{formatDate(invoice.issueDate)}</span>
                 </TableCell>
                 <TableCell>
-                  <span style={{ color: 'var(--ink-400)', fontFamily: 'var(--font-body)', fontSize: '14px' }}>{formatDate(invoice.dueDate)}</span>
+                  <span className="text-(--ink-400) [font-family:var(--font-body)] text-[14px]">{formatDate(invoice.dueDate)}</span>
                 </TableCell>
                 <TableCell>
-                  <span style={{ color: 'var(--ink-900)', fontFamily: 'var(--font-mono)', fontSize: '13px', fontWeight: 500 }}>
+                  <span className="text-(--ink-900) [font-family:var(--font-mono)] text-[13px] font-medium">
                     {formatCurrency(invoice.total, invoice.currency)}
                   </span>
                 </TableCell>

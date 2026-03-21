@@ -44,35 +44,16 @@ export function InvoicesEmptyState({ status, hasFilters, onClearFilters }: Invoi
     return (
       <div className="flex flex-col items-center justify-center py-20 text-center">
         <div
-          className="flex items-center justify-center rounded-full mb-5"
-          style={{ width: 56, height: 56, backgroundColor: 'var(--surface-overlay)', color: 'var(--ink-400)' }}
+          className="flex items-center justify-center rounded-full mb-5 w-14 h-14 bg-(--surface-overlay) text-(--ink-400)"
         >
           <SearchX className="w-6 h-6" />
         </div>
 
-        <h3
-          style={{
-            fontFamily: 'var(--font-display)',
-            fontSize: 16,
-            fontWeight: 700,
-            color: 'var(--ink-900)',
-            letterSpacing: '-0.02em',
-            marginBottom: 6,
-          }}
-        >
+        <h3 className="[font-family:var(--font-display)] text-[16px] font-bold text-(--ink-900) tracking-[-0.02em] mb-1.5">
           No invoices match your filters
         </h3>
 
-        <p
-          style={{
-            fontFamily: 'var(--font-body)',
-            fontSize: 14,
-            color: 'var(--ink-400)',
-            maxWidth: 300,
-            marginBottom: 20,
-            lineHeight: 1.5,
-          }}
-        >
+        <p className="[font-family:var(--font-body)] text-[14px] text-(--ink-400) max-w-75 mb-5 leading-normal">
           Try adjusting your search or status filter to find what you are looking for.
         </p>
 
@@ -81,14 +62,7 @@ export function InvoicesEmptyState({ status, hasFilters, onClearFilters }: Invoi
             variant="outline"
             size="sm"
             onClick={onClearFilters}
-            style={{
-              fontFamily: 'var(--font-display)',
-              fontWeight: 600,
-              fontSize: 13,
-              borderColor: 'var(--border-strong)',
-              color: 'var(--ink-700)',
-              borderRadius: 'var(--r-md)',
-            }}
+            className="[font-family:var(--font-display)] font-semibold text-[13px] border-(--border-strong) text-(--ink-700) rounded-md"
           >
             <X className="w-3.5 h-3.5 mr-1.5" />
             Clear filters
@@ -108,10 +82,8 @@ export function InvoicesEmptyState({ status, hasFilters, onClearFilters }: Invoi
     return (
       <div className="flex flex-col items-center justify-center py-20 text-center">
         <div
-          className="flex items-center justify-center rounded-full mb-5"
+          className="flex items-center justify-center rounded-full mb-5 w-14 h-14"
           style={{
-            width: 56,
-            height: 56,
             backgroundColor: isOverdue ? '#EDFAF3' : 'var(--surface-overlay)',
             color: isOverdue ? '#0A8F52' : 'var(--ink-400)',
           }}
@@ -119,45 +91,19 @@ export function InvoicesEmptyState({ status, hasFilters, onClearFilters }: Invoi
           <FileText className="w-6 h-6" />
         </div>
 
-        <h3
-          style={{
-            fontFamily: 'var(--font-display)',
-            fontSize: 16,
-            fontWeight: 700,
-            color: 'var(--ink-900)',
-            letterSpacing: '-0.02em',
-            marginBottom: 6,
-          }}
-        >
+        <h3 className="[font-family:var(--font-display)] text-[16px] font-bold text-(--ink-900) tracking-[-0.02em] mb-1.5">
           {copy?.heading ?? `No ${status.toLowerCase()} invoices`}
           {isOverdue ? ' 🎉' : ''}
         </h3>
 
-        <p
-          style={{
-            fontFamily: 'var(--font-body)',
-            fontSize: 14,
-            color: 'var(--ink-400)',
-            maxWidth: 300,
-            marginBottom: 20,
-            lineHeight: 1.5,
-          }}
-        >
+        <p className="[font-family:var(--font-body)] text-[14px] text-(--ink-400) max-w-75 mb-5 leading-normal">
           {copy?.description ?? `No invoices with status "${status.toLowerCase()}" found.`}
         </p>
 
         {!isOverdue && (
           <Link
             href="/invoices/new"
-            className="inline-flex items-center gap-1.5 rounded-lg text-sm font-semibold transition-colors hover:opacity-90"
-            style={{
-              fontFamily: 'var(--font-display)',
-              backgroundColor: 'var(--blue-600)',
-              color: '#fff',
-              height: 32,
-              paddingLeft: 12,
-              paddingRight: 12,
-            }}
+            className="inline-flex items-center gap-1.5 rounded-md text-sm font-semibold transition-colors hover:opacity-90 [font-family:var(--font-display)] bg-(--blue-600) text-white h-8 px-3"
           >
             <Plus className="w-3.5 h-3.5" />
             Create Invoice
@@ -170,50 +116,21 @@ export function InvoicesEmptyState({ status, hasFilters, onClearFilters }: Invoi
   // Default: no invoices at all
   return (
     <div className="flex flex-col items-center justify-center py-20 text-center">
-      <div
-        className="flex items-center justify-center rounded-full mb-5"
-        style={{ width: 56, height: 56, backgroundColor: 'var(--blue-50)', color: 'var(--blue-600)' }}
-      >
+      <div className="flex items-center justify-center rounded-full mb-5 w-14 h-14 bg-(--blue-50) text-(--blue-600)">
         <FileText className="w-6 h-6" />
       </div>
 
-      <h3
-        style={{
-          fontFamily: 'var(--font-display)',
-          fontSize: 16,
-          fontWeight: 700,
-          color: 'var(--ink-900)',
-          letterSpacing: '-0.02em',
-          marginBottom: 6,
-        }}
-      >
+      <h3 className="[font-family:var(--font-display)] text-[16px] font-bold text-(--ink-900) tracking-[-0.02em] mb-1.5">
         Create your first invoice
       </h3>
 
-      <p
-        style={{
-          fontFamily: 'var(--font-body)',
-          fontSize: 14,
-          color: 'var(--ink-400)',
-          maxWidth: 300,
-          marginBottom: 20,
-          lineHeight: 1.5,
-        }}
-      >
+      <p className="[font-family:var(--font-body)] text-[14px] text-(--ink-400) max-w-75 mb-5 leading-normal">
         Send professional, branded invoices to your clients and track payments from draft to paid.
       </p>
 
       <Link
         href="/invoices/new"
-        className="inline-flex items-center gap-1.5 rounded-lg text-sm font-semibold transition-colors hover:opacity-90"
-        style={{
-          fontFamily: 'var(--font-display)',
-          backgroundColor: 'var(--blue-600)',
-          color: '#fff',
-          height: 32,
-          paddingLeft: 12,
-          paddingRight: 12,
-        }}
+        className="inline-flex items-center gap-1.5 rounded-md text-sm font-semibold transition-colors hover:opacity-90 [font-family:var(--font-display)] bg-(--blue-600) text-white h-8 px-3"
       >
         <Plus className="w-3.5 h-3.5" />
         Create Invoice

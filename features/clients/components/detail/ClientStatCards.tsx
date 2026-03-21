@@ -20,17 +20,24 @@ function StatCard({ label, value, accentColor, isMono = false, subLabel }: {
 }) {
   return (
     <div
-      className="relative overflow-hidden rounded-[var(--r-xl)] border p-[var(--s5)]"
-      style={{ background: 'var(--surface-base)', borderColor: 'var(--border-default)', borderLeft: `3px solid ${accentColor}` }}
+      className="relative overflow-hidden rounded-lg border p-(--s5) bg-(--surface-base) border-(--border-default)"
+      style={{ borderLeft: `3px solid ${accentColor}` }}
     >
-      <p className="text-xs font-semibold uppercase mb-[var(--s2)]" style={{ color: 'var(--ink-400)', fontFamily: 'var(--font-display)', letterSpacing: '0.08em' }}>
+      <p className="text-xs font-semibold uppercase mb-[var(--s2)] text-(--ink-400) [font-family:var(--font-display)] tracking-[0.08em]">
         {label}
       </p>
-      <p className="text-2xl font-bold leading-tight" style={{ color: accentColor, fontFamily: isMono ? 'var(--font-mono)' : 'var(--font-display)', letterSpacing: isMono ? '0' : '-0.02em' }}>
+      <p
+        className="text-2xl font-bold leading-tight"
+        style={{
+          color: accentColor,
+          fontFamily: isMono ? 'var(--font-mono)' : 'var(--font-display)',
+          letterSpacing: isMono ? '0' : '-0.02em',
+        }}
+      >
         {value}
       </p>
       {subLabel && (
-        <p className="text-xs mt-[var(--s1)]" style={{ color: 'var(--ink-300)', fontFamily: 'var(--font-body)' }}>
+        <p className="text-xs mt-[var(--s1)] text-(--ink-300) [font-family:var(--font-body)]">
           {subLabel}
         </p>
       )}

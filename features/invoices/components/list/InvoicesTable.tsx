@@ -49,7 +49,7 @@ function SkeletonRows() {
   return (
     <>
       {Array.from({ length: 5 }).map((_, i) => (
-        <TableRow key={i} style={{ borderBottom: '1px solid var(--border-default)' }}>
+        <TableRow key={i} className="border-b border-(--border-default)">
           <TableCell>
             <Skeleton className="h-3.5 w-28" />
           </TableCell>
@@ -96,11 +96,11 @@ function DueDateCell({ dueDate, status }: { dueDate: string; status: InvoiceList
     const daysOverdue = differenceInDays(new Date(), parseISO(dueDate))
     return (
       <div>
-        <span style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: 'var(--error)' }}>
+        <span className="[font-family:var(--font-body)] text-[13px] text-(--error)">
           {displayDate}
         </span>
         <br />
-        <span style={{ fontFamily: 'var(--font-body)', fontSize: 11, color: 'var(--error)', opacity: 0.8 }}>
+        <span className="[font-family:var(--font-body)] text-[11px] text-(--error) opacity-80">
           {daysOverdue > 0 ? `${daysOverdue}d overdue` : 'Due today'}
         </span>
       </div>
@@ -108,7 +108,7 @@ function DueDateCell({ dueDate, status }: { dueDate: string; status: InvoiceList
   }
 
   return (
-    <span style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: 'var(--ink-400)' }}>
+    <span className="[font-family:var(--font-body)] text-[13px] text-(--ink-400)">
       {displayDate}
     </span>
   )
@@ -116,16 +116,8 @@ function DueDateCell({ dueDate, status }: { dueDate: string; status: InvoiceList
 
 const columnHelper = createColumnHelper<InvoiceListItem>()
 
-const thStyle = {
-  color: 'var(--ink-400)',
-  fontFamily: 'var(--font-display)',
-  fontSize: 11,
-  fontWeight: 600,
-  letterSpacing: '0.08em',
-  textTransform: 'uppercase' as const,
-  paddingTop: 12,
-  paddingBottom: 12,
-}
+const thClassName =
+  'text-(--ink-400) [font-family:var(--font-display)] text-[11px] font-semibold tracking-[0.08em] uppercase py-3'
 
 export function InvoicesTable({ invoices, isPending, onDuplicate, onDelete }: InvoicesTableProps) {
   const router = useRouter()
@@ -137,13 +129,7 @@ export function InvoicesTable({ invoices, isPending, onDuplicate, onDelete }: In
         <Link
           href={`/invoices/${info.row.original.id}`}
           onClick={(e) => e.stopPropagation()}
-          style={{
-            fontFamily: 'var(--font-mono)',
-            fontSize: 13,
-            fontWeight: 500,
-            color: 'var(--blue-600)',
-            textDecoration: 'none',
-          }}
+          className="font-mono text-[13px] font-medium text-(--blue-600) no-underline"
         >
           {info.getValue()}
         </Link>
@@ -155,28 +141,11 @@ export function InvoicesTable({ invoices, isPending, onDuplicate, onDelete }: In
         const client = info.getValue()
         return (
           <div>
-            <p
-              style={{
-                fontFamily: 'var(--font-display)',
-                fontSize: 14,
-                fontWeight: 600,
-                color: 'var(--ink-900)',
-                letterSpacing: '-0.01em',
-                lineHeight: 1.3,
-              }}
-            >
+            <p className="[font-family:var(--font-display)] text-[14px] font-semibold text-(--ink-900) tracking-[-0.01em] leading-[1.3]">
               {client.name}
             </p>
             {client.company && (
-              <p
-                style={{
-                  fontFamily: 'var(--font-body)',
-                  fontSize: 12,
-                  color: 'var(--ink-400)',
-                  marginTop: 2,
-                  lineHeight: 1.2,
-                }}
-              >
+              <p className="[font-family:var(--font-body)] text-[12px] text-(--ink-400) mt-0.5 leading-[1.2]">
                 {client.company}
               </p>
             )}
@@ -187,7 +156,7 @@ export function InvoicesTable({ invoices, isPending, onDuplicate, onDelete }: In
     columnHelper.accessor('issueDate', {
       header: 'Issue Date',
       cell: (info) => (
-        <span style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: 'var(--ink-400)' }}>
+        <span className="[font-family:var(--font-body)] text-[13px] text-(--ink-400)">
           {formatDisplayDate(info.getValue())}
         </span>
       ),
@@ -201,15 +170,7 @@ export function InvoicesTable({ invoices, isPending, onDuplicate, onDelete }: In
     columnHelper.accessor('total', {
       header: 'Amount',
       cell: (info) => (
-        <span
-          className="block text-right"
-          style={{
-            fontFamily: 'var(--font-mono)',
-            fontSize: 13,
-            fontWeight: 500,
-            color: 'var(--ink-900)',
-          }}
-        >
+        <span className="block text-right font-mono text-[13px] font-medium text-(--ink-900)">
           {formatCurrency(info.getValue(), info.row.original.currency)}
         </span>
       ),
@@ -229,8 +190,7 @@ export function InvoicesTable({ invoices, isPending, onDuplicate, onDelete }: In
           <div className="flex justify-end">
             <DropdownMenu>
               <DropdownMenuTrigger
-                className="h-7 w-7 inline-flex items-center justify-center rounded opacity-0 group-hover:opacity-100 transition-opacity duration-100"
-                style={{ color: 'var(--ink-400)' }}
+                className="h-7 w-7 inline-flex items-center justify-center rounded opacity-0 group-hover:opacity-100 transition-opacity duration-100 text-(--ink-400)"
                 onClick={(e: React.MouseEvent) => e.stopPropagation()}
               >
                 <MoreHorizontal className="h-4 w-4" />
@@ -238,15 +198,10 @@ export function InvoicesTable({ invoices, isPending, onDuplicate, onDelete }: In
               </DropdownMenuTrigger>
               <DropdownMenuContent
                 align="end"
-                style={{
-                  minWidth: 168,
-                  border: '1px solid var(--border-default)',
-                  backgroundColor: 'var(--surface-base)',
-                  borderRadius: 'var(--r-lg)',
-                }}
+                className="min-w-42 border border-(--border-default) bg-(--surface-base) rounded-lg"
               >
                 <DropdownMenuItem
-                  style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: 'var(--ink-900)', cursor: 'pointer' }}
+                  className="[font-family:var(--font-body)] text-[13px] text-(--ink-900) cursor-pointer"
                   onClick={(e) => e.stopPropagation()}
                 >
                   <Link href={`/invoices/${invoice.id}`} className="flex items-center w-full">
@@ -257,7 +212,7 @@ export function InvoicesTable({ invoices, isPending, onDuplicate, onDelete }: In
 
                 {isDraft && (
                   <DropdownMenuItem
-                    style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: 'var(--ink-900)', cursor: 'pointer' }}
+                    className="[font-family:var(--font-body)] text-[13px] text-(--ink-900) cursor-pointer"
                     onClick={(e) => {
                       e.stopPropagation()
                       router.push(`/invoices/${invoice.id}`)
@@ -269,7 +224,7 @@ export function InvoicesTable({ invoices, isPending, onDuplicate, onDelete }: In
                 )}
 
                 <DropdownMenuItem
-                  style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: 'var(--ink-900)', cursor: 'pointer' }}
+                  className="[font-family:var(--font-body)] text-[13px] text-(--ink-900) cursor-pointer"
                   onClick={(e) => e.stopPropagation()}
                 >
                   <Link href={`/invoices/${invoice.id}/preview`} className="flex items-center w-full">
@@ -279,7 +234,7 @@ export function InvoicesTable({ invoices, isPending, onDuplicate, onDelete }: In
                 </DropdownMenuItem>
 
                 <DropdownMenuItem
-                  style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: 'var(--ink-900)', cursor: 'pointer' }}
+                  className="[font-family:var(--font-body)] text-[13px] text-(--ink-900) cursor-pointer"
                   onClick={(e) => {
                     e.stopPropagation()
                     onDuplicate(invoice.id)
@@ -291,9 +246,9 @@ export function InvoicesTable({ invoices, isPending, onDuplicate, onDelete }: In
 
                 {isDeletable && (
                   <>
-                    <DropdownMenuSeparator style={{ backgroundColor: 'var(--border-default)' }} />
+                    <DropdownMenuSeparator className="bg-(--border-default)" />
                     <DropdownMenuItem
-                      style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: 'var(--error)', cursor: 'pointer' }}
+                      className="[font-family:var(--font-body)] text-[13px] text-(--error) cursor-pointer"
                       onClick={(e) => {
                         e.stopPropagation()
                         onDelete(invoice.id)
@@ -319,18 +274,13 @@ export function InvoicesTable({ invoices, isPending, onDuplicate, onDelete }: In
   })
 
   return (
-    <div
-      className="rounded-xl overflow-hidden"
-      style={{ border: '1px solid var(--border-default)', backgroundColor: 'var(--surface-base)' }}
-    >
+    <div className="rounded-lg overflow-hidden border border-(--border-default) bg-(--surface-base)">
       <Table>
         <TableHeader>
-          <TableRow
-            style={{ backgroundColor: 'var(--surface-raised)', borderBottom: '1px solid var(--border-default)' }}
-          >
+          <TableRow className="bg-(--surface-raised) border-b border-(--border-default)">
             {table.getHeaderGroups().map((headerGroup) =>
               headerGroup.headers.map((header) => (
-                <TableHead key={header.id} style={thStyle}>
+                <TableHead key={header.id} className={thClassName}>
                   {header.isPlaceholder
                     ? null
                     : flexRender(header.column.columnDef.header, header.getContext())}

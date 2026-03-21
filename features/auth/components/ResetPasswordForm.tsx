@@ -52,44 +52,23 @@ export function ResetPasswordForm() {
     <div className="flex flex-col gap-7">
       {/* Header */}
       <div className="flex flex-col gap-2">
-        <h1
-          className="font-[family-name:var(--font-display)]"
-          style={{
-            fontSize: 30,
-            fontWeight: 800,
-            letterSpacing: '-0.025em',
-            color: 'var(--ink-900)',
-            lineHeight: 1.15,
-          }}
-        >
+        <h1 className="font-[family-name:var(--font-display)] text-[30px] font-[800] tracking-[-0.025em] text-(--ink-900) leading-[1.15]">
           Set new password
         </h1>
-        <p
-          className="font-[family-name:var(--font-body)]"
-          style={{ fontSize: 15, color: 'var(--ink-400)', lineHeight: 1.6 }}
-        >
+        <p className="font-[family-name:var(--font-body)] text-[15px] text-(--ink-400) leading-[1.6]">
           Choose a strong password for your account.
         </p>
       </div>
 
       {/* Success message */}
       {success && (
-        <div
-          className="flex items-center gap-2.5 rounded-lg px-4 py-3"
-          style={{
-            backgroundColor: 'color-mix(in srgb, var(--success) 10%, transparent)',
-            border: '1px solid color-mix(in srgb, var(--success) 25%, transparent)',
-          }}
-        >
+        <div className="flex items-center gap-2.5 rounded-lg px-4 py-3 bg-[color-mix(in_srgb,var(--success)_10%,transparent)] border border-[color-mix(in_srgb,var(--success)_25%,transparent)]">
           <CheckCircle
             size={16}
             strokeWidth={2}
-            style={{ color: 'var(--success)', flexShrink: 0 }}
+            className="text-(--success) shrink-0"
           />
-          <p
-            className="font-[family-name:var(--font-body)]"
-            style={{ fontSize: 13, color: 'var(--success)', fontWeight: 500 }}
-          >
+          <p className="font-[family-name:var(--font-body)] text-[13px] text-(--success) font-medium">
             Password updated! Redirecting...
           </p>
         </div>
@@ -98,7 +77,7 @@ export function ResetPasswordForm() {
       {/* Form */}
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5" noValidate>
         {serverError && (
-          <div className="rounded-[var(--r-md)] bg-[color-mix(in_srgb,var(--error)_10%,transparent)] border border-[color-mix(in_srgb,var(--error)_30%,transparent)] px-4 py-3">
+          <div className="rounded-md bg-[color-mix(in_srgb,var(--error)_10%,transparent)] border border-[color-mix(in_srgb,var(--error)_30%,transparent)] px-4 py-3">
             <p className="text-[13px] font-[family-name:var(--font-body)] text-[var(--error)]">{serverError}</p>
           </div>
         )}
@@ -106,8 +85,7 @@ export function ResetPasswordForm() {
         <div className="flex flex-col gap-1.5">
           <Label
             htmlFor="password"
-            className="font-[family-name:var(--font-display)]"
-            style={{ fontSize: 12, fontWeight: 600, color: 'var(--ink-900)' }}
+            className="font-[family-name:var(--font-display)] text-[12px] font-semibold text-(--ink-900)"
           >
             New password
           </Label>
@@ -118,28 +96,16 @@ export function ResetPasswordForm() {
               placeholder="Min. 8 characters"
               autoComplete="new-password"
               aria-invalid={!!errors.password}
-              className="font-[family-name:var(--font-body)] pr-11"
+              className="font-[family-name:var(--font-body)] text-[14px] text-(--ink-900) pr-11 h-10.5 rounded-md pl-3.5"
               style={{
-                height: 42,
-                borderRadius: 'var(--r-md)',
                 borderColor: errors.password ? 'var(--error)' : 'var(--border-default)',
-                fontSize: 14,
-                color: 'var(--ink-900)',
-                paddingLeft: 14,
               }}
               {...register('password')}
             />
             <button
               type="button"
               onClick={() => setShowPassword((v) => !v)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center justify-center transition-colors"
-              style={{
-                color: 'var(--ink-300)',
-                background: 'none',
-                border: 'none',
-                padding: 0,
-                cursor: 'pointer',
-              }}
+              className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center justify-center text-(--ink-300) bg-transparent border-0 p-0 cursor-pointer transition-colors"
               aria-label={showPassword ? 'Hide password' : 'Show password'}
               onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = 'var(--ink-400)')}
               onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = 'var(--ink-300)')}
@@ -148,17 +114,11 @@ export function ResetPasswordForm() {
             </button>
           </div>
           {errors.password ? (
-            <p
-              className="font-[family-name:var(--font-body)]"
-              style={{ fontSize: 11, color: 'var(--error)', marginTop: 2 }}
-            >
+            <p className="font-[family-name:var(--font-body)] text-[11px] text-(--error) mt-0.5">
               {errors.password.message}
             </p>
           ) : (
-            <p
-              className="font-[family-name:var(--font-body)]"
-              style={{ fontSize: 11, color: 'var(--ink-300)', marginTop: 2 }}
-            >
+            <p className="font-[family-name:var(--font-body)] text-[11px] text-(--ink-300) mt-0.5">
               Must be at least 8 characters
             </p>
           )}
@@ -168,8 +128,7 @@ export function ResetPasswordForm() {
         <div className="flex flex-col gap-1.5">
           <Label
             htmlFor="confirmPassword"
-            className="font-[family-name:var(--font-display)]"
-            style={{ fontSize: 12, fontWeight: 600, color: 'var(--ink-900)' }}
+            className="font-[family-name:var(--font-display)] text-[12px] font-semibold text-(--ink-900)"
           >
             Confirm password
           </Label>
@@ -180,28 +139,16 @@ export function ResetPasswordForm() {
               placeholder="Re-enter your password"
               autoComplete="new-password"
               aria-invalid={!!errors.confirmPassword}
-              className="font-[family-name:var(--font-body)] pr-11"
+              className="font-[family-name:var(--font-body)] text-[14px] text-(--ink-900) pr-11 h-10.5 rounded-md pl-3.5"
               style={{
-                height: 42,
-                borderRadius: 'var(--r-md)',
                 borderColor: errors.confirmPassword ? 'var(--error)' : 'var(--border-default)',
-                fontSize: 14,
-                color: 'var(--ink-900)',
-                paddingLeft: 14,
               }}
               {...register('confirmPassword')}
             />
             <button
               type="button"
               onClick={() => setShowConfirm((v) => !v)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center justify-center transition-colors"
-              style={{
-                color: 'var(--ink-300)',
-                background: 'none',
-                border: 'none',
-                padding: 0,
-                cursor: 'pointer',
-              }}
+              className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center justify-center text-(--ink-300) bg-transparent border-0 p-0 cursor-pointer transition-colors"
               aria-label={showConfirm ? 'Hide password' : 'Show password'}
               onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = 'var(--ink-400)')}
               onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = 'var(--ink-300)')}
@@ -210,10 +157,7 @@ export function ResetPasswordForm() {
             </button>
           </div>
           {errors.confirmPassword && (
-            <p
-              className="font-[family-name:var(--font-body)]"
-              style={{ fontSize: 11, color: 'var(--error)', marginTop: 2 }}
-            >
+            <p className="font-[family-name:var(--font-body)] text-[11px] text-(--error) mt-0.5">
               {errors.confirmPassword.message}
             </p>
           )}
@@ -222,16 +166,7 @@ export function ResetPasswordForm() {
         <Button
           type="submit"
           disabled={isSubmitting || success}
-          className="w-full font-[family-name:var(--font-display)]"
-          style={{
-            height: 42,
-            borderRadius: 'var(--r-md)',
-            backgroundColor: 'var(--blue-600)',
-            color: '#ffffff',
-            fontSize: 14,
-            fontWeight: 600,
-            border: 'none',
-          }}
+          className="w-full font-[family-name:var(--font-display)] text-[14px] font-semibold bg-(--blue-600) text-white border-0 h-10.5 rounded-md"
         >
           {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
           Reset password

@@ -65,7 +65,7 @@ export function BrandColorPicker({ value, onChange }: BrandColorPickerProps) {
           type="button"
           onClick={() => colorInputRef.current?.click()}
           aria-label="Open color picker"
-          className="h-[44px] w-[44px] flex-shrink-0 rounded-[var(--r-md)] border-2 border-[var(--border-strong)] transition-all duration-200 hover:border-[var(--blue-600)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--blue-600)] focus-visible:ring-offset-2"
+          className="h-11 w-11 shrink-0 rounded-md border-2 border-(--border-strong) transition-all duration-200 hover:border-(--blue-600) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--blue-600) focus-visible:ring-offset-2"
           style={{ backgroundColor: displayColor }}
         />
         {/* Hidden native color input */}
@@ -87,17 +87,12 @@ export function BrandColorPicker({ value, onChange }: BrandColorPickerProps) {
           onBlur={handleHexInputBlur}
           placeholder="#1740F5"
           maxLength={7}
-          className="h-[44px] w-full rounded-[var(--r-md)] border border-[var(--border-default)] bg-[var(--surface-base)] px-3.5 text-[14px] text-[var(--ink-900)] placeholder:text-[var(--ink-300)] transition-colors duration-200 focus:border-[var(--blue-600)] focus:outline-none focus:ring-2 focus:ring-[var(--blue-600)]/20"
-          style={{ fontFamily: 'var(--font-mono)' }}
+          className="h-11 w-full rounded-md border border-(--border-default) bg-(--surface-base) px-3.5 text-[14px] text-(--ink-900) placeholder:text-(--ink-300) transition-colors duration-200 focus:border-(--blue-600) focus:outline-none focus:ring-2 focus:ring-(--blue-600)/20 font-mono"
         />
       </div>
 
       {hexError && (
-        <p
-          className="text-[11px] text-[var(--error)]"
-          style={{ fontFamily: 'var(--font-body)' }}
-          role="alert"
-        >
+        <p className="text-[11px] text-(--error) [font-family:var(--font-body)]" role="alert">
           {hexError}
         </p>
       )}
@@ -111,9 +106,9 @@ export function BrandColorPicker({ value, onChange }: BrandColorPickerProps) {
             onClick={() => handlePresetClick(hex)}
             aria-label={`Use ${label} (${hex})`}
             className={[
-              'h-8 w-8 rounded-[var(--r-sm)] border-2 transition-all duration-200 hover:scale-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--blue-600)] focus-visible:ring-offset-2',
+              'h-8 w-8 rounded border-2 transition-all duration-200 hover:scale-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--blue-600) focus-visible:ring-offset-2',
               value.toLowerCase() === hex.toLowerCase()
-                ? 'border-[var(--ink-900)] shadow-sm'
+                ? 'border-(--ink-900) shadow-sm'
                 : 'border-transparent',
             ].join(' ')}
             style={{ backgroundColor: hex }}

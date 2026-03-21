@@ -53,20 +53,6 @@ function getTodayISODate(): string {
   return now.toISOString().split('T')[0]
 }
 
-const labelStyle = {
-  fontFamily: 'var(--font-display)',
-  fontSize: '12px',
-  fontWeight: 600,
-  color: 'var(--ink-900)',
-  letterSpacing: '-0.01em',
-} as const
-
-const errorStyle = {
-  fontFamily: 'var(--font-body)',
-  fontSize: '11px',
-  color: 'var(--error)',
-} as const
-
 export function MarkPaidModal({ open, onOpenChange, invoice }: MarkPaidModalProps) {
   const totalPaid = getTotalPaid(invoice)
   const remaining = Math.max(0, invoice.total - totalPaid)
@@ -122,134 +108,89 @@ export function MarkPaidModal({ open, onOpenChange, invoice }: MarkPaidModalProp
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
-        className="sm:max-w-[460px]"
-        style={{ borderColor: 'var(--border-default)', background: 'var(--surface-base)' }}
+        className="sm:max-w-[460px] bg-(--surface-base) border-(--border-default)"
       >
         <DialogHeader>
-          <DialogTitle
-            style={{
-              fontFamily: 'var(--font-display)',
-              fontSize: '17px',
-              fontWeight: 700,
-              color: 'var(--ink-900)',
-              letterSpacing: '-0.02em',
-            }}
-          >
+          <DialogTitle className="[font-family:var(--font-display)] text-[17px] font-bold text-(--ink-900) tracking-[-0.02em]">
             Record Payment
           </DialogTitle>
-          <p
-            style={{
-              fontFamily: 'var(--font-mono)',
-              fontSize: '12px',
-              color: 'var(--ink-400)',
-              marginTop: '2px',
-            }}
-          >
+          <p className="font-mono text-[12px] text-(--ink-400) mt-0.5">
             {invoice.invoiceNumber}
           </p>
         </DialogHeader>
 
         {/* Outstanding balance summary */}
-        <div
-          className="rounded-[var(--r-lg)] px-[var(--s4)] py-[var(--s3)]"
-          style={{ background: 'var(--surface-raised)', border: '1px solid var(--border-default)' }}
-        >
-          <p style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: 'var(--ink-400)' }}>
+        <div className="rounded-lg px-(--s4) py-(--s3) bg-(--surface-raised) border border-(--border-default)">
+          <p className="[font-family:var(--font-body)] text-[12px] text-(--ink-400)">
             Outstanding balance
           </p>
-          <p
-            style={{
-              fontFamily: 'var(--font-mono)',
-              fontSize: '22px',
-              fontWeight: 700,
-              color: 'var(--ink-900)',
-              letterSpacing: '-0.03em',
-              marginTop: '2px',
-            }}
-          >
+          <p className="[font-family:var(--font-mono)] text-[22px] font-bold text-(--ink-900) tracking-[-0.03em] mt-0.5">
             {formatCurrency(remaining, invoice.currency)}
           </p>
-          <p style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: 'var(--ink-400)', marginTop: '4px' }}>
+          <p className="[font-family:var(--font-body)] text-[12px] text-(--ink-400) mt-1">
             {formatCurrency(totalPaid, invoice.currency)} paid of{' '}
             {formatCurrency(invoice.total, invoice.currency)} total ({paidPercent}%)
           </p>
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-[var(--s4)]">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-(--s4)">
           {/* Amount */}
-          <div className="space-y-[var(--s1)]">
-            <Label style={labelStyle}>Amount</Label>
+          <div className="space-y-(--s1)">
+            <Label className="[font-family:var(--font-display)] text-[12px] font-semibold text-(--ink-900) tracking-[-0.01em]">
+              Amount
+            </Label>
             <div className="relative">
-              <span
-                className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none select-none"
-                style={{
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: '14px',
-                  color: 'var(--ink-400)',
-                }}
-              >
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none select-none [font-family:var(--font-mono)] text-[14px] text-(--ink-400)">
                 ₦
               </span>
               <Input
                 type="number"
                 step="0.01"
                 min="0.01"
-                className="pl-7"
-                style={{
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: '14px',
-                  borderColor: errors.amount ? 'var(--error)' : 'var(--border-strong)',
-                  borderRadius: 'var(--r-md)',
-                }}
+                className={`pl-7 [font-family:var(--font-mono)] text-[14px] rounded-md ${errors.amount ? 'border-(--error)' : 'border-(--border-strong)'}`}
                 {...register('amount', { valueAsNumber: true })}
               />
             </div>
             {errors.amount && (
-              <p style={errorStyle}>{errors.amount.message}</p>
+              <p className="[font-family:var(--font-body)] text-[11px] text-(--error)">{errors.amount.message}</p>
             )}
           </div>
 
           {/* Date Paid */}
-          <div className="space-y-[var(--s1)]">
-            <Label style={labelStyle}>Date Paid</Label>
+          <div className="space-y-(--s1)">
+            <Label className="[font-family:var(--font-display)] text-[12px] font-semibold text-(--ink-900) tracking-[-0.01em]">
+              Date Paid
+            </Label>
             <Input
               type="date"
-              style={{
-                fontFamily: 'var(--font-body)',
-                fontSize: '14px',
-                borderColor: errors.datePaid ? 'var(--error)' : 'var(--border-strong)',
-                borderRadius: 'var(--r-md)',
-              }}
+              className={`[font-family:var(--font-body)] text-[14px] rounded-md ${errors.datePaid ? 'border-(--error)' : 'border-(--border-strong)'}`}
               {...register('datePaid')}
             />
             {errors.datePaid && (
-              <p style={errorStyle}>{errors.datePaid.message}</p>
+              <p className="[font-family:var(--font-body)] text-[11px] text-(--error)">{errors.datePaid.message}</p>
             )}
           </div>
 
           {/* Payment Method */}
-          <div className="space-y-[var(--s1)]">
-            <Label style={labelStyle}>Payment Method</Label>
+          <div className="space-y-(--s1)">
+            <Label className="[font-family:var(--font-display)] text-[12px] font-semibold text-(--ink-900) tracking-[-0.01em]">
+              Payment Method
+            </Label>
             <Select
               defaultValue="BANK_TRANSFER"
               onValueChange={(val) => setValue('method', val as ZCreatePayment['method'], { shouldValidate: true })}
             >
               <SelectTrigger
-                style={{
-                  fontFamily: 'var(--font-body)',
-                  fontSize: '14px',
-                  borderColor: errors.method ? 'var(--error)' : 'var(--border-strong)',
-                  borderRadius: 'var(--r-md)',
-                }}
+                className={`[font-family:var(--font-body)] text-[14px] rounded-md ${errors.method ? 'border-(--error)' : 'border-(--border-strong)'}`}
               >
                 <SelectValue placeholder="Select method" />
               </SelectTrigger>
-              <SelectContent style={{ borderColor: 'var(--border-default)', background: 'var(--surface-base)' }}>
+              <SelectContent className="border-(--border-default) bg-(--surface-base)">
                 {Object.entries(PAYMENT_METHOD_LABELS).map(([value, label]) => (
                   <SelectItem
                     key={value}
                     value={value}
-                    style={{ fontFamily: 'var(--font-body)', fontSize: '14px', color: 'var(--ink-900)' }}
+                    className="[font-family:var(--font-body)] text-[14px] text-(--ink-900)"
                   >
                     {label}
                   </SelectItem>
@@ -257,75 +198,53 @@ export function MarkPaidModal({ open, onOpenChange, invoice }: MarkPaidModalProp
               </SelectContent>
             </Select>
             {errors.method && (
-              <p style={errorStyle}>{errors.method.message}</p>
+              <p className="[font-family:var(--font-body)] text-[11px] text-(--error)">{errors.method.message}</p>
             )}
           </div>
 
           {/* Note */}
-          <div className="space-y-[var(--s1)]">
-            <Label style={labelStyle}>
+          <div className="space-y-(--s1)">
+            <Label className="[font-family:var(--font-display)] text-[12px] font-semibold text-(--ink-900) tracking-[-0.01em]">
               Note{' '}
-              <span style={{ fontWeight: 400, color: 'var(--ink-300)' }}>(optional)</span>
+              <span className="font-normal text-(--ink-300)">(optional)</span>
             </Label>
             <Textarea
               rows={2}
               placeholder="e.g. Reference: TXN-00432"
-              style={{
-                fontFamily: 'var(--font-body)',
-                fontSize: '14px',
-                borderColor: 'var(--border-strong)',
-                borderRadius: 'var(--r-md)',
-                resize: 'none',
-              }}
+              className="[font-family:var(--font-body)] text-[14px] resize-none border-(--border-strong) rounded-md"
               {...register('note')}
             />
           </div>
 
           {/* Running total */}
-          <div
-            className="rounded-[var(--r-md)] px-[var(--s3)] py-[var(--s2)]"
-            style={{ background: 'var(--blue-50)', border: '1px solid var(--blue-100)' }}
-          >
-            <p
-              style={{
-                fontFamily: 'var(--font-body)',
-                fontSize: '12px',
-                color: 'var(--blue-700)',
-              }}
-            >
+          <div className="rounded-md px-(--s3) py-(--s2) bg-(--blue-50) border border-(--blue-100)">
+            <p className="[font-family:var(--font-body)] text-[12px] text-(--blue-700)">
               After this payment:{' '}
-              <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 600 }}>
+              <span className="[font-family:var(--font-mono)] font-semibold">
                 {formatCurrency(Math.min(newTotalPaid, invoice.total), invoice.currency)}
               </span>{' '}
               paid of{' '}
-              <span style={{ fontFamily: 'var(--font-mono)' }}>
+              <span className="[font-family:var(--font-mono)]">
                 {formatCurrency(invoice.total, invoice.currency)}
               </span>{' '}
               ({newPercent}%)
             </p>
           </div>
 
-          <DialogFooter className="gap-[var(--s2)] pt-[var(--s2)]">
+          <DialogFooter className="gap-(--s2) pt-(--s2)">
             <Button
               type="button"
               variant="ghost"
               onClick={() => onOpenChange(false)}
               disabled={mutation.isPending}
-              style={{ fontFamily: 'var(--font-display)', fontSize: '13px', color: 'var(--ink-400)' }}
+              className="[font-family:var(--font-display)] text-[13px] text-(--ink-400)"
             >
               Cancel
             </Button>
             <Button
               type="submit"
               disabled={mutation.isPending}
-              className="gap-1.5"
-              style={{
-                background: 'var(--blue-600)',
-                color: 'white',
-                fontFamily: 'var(--font-display)',
-                fontSize: '13px',
-                borderRadius: 'var(--r-md)',
-              }}
+              className="gap-1.5 bg-(--blue-600) text-white [font-family:var(--font-display)] text-[13px] rounded-md"
             >
               {mutation.isPending ? (
                 <>

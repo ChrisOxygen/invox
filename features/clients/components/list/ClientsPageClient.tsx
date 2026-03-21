@@ -73,19 +73,17 @@ export function ClientsPageClient() {
       {/* Page header */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1
-            style={{ fontFamily: 'var(--font-display)', fontSize: 28, fontWeight: 700, color: 'var(--ink-900)', letterSpacing: '-0.025em', lineHeight: 1.2 }}
-          >
+          <h1 className="[font-family:var(--font-display)] text-[28px] font-bold text-(--ink-900) tracking-[-0.025em] leading-[1.2]">
             Clients
           </h1>
-          <p style={{ fontFamily: 'var(--font-body)', fontSize: 14, color: 'var(--ink-400)', marginTop: 4 }}>
+          <p className="[font-family:var(--font-body)] text-[14px] text-(--ink-400) mt-1">
             Manage your client contacts and relationships
           </p>
         </div>
 
         <Button
           onClick={handleAdd}
-          style={{ fontFamily: 'var(--font-display)', fontWeight: 600, fontSize: 13, backgroundColor: 'var(--blue-600)', color: '#fff', borderRadius: 'var(--r-md)', border: 'none', height: 36, paddingLeft: 14, paddingRight: 14 }}
+          className="[font-family:var(--font-display)] font-semibold text-[13px] bg-(--blue-600) text-white border-0 h-9 px-[14px] rounded-md"
         >
           <Plus className="w-3.5 h-3.5 mr-1.5" />
           Add Client
@@ -115,15 +113,12 @@ export function ClientsPageClient() {
 
           {/* Pagination */}
           {totalPages > 1 && (
-            <div
-              className="flex items-center justify-between mt-4"
-              style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: 'var(--ink-400)' }}
-            >
+            <div className="flex items-center justify-between mt-4 [font-family:var(--font-body)] text-[13px] text-(--ink-400)">
               <span>
                 Page{' '}
-                <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 500, color: 'var(--ink-700)' }}>{page}</span>
+                <span className="[font-family:var(--font-mono)] font-medium text-(--ink-700)">{page}</span>
                 {' '}of{' '}
-                <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 500, color: 'var(--ink-700)' }}>{totalPages}</span>
+                <span className="[font-family:var(--font-mono)] font-medium text-(--ink-700)">{totalPages}</span>
               </span>
               <div className="flex items-center gap-2">
                 <Button
@@ -131,7 +126,7 @@ export function ClientsPageClient() {
                   size="sm"
                   onClick={() => setPage((p) => Math.max(1, p - 1))}
                   disabled={page <= 1}
-                  style={{ fontFamily: 'var(--font-display)', fontWeight: 600, fontSize: 12, borderColor: 'var(--border-default)', color: 'var(--ink-700)', borderRadius: 'var(--r-md)', height: 32 }}
+                  className="[font-family:var(--font-display)] font-semibold text-[12px] border-(--border-default) text-(--ink-700) h-8 rounded-md"
                 >
                   Previous
                 </Button>
@@ -140,7 +135,7 @@ export function ClientsPageClient() {
                   size="sm"
                   onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
                   disabled={page >= totalPages}
-                  style={{ fontFamily: 'var(--font-display)', fontWeight: 600, fontSize: 12, borderColor: 'var(--border-default)', color: 'var(--ink-700)', borderRadius: 'var(--r-md)', height: 32 }}
+                  className="[font-family:var(--font-display)] font-semibold text-[12px] border-(--border-default) text-(--ink-700) h-8 rounded-md"
                 >
                   Next
                 </Button>
@@ -167,13 +162,13 @@ export function ClientsPageClient() {
       {/* Delete confirmation dialog */}
       <Dialog open={!!deletingClientId} onOpenChange={(open) => { if (!open) setDeletingClientId(null) }}>
         <DialogContent
-          style={{ backgroundColor: 'var(--surface-base)', border: '1px solid var(--border-default)', borderRadius: 'var(--r-xl)', maxWidth: 420 }}
+          className="bg-(--surface-base) border-(--border-default) max-w-[420px] rounded-lg"
         >
           <DialogHeader>
-            <DialogTitle style={{ fontFamily: 'var(--font-display)', fontSize: 18, fontWeight: 700, color: 'var(--ink-900)', letterSpacing: '-0.02em' }}>
+            <DialogTitle className="[font-family:var(--font-display)] text-[18px] font-bold text-(--ink-900) tracking-[-0.02em]">
               Delete client?
             </DialogTitle>
-            <DialogDescription style={{ fontFamily: 'var(--font-body)', fontSize: 14, color: 'var(--ink-400)', lineHeight: 1.5, marginTop: 6 }}>
+            <DialogDescription className="[font-family:var(--font-body)] text-[14px] text-(--ink-400) leading-[1.5] mt-[6px]">
               This will hide the client from your list. Their invoices will be retained.
             </DialogDescription>
           </DialogHeader>
@@ -183,14 +178,14 @@ export function ClientsPageClient() {
               variant="outline"
               onClick={() => setDeletingClientId(null)}
               disabled={deleteMutation.isPending}
-              style={{ fontFamily: 'var(--font-display)', fontWeight: 600, fontSize: 13, borderColor: 'var(--border-default)', color: 'var(--ink-700)', borderRadius: 'var(--r-md)', height: 36 }}
+              className="[font-family:var(--font-display)] font-semibold text-[13px] border-(--border-default) text-(--ink-700) h-9 rounded-md"
             >
               Cancel
             </Button>
             <Button
               onClick={handleDeleteConfirm}
               disabled={deleteMutation.isPending}
-              style={{ fontFamily: 'var(--font-display)', fontWeight: 600, fontSize: 13, backgroundColor: 'var(--error)', color: '#fff', border: 'none', borderRadius: 'var(--r-md)', height: 36 }}
+              className="[font-family:var(--font-display)] font-semibold text-[13px] bg-(--error) text-white border-0 h-9 rounded-md"
             >
               {deleteMutation.isPending ? (
                 <>

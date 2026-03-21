@@ -30,14 +30,9 @@ export function LineItemRow({ index, control, setValue, remove, currency }: Line
   const subtotal = (Number(quantity) || 0) * (Number(unitPrice) || 0)
 
   return (
-    <div
-      className="group flex items-center gap-2 rounded-lg px-2 py-2 transition-colors hover:bg-[var(--surface-raised)]"
-    >
+    <div className="group flex items-center gap-2 rounded-lg px-2 py-2 transition-colors hover:bg-(--surface-raised)">
       {/* Drag handle */}
-      <div
-        className="cursor-grab opacity-0 transition-opacity group-hover:opacity-100"
-        style={{ color: 'var(--ink-200)', flexShrink: 0 }}
-      >
+      <div className="cursor-grab opacity-0 transition-opacity group-hover:opacity-100 text-(--ink-200) shrink-0">
         <GripVertical size={14} />
       </div>
 
@@ -51,11 +46,8 @@ export function LineItemRow({ index, control, setValue, remove, currency }: Line
               {...field}
               type="text"
               placeholder="Item description..."
-              className="w-full rounded px-2 py-1.5 text-sm outline-none transition-colors focus:bg-[var(--surface-overlay)] placeholder:text-[var(--ink-300)]"
+              className="w-full rounded px-2 py-1.5 text-sm outline-none transition-colors focus:bg-(--surface-overlay) placeholder:text-(--ink-300) [font-family:var(--font-body)] text-(--ink-900) bg-transparent"
               style={{
-                fontFamily: 'var(--font-body)',
-                color: 'var(--ink-900)',
-                background: 'transparent',
                 border: fieldState.error ? '1px solid var(--error)' : '1px solid transparent',
               }}
             />
@@ -77,13 +69,7 @@ export function LineItemRow({ index, control, setValue, remove, currency }: Line
               min="0"
               step="any"
               onChange={(e) => field.onChange(e.target.value === '' ? 0 : parseFloat(e.target.value))}
-              className="w-full rounded px-2 py-1.5 text-sm outline-none transition-colors focus:bg-[var(--surface-overlay)] text-center"
-              style={{
-                fontFamily: 'var(--font-body)',
-                color: 'var(--ink-900)',
-                background: 'transparent',
-                border: '1px solid transparent',
-              }}
+              className="w-full rounded px-2 py-1.5 text-sm outline-none transition-colors focus:bg-(--surface-overlay) text-center [font-family:var(--font-body)] text-(--ink-900) bg-transparent border border-transparent"
             />
           </div>
         )}
@@ -103,13 +89,7 @@ export function LineItemRow({ index, control, setValue, remove, currency }: Line
               min="0"
               step="any"
               onChange={(e) => field.onChange(e.target.value === '' ? 0 : parseFloat(e.target.value))}
-              className="w-full rounded px-2 py-1.5 text-sm outline-none transition-colors focus:bg-[var(--surface-overlay)] text-right"
-              style={{
-                fontFamily: 'var(--font-mono)',
-                color: 'var(--ink-900)',
-                background: 'transparent',
-                border: '1px solid transparent',
-              }}
+              className="w-full rounded px-2 py-1.5 text-sm outline-none transition-colors focus:bg-(--surface-overlay) text-right font-mono text-(--ink-900) bg-transparent border border-transparent"
             />
           </div>
         )}
@@ -117,15 +97,8 @@ export function LineItemRow({ index, control, setValue, remove, currency }: Line
 
       {/* Subtotal (read-only) */}
       <div
-        style={{
-          width: '110px',
-          fontFamily: 'var(--font-mono)',
-          fontSize: '13px',
-          color: 'var(--ink-900)',
-          textAlign: 'right',
-          flexShrink: 0,
-          paddingRight: '8px',
-        }}
+        className="font-mono text-[13px] text-(--ink-900) text-right shrink-0 pr-2"
+        style={{ width: '110px' }}
       >
         {formatCurrency(subtotal, currency)}
       </div>
@@ -134,8 +107,7 @@ export function LineItemRow({ index, control, setValue, remove, currency }: Line
       <button
         type="button"
         onClick={remove}
-        className="opacity-0 transition-opacity group-hover:opacity-100 rounded p-1 hover:bg-red-50"
-        style={{ color: 'var(--error)', flexShrink: 0 }}
+        className="opacity-0 transition-opacity group-hover:opacity-100 rounded p-1 hover:bg-red-50 text-(--error) shrink-0"
         aria-label="Remove line item"
       >
         <Trash2 size={13} />

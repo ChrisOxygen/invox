@@ -59,20 +59,17 @@ export function InvoiceDefaultsForm({ defaultValues }: InvoiceDefaultsFormProps)
     })
   }
 
-  const labelClass = 'text-[12px] font-[600] uppercase tracking-[0.06em] text-[var(--ink-700)]'
+  const labelClass =
+    'text-[12px] font-semibold uppercase tracking-[0.06em] text-(--ink-700) [font-family:var(--font-display)]'
   const inputClass =
-    'h-[44px] w-full rounded-[var(--r-md)] border border-[var(--border-default)] bg-[var(--surface-base)] px-3.5 text-[14px] text-[var(--ink-900)] placeholder:text-[var(--ink-300)] transition-colors duration-200 focus:border-[var(--blue-600)] focus:outline-none focus:ring-2 focus:ring-[var(--blue-600)]/20'
+    'h-11 w-full rounded-md border border-(--border-default) bg-(--surface-base) px-3.5 text-[14px] text-(--ink-900) placeholder:text-(--ink-300) transition-colors duration-200 focus:border-(--blue-600) focus:outline-none focus:ring-2 focus:ring-(--blue-600)/20'
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate>
       <div className="flex flex-col gap-5">
         {/* Currency */}
         <div className="flex flex-col gap-1.5">
-          <label
-            htmlFor="currency"
-            className={labelClass}
-            style={{ fontFamily: 'var(--font-display)' }}
-          >
+          <label htmlFor="currency" className={labelClass}>
             Default Currency
           </label>
           <Controller
@@ -85,8 +82,7 @@ export function InvoiceDefaultsForm({ defaultValues }: InvoiceDefaultsFormProps)
               >
                 <SelectTrigger
                   id="currency"
-                  className="h-[44px] rounded-[var(--r-md)] border-[var(--border-default)] text-[14px] text-[var(--ink-900)]"
-                  style={{ fontFamily: 'var(--font-body)' }}
+                  className="h-11 rounded-md border-(--border-default) text-[14px] text-(--ink-900) [font-family:var(--font-body)]"
                 >
                   <SelectValue placeholder="Select currency" />
                 </SelectTrigger>
@@ -95,7 +91,7 @@ export function InvoiceDefaultsForm({ defaultValues }: InvoiceDefaultsFormProps)
                     <SelectItem
                       key={value}
                       value={value}
-                      style={{ fontFamily: 'var(--font-body)' }}
+                      className="[font-family:var(--font-body)]"
                     >
                       {label}
                     </SelectItem>
@@ -105,11 +101,7 @@ export function InvoiceDefaultsForm({ defaultValues }: InvoiceDefaultsFormProps)
             )}
           />
           {errors.currency && (
-            <p
-              className="text-[11px] text-[var(--error)]"
-              style={{ fontFamily: 'var(--font-body)' }}
-              role="alert"
-            >
+            <p className="text-[11px] text-(--error) [font-family:var(--font-body)]" role="alert">
               {errors.currency.message}
             </p>
           )}
@@ -117,11 +109,7 @@ export function InvoiceDefaultsForm({ defaultValues }: InvoiceDefaultsFormProps)
 
         {/* Invoice Prefix */}
         <div className="flex flex-col gap-1.5">
-          <label
-            htmlFor="invoicePrefix"
-            className={labelClass}
-            style={{ fontFamily: 'var(--font-display)' }}
-          >
+          <label htmlFor="invoicePrefix" className={labelClass}>
             Invoice Prefix
           </label>
           <input
@@ -130,23 +118,15 @@ export function InvoiceDefaultsForm({ defaultValues }: InvoiceDefaultsFormProps)
             placeholder="INV"
             maxLength={10}
             {...register('invoicePrefix')}
-            className={inputClass}
-            style={{ fontFamily: 'var(--font-mono)' }}
+            className={`${inputClass} font-mono`}
           />
-          <p
-            className="text-[12px] text-[var(--ink-400)]"
-            style={{ fontFamily: 'var(--font-body)' }}
-          >
+          <p className="text-[12px] text-(--ink-400) [font-family:var(--font-body)]">
             Used in invoice numbers, e.g.{' '}
-            <span style={{ fontFamily: 'var(--font-mono)' }}>INV-2025-0001</span>. Only letters,
+            <span className="font-mono">INV-2025-0001</span>. Only letters,
             numbers, and hyphens.
           </p>
           {errors.invoicePrefix && (
-            <p
-              className="text-[11px] text-[var(--error)]"
-              style={{ fontFamily: 'var(--font-body)' }}
-              role="alert"
-            >
+            <p className="text-[11px] text-(--error) [font-family:var(--font-body)]" role="alert">
               {errors.invoicePrefix.message}
             </p>
           )}
@@ -157,8 +137,7 @@ export function InvoiceDefaultsForm({ defaultValues }: InvoiceDefaultsFormProps)
           <button
             type="submit"
             disabled={isPending}
-            className="flex h-[44px] items-center justify-center gap-2 rounded-[var(--r-md)] bg-[var(--blue-600)] px-6 text-[14px] font-[600] text-white transition-colors duration-200 hover:bg-[var(--blue-700)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--blue-600)] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
-            style={{ fontFamily: 'var(--font-display)' }}
+            className="flex h-11 items-center justify-center gap-2 rounded-md bg-(--blue-600) px-6 text-[14px] font-semibold text-white transition-colors duration-200 hover:bg-(--blue-700) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--blue-600) focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 [font-family:var(--font-display)]"
           >
             {isPending && <Loader2 className="h-4 w-4 animate-spin" />}
             Save changes

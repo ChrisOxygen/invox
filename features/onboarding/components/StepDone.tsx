@@ -11,7 +11,7 @@ const QUICK_ACCESS_CARDS = [
     icon: FileText,
     label: 'Create invoice',
     bgColor: 'var(--blue-50)',
-    iconColor: 'var(--blue-600)',
+    iconColor: 'var(--ink-500)',
   },
   {
     icon: Users,
@@ -43,85 +43,39 @@ export function StepDone() {
   }
 
   return (
-    <div
-      className="flex flex-col items-center text-center animate-in fade-in slide-in-from-bottom-4 duration-500"
-      style={{ paddingTop: '8px', paddingBottom: '8px' }}
-    >
+    <div className="flex flex-col items-center text-center animate-in fade-in slide-in-from-bottom-4 duration-500 py-2">
       {/* Success circle */}
       <div
-        className="flex items-center justify-center"
-        style={{
-          width: '80px',
-          height: '80px',
-          borderRadius: '50%',
-          backgroundColor: 'color-mix(in srgb, var(--success) 12%, transparent)',
-          marginBottom: 'var(--s5)',
-        }}
+        className="flex items-center justify-center w-20 h-20 rounded-full mb-5"
+        style={{ backgroundColor: 'color-mix(in srgb, var(--success) 12%, transparent)' }}
       >
-        <CheckCircle2
-          size={40}
-          style={{ color: 'var(--success)' }}
-          aria-hidden="true"
-        />
+        <CheckCircle2 size={40} className="text-(--success)" aria-hidden="true" />
       </div>
 
       {/* Heading */}
-      <h2
-        className="font-[family-name:var(--font-display)] font-extrabold"
-        style={{
-          fontSize: '28px',
-          color: 'var(--ink-900)',
-          letterSpacing: '-0.025em',
-          marginBottom: 'var(--s2)',
-        }}
-      >
+      <h2 className="[font-family:var(--font-display)] font-extrabold text-[28px] text-(--ink-900) tracking-[-0.025em] mb-2">
         {firstName ? `You're all set, ${firstName}! 🎉` : "You're all set! 🎉"}
       </h2>
 
       {/* Body */}
-      <p
-        className="font-[family-name:var(--font-body)] mx-auto"
-        style={{
-          fontSize: '15px',
-          color: 'var(--ink-400)',
-          maxWidth: '300px',
-          lineHeight: '1.55',
-        }}
-      >
+      <p className="[font-family:var(--font-body)] text-[15px] text-(--ink-400) max-w-75 leading-[1.55] mx-auto">
         Your Invox account is ready. Time to send your first invoice.
       </p>
 
       {/* Quick-access cards */}
-      <div
-        className="grid w-full mt-8"
-        style={{ gridTemplateColumns: 'repeat(3, 1fr)', gap: 'var(--s3)' }}
-      >
+      <div className="grid w-full mt-8 gap-3" style={{ gridTemplateColumns: 'repeat(3, 1fr)' }}>
         {QUICK_ACCESS_CARDS.map(({ icon: Icon, label, bgColor, iconColor }) => (
           <div
             key={label}
-            className="flex flex-col items-center gap-2"
-            style={{
-              backgroundColor: 'var(--surface-base)',
-              border: '1px solid var(--border-default)',
-              borderRadius: 'var(--r-lg)',
-              padding: 'var(--s4)',
-            }}
+            className="flex flex-col items-center gap-2 bg-(--surface-base) border border-(--border-default) rounded-lg p-4"
           >
             <div
-              className="flex items-center justify-center"
-              style={{
-                width: '36px',
-                height: '36px',
-                borderRadius: 'var(--r-md)',
-                backgroundColor: bgColor,
-              }}
+              className="flex items-center justify-center w-9 h-9 rounded-md"
+              style={{ backgroundColor: bgColor }}
             >
               <Icon size={18} style={{ color: iconColor }} aria-hidden="true" />
             </div>
-            <span
-              className="font-[family-name:var(--font-display)] font-semibold"
-              style={{ fontSize: '12px', color: 'var(--ink-700)', lineHeight: '1.3' }}
-            >
+            <span className="[font-family:var(--font-display)] font-semibold text-[12px] text-(--ink-700) leading-[1.3]">
               {label}
             </span>
           </div>
@@ -130,8 +84,7 @@ export function StepDone() {
 
       {/* CTA */}
       <Button
-        className="w-full font-[family-name:var(--font-display)] font-semibold mt-8"
-        style={{ height: '44px' }}
+        className="w-full h-11 [font-family:var(--font-display)] font-semibold mt-8"
         onClick={handleGoToDashboard}
         disabled={isPending}
       >

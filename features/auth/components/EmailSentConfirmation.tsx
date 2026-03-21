@@ -14,40 +14,19 @@ export function EmailSentConfirmation({ email, onResend }: EmailSentConfirmation
     <div className="flex flex-col items-center text-center gap-6">
       {/* Success icon */}
       <div
-        className="flex items-center justify-center rounded-full"
-        style={{
-          width: 56,
-          height: 56,
-          backgroundColor: 'color-mix(in srgb, var(--success) 12%, transparent)',
-          color: 'var(--success)',
-        }}
+        className="flex items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--success)_12%,transparent)] text-(--success) w-14 h-14"
       >
         <CheckCircle size={28} strokeWidth={2} />
       </div>
 
       {/* Heading + body */}
       <div className="flex flex-col gap-2">
-        <h1
-          className="font-[family-name:var(--font-display)]"
-          style={{
-            fontSize: 30,
-            fontWeight: 800,
-            letterSpacing: '-0.025em',
-            color: 'var(--ink-900)',
-            lineHeight: 1.15,
-          }}
-        >
+        <h1 className="font-[family-name:var(--font-display)] text-[30px] font-[800] tracking-[-0.025em] text-(--ink-900) leading-[1.15]">
           Check your inbox
         </h1>
-        <p
-          className="font-[family-name:var(--font-body)]"
-          style={{ fontSize: 15, color: 'var(--ink-400)', lineHeight: 1.6 }}
-        >
+        <p className="font-[family-name:var(--font-body)] text-[15px] text-(--ink-400) leading-[1.6]">
           We sent a password reset link to{' '}
-          <strong
-            className="font-[family-name:var(--font-body)]"
-            style={{ color: 'var(--ink-900)', fontWeight: 600 }}
-          >
+          <strong className="font-[family-name:var(--font-body)] text-(--ink-900) font-semibold">
             {email}
           </strong>
           . Check your spam folder if you don&apos;t see it.
@@ -59,35 +38,18 @@ export function EmailSentConfirmation({ email, onResend }: EmailSentConfirmation
         <a href="https://mail.google.com" target="_blank" rel="noopener noreferrer" className="w-full">
           <Button
             variant="outline"
-            className="w-full h-11 font-[family-name:var(--font-display)] text-sm font-semibold"
-            style={{
-              borderRadius: 'var(--r-md)',
-              borderColor: 'var(--border-default)',
-              color: 'var(--ink-900)',
-            }}
+            className="w-full h-11 font-[family-name:var(--font-display)] text-sm font-semibold border-(--border-default) text-(--ink-900) rounded-md"
           >
             Open Gmail
           </Button>
         </a>
 
-        <p
-          className="font-[family-name:var(--font-body)]"
-          style={{ fontSize: 13, color: 'var(--ink-400)' }}
-        >
+        <p className="font-[family-name:var(--font-body)] text-[13px] text-(--ink-400)">
           Didn&apos;t receive it?{' '}
           <button
             type="button"
             onClick={onResend}
-            className="font-[family-name:var(--font-body)] transition-colors"
-            style={{
-              fontSize: 13,
-              color: 'var(--blue-600)',
-              fontWeight: 600,
-              background: 'none',
-              border: 'none',
-              padding: 0,
-              cursor: 'pointer',
-            }}
+            className="font-[family-name:var(--font-body)] text-[13px] text-(--blue-600) font-semibold transition-colors bg-transparent border-0 p-0 cursor-pointer"
             onMouseEnter={(e) => ((e.target as HTMLElement).style.color = 'var(--blue-700)')}
             onMouseLeave={(e) => ((e.target as HTMLElement).style.color = 'var(--blue-600)')}
           >
@@ -99,8 +61,7 @@ export function EmailSentConfirmation({ email, onResend }: EmailSentConfirmation
       {/* Back to login */}
       <Link
         href="/login"
-        className="inline-flex items-center gap-1.5 font-[family-name:var(--font-body)] transition-colors"
-        style={{ fontSize: 13, color: 'var(--ink-400)', textDecoration: 'none' }}
+        className="inline-flex items-center gap-1.5 font-[family-name:var(--font-body)] text-[13px] text-(--ink-400) no-underline transition-colors"
         onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = 'var(--ink-900)')}
         onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = 'var(--ink-400)')}
       >

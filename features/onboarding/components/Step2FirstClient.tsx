@@ -34,15 +34,11 @@ function Field({ id, label, optional, error, children }: FieldProps) {
     <div className="flex flex-col gap-1.5">
       <label
         htmlFor={id}
-        className="flex items-baseline gap-1.5 text-[12px] font-[600] uppercase tracking-[0.06em] text-[var(--ink-700)]"
-        style={{ fontFamily: 'var(--font-display)' }}
+        className="flex items-baseline gap-1.5 text-[12px] font-semibold uppercase tracking-[0.06em] text-(--ink-700) [font-family:var(--font-display)]"
       >
         {label}
         {optional && (
-          <span
-            className="text-[11px] font-[400] normal-case tracking-normal text-[var(--ink-300)]"
-            style={{ fontFamily: 'var(--font-body)' }}
-          >
+          <span className="text-[11px] font-normal normal-case tracking-normal text-(--ink-300) [font-family:var(--font-body)]">
             (optional)
           </span>
         )}
@@ -50,8 +46,7 @@ function Field({ id, label, optional, error, children }: FieldProps) {
       {children}
       {error && (
         <p
-          className="text-[11px] text-[var(--error)]"
-          style={{ fontFamily: 'var(--font-body)' }}
+          className="text-[11px] text-(--error) [font-family:var(--font-body)]"
           role="alert"
         >
           {error}
@@ -99,16 +94,10 @@ export function Step2FirstClient() {
   return (
     <div>
       {/* Heading block */}
-      <h1
-        className="text-[24px] font-[800] leading-[1.2] tracking-[-0.025em] text-[var(--ink-900)]"
-        style={{ fontFamily: 'var(--font-display)' }}
-      >
+      <h1 className="text-[24px] font-extrabold leading-[1.2] tracking-[-0.025em] text-(--ink-900) [font-family:var(--font-display)]">
         Add your first client
       </h1>
-      <p
-        className="mt-1.5 text-[14px] text-[var(--ink-400)]"
-        style={{ fontFamily: 'var(--font-body)' }}
-      >
+      <p className="mt-1.5 text-[14px] text-(--ink-400) [font-family:var(--font-body)]">
         You&apos;ll need a client to create an invoice.
       </p>
 
@@ -123,8 +112,7 @@ export function Step2FirstClient() {
               aria-describedby={errors.name ? 'clientName-error' : undefined}
               aria-invalid={!!errors.name}
               {...register('name')}
-              className="h-[44px] w-full rounded-[var(--r-md)] border border-[var(--border-default)] bg-[var(--surface-base)] px-3.5 text-[14px] text-[var(--ink-900)] placeholder:text-[var(--ink-300)] transition-colors duration-[var(--motion-fast)] focus:border-[var(--blue-600)] focus:outline-none focus:ring-2 focus:ring-[var(--blue-600)]/20 aria-invalid:border-[var(--error)] aria-invalid:ring-2 aria-invalid:ring-[var(--error)]/20"
-              style={{ fontFamily: 'var(--font-body)' }}
+              className="h-11 w-full rounded-md border border-(--border-default) bg-(--surface-base) px-3.5 text-[14px] text-(--ink-900) placeholder:text-(--ink-300) transition-colors duration-(--motion-fast) focus:border-(--blue-600) focus:outline-none focus:ring-2 focus:ring-(--blue-600)/20 aria-invalid:border-(--error) aria-invalid:ring-2 aria-invalid:ring-(--error)/20 [font-family:var(--font-body)]"
             />
           </Field>
 
@@ -137,8 +125,7 @@ export function Step2FirstClient() {
               aria-describedby={errors.email ? 'clientEmail-error' : undefined}
               aria-invalid={!!errors.email}
               {...register('email')}
-              className="h-[44px] w-full rounded-[var(--r-md)] border border-[var(--border-default)] bg-[var(--surface-base)] px-3.5 text-[14px] text-[var(--ink-900)] placeholder:text-[var(--ink-300)] transition-colors duration-[var(--motion-fast)] focus:border-[var(--blue-600)] focus:outline-none focus:ring-2 focus:ring-[var(--blue-600)]/20 aria-invalid:border-[var(--error)] aria-invalid:ring-2 aria-invalid:ring-[var(--error)]/20"
-              style={{ fontFamily: 'var(--font-body)' }}
+              className="h-11 w-full rounded-md border border-(--border-default) bg-(--surface-base) px-3.5 text-[14px] text-(--ink-900) placeholder:text-(--ink-300) transition-colors duration-(--motion-fast) focus:border-(--blue-600) focus:outline-none focus:ring-2 focus:ring-(--blue-600)/20 aria-invalid:border-(--error) aria-invalid:ring-2 aria-invalid:ring-(--error)/20 [font-family:var(--font-body)]"
             />
           </Field>
 
@@ -149,8 +136,7 @@ export function Step2FirstClient() {
               type="tel"
               placeholder="+234 800 000 0000"
               {...register('phone')}
-              className="h-[44px] w-full rounded-[var(--r-md)] border border-[var(--border-default)] bg-[var(--surface-base)] px-3.5 text-[14px] text-[var(--ink-900)] placeholder:text-[var(--ink-300)] transition-colors duration-[var(--motion-fast)] focus:border-[var(--blue-600)] focus:outline-none focus:ring-2 focus:ring-[var(--blue-600)]/20"
-              style={{ fontFamily: 'var(--font-body)' }}
+              className="h-11 w-full rounded-md border border-(--border-default) bg-(--surface-base) px-3.5 text-[14px] text-(--ink-900) placeholder:text-(--ink-300) transition-colors duration-(--motion-fast) focus:border-(--blue-600) focus:outline-none focus:ring-2 focus:ring-(--blue-600)/20 [font-family:var(--font-body)]"
             />
           </Field>
 
@@ -161,8 +147,7 @@ export function Step2FirstClient() {
               type="text"
               placeholder="Acme Corporation"
               {...register('company')}
-              className="h-[44px] w-full rounded-[var(--r-md)] border border-[var(--border-default)] bg-[var(--surface-base)] px-3.5 text-[14px] text-[var(--ink-900)] placeholder:text-[var(--ink-300)] transition-colors duration-[var(--motion-fast)] focus:border-[var(--blue-600)] focus:outline-none focus:ring-2 focus:ring-[var(--blue-600)]/20"
-              style={{ fontFamily: 'var(--font-body)' }}
+              className="h-11 w-full rounded-md border border-(--border-default) bg-(--surface-base) px-3.5 text-[14px] text-(--ink-900) placeholder:text-(--ink-300) transition-colors duration-(--motion-fast) focus:border-(--blue-600) focus:outline-none focus:ring-2 focus:ring-(--blue-600)/20 [font-family:var(--font-body)]"
             />
           </Field>
         </div>
@@ -170,13 +155,10 @@ export function Step2FirstClient() {
         {/* Server error */}
         {serverError && (
           <div
-            className="mt-4 rounded-[var(--r-md)] border border-[var(--error)]/20 bg-[var(--error)]/5 px-4 py-3"
+            className="mt-4 rounded-md border border-(--error)/20 bg-(--error)/5 px-4 py-3"
             role="alert"
           >
-            <p
-              className="text-[13px] text-[var(--error)]"
-              style={{ fontFamily: 'var(--font-body)' }}
-            >
+            <p className="text-[13px] text-(--error) [font-family:var(--font-body)]">
               {serverError}
             </p>
           </div>
@@ -187,8 +169,7 @@ export function Step2FirstClient() {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="flex h-[44px] w-full items-center justify-center gap-2 rounded-[var(--r-md)] bg-[var(--blue-600)] text-[14px] font-[600] text-white transition-colors duration-[var(--motion-base)] hover:bg-[var(--blue-700)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--blue-600)] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
-            style={{ fontFamily: 'var(--font-display)' }}
+            className="flex h-11 w-full items-center justify-center gap-2 rounded-md bg-(--blue-600) text-[14px] font-semibold text-white transition-colors duration-(--motion-base) hover:bg-(--blue-700) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--blue-600) focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 [font-family:var(--font-display)]"
           >
             {isSubmitting && <Loader2 className="h-4 w-4 animate-spin" />}
             Continue
@@ -198,8 +179,7 @@ export function Step2FirstClient() {
             type="button"
             onClick={nextStep}
             disabled={isSubmitting}
-            className="text-[13px] text-[var(--ink-400)] transition-colors duration-[var(--motion-fast)] hover:text-[var(--ink-700)] focus-visible:outline-none focus-visible:underline disabled:cursor-not-allowed disabled:opacity-60"
-            style={{ fontFamily: 'var(--font-body)' }}
+            className="text-[13px] text-(--ink-400) transition-colors duration-(--motion-fast) hover:text-(--ink-700) focus-visible:outline-none focus-visible:underline disabled:cursor-not-allowed disabled:opacity-60 [font-family:var(--font-body)]"
           >
             Skip for now
           </button>

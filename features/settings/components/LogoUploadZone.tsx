@@ -88,10 +88,10 @@ export function LogoUploadZone({
       <div
         {...getRootProps()}
         className={[
-          'relative flex min-h-[140px] cursor-pointer flex-col items-center justify-center gap-3 rounded-[var(--r-lg)] border-2 border-dashed transition-colors duration-200',
+          'relative flex min-h-[140px] cursor-pointer flex-col items-center justify-center gap-3 rounded-lg border-2 border-dashed transition-colors duration-200',
           isDragActive
-            ? 'border-[var(--blue-600)] bg-[var(--blue-50)]'
-            : 'border-[var(--border-strong)] bg-[var(--surface-raised)] hover:border-[var(--blue-400)] hover:bg-[var(--blue-50)]',
+            ? 'border-(--blue-600) bg-(--blue-50)'
+            : 'border-(--border-strong) bg-(--surface-raised) hover:border-(--blue-400) hover:bg-(--blue-50)',
           uploading ? 'cursor-not-allowed opacity-70' : '',
         ]
           .filter(Boolean)
@@ -105,11 +105,11 @@ export function LogoUploadZone({
             <img
               src={preview}
               alt="Business logo"
-              className="max-h-[100px] max-w-[200px] rounded-[var(--r-lg)] object-contain"
+              className="max-h-[100px] max-w-[200px] rounded-lg object-contain"
             />
             {uploading && (
-              <div className="absolute inset-0 flex items-center justify-center rounded-[var(--r-lg)] bg-white/70">
-                <Loader2 className="h-6 w-6 animate-spin text-[var(--blue-600)]" />
+              <div className="absolute inset-0 flex items-center justify-center rounded-lg bg-white/70">
+                <Loader2 className="h-6 w-6 animate-spin text-(--blue-600)" />
               </div>
             )}
             {!uploading && (
@@ -117,7 +117,7 @@ export function LogoUploadZone({
                 type="button"
                 onClick={handleRemove}
                 aria-label="Remove logo"
-                className="absolute right-2 top-2 flex h-6 w-6 items-center justify-center rounded-full bg-[var(--ink-900)] text-white shadow-sm transition-opacity duration-200 hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ink-900)] focus-visible:ring-offset-1"
+                className="absolute right-2 top-2 flex h-6 w-6 items-center justify-center rounded-full bg-(--ink-900) text-white shadow-sm transition-opacity duration-200 hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ink-900) focus-visible:ring-offset-1"
               >
                 <X className="h-3.5 w-3.5" />
               </button>
@@ -126,26 +126,20 @@ export function LogoUploadZone({
         ) : (
           <>
             {uploading ? (
-              <Loader2 className="h-8 w-8 animate-spin text-[var(--blue-600)]" />
+              <Loader2 className="h-8 w-8 animate-spin text-(--blue-600)" />
             ) : (
               <UploadCloud
                 className={[
                   'h-8 w-8 transition-colors duration-200',
-                  isDragActive ? 'text-[var(--blue-600)]' : 'text-[var(--ink-300)]',
+                  isDragActive ? 'text-(--blue-600)' : 'text-(--ink-300)',
                 ].join(' ')}
               />
             )}
             <div className="text-center">
-              <p
-                className="text-[13px] font-[500] text-[var(--ink-700)]"
-                style={{ fontFamily: 'var(--font-body)' }}
-              >
+              <p className="text-[13px] font-medium text-(--ink-700) [font-family:var(--font-body)]">
                 {isDragActive ? 'Drop your logo here' : 'Drag & drop or click to upload'}
               </p>
-              <p
-                className="mt-0.5 text-[11px] text-[var(--ink-300)]"
-                style={{ fontFamily: 'var(--font-body)' }}
-              >
+              <p className="mt-0.5 text-[11px] text-(--ink-300) [font-family:var(--font-body)]">
                 PNG, JPG or SVG · Max 2MB
               </p>
             </div>
@@ -154,11 +148,7 @@ export function LogoUploadZone({
       </div>
 
       {error && (
-        <p
-          className="text-[11px] text-[var(--error)]"
-          style={{ fontFamily: 'var(--font-body)' }}
-          role="alert"
-        >
+        <p className="text-[11px] text-(--error) [font-family:var(--font-body)]" role="alert">
           {error}
         </p>
       )}

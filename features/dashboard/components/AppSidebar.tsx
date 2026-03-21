@@ -13,6 +13,7 @@ import {
 } from 'lucide-react'
 import { Avatar, AvatarFallback } from '@/shared/components/ui/avatar'
 import { createClient } from '@/shared/lib/supabase/client'
+import { cn } from '@/shared/lib/utils'
 
 // ---------------------------------------------------------------------------
 // Nav config
@@ -35,10 +36,7 @@ const generalNav = [
 function InvoxLogo() {
   return (
     <div className="flex items-center gap-2.5 px-1 py-0.5">
-      <div
-        className="flex size-8 shrink-0 items-center justify-center rounded-lg"
-        style={{ backgroundColor: 'var(--blue-600)' }}
-      >
+      <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-(--blue-600)">
         <Image
           src="/assets/logo-white-icon.webp"
           alt="Invox"
@@ -47,12 +45,9 @@ function InvoxLogo() {
           className="object-contain"
         />
       </div>
-      <span
-        className="text-[17px] font-bold tracking-[-0.03em]"
-        style={{ fontFamily: 'var(--font-display)', color: 'var(--ink-900)' }}
-      >
+      <span className="text-[17px] font-bold tracking-[-0.03em] [font-family:var(--font-display)] text-(--ink-900)">
         Inv
-        <span style={{ color: 'var(--blue-600)' }}>ox</span>
+        <span className="text-(--blue-600)">ox</span>
       </span>
     </div>
   )
@@ -83,11 +78,7 @@ function NavButton({ label, icon: Icon, onClick }: NavButtonProps) {
     <button
       type="button"
       onClick={onClick}
-      className="flex h-9 w-full items-center gap-3 rounded px-3 text-[13.5px] font-semibold transition-colors duration-100"
-      style={{
-        fontFamily: 'var(--font-display)',
-        color: 'var(--ink-400)',
-      }}
+      className="flex h-9 w-full items-center gap-3 rounded px-3 text-[13.5px] font-semibold transition-colors duration-100 [font-family:var(--font-display)] text-(--ink-400)"
       onMouseEnter={(e) => {
         ;(e.currentTarget as HTMLButtonElement).style.color = 'var(--blue-600)'
       }}
@@ -107,10 +98,7 @@ function NavButton({ label, icon: Icon, onClick }: NavButtonProps) {
 
 function NavGroupLabel({ children }: { children: React.ReactNode }) {
   return (
-    <p
-      className="mb-1 px-3 text-[10px] font-semibold uppercase tracking-[0.08em]"
-      style={{ color: 'var(--ink-300)', fontFamily: 'var(--font-display)' }}
-    >
+    <p className="mb-1 px-3 text-[10px] font-semibold uppercase tracking-[0.08em] text-(--ink-300) [font-family:var(--font-display)]">
       {children}
     </p>
   )
@@ -142,13 +130,7 @@ export function AppSidebar({ user }: AppSidebarProps) {
   }
 
   return (
-    <aside
-      className="flex w-55 shrink-0 flex-col overflow-hidden rounded-lg border"
-      style={{
-        backgroundColor: 'var(--surface-base)',
-        borderColor: 'var(--border-default)',
-      }}
-    >
+    <aside className="flex w-55 shrink-0 flex-col overflow-hidden rounded-lg border bg-(--surface-base) border-(--border-default)">
       {/* Logo */}
       <div className="flex items-center px-4 py-5">
         <InvoxLogo />
@@ -180,39 +162,20 @@ export function AppSidebar({ user }: AppSidebarProps) {
       </nav>
 
       {/* Divider */}
-      <div
-        className="mx-3 shrink-0"
-        style={{ height: '1px', backgroundColor: 'var(--border-default)' }}
-      />
+      <div className="mx-3 shrink-0 h-px bg-(--border-default)" />
 
       {/* User footer */}
       <div className="flex shrink-0 items-center gap-3 px-4 py-4">
         <Avatar className="size-8 shrink-0 rounded-lg">
-          <AvatarFallback
-            className="rounded-lg text-[11px] font-semibold"
-            style={{
-              backgroundColor: 'var(--blue-50)',
-              color: 'var(--blue-700)',
-              fontFamily: 'var(--font-display)',
-            }}
-          >
+          <AvatarFallback className="rounded-lg text-[11px] font-semibold bg-(--blue-50) text-(--blue-700) [font-family:var(--font-display)]">
             {displayInitials}
           </AvatarFallback>
         </Avatar>
         <div className="flex min-w-0 flex-1 flex-col">
-          <span
-            className="truncate text-[13px] font-semibold leading-tight"
-            style={{
-              fontFamily: 'var(--font-display)',
-              color: 'var(--ink-900)',
-            }}
-          >
+          <span className="truncate text-[13px] font-semibold leading-tight [font-family:var(--font-display)] text-(--ink-900)">
             {displayName}
           </span>
-          <span
-            className="truncate text-[11px] leading-tight"
-            style={{ color: 'var(--ink-400)' }}
-          >
+          <span className="truncate text-[11px] leading-tight text-(--ink-400)">
             {displayEmail}
           </span>
         </div>
@@ -234,26 +197,12 @@ function NavLinkWithHover({ href, label, icon: Icon }: NavLinkProps) {
   return (
     <Link
       href={href}
-      className="flex h-9 items-center gap-3 rounded px-3 text-[13.5px] font-semibold transition-colors duration-100"
-      style={{
-        fontFamily: 'var(--font-display)',
-        backgroundColor: isActive ? 'var(--blue-50)' : undefined,
-        color: isActive ? 'var(--blue-600)' : 'var(--ink-400)',
-      }}
-      onMouseEnter={
-        !isActive
-          ? (e) => {
-              ;(e.currentTarget as HTMLAnchorElement).style.color = 'var(--blue-600)'
-            }
-          : undefined
-      }
-      onMouseLeave={
-        !isActive
-          ? (e) => {
-              ;(e.currentTarget as HTMLAnchorElement).style.color = 'var(--ink-400)'
-            }
-          : undefined
-      }
+      className={cn(
+        'flex h-9 items-center gap-3 rounded px-3 text-[13.5px] font-semibold transition-colors duration-100 [font-family:var(--font-display)]',
+        isActive
+          ? 'bg-(--blue-50) text-(--blue-600)'
+          : 'text-(--ink-400) hover:text-(--blue-600)',
+      )}
     >
       <Icon className="size-4 shrink-0" />
       <span>{label}</span>

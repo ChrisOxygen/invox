@@ -124,17 +124,14 @@ export function InvoicesPageClient() {
 
           {/* Pagination */}
           {total > PAGE_SIZE && (
-            <div
-              className="flex items-center justify-between mt-4"
-              style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: 'var(--ink-400)' }}
-            >
+            <div className="flex items-center justify-between mt-4 [font-family:var(--font-body)] text-[13px] text-(--ink-400)">
               <span>
                 Showing{' '}
-                <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 500, color: 'var(--ink-700)' }}>
+                <span className="font-mono font-medium text-(--ink-700)">
                   {startFrom}–{endAt}
                 </span>
                 {' '}of{' '}
-                <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 500, color: 'var(--ink-700)' }}>
+                <span className="font-mono font-medium text-(--ink-700)">
                   {total}
                 </span>
                 {' '}invoices
@@ -147,15 +144,7 @@ export function InvoicesPageClient() {
                     setFilters((prev) => ({ ...prev, page: Math.max(1, (prev.page ?? 1) - 1) }))
                   }
                   disabled={page <= 1 || isPending}
-                  style={{
-                    fontFamily: 'var(--font-display)',
-                    fontWeight: 600,
-                    fontSize: 12,
-                    borderColor: 'var(--border-default)',
-                    color: 'var(--ink-700)',
-                    borderRadius: 'var(--r-md)',
-                    height: 32,
-                  }}
+                  className="[font-family:var(--font-display)] font-semibold text-[12px] border-(--border-default) text-(--ink-700) rounded-md h-8"
                 >
                   Previous
                 </Button>
@@ -169,15 +158,7 @@ export function InvoicesPageClient() {
                     }))
                   }
                   disabled={page >= totalPages || isPending}
-                  style={{
-                    fontFamily: 'var(--font-display)',
-                    fontWeight: 600,
-                    fontSize: 12,
-                    borderColor: 'var(--border-default)',
-                    color: 'var(--ink-700)',
-                    borderRadius: 'var(--r-md)',
-                    height: 32,
-                  }}
+                  className="[font-family:var(--font-display)] font-semibold text-[12px] border-(--border-default) text-(--ink-700) rounded-md h-8"
                 >
                   Next
                 </Button>
@@ -194,35 +175,12 @@ export function InvoicesPageClient() {
           if (!open) setDeletingInvoiceId(null)
         }}
       >
-        <DialogContent
-          style={{
-            backgroundColor: 'var(--surface-base)',
-            border: '1px solid var(--border-default)',
-            borderRadius: 'var(--r-xl)',
-            maxWidth: 420,
-          }}
-        >
+        <DialogContent className="bg-(--surface-base) border border-(--border-default) rounded-lg max-w-105">
           <DialogHeader>
-            <DialogTitle
-              style={{
-                fontFamily: 'var(--font-display)',
-                fontSize: 18,
-                fontWeight: 700,
-                color: 'var(--ink-900)',
-                letterSpacing: '-0.02em',
-              }}
-            >
+            <DialogTitle className="[font-family:var(--font-display)] text-[18px] font-bold text-(--ink-900) tracking-[-0.02em]">
               Delete invoice?
             </DialogTitle>
-            <DialogDescription
-              style={{
-                fontFamily: 'var(--font-body)',
-                fontSize: 14,
-                color: 'var(--ink-400)',
-                lineHeight: 1.5,
-                marginTop: 6,
-              }}
-            >
+            <DialogDescription className="[font-family:var(--font-body)] text-[14px] text-(--ink-400) leading-normal mt-1.5">
               This will permanently delete the invoice. This action cannot be undone.
             </DialogDescription>
           </DialogHeader>
@@ -232,31 +190,14 @@ export function InvoicesPageClient() {
               variant="outline"
               onClick={() => setDeletingInvoiceId(null)}
               disabled={isDeleting}
-              style={{
-                fontFamily: 'var(--font-display)',
-                fontWeight: 600,
-                fontSize: 13,
-                borderColor: 'var(--border-default)',
-                color: 'var(--ink-700)',
-                borderRadius: 'var(--r-md)',
-                height: 36,
-              }}
+              className="[font-family:var(--font-display)] font-semibold text-[13px] border-(--border-default) text-(--ink-700) rounded-md h-9"
             >
               Cancel
             </Button>
             <Button
               onClick={handleDeleteConfirm}
               disabled={isDeleting}
-              style={{
-                fontFamily: 'var(--font-display)',
-                fontWeight: 600,
-                fontSize: 13,
-                backgroundColor: 'var(--error)',
-                color: '#fff',
-                border: 'none',
-                borderRadius: 'var(--r-md)',
-                height: 36,
-              }}
+              className="[font-family:var(--font-display)] font-semibold text-[13px] bg-(--error) text-white border-none rounded-md h-9"
             >
               {isDeleting ? (
                 <>

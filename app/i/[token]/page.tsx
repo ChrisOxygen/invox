@@ -1,8 +1,9 @@
 import { notFound } from 'next/navigation'
 import { format, parseISO } from 'date-fns'
-import { Printer, Globe, Mail, Phone } from 'lucide-react'
+import { Globe, Mail, Phone } from 'lucide-react'
 import { _getInvoiceByToken } from '@/features/invoices/server/_get-invoice-by-token'
 import { formatCurrency } from '@/shared/lib/utils'
+import { PrintButton } from '@/features/invoices/components/pdf/PrintButton'
 import type { PublicInvoice } from '@/features/invoices/server/_get-invoice-by-token'
 
 export default async function PublicInvoicePage({
@@ -115,26 +116,7 @@ export default async function PublicInvoicePage({
             </span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <button
-              onClick={() => window.print()}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: 6,
-                padding: '7px 14px',
-                border: '1px solid #E3E3EE',
-                borderRadius: 8,
-                backgroundColor: 'white',
-                color: '#3D3D6B',
-                fontFamily: "'Plus Jakarta Sans', sans-serif",
-                fontSize: 13,
-                fontWeight: 600,
-                cursor: 'pointer',
-              }}
-            >
-              <Printer style={{ width: 14, height: 14 }} />
-              Print
-            </button>
+            <PrintButton />
           </div>
         </div>
 

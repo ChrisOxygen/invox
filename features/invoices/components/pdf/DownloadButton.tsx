@@ -18,7 +18,7 @@ export function DownloadButton({ invoice, variant = 'default', size = 'md' }: Do
     display: 'inline-flex',
     alignItems: 'center',
     gap: '6px',
-    borderRadius: 'var(--r-md)',
+    borderRadius: '4px',
     fontFamily: 'var(--font-display)',
     fontWeight: 600,
     cursor: 'pointer',

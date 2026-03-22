@@ -5,7 +5,6 @@ import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
 import { InvoiceStatusBadge } from '@/features/invoices/components/list/InvoiceStatusBadge'
 import { InvoiceInfoCard } from '@/features/invoices/components/detail/InvoiceInfoCard'
-import { PrintButton } from '@/features/invoices/components/pdf/PrintButton'
 import type { InvoiceDetail } from '@/features/invoices/types'
 
 // dynamic imports must live in a Client Component
@@ -46,13 +45,9 @@ export function InvoicePreviewPageClient({ invoice }: InvoicePreviewPageClientPr
     <>
       <style>{`
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-        @media print {
-          body > * { display: none !important; }
-          #invoice-print-target { display: block !important; }
-        }
       `}</style>
 
-      <div className="flex flex-col h-full min-h-0">
+<div className="flex flex-col h-full min-h-0">
         {/* ── Top bar ──────────────────────────────────────────────── */}
         <div className="flex items-center justify-between gap-(--s3) pb-(--s4) border-b border-(--border-default) mb-(--s5) flex-wrap">
           <div className="flex items-center gap-(--s3)">
@@ -75,7 +70,6 @@ export function InvoicePreviewPageClient({ invoice }: InvoicePreviewPageClientPr
           </div>
 
           <div className="flex items-center gap-(--s2)">
-            <PrintButton />
             <DownloadButton invoice={invoice} variant="default" size="sm" />
           </div>
         </div>

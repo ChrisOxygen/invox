@@ -21,7 +21,7 @@ export function PrintButton({ size = 'sm' }: PrintButtonProps) {
         color: 'var(--ink-900)',
         background: 'transparent',
         border: '1px solid var(--border-strong)',
-        borderRadius: 'var(--r-md)',
+        borderRadius: '4px',
         padding: size === 'sm' ? '6px 12px' : '8px 16px',
         cursor: 'pointer',
         transition: 'background 200ms ease',

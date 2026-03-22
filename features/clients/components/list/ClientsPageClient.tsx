@@ -1,8 +1,8 @@
 'use client'
 
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import { toast } from 'sonner'
-import { Plus, Loader2 } from 'lucide-react'
+import { Loader2 } from 'lucide-react'
 import { Button } from '@/shared/components/ui/button'
 import {
   Dialog,
@@ -51,6 +51,11 @@ export function ClientsPageClient() {
     setIsSheetOpen(true)
   }, [])
 
+  useEffect(() => {
+    window.addEventListener('invox:add-client', handleAdd)
+    return () => window.removeEventListener('invox:add-client', handleAdd)
+  }, [handleAdd])
+
   const handleDeleteConfirm = () => {
     if (!deletingClientId) return
     deleteMutation.mutate(deletingClientId, {
@@ -70,26 +75,6 @@ export function ClientsPageClient() {
 
   return (
     <>
-      {/* Page header */}
-      <div className="flex items-center justify-between mb-6">
-        <div>
-          <h1 className="[font-family:var(--font-display)] text-[28px] font-bold text-(--ink-900) tracking-[-0.025em] leading-[1.2]">
-            Clients
-          </h1>
-          <p className="[font-family:var(--font-body)] text-[14px] text-(--ink-400) mt-1">
-            Manage your client contacts and relationships
-          </p>
-        </div>
-
-        <Button
-          onClick={handleAdd}
-          className="[font-family:var(--font-display)] font-semibold text-[13px] bg-(--blue-600) text-white border-0 h-9 px-[14px] rounded-md"
-        >
-          <Plus className="w-3.5 h-3.5 mr-1.5" />
-          Add Client
-        </Button>
-      </div>
-
       {/* Filters */}
       <div className="mb-4">
         <ClientFilters onSearch={handleSearch} total={total} isLoading={isPending} />
@@ -126,7 +111,7 @@ export function ClientsPageClient() {
                   size="sm"
                   onClick={() => setPage((p) => Math.max(1, p - 1))}
                   disabled={page <= 1}
-                  className="[font-family:var(--font-display)] font-semibold text-[12px] border-(--border-default) text-(--ink-700) h-8 rounded-md"
+                  className="[font-family:var(--font-display)] font-semibold text-[12px] border-(--border-default) text-(--ink-700) h-8 rounded"
                 >
                   Previous
                 </Button>
@@ -135,7 +120,7 @@ export function ClientsPageClient() {
                   size="sm"
                   onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
                   disabled={page >= totalPages}
-                  className="[font-family:var(--font-display)] font-semibold text-[12px] border-(--border-default) text-(--ink-700) h-8 rounded-md"
+                  className="[font-family:var(--font-display)] font-semibold text-[12px] border-(--border-default) text-(--ink-700) h-8 rounded"
                 >
                   Next
                 </Button>
@@ -162,7 +147,7 @@ export function ClientsPageClient() {
       {/* Delete confirmation dialog */}
       <Dialog open={!!deletingClientId} onOpenChange={(open) => { if (!open) setDeletingClientId(null) }}>
         <DialogContent
-          className="bg-(--surface-base) border-(--border-default) max-w-[420px] rounded-lg"
+          className="bg-(--surface-base) border-(--border-default) max-w-[420px] rounded"
         >
           <DialogHeader>
             <DialogTitle className="[font-family:var(--font-display)] text-[18px] font-bold text-(--ink-900) tracking-[-0.02em]">
@@ -178,14 +163,14 @@ export function ClientsPageClient() {
               variant="outline"
               onClick={() => setDeletingClientId(null)}
               disabled={deleteMutation.isPending}
-              className="[font-family:var(--font-display)] font-semibold text-[13px] border-(--border-default) text-(--ink-700) h-9 rounded-md"
+              className="[font-family:var(--font-display)] font-semibold text-[13px] border-(--border-default) text-(--ink-700) h-9 rounded"
             >
               Cancel
             </Button>
             <Button
               onClick={handleDeleteConfirm}
               disabled={deleteMutation.isPending}
-              className="[font-family:var(--font-display)] font-semibold text-[13px] bg-(--error) text-white border-0 h-9 rounded-md"
+              className="[font-family:var(--font-display)] font-semibold text-[13px] bg-(--error) text-white border-0 h-9 rounded"
             >
               {deleteMutation.isPending ? (
                 <>

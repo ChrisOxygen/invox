@@ -21,6 +21,17 @@ function FieldError({ message }: { message?: string }) {
   )
 }
 
+function SubsectionLabel({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="flex items-center gap-3 pt-2">
+      <span className="text-[11px] font-semibold uppercase tracking-[0.08em] text-(--ink-300) [font-family:var(--font-display)] whitespace-nowrap">
+        {children}
+      </span>
+      <div className="h-px flex-1 bg-(--border-default)" />
+    </div>
+  )
+}
+
 export function BusinessInfoForm({ defaultValues }: BusinessInfoFormProps) {
   const { mutate, isPending } = useUpdateProfile({
     onSuccess: () => toast.success('Business info saved'),
@@ -48,24 +59,21 @@ export function BusinessInfoForm({ defaultValues }: BusinessInfoFormProps) {
   })
 
   function onSubmit(data: ZUpdateBusinessInfo) {
-    mutate(data, {
-      onError: (err) => toast.error(err.message),
-    })
+    mutate(data, { onError: (err) => toast.error(err.message) })
   }
 
   const inputClass =
-    'h-11 w-full rounded-md border border-(--border-default) bg-(--surface-base) px-3.5 text-[14px] text-(--ink-900) placeholder:text-(--ink-300) transition-colors duration-200 focus:border-(--blue-600) focus:outline-none focus:ring-2 focus:ring-(--blue-600)/20 [font-family:var(--font-body)]'
+    'h-10 w-full rounded border border-(--border-default) bg-(--surface-base) px-3.5 text-[14px] text-(--ink-900) placeholder:text-(--ink-300) transition-colors duration-200 focus:border-(--blue-600) focus:outline-none focus:ring-2 focus:ring-(--blue-600)/20 [font-family:var(--font-body)]'
   const labelClass =
-    'text-[12px] font-semibold uppercase tracking-[0.06em] text-(--ink-700) [font-family:var(--font-display)]'
+    'text-[12px] font-semibold text-(--ink-700) [font-family:var(--font-display)]'
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate>
       <div className="flex flex-col gap-4">
-        {/* Business name — full width */}
+
+        {/* Business name */}
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="businessName" className={labelClass}>
-            Business Name
-          </label>
+          <label htmlFor="businessName" className={labelClass}>Business Name</label>
           <input
             id="businessName"
             type="text"
@@ -76,11 +84,11 @@ export function BusinessInfoForm({ defaultValues }: BusinessInfoFormProps) {
           <FieldError message={errors.businessName?.message} />
         </div>
 
-        {/* Address — full width */}
+        {/* ── Address ───────────────────────────────── */}
+        <SubsectionLabel>Address</SubsectionLabel>
+
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="address" className={labelClass}>
-            Street Address
-          </label>
+          <label htmlFor="address" className={labelClass}>Street Address</label>
           <input
             id="address"
             type="text"
@@ -91,12 +99,9 @@ export function BusinessInfoForm({ defaultValues }: BusinessInfoFormProps) {
           <FieldError message={errors.address?.message} />
         </div>
 
-        {/* City + State */}
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="city" className={labelClass}>
-              City
-            </label>
+            <label htmlFor="city" className={labelClass}>City</label>
             <input
               id="city"
               type="text"
@@ -107,9 +112,7 @@ export function BusinessInfoForm({ defaultValues }: BusinessInfoFormProps) {
             <FieldError message={errors.city?.message} />
           </div>
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="state" className={labelClass}>
-              State
-            </label>
+            <label htmlFor="state" className={labelClass}>State</label>
             <input
               id="state"
               type="text"
@@ -121,12 +124,9 @@ export function BusinessInfoForm({ defaultValues }: BusinessInfoFormProps) {
           </div>
         </div>
 
-        {/* Zip + Country */}
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="zipCode" className={labelClass}>
-              Zip / Postal Code
-            </label>
+            <label htmlFor="zipCode" className={labelClass}>Zip / Postal Code</label>
             <input
               id="zipCode"
               type="text"
@@ -137,9 +137,7 @@ export function BusinessInfoForm({ defaultValues }: BusinessInfoFormProps) {
             <FieldError message={errors.zipCode?.message} />
           </div>
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="country" className={labelClass}>
-              Country
-            </label>
+            <label htmlFor="country" className={labelClass}>Country</label>
             <input
               id="country"
               type="text"
@@ -151,12 +149,12 @@ export function BusinessInfoForm({ defaultValues }: BusinessInfoFormProps) {
           </div>
         </div>
 
-        {/* Phone + Email */}
+        {/* ── Contact ───────────────────────────────── */}
+        <SubsectionLabel>Contact</SubsectionLabel>
+
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="phone" className={labelClass}>
-              Phone
-            </label>
+            <label htmlFor="phone" className={labelClass}>Phone</label>
             <input
               id="phone"
               type="tel"
@@ -167,9 +165,7 @@ export function BusinessInfoForm({ defaultValues }: BusinessInfoFormProps) {
             <FieldError message={errors.phone?.message} />
           </div>
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="email" className={labelClass}>
-              Business Email
-            </label>
+            <label htmlFor="email" className={labelClass}>Business Email</label>
             <input
               id="email"
               type="email"
@@ -181,11 +177,8 @@ export function BusinessInfoForm({ defaultValues }: BusinessInfoFormProps) {
           </div>
         </div>
 
-        {/* Website — full width */}
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="website" className={labelClass}>
-            Website
-          </label>
+          <label htmlFor="website" className={labelClass}>Website</label>
           <input
             id="website"
             type="url"
@@ -196,11 +189,14 @@ export function BusinessInfoForm({ defaultValues }: BusinessInfoFormProps) {
           <FieldError message={errors.website?.message} />
         </div>
 
-        {/* TIN + RC Number */}
+        {/* ── Legal & Tax ───────────────────────────── */}
+        <SubsectionLabel>Legal &amp; Tax — Nigeria</SubsectionLabel>
+
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div className="flex flex-col gap-1.5">
             <label htmlFor="taxNumber" className={labelClass}>
-              TIN (Tax Identification Number)
+              TIN
+              <span className="ml-1.5 text-[11px] font-normal text-(--ink-300)">(Tax Identification Number)</span>
             </label>
             <input
               id="taxNumber"
@@ -213,7 +209,8 @@ export function BusinessInfoForm({ defaultValues }: BusinessInfoFormProps) {
           </div>
           <div className="flex flex-col gap-1.5">
             <label htmlFor="rcNumber" className={labelClass}>
-              RC Number (CAC)
+              RC Number
+              <span className="ml-1.5 text-[11px] font-normal text-(--ink-300)">(CAC Registration)</span>
             </label>
             <input
               id="rcNumber"
@@ -226,17 +223,18 @@ export function BusinessInfoForm({ defaultValues }: BusinessInfoFormProps) {
           </div>
         </div>
 
-        {/* Submit */}
-        <div className="flex justify-end pt-2">
+        {/* ── Footer / Submit ───────────────────────── */}
+        <div className="flex justify-end border-t border-(--border-default) pt-5 mt-1">
           <button
             type="submit"
             disabled={isPending}
-            className="flex h-11 items-center justify-center gap-2 rounded-md bg-(--blue-600) px-6 text-[14px] font-semibold text-white transition-colors duration-200 hover:bg-(--blue-700) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--blue-600) focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 [font-family:var(--font-display)]"
+            className="flex h-9 items-center justify-center gap-2 rounded bg-(--blue-600) px-5 text-[13px] font-semibold text-white transition-colors duration-200 hover:bg-(--blue-700) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--blue-600) focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 [font-family:var(--font-display)]"
           >
-            {isPending && <Loader2 className="h-4 w-4 animate-spin" />}
+            {isPending && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
             Save changes
           </button>
         </div>
+
       </div>
     </form>
   )

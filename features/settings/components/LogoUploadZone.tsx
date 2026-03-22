@@ -88,7 +88,7 @@ export function LogoUploadZone({
       <div
         {...getRootProps()}
         className={[
-          'relative flex min-h-[140px] cursor-pointer flex-col items-center justify-center gap-3 rounded-lg border-2 border-dashed transition-colors duration-200',
+          'relative flex min-h-35 cursor-pointer flex-col items-center justify-center gap-3 rounded border-2 border-dashed transition-colors duration-200',
           isDragActive
             ? 'border-(--blue-600) bg-(--blue-50)'
             : 'border-(--border-strong) bg-(--surface-raised) hover:border-(--blue-400) hover:bg-(--blue-50)',
@@ -105,10 +105,10 @@ export function LogoUploadZone({
             <img
               src={preview}
               alt="Business logo"
-              className="max-h-[100px] max-w-[200px] rounded-lg object-contain"
+              className="max-h-25 max-w-50 rounded object-contain"
             />
             {uploading && (
-              <div className="absolute inset-0 flex items-center justify-center rounded-lg bg-white/70">
+              <div className="absolute inset-0 flex items-center justify-center rounded bg-white/70">
                 <Loader2 className="h-6 w-6 animate-spin text-(--blue-600)" />
               </div>
             )}

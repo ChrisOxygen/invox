@@ -65,7 +65,7 @@ export function BrandColorPicker({ value, onChange }: BrandColorPickerProps) {
           type="button"
           onClick={() => colorInputRef.current?.click()}
           aria-label="Open color picker"
-          className="h-11 w-11 shrink-0 rounded-md border-2 border-(--border-strong) transition-all duration-200 hover:border-(--blue-600) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--blue-600) focus-visible:ring-offset-2"
+          className="h-11 w-11 shrink-0 rounded border-2 border-(--border-strong) transition-all duration-200 hover:border-(--blue-600) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--blue-600) focus-visible:ring-offset-2"
           style={{ backgroundColor: displayColor }}
         />
         {/* Hidden native color input */}
@@ -87,7 +87,7 @@ export function BrandColorPicker({ value, onChange }: BrandColorPickerProps) {
           onBlur={handleHexInputBlur}
           placeholder="#1740F5"
           maxLength={7}
-          className="h-11 w-full rounded-md border border-(--border-default) bg-(--surface-base) px-3.5 text-[14px] text-(--ink-900) placeholder:text-(--ink-300) transition-colors duration-200 focus:border-(--blue-600) focus:outline-none focus:ring-2 focus:ring-(--blue-600)/20 font-mono"
+          className="h-11 w-full rounded border border-(--border-default) bg-(--surface-base) px-3.5 text-[14px] text-(--ink-900) placeholder:text-(--ink-300) transition-colors duration-200 focus:border-(--blue-600) focus:outline-none focus:ring-2 focus:ring-(--blue-600)/20 font-mono"
         />
       </div>
 

@@ -44,8 +44,10 @@ export function AppHeader() {
   const pathname = usePathname();
   const { title, description } = getPageMeta(pathname);
 
+  const isClientsPage = pathname === "/clients";
+
   return (
-    <header className="flex shrink-0 items-center gap-4 px-2 py-4">
+    <header className="flex shrink-0 items-center gap-4  py-4">
       {/* Page title + description */}
       <div className="flex flex-col gap-0.5">
         <h1 className="text-[20px] font-bold leading-tight tracking-[-0.025em] [font-family:var(--font-display)] text-(--ink-900)">
@@ -73,12 +75,23 @@ export function AppHeader() {
 
       {/* Actions */}
       <div className="flex items-center gap-2">
-        <Link href="/invoices/new">
-          <Button size="sm" className="h-9 gap-1.5 rounded-md px-4">
+        {isClientsPage ? (
+          <Button
+            size="sm"
+            className="h-9 gap-1.5 rounded px-4"
+            onClick={() => window.dispatchEvent(new CustomEvent("invox:add-client"))}
+          >
             <Plus className="size-3.5" />
-            Create Invoice
+            Add Client
           </Button>
-        </Link>
+        ) : (
+          <Link href="/invoices/new">
+            <Button size="sm" className="h-9 gap-1.5 rounded px-4">
+              <Plus className="size-3.5" />
+              Create Invoice
+            </Button>
+          </Link>
+        )}
 
         <Button
           variant="ghost"

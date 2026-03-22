@@ -137,7 +137,7 @@ export function ActionsToolbar({ invoice, onRecordPayment }: ActionsToolbarProps
             <Button
               variant="outline"
               size="sm"
-              className="[font-family:var(--font-display)] text-[13px] border-(--border-strong) text-(--ink-900) rounded-md"
+              className="[font-family:var(--font-display)] text-[13px] border-(--border-strong) text-(--ink-900) rounded"
             >
               Edit
             </Button>
@@ -151,7 +151,7 @@ export function ActionsToolbar({ invoice, onRecordPayment }: ActionsToolbarProps
             size="sm"
             onClick={handleMarkAsSent}
             disabled={isMarkingSent}
-            className="gap-1.5 [font-family:var(--font-display)] text-[13px] border-(--border-strong) text-(--ink-900) rounded-md"
+            className="gap-1.5 [font-family:var(--font-display)] text-[13px] border-(--border-strong) text-(--ink-900) rounded"
           >
             {isMarkingSent ? (
               <Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -169,7 +169,7 @@ export function ActionsToolbar({ invoice, onRecordPayment }: ActionsToolbarProps
           <Button
             size="sm"
             onClick={onRecordPayment}
-            className="gap-1.5 bg-(--blue-600) text-white [font-family:var(--font-display)] text-[13px] rounded-md"
+            className="gap-1.5 bg-(--blue-600) text-white [font-family:var(--font-display)] text-[13px] rounded"
           >
             Record Payment
           </Button>
@@ -181,7 +181,7 @@ export function ActionsToolbar({ invoice, onRecordPayment }: ActionsToolbarProps
           size="sm"
           onClick={handleShareLink}
           disabled={isShareLoading || generateShareToken.isPending}
-          className="gap-1.5 [font-family:var(--font-display)] text-[13px] border-(--border-strong) text-(--ink-900) rounded-md"
+          className="gap-1.5 [font-family:var(--font-display)] text-[13px] border-(--border-strong) text-(--ink-900) rounded"
         >
           {isShareLoading || generateShareToken.isPending ? (
             <Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -199,7 +199,7 @@ export function ActionsToolbar({ invoice, onRecordPayment }: ActionsToolbarProps
             variant="outline"
             size="sm"
             onClick={handleWhatsApp}
-            className="gap-1.5 [font-family:var(--font-display)] text-[13px] rounded-md"
+            className="gap-1.5 [font-family:var(--font-display)] text-[13px] rounded"
             style={{ borderColor: '#25D366', color: '#25D366' }}
           >
             <MessageCircle className="h-3.5 w-3.5" />

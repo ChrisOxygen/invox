@@ -197,7 +197,7 @@ export function InvoiceForm({ invoice, onSuccess }: InvoiceFormProps) {
           <div className="space-y-8">
 
             {/* Section: Header */}
-            <div className="rounded-lg border p-6 border-(--border-default) bg-(--surface-base)">
+            <div className="rounded border p-6 border-(--border-default) bg-(--surface-base)">
               <p className="mb-5 text-sm font-semibold [font-family:var(--font-display)] text-(--ink-900)">
                 Invoice Details
               </p>
@@ -209,7 +209,7 @@ export function InvoiceForm({ invoice, onSuccess }: InvoiceFormProps) {
                     Invoice #
                   </label>
                   <div
-                    className="flex h-10 items-center rounded-lg px-3 text-sm border border-(--border-default) bg-(--surface-raised) font-mono"
+                    className="flex h-10 items-center rounded px-3 text-sm border border-(--border-default) bg-(--surface-raised) font-mono"
                     style={{ color: invoice ? 'var(--blue-600)' : 'var(--ink-300)' }}
                   >
                     {invoice?.invoiceNumber ?? 'Auto-generated'}
@@ -278,7 +278,7 @@ export function InvoiceForm({ invoice, onSuccess }: InvoiceFormProps) {
             </div>
 
             {/* Section: Bill To */}
-            <div className="rounded-lg border p-6 border-(--border-default) bg-(--surface-base)">
+            <div className="rounded border p-6 border-(--border-default) bg-(--surface-base)">
               <p className="mb-5 text-sm font-semibold [font-family:var(--font-display)] text-(--ink-900)">
                 Bill To
               </p>
@@ -304,7 +304,7 @@ export function InvoiceForm({ invoice, onSuccess }: InvoiceFormProps) {
             </div>
 
             {/* Section: Line Items */}
-            <div className="rounded-lg border border-(--border-default) bg-(--surface-base)">
+            <div className="rounded border border-(--border-default) bg-(--surface-base)">
               {/* Table header */}
               <div className="flex items-center gap-2 border-b px-4 py-3 border-(--border-default)">
                 <span className="flex-1 text-xs font-semibold uppercase text-(--ink-400) [font-family:var(--font-display)] tracking-[0.08em]">
@@ -373,7 +373,7 @@ export function InvoiceForm({ invoice, onSuccess }: InvoiceFormProps) {
             </div>
 
             {/* Section: Notes */}
-            <div className="rounded-lg border p-6 border-(--border-default) bg-(--surface-base)">
+            <div className="rounded border p-6 border-(--border-default) bg-(--surface-base)">
               <p className="mb-5 text-sm font-semibold [font-family:var(--font-display)] text-(--ink-900)">
                 Notes
               </p>
@@ -471,7 +471,7 @@ export function InvoiceForm({ invoice, onSuccess }: InvoiceFormProps) {
 
           {/* ── Right column: live summary ── */}
           <div className="hidden lg:block">
-            <div className="sticky top-6 rounded-lg border p-5 border-(--border-default) bg-(--surface-raised)">
+            <div className="sticky top-6 rounded border p-5 border-(--border-default) bg-(--surface-raised)">
               <p className="mb-4 text-xs font-semibold uppercase [font-family:var(--font-display)] text-(--ink-400) tracking-[0.08em]">
                 Summary
               </p>

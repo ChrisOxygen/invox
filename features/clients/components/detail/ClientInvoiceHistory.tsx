@@ -64,7 +64,7 @@ function SkeletonRows() {
 function EmptyState({ clientId }: { clientId: string }) {
   return (
     <div className="flex flex-col items-center justify-center py-14 text-center">
-      <div className="w-12 h-12 rounded-lg flex items-center justify-center mb-(--s4) bg-(--surface-overlay)">
+      <div className="w-12 h-12 rounded flex items-center justify-center mb-(--s4) bg-(--surface-overlay)">
         <FileText className="h-5 w-5 text-(--ink-300)" />
       </div>
       <p className="font-semibold mb-1 text-(--ink-900) [font-family:var(--font-display)] text-[15px]">
@@ -75,7 +75,7 @@ function EmptyState({ clientId }: { clientId: string }) {
       </p>
       <Link
         href={`/invoices/new?clientId=${clientId}`}
-        className="inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-sm font-medium transition-opacity hover:opacity-90 bg-(--blue-600) text-white [font-family:var(--font-display)]"
+        className="inline-flex items-center gap-1.5 rounded px-2.5 py-1 text-sm font-medium transition-opacity hover:opacity-90 bg-(--blue-600) text-white [font-family:var(--font-display)]"
       >
         <Plus className="h-4 w-4" />
         Create Invoice
@@ -136,7 +136,7 @@ export function ClientInvoiceHistory({ invoices, isLoading, clientId }: {
   )
 
   return (
-    <div className="rounded-lg border overflow-hidden bg-(--surface-base) border-(--border-default)">
+    <div className="rounded border overflow-hidden bg-(--surface-base) border-(--border-default)">
       <div className="px-[var(--s5)] py-[var(--s4)] border-b border-(--border-default) flex items-center justify-between">
         <div>
           <h3 className="font-bold text-(--ink-900) [font-family:var(--font-display)] text-[15px] tracking-[-0.02em]">
@@ -150,7 +150,7 @@ export function ClientInvoiceHistory({ invoices, isLoading, clientId }: {
         </div>
         <Link
           href={`/invoices/new?clientId=${clientId}`}
-          className="inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1 text-[0.8rem] font-medium transition-colors hover:bg-muted border-(--border-strong) text-(--ink-900) [font-family:var(--font-display)] text-[13px]"
+          className="inline-flex items-center gap-1.5 rounded border px-2.5 py-1 text-[0.8rem] font-medium transition-colors hover:bg-muted border-(--border-strong) text-(--ink-900) [font-family:var(--font-display)] text-[13px]"
         >
           <Plus className="h-3.5 w-3.5" />
           New Invoice

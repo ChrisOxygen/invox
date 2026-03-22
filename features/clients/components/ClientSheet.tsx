@@ -125,7 +125,7 @@ export function ClientSheet({ open, onOpenChange, client = null, onSuccess }: Cl
 
               {/* Duplicate email warning */}
               {duplicateWarning && (
-                <div className="flex items-start gap-3 rounded-lg px-4 py-3 bg-[#FFF7EA] border-l-[3px] border-l-(--warning)">
+                <div className="flex items-start gap-3 rounded px-4 py-3 bg-[#FFF7EA] border-l-[3px] border-l-(--warning)">
                   <AlertTriangle size={14} className="mt-0.5 shrink-0 text-(--warning)" />
                   <p className="text-xs leading-relaxed text-[#B57200] [font-family:var(--font-body)]">
                     A client with this email already exists. You can still save.

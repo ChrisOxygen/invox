@@ -16,7 +16,7 @@ export function InvoiceInfoCard({ invoice }: InvoiceInfoCardProps) {
   const client = invoice.client
 
   return (
-    <div className="rounded-lg border overflow-hidden bg-(--surface-base) border-(--border-default)">
+    <div className="rounded border overflow-hidden bg-(--surface-base) border-(--border-default)">
       {/* ── Invoice header ── */}
       <div className="px-(--s5) py-(--s5) border-b border-(--border-default) flex flex-col sm:flex-row sm:items-center sm:justify-between gap-(--s3)">
         <div>

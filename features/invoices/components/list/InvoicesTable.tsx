@@ -198,7 +198,7 @@ export function InvoicesTable({ invoices, isPending, onDuplicate, onDelete }: In
               </DropdownMenuTrigger>
               <DropdownMenuContent
                 align="end"
-                className="min-w-42 border border-(--border-default) bg-(--surface-base) rounded-lg"
+                className="min-w-42 border border-(--border-default) bg-(--surface-base) rounded"
               >
                 <DropdownMenuItem
                   className="[font-family:var(--font-body)] text-[13px] text-(--ink-900) cursor-pointer"
@@ -274,7 +274,7 @@ export function InvoicesTable({ invoices, isPending, onDuplicate, onDelete }: In
   })
 
   return (
-    <div className="rounded-lg overflow-hidden border border-(--border-default) bg-(--surface-base)">
+    <div className="rounded overflow-hidden border border-(--border-default) bg-(--surface-base)">
       <Table>
         <TableHeader>
           <TableRow className="bg-(--surface-raised) border-b border-(--border-default)">

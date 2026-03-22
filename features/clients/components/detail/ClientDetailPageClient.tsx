@@ -26,15 +26,15 @@ function DetailSkeleton() {
   return (
     <div className="space-y-[var(--s6)]">
       <div className="flex items-center gap-[var(--s3)]">
-        <Skeleton className="h-8 w-8 rounded-md" />
-        <Skeleton className="h-8 w-48 rounded-md" />
+        <Skeleton className="h-8 w-8 rounded" />
+        <Skeleton className="h-8 w-48 rounded" />
       </div>
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-[var(--s4)]">
-        {[...Array(4)].map((_, i) => <Skeleton key={i} className="h-24 rounded-lg" />)}
+        {[...Array(4)].map((_, i) => <Skeleton key={i} className="h-24 rounded" />)}
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-[var(--s5)]">
-        <Skeleton className="h-64 rounded-lg" />
-        <div className="lg:col-span-2"><Skeleton className="h-64 rounded-lg" /></div>
+        <Skeleton className="h-64 rounded" />
+        <div className="lg:col-span-2"><Skeleton className="h-64 rounded" /></div>
       </div>
     </div>
   )
@@ -42,14 +42,14 @@ function DetailSkeleton() {
 
 function NotFound() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-[400px] rounded-lg border p-[var(--s10)] bg-(--surface-base) border-(--border-default)">
+    <div className="flex flex-col items-center justify-center min-h-[400px] rounded border p-[var(--s10)] bg-(--surface-base) border-(--border-default)">
       <h2 className="text-xl font-bold mb-2 text-(--ink-900) [font-family:var(--font-display)] tracking-[-0.025em]">
         Client not found
       </h2>
       <p className="text-sm mb-[var(--s6)] text-center max-w-xs text-(--ink-400) [font-family:var(--font-body)]">
         This client may have been deleted or does not belong to your account.
       </p>
-      <Link href="/clients" className="inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1 text-[0.8rem] font-medium transition-colors hover:bg-muted border-(--border-strong) [font-family:var(--font-display)]">
+      <Link href="/clients" className="inline-flex items-center gap-1.5 rounded border px-2.5 py-1 text-[0.8rem] font-medium transition-colors hover:bg-muted border-(--border-strong) [font-family:var(--font-display)]">
         <ArrowLeft className="h-4 w-4" />Back to Clients
       </Link>
     </div>
@@ -86,7 +86,7 @@ export function ClientDetailPageClient({ id }: { id: string }) {
       {/* Top bar */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-[var(--s4)]">
         <div className="flex items-center gap-[var(--s3)]">
-          <Link href="/clients" className="inline-flex items-center gap-1.5 px-2 h-8 rounded-md text-[0.8rem] font-medium transition-colors hover:bg-muted text-(--ink-400) [font-family:var(--font-display)] text-[13px]">
+          <Link href="/clients" className="inline-flex items-center gap-1.5 px-2 h-8 rounded text-[0.8rem] font-medium transition-colors hover:bg-muted text-(--ink-400) [font-family:var(--font-display)] text-[13px]">
             <ArrowLeft className="h-4 w-4" />Clients
           </Link>
           <span className="text-(--border-strong)">/</span>
@@ -102,7 +102,7 @@ export function ClientDetailPageClient({ id }: { id: string }) {
           <Button variant="ghost" size="sm" onClick={() => setDeleteOpen(true)} className="gap-1.5 text-(--error) [font-family:var(--font-display)] text-[13px]">
             <Trash2 className="h-4 w-4" />Delete
           </Button>
-          <Link href={`/invoices/new?clientId=${id}`} className="inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-[0.8rem] font-medium transition-opacity hover:opacity-90 bg-(--blue-600) text-white [font-family:var(--font-display)] text-[13px]">
+          <Link href={`/invoices/new?clientId=${id}`} className="inline-flex items-center gap-1.5 rounded px-2.5 py-1 text-[0.8rem] font-medium transition-opacity hover:opacity-90 bg-(--blue-600) text-white [font-family:var(--font-display)] text-[13px]">
             <Plus className="h-4 w-4" />New Invoice
           </Link>
         </div>
@@ -128,7 +128,7 @@ export function ClientDetailPageClient({ id }: { id: string }) {
       <Dialog open={deleteOpen} onOpenChange={setDeleteOpen}>
         <DialogContent className="sm:max-w-[420px] border-(--border-default)">
           <DialogHeader>
-            <div className="w-10 h-10 rounded-lg flex items-center justify-center mb-[var(--s3)] bg-[#FFF0F0]">
+            <div className="w-10 h-10 rounded flex items-center justify-center mb-[var(--s3)] bg-[#FFF0F0]">
               <Trash2 className="h-5 w-5 text-(--error)" />
             </div>
             <DialogTitle className="text-(--ink-900) [font-family:var(--font-display)] tracking-[-0.02em]">

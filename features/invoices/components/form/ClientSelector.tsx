@@ -73,7 +73,7 @@ export function ClientSelector({ value, onChange, disabled }: ClientSelectorProp
           type="button"
           onClick={() => !disabled && setOpen((v) => !v)}
           disabled={disabled}
-          className="flex w-full items-center justify-between rounded-md border px-3 py-2.5 text-sm transition-colors [font-family:var(--font-body)] bg-(--surface-base) min-h-10.5"
+          className="flex w-full items-center justify-between rounded border px-3 py-2.5 text-sm transition-colors [font-family:var(--font-body)] bg-(--surface-base) min-h-10.5"
           style={{
             borderColor: open ? 'var(--blue-600)' : 'var(--border-default)',
             color: selectedClient ? 'var(--ink-900)' : 'var(--ink-300)',
@@ -102,7 +102,7 @@ export function ClientSelector({ value, onChange, disabled }: ClientSelectorProp
 
         {open && (
           <div
-            className="absolute z-50 w-full rounded-lg border shadow-sm bg-(--surface-base) border-(--border-default)"
+            className="absolute z-50 w-full rounded border shadow-sm bg-(--surface-base) border-(--border-default)"
             style={{ top: 'calc(100% + 4px)' }}
           >
             {/* Search */}

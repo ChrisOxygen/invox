@@ -20,7 +20,7 @@ function StatCard({ label, value, accentColor, isMono = false, subLabel }: {
 }) {
   return (
     <div
-      className="relative overflow-hidden rounded-lg border p-(--s5) bg-(--surface-base) border-(--border-default)"
+      className="relative overflow-hidden rounded border p-(--s5) bg-(--surface-base) border-(--border-default)"
       style={{ borderLeft: `3px solid ${accentColor}` }}
     >
       <p className="text-xs font-semibold uppercase mb-[var(--s2)] text-(--ink-400) [font-family:var(--font-display)] tracking-[0.08em]">

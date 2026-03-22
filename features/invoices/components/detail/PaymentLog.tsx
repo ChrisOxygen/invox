@@ -21,7 +21,7 @@ function PaymentRow({ payment, currency }: { payment: InvoicePayment; currency: 
       className="flex items-start justify-between gap-(--s3) py-(--s3) border-b border-(--border-default)"
     >
       <div className="flex items-start gap-(--s3) min-w-0 flex-1">
-        <div className="mt-0.5 w-7 h-7 rounded-md flex items-center justify-center shrink-0 bg-(--surface-overlay)">
+        <div className="mt-0.5 w-7 h-7 rounded flex items-center justify-center shrink-0 bg-(--surface-overlay)">
           <CreditCard className="h-3.5 w-3.5 text-(--ink-400)" />
         </div>
         <div className="min-w-0">
@@ -49,7 +49,7 @@ function PaymentRow({ payment, currency }: { payment: InvoicePayment; currency: 
 function EmptyPayments() {
   return (
     <div className="flex flex-col items-center justify-center py-(--s10) text-center">
-      <div className="w-10 h-10 rounded-lg flex items-center justify-center mb-(--s3) bg-(--surface-overlay)">
+      <div className="w-10 h-10 rounded flex items-center justify-center mb-(--s3) bg-(--surface-overlay)">
         <Receipt className="h-5 w-5 text-(--ink-300)" />
       </div>
       <p className="[font-family:var(--font-body)] text-[13px] text-(--ink-400)">
@@ -70,7 +70,7 @@ export function PaymentLog({ invoice, onRecordPayment }: PaymentLogProps) {
     invoice.total > 0 ? Math.min(100, Math.round((totalPaid / invoice.total) * 100)) : 0
 
   return (
-    <div className="rounded-lg border overflow-hidden bg-(--surface-base) border-(--border-default)">
+    <div className="rounded border overflow-hidden bg-(--surface-base) border-(--border-default)">
       {/* Header */}
       <div className="px-(--s5) py-(--s4) border-b border-(--border-default) flex items-center justify-between">
         <h3 className="[font-family:var(--font-display)] text-[15px] font-bold text-(--ink-900) tracking-[-0.02em]">
@@ -80,7 +80,7 @@ export function PaymentLog({ invoice, onRecordPayment }: PaymentLogProps) {
           variant="outline"
           size="sm"
           onClick={onRecordPayment}
-          className="[font-family:var(--font-display)] text-[12px] border-(--border-strong) text-(--ink-900) rounded-md"
+          className="[font-family:var(--font-display)] text-[12px] border-(--border-strong) text-(--ink-900) rounded"
         >
           Record Payment
         </Button>

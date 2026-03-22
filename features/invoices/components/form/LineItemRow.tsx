@@ -30,7 +30,7 @@ export function LineItemRow({ index, control, setValue, remove, currency }: Line
   const subtotal = (Number(quantity) || 0) * (Number(unitPrice) || 0)
 
   return (
-    <div className="group flex items-center gap-2 rounded-lg px-2 py-2 transition-colors hover:bg-(--surface-raised)">
+    <div className="group flex items-center gap-2 rounded px-2 py-2 transition-colors hover:bg-(--surface-raised)">
       {/* Drag handle */}
       <div className="cursor-grab opacity-0 transition-opacity group-hover:opacity-100 text-(--ink-200) shrink-0">
         <GripVertical size={14} />

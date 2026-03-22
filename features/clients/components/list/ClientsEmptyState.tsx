@@ -32,7 +32,7 @@ export function ClientsEmptyState({ variant, onAdd, onClear }: ClientsEmptyState
             variant="outline"
             onClick={onClear}
             size="sm"
-            className="[font-family:var(--font-display)] font-semibold text-[13px] border-(--border-strong) text-(--ink-700) rounded-md"
+            className="[font-family:var(--font-display)] font-semibold text-[13px] border-(--border-strong) text-(--ink-700) rounded"
           >
             <X className="w-3.5 h-3.5 mr-1.5" />
             Clear search
@@ -62,7 +62,7 @@ export function ClientsEmptyState({ variant, onAdd, onClear }: ClientsEmptyState
         <Button
           onClick={onAdd}
           size="sm"
-          className="[font-family:var(--font-display)] font-semibold text-[13px] bg-(--blue-600) text-white border-0 rounded-md"
+          className="[font-family:var(--font-display)] font-semibold text-[13px] bg-(--blue-600) text-white border-0 rounded"
         >
           <Plus className="w-3.5 h-3.5 mr-1.5" />
           Add Client

@@ -29,7 +29,7 @@ export function ClientFilters({ onSearch, total, isLoading }: ClientFiltersProps
           placeholder="Search clients…"
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
-          className="pl-9 [font-family:var(--font-body)] text-[14px] border-(--border-default) bg-(--surface-base) text-(--ink-900) rounded-md h-9"
+          className="pl-9 [font-family:var(--font-body)] text-[14px] border-(--border-default) bg-(--surface-base) text-(--ink-900) rounded h-9"
         />
       </div>
 

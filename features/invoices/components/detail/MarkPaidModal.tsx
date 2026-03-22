@@ -120,7 +120,7 @@ export function MarkPaidModal({ open, onOpenChange, invoice }: MarkPaidModalProp
         </DialogHeader>
 
         {/* Outstanding balance summary */}
-        <div className="rounded-lg px-(--s4) py-(--s3) bg-(--surface-raised) border border-(--border-default)">
+        <div className="rounded px-(--s4) py-(--s3) bg-(--surface-raised) border border-(--border-default)">
           <p className="[font-family:var(--font-body)] text-[12px] text-(--ink-400)">
             Outstanding balance
           </p>
@@ -147,7 +147,7 @@ export function MarkPaidModal({ open, onOpenChange, invoice }: MarkPaidModalProp
                 type="number"
                 step="0.01"
                 min="0.01"
-                className={`pl-7 [font-family:var(--font-mono)] text-[14px] rounded-md ${errors.amount ? 'border-(--error)' : 'border-(--border-strong)'}`}
+                className={`pl-7 [font-family:var(--font-mono)] text-[14px] rounded ${errors.amount ? 'border-(--error)' : 'border-(--border-strong)'}`}
                 {...register('amount', { valueAsNumber: true })}
               />
             </div>
@@ -163,7 +163,7 @@ export function MarkPaidModal({ open, onOpenChange, invoice }: MarkPaidModalProp
             </Label>
             <Input
               type="date"
-              className={`[font-family:var(--font-body)] text-[14px] rounded-md ${errors.datePaid ? 'border-(--error)' : 'border-(--border-strong)'}`}
+              className={`[font-family:var(--font-body)] text-[14px] rounded ${errors.datePaid ? 'border-(--error)' : 'border-(--border-strong)'}`}
               {...register('datePaid')}
             />
             {errors.datePaid && (
@@ -181,7 +181,7 @@ export function MarkPaidModal({ open, onOpenChange, invoice }: MarkPaidModalProp
               onValueChange={(val) => setValue('method', val as ZCreatePayment['method'], { shouldValidate: true })}
             >
               <SelectTrigger
-                className={`[font-family:var(--font-body)] text-[14px] rounded-md ${errors.method ? 'border-(--error)' : 'border-(--border-strong)'}`}
+                className={`[font-family:var(--font-body)] text-[14px] rounded ${errors.method ? 'border-(--error)' : 'border-(--border-strong)'}`}
               >
                 <SelectValue placeholder="Select method" />
               </SelectTrigger>
@@ -211,13 +211,13 @@ export function MarkPaidModal({ open, onOpenChange, invoice }: MarkPaidModalProp
             <Textarea
               rows={2}
               placeholder="e.g. Reference: TXN-00432"
-              className="[font-family:var(--font-body)] text-[14px] resize-none border-(--border-strong) rounded-md"
+              className="[font-family:var(--font-body)] text-[14px] resize-none border-(--border-strong) rounded"
               {...register('note')}
             />
           </div>
 
           {/* Running total */}
-          <div className="rounded-md px-(--s3) py-(--s2) bg-(--blue-50) border border-(--blue-100)">
+          <div className="rounded px-(--s3) py-(--s2) bg-(--blue-50) border border-(--blue-100)">
             <p className="[font-family:var(--font-body)] text-[12px] text-(--blue-700)">
               After this payment:{' '}
               <span className="[font-family:var(--font-mono)] font-semibold">
@@ -244,7 +244,7 @@ export function MarkPaidModal({ open, onOpenChange, invoice }: MarkPaidModalProp
             <Button
               type="submit"
               disabled={mutation.isPending}
-              className="gap-1.5 bg-(--blue-600) text-white [font-family:var(--font-display)] text-[13px] rounded-md"
+              className="gap-1.5 bg-(--blue-600) text-white [font-family:var(--font-display)] text-[13px] rounded"
             >
               {mutation.isPending ? (
                 <>

@@ -1,11 +1,11 @@
-'use client'
+"use client";
 
-import { useState, useCallback } from 'react'
-import { useRouter } from 'next/navigation'
-import { useQueryClient } from '@tanstack/react-query'
-import { toast } from 'sonner'
-import { Loader2 } from 'lucide-react'
-import { Button } from '@/shared/components/ui/button'
+import { useState, useCallback } from "react";
+import { useRouter } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
+import { Loader2 } from "lucide-react";
+import { Button } from "@/shared/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -13,103 +13,126 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/shared/components/ui/dialog'
-import { useInvoices } from '../../hooks/use-invoices'
-import type { InvoiceFilters } from '../../types'
-import { InvoiceFilters as InvoiceFiltersComponent } from './InvoiceFilters'
-import { InvoicesTable } from './InvoicesTable'
-import { InvoicesEmptyState } from './InvoicesEmptyState'
+} from "@/shared/components/ui/dialog";
+import { useInvoices } from "../../hooks/use-invoices";
+import type { InvoiceFilters } from "../../types";
+import { InvoiceFilters as InvoiceFiltersComponent } from "./InvoiceFilters";
+import { InvoicesTable } from "./InvoicesTable";
+import { InvoicesEmptyState } from "./InvoicesEmptyState";
 
-const PAGE_SIZE = 20
+const PAGE_SIZE = 20;
 
 export function InvoicesPageClient() {
-  const router = useRouter()
-  const queryClient = useQueryClient()
+  const router = useRouter();
+  const queryClient = useQueryClient();
 
   const [filters, setFilters] = useState<InvoiceFilters>({
     status: undefined,
     search: undefined,
     page: 1,
     pageSize: PAGE_SIZE,
-  })
-  const [deletingInvoiceId, setDeletingInvoiceId] = useState<string | null>(null)
-  const [isDuplicating, setIsDuplicating] = useState(false)
-  const [isDeleting, setIsDeleting] = useState(false)
+  });
+  const [deletingInvoiceId, setDeletingInvoiceId] = useState<string | null>(
+    null,
+  );
+  const [isDuplicating, setIsDuplicating] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
-  const { data, isPending } = useInvoices(filters)
+  const { data, isPending } = useInvoices(filters);
 
-  const invoices = data?.invoices ?? []
-  const total = data?.total ?? 0
-  const page = filters.page ?? 1
-  const totalPages = Math.ceil(total / PAGE_SIZE)
+  const invoices = data?.invoices ?? [];
+  const total = data?.total ?? 0;
+  const page = filters.page ?? 1;
+  const totalPages = Math.ceil(total / PAGE_SIZE);
 
   const hasFilters = Boolean(
-    (filters.status && filters.status !== 'ALL') ||
-    (filters.search && filters.search.trim().length > 0)
-  )
+    (filters.status && filters.status !== "ALL") ||
+    (filters.search && filters.search.trim().length > 0),
+  );
 
-  const isEmpty = !isPending && invoices.length === 0
+  const isEmpty = !isPending && invoices.length === 0;
 
   const handleFilterChange = useCallback((next: InvoiceFilters) => {
-    setFilters(next)
-  }, [])
+    setFilters(next);
+  }, []);
 
   const handleClearFilters = useCallback(() => {
-    setFilters({ status: undefined, search: undefined, page: 1, pageSize: PAGE_SIZE })
-  }, [])
+    setFilters({
+      status: undefined,
+      search: undefined,
+      page: 1,
+      pageSize: PAGE_SIZE,
+    });
+  }, []);
 
-  const handleDuplicate = useCallback(async (id: string) => {
-    setIsDuplicating(true)
-    try {
-      const res = await fetch(`/api/v1/invoices/${id}/duplicate`, { method: 'POST' })
-      if (!res.ok) {
-        const json = await res.json().catch(() => ({}))
-        throw new Error(json?.error?.message ?? 'Failed to duplicate invoice')
+  const handleDuplicate = useCallback(
+    async (id: string) => {
+      setIsDuplicating(true);
+      try {
+        const res = await fetch(`/api/v1/invoices/${id}/duplicate`, {
+          method: "POST",
+        });
+        if (!res.ok) {
+          const json = await res.json().catch(() => ({}));
+          throw new Error(
+            json?.error?.message ?? "Failed to duplicate invoice",
+          );
+        }
+        const newInvoice = await res.json();
+        await queryClient.invalidateQueries({ queryKey: ["invoices"] });
+        toast.success("Invoice duplicated");
+        router.push(`/invoices/${newInvoice.id}`);
+      } catch (err) {
+        toast.error(
+          err instanceof Error ? err.message : "Failed to duplicate invoice",
+        );
+      } finally {
+        setIsDuplicating(false);
       }
-      const newInvoice = await res.json()
-      await queryClient.invalidateQueries({ queryKey: ['invoices'] })
-      toast.success('Invoice duplicated')
-      router.push(`/invoices/${newInvoice.id}`)
-    } catch (err) {
-      toast.error(err instanceof Error ? err.message : 'Failed to duplicate invoice')
-    } finally {
-      setIsDuplicating(false)
-    }
-  }, [queryClient, router])
+    },
+    [queryClient, router],
+  );
 
   const handleDeleteConfirm = async () => {
-    if (!deletingInvoiceId) return
-    setIsDeleting(true)
+    if (!deletingInvoiceId) return;
+    setIsDeleting(true);
     try {
-      const res = await fetch(`/api/v1/invoices/${deletingInvoiceId}`, { method: 'DELETE' })
+      const res = await fetch(`/api/v1/invoices/${deletingInvoiceId}`, {
+        method: "DELETE",
+      });
       if (!res.ok) {
-        const json = await res.json().catch(() => ({}))
-        throw new Error(json?.error?.message ?? 'Failed to delete invoice')
+        const json = await res.json().catch(() => ({}));
+        throw new Error(json?.error?.message ?? "Failed to delete invoice");
       }
-      await queryClient.invalidateQueries({ queryKey: ['invoices'] })
-      toast.success('Invoice deleted')
-      setDeletingInvoiceId(null)
+      await queryClient.invalidateQueries({ queryKey: ["invoices"] });
+      toast.success("Invoice deleted");
+      setDeletingInvoiceId(null);
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : 'Failed to delete invoice')
+      toast.error(
+        err instanceof Error ? err.message : "Failed to delete invoice",
+      );
     } finally {
-      setIsDeleting(false)
+      setIsDeleting(false);
     }
-  }
+  };
 
-  const startFrom = (page - 1) * PAGE_SIZE + 1
-  const endAt = Math.min(page * PAGE_SIZE, total)
+  const startFrom = (page - 1) * PAGE_SIZE + 1;
+  const endAt = Math.min(page * PAGE_SIZE, total);
 
   return (
     <>
       {/* Filters */}
       <div className="mb-5">
-        <InvoiceFiltersComponent filters={filters} onFilterChange={handleFilterChange} />
+        <InvoiceFiltersComponent
+          filters={filters}
+          onFilterChange={handleFilterChange}
+        />
       </div>
 
       {/* Table or empty state */}
       {isEmpty ? (
         <InvoicesEmptyState
-          status={filters.status ?? 'ALL'}
+          status={filters.status ?? "ALL"}
           hasFilters={hasFilters}
           onClearFilters={hasFilters ? handleClearFilters : undefined}
         />
@@ -126,25 +149,28 @@ export function InvoicesPageClient() {
           {total > PAGE_SIZE && (
             <div className="flex items-center justify-between mt-4 [font-family:var(--font-body)] text-[13px] text-(--ink-400)">
               <span>
-                Showing{' '}
+                Showing{" "}
                 <span className="font-mono font-medium text-(--ink-700)">
                   {startFrom}–{endAt}
-                </span>
-                {' '}of{' '}
+                </span>{" "}
+                of{" "}
                 <span className="font-mono font-medium text-(--ink-700)">
                   {total}
-                </span>
-                {' '}invoices
+                </span>{" "}
+                invoices
               </span>
               <div className="flex items-center gap-2">
                 <Button
                   variant="outline"
                   size="sm"
                   onClick={() =>
-                    setFilters((prev) => ({ ...prev, page: Math.max(1, (prev.page ?? 1) - 1) }))
+                    setFilters((prev) => ({
+                      ...prev,
+                      page: Math.max(1, (prev.page ?? 1) - 1),
+                    }))
                   }
                   disabled={page <= 1 || isPending}
-                  className="[font-family:var(--font-display)] font-semibold text-[12px] border-(--border-default) text-(--ink-700) rounded-md h-8"
+                  className="[font-family:var(--font-display)] font-semibold text-[12px] border-(--border-default) text-(--ink-700) rounded h-8"
                 >
                   Previous
                 </Button>
@@ -158,7 +184,7 @@ export function InvoicesPageClient() {
                     }))
                   }
                   disabled={page >= totalPages || isPending}
-                  className="[font-family:var(--font-display)] font-semibold text-[12px] border-(--border-default) text-(--ink-700) rounded-md h-8"
+                  className="[font-family:var(--font-display)] font-semibold text-[12px] border-(--border-default) text-(--ink-700) rounded h-8"
                 >
                   Next
                 </Button>
@@ -172,16 +198,17 @@ export function InvoicesPageClient() {
       <Dialog
         open={!!deletingInvoiceId}
         onOpenChange={(open) => {
-          if (!open) setDeletingInvoiceId(null)
+          if (!open) setDeletingInvoiceId(null);
         }}
       >
-        <DialogContent className="bg-(--surface-base) border border-(--border-default) rounded-lg max-w-105">
+        <DialogContent className="bg-(--surface-base) border border-(--border-default) rounded max-w-105">
           <DialogHeader>
             <DialogTitle className="[font-family:var(--font-display)] text-[18px] font-bold text-(--ink-900) tracking-[-0.02em]">
               Delete invoice?
             </DialogTitle>
             <DialogDescription className="[font-family:var(--font-body)] text-[14px] text-(--ink-400) leading-normal mt-1.5">
-              This will permanently delete the invoice. This action cannot be undone.
+              This will permanently delete the invoice. This action cannot be
+              undone.
             </DialogDescription>
           </DialogHeader>
 
@@ -190,14 +217,14 @@ export function InvoicesPageClient() {
               variant="outline"
               onClick={() => setDeletingInvoiceId(null)}
               disabled={isDeleting}
-              className="[font-family:var(--font-display)] font-semibold text-[13px] border-(--border-default) text-(--ink-700) rounded-md h-9"
+              className="[font-family:var(--font-display)] font-semibold text-[13px] border-(--border-default) text-(--ink-700) rounded h-9"
             >
               Cancel
             </Button>
             <Button
               onClick={handleDeleteConfirm}
               disabled={isDeleting}
-              className="[font-family:var(--font-display)] font-semibold text-[13px] bg-(--error) text-white border-none rounded-md h-9"
+              className="[font-family:var(--font-display)] font-semibold text-[13px] bg-(--error) text-white border-none rounded h-9"
             >
               {isDeleting ? (
                 <>
@@ -205,12 +232,12 @@ export function InvoicesPageClient() {
                   Deleting…
                 </>
               ) : (
-                'Delete'
+                "Delete"
               )}
             </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
     </>
-  )
+  );
 }

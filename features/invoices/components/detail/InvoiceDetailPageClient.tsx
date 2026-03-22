@@ -17,18 +17,18 @@ function DetailSkeleton() {
       <div className="flex items-center justify-between">
         <Skeleton className="h-6 w-24 rounded-full" />
         <div className="flex gap-[var(--s2)]">
-          <Skeleton className="h-8 w-28 rounded-md" />
-          <Skeleton className="h-8 w-24 rounded-md" />
-          <Skeleton className="h-8 w-8 rounded-md" />
+          <Skeleton className="h-8 w-28 rounded" />
+          <Skeleton className="h-8 w-24 rounded" />
+          <Skeleton className="h-8 w-8 rounded" />
         </div>
       </div>
       {/* Two-column skeleton */}
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-[var(--s5)]">
         <div className="lg:col-span-3 space-y-3">
-          <Skeleton className="h-[480px] w-full rounded-lg" />
+          <Skeleton className="h-[480px] w-full rounded" />
         </div>
         <div className="lg:col-span-2">
-          <Skeleton className="h-[320px] w-full rounded-lg" />
+          <Skeleton className="h-[320px] w-full rounded" />
         </div>
       </div>
     </div>
@@ -37,8 +37,8 @@ function DetailSkeleton() {
 
 function NotFound() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-[400px] rounded-lg border p-(--s10) bg-(--surface-base) border-(--border-default)">
-      <div className="w-12 h-12 rounded-lg flex items-center justify-center mb-(--s4) bg-(--surface-overlay)">
+    <div className="flex flex-col items-center justify-center min-h-[400px] rounded border p-(--s10) bg-(--surface-base) border-(--border-default)">
+      <div className="w-12 h-12 rounded flex items-center justify-center mb-(--s4) bg-(--surface-overlay)">
         <FileX className="h-6 w-6 text-(--ink-300)" />
       </div>
       <h2 className="text-xl font-bold mb-2 text-(--ink-900) [font-family:var(--font-display)] tracking-[-0.025em]">
@@ -49,7 +49,7 @@ function NotFound() {
       </p>
       <Link
         href="/invoices"
-        className="inline-flex items-center gap-1.5 rounded-md border px-3 py-1.5 text-sm font-medium transition-colors hover:bg-muted border-(--border-strong) text-(--ink-900) [font-family:var(--font-display)] text-[13px]"
+        className="inline-flex items-center gap-1.5 rounded border px-3 py-1.5 text-sm font-medium transition-colors hover:bg-muted border-(--border-strong) text-(--ink-900) [font-family:var(--font-display)] text-[13px]"
       >
         <ArrowLeft className="h-4 w-4" />
         Back to Invoices
@@ -69,7 +69,7 @@ export function InvoiceDetailPageClient({ id }: { id: string }) {
   return (
     <div className="space-y-[var(--s5)]">
       {/* Actions toolbar */}
-      <div className="rounded-lg border px-(--s5) py-(--s4) bg-(--surface-base) border-(--border-default)">
+      <div className="rounded border px-(--s5) py-(--s4) bg-(--surface-base) border-(--border-default)">
         <ActionsToolbar invoice={invoice} onRecordPayment={() => setMarkPaidOpen(true)} />
       </div>
 

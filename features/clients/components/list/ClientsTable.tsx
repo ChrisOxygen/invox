@@ -75,7 +75,7 @@ const thClassName = "text-(--ink-400) [font-family:var(--font-display)] text-[11
 
 export function ClientsTable({ clients, isLoading, onEdit, onDelete }: ClientsTableProps) {
   return (
-    <div className="rounded-lg overflow-hidden border border-(--border-default) bg-(--surface-base)">
+    <div className="rounded overflow-hidden border border-(--border-default) bg-(--surface-base)">
       <Table>
         <TableHeader>
           <TableRow className="bg-(--surface-raised) border-b border-(--border-default)">
@@ -143,7 +143,7 @@ export function ClientsTable({ clients, isLoading, onEdit, onDelete }: ClientsTa
                     </DropdownMenuTrigger>
                     <DropdownMenuContent
                       align="end"
-                      className="min-w-[160px] border-(--border-default) bg-(--surface-base) rounded-lg"
+                      className="min-w-[160px] border-(--border-default) bg-(--surface-base) rounded"
                     >
                       <DropdownMenuItem className="[font-family:var(--font-body)] text-[13px] text-(--ink-900) cursor-pointer">
                         <Link href={`/clients/${client.id}`} className="flex items-center w-full">

@@ -36,10 +36,10 @@ export function ClientInfoCard({ client, onEdit, onDelete }: {
   const address = [client.address, client.city, client.state, client.country].filter(Boolean).join(', ')
 
   return (
-    <div className="rounded-lg border overflow-hidden bg-(--surface-base) border-(--border-default)">
+    <div className="rounded border overflow-hidden bg-(--surface-base) border-(--border-default)">
       <div className="p-[var(--s5)] border-b border-(--border-default) flex items-start justify-between gap-[var(--s3)]">
         <div className="flex items-center gap-[var(--s4)]">
-          <div className="w-12 h-12 rounded-lg flex items-center justify-center shrink-0 text-sm font-bold bg-(--blue-50) text-(--blue-600) [font-family:var(--font-display)] tracking-[-0.02em]">
+          <div className="w-12 h-12 rounded flex items-center justify-center shrink-0 text-sm font-bold bg-(--blue-50) text-(--blue-600) [font-family:var(--font-display)] tracking-[-0.02em]">
             {getInitials(client.name)}
           </div>
           <div>

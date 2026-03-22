@@ -62,7 +62,7 @@ export function InvoicesEmptyState({ status, hasFilters, onClearFilters }: Invoi
             variant="outline"
             size="sm"
             onClick={onClearFilters}
-            className="[font-family:var(--font-display)] font-semibold text-[13px] border-(--border-strong) text-(--ink-700) rounded-md"
+            className="[font-family:var(--font-display)] font-semibold text-[13px] border-(--border-strong) text-(--ink-700) rounded"
           >
             <X className="w-3.5 h-3.5 mr-1.5" />
             Clear filters
@@ -103,7 +103,7 @@ export function InvoicesEmptyState({ status, hasFilters, onClearFilters }: Invoi
         {!isOverdue && (
           <Link
             href="/invoices/new"
-            className="inline-flex items-center gap-1.5 rounded-md text-sm font-semibold transition-colors hover:opacity-90 [font-family:var(--font-display)] bg-(--blue-600) text-white h-8 px-3"
+            className="inline-flex items-center gap-1.5 rounded text-sm font-semibold transition-colors hover:opacity-90 [font-family:var(--font-display)] bg-(--blue-600) text-white h-8 px-3"
           >
             <Plus className="w-3.5 h-3.5" />
             Create Invoice
@@ -130,7 +130,7 @@ export function InvoicesEmptyState({ status, hasFilters, onClearFilters }: Invoi
 
       <Link
         href="/invoices/new"
-        className="inline-flex items-center gap-1.5 rounded-md text-sm font-semibold transition-colors hover:opacity-90 [font-family:var(--font-display)] bg-(--blue-600) text-white h-8 px-3"
+        className="inline-flex items-center gap-1.5 rounded text-sm font-semibold transition-colors hover:opacity-90 [font-family:var(--font-display)] bg-(--blue-600) text-white h-8 px-3"
       >
         <Plus className="w-3.5 h-3.5" />
         Create Invoice

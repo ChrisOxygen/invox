@@ -30,7 +30,7 @@ const StatusDonutChart = dynamic(
 function EmptyDashboard() {
   return (
     <div className="flex flex-col items-center justify-center gap-[var(--s4)] py-[var(--s20)] px-[var(--s4)] text-center">
-      <div className="w-16 h-16 rounded-lg bg-(--blue-50) flex items-center justify-center">
+      <div className="w-16 h-16 rounded bg-(--blue-50) flex items-center justify-center">
         <FileText className="h-7 w-7 text-(--blue-600)" />
       </div>
       <div>
@@ -67,15 +67,15 @@ export function DashboardPageClient() {
 
       {/* Empty state */}
       {isEmpty ? (
-        <div className="bg-(--surface-base) border border-(--border-default) rounded-lg">
+        <div className="bg-(--surface-base) border border-(--border-default) rounded">
           <EmptyDashboard />
         </div>
       ) : (
         <>
           {/* Charts row */}
-          <div className="grid grid-cols-1 gap-[var(--s4)] lg:grid-cols-[3fr_2fr]">
+          <div className="grid grid-cols-1 gap-5 lg:grid-cols-[3fr_2fr]">
             {/* Revenue chart */}
-            <div className="bg-(--surface-base) border border-(--border-default) rounded-lg p-(--s5)">
+            <div className="bg-(--surface-base) border border-(--border-default) rounded p-(--s5)">
               <div className="flex items-center justify-between mb-4">
                 <p className="[font-family:var(--font-display)] text-[13px] font-bold text-(--ink-700) tracking-[-0.01em]">
                   Revenue — Last 6 Months
@@ -92,7 +92,7 @@ export function DashboardPageClient() {
             </div>
 
             {/* Status distribution */}
-            <div className="bg-(--surface-base) border border-(--border-default) rounded-lg p-(--s5)">
+            <div className="bg-(--surface-base) border border-(--border-default) rounded p-(--s5)">
               <p className="[font-family:var(--font-display)] text-[13px] font-bold text-(--ink-700) tracking-[-0.01em] mb-4">
                 Invoice Status
               </p>

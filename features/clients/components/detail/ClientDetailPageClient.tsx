@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { ArrowLeft, Edit, Trash2, Plus, Loader2 } from 'lucide-react'
+import { ArrowLeft, Edit, Trash2, Loader2 } from 'lucide-react'
 import { toast } from 'sonner'
 import { Button } from '@/shared/components/ui/button'
 import { Skeleton } from '@/shared/components/ui/skeleton'
@@ -42,7 +42,7 @@ function DetailSkeleton() {
 
 function NotFound() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-[400px] rounded border p-[var(--s10)] bg-(--surface-base) border-(--border-default)">
+    <div className="flex flex-col items-center justify-center min-h-[400px] rounded border p-(--s10) bg-(--surface-base) border-(--border-default)">
       <h2 className="text-xl font-bold mb-2 text-(--ink-900) font-display tracking-[-0.025em]">
         Client not found
       </h2>
@@ -102,9 +102,6 @@ export function ClientDetailPageClient({ id }: { id: string }) {
           <Button variant="ghost" size="sm" onClick={() => setDeleteOpen(true)} className="gap-1.5 text-(--error) font-display text-[13px]">
             <Trash2 className="h-4 w-4" />Delete
           </Button>
-          <Link href={`/invoices/new?clientId=${id}`} className="inline-flex items-center gap-1.5 rounded px-2.5 py-1 text-[0.8rem] font-medium transition-opacity hover:opacity-90 bg-(--blue-600) text-white font-display text-[13px]">
-            <Plus className="h-4 w-4" />New Invoice
-          </Link>
         </div>
       </div>
 

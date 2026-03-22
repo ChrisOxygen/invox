@@ -14,6 +14,7 @@ import {
   Trash2,
   MessageCircle,
   Loader2,
+  Check,
 } from 'lucide-react'
 import { toast } from 'sonner'
 import { Button } from '@/shared/components/ui/button'
@@ -48,6 +49,12 @@ function isShareTokenValid(shareToken: string | null, shareTokenExp: string | nu
 
 export function ActionsToolbar({ invoice, onRecordPayment }: ActionsToolbarProps) {
   const [isShareLoading, setIsShareLoading] = useState(false)
+  const [isCopied, setIsCopied] = useState(false)
+
+  const flashCopied = () => {
+    setIsCopied(true)
+    setTimeout(() => setIsCopied(false), 2000)
+  }
 
   const updateStatusMutation = useUpdateInvoiceStatus()
   const generateShareToken = useGenerateShareToken()
@@ -69,7 +76,7 @@ export function ActionsToolbar({ invoice, onRecordPayment }: ActionsToolbarProps
       const url = `${window.location.origin}/i/${invoice.shareToken}`
       try {
         await navigator.clipboard.writeText(url)
-        toast.success('Link copied!')
+        flashCopied()
       } catch {
         toast.error('Failed to copy link')
       }
@@ -84,7 +91,7 @@ export function ActionsToolbar({ invoice, onRecordPayment }: ActionsToolbarProps
           const url = `${window.location.origin}/i/${data.shareToken}`
           try {
             await navigator.clipboard.writeText(url)
-            toast.success('Share link created and copied!')
+            flashCopied()
           } catch {
             toast.error('Link created but could not copy automatically')
           }
@@ -181,16 +188,18 @@ export function ActionsToolbar({ invoice, onRecordPayment }: ActionsToolbarProps
           size="sm"
           onClick={handleShareLink}
           disabled={isShareLoading || generateShareToken.isPending}
-          className="h-8 gap-1.5 font-display text-[13px] border-(--border-strong) text-(--ink-900) rounded"
+          className={`h-8 gap-1.5 font-display text-[13px] rounded transition-colors ${isCopied ? 'border-(--success) text-(--success)' : 'border-(--border-strong) text-(--ink-900)'}`}
         >
           {isShareLoading || generateShareToken.isPending ? (
             <Loader2 className="h-3.5 w-3.5 animate-spin" />
+          ) : isCopied ? (
+            <Check className="h-3.5 w-3.5" />
           ) : tokenValid ? (
             <Copy className="h-3.5 w-3.5" />
           ) : (
             <Link2 className="h-3.5 w-3.5" />
           )}
-          Share Link
+          {isCopied ? 'Copied!' : 'Share Link'}
         </Button>
 
         {/* WhatsApp — when share token exists */}
@@ -217,41 +226,41 @@ export function ActionsToolbar({ invoice, onRecordPayment }: ActionsToolbarProps
           </DropdownMenuTrigger>
           <DropdownMenuContent
             align="end"
-            className="border-(--border-default) bg-(--surface-base)"
+            className="rounded min-w-44 border-(--border-default) bg-(--surface-base)"
           >
             <DropdownMenuItem
-              className="gap-2 cursor-pointer font-body text-[13px] text-(--ink-900)"
+              className="gap-2 cursor-pointer font-body text-[13px] text-(--ink-900) whitespace-nowrap"
               onClick={() => window.open(`/invoices/${invoice.id}/preview`, '_self')}
             >
-              <Eye className="h-4 w-4 text-(--ink-400)" />
+              <Eye className="h-4 w-4 shrink-0 text-(--ink-400)" />
               Preview PDF
             </DropdownMenuItem>
             <DropdownMenuItem
-              className="gap-2 cursor-pointer font-body text-[13px] text-(--ink-900)"
+              className="gap-2 cursor-pointer font-body text-[13px] text-(--ink-900) whitespace-nowrap"
               onClick={() => window.location.assign(`/api/v1/invoices/${invoice.id}/pdf`)}
             >
-              <FileDown className="h-4 w-4 text-(--ink-400)" />
+              <FileDown className="h-4 w-4 shrink-0 text-(--ink-400)" />
               Download PDF
             </DropdownMenuItem>
-            <DropdownMenuItem className="gap-2 cursor-pointer">
-              <CopyPlus className="h-4 w-4 text-(--ink-400)" />
+            <DropdownMenuItem className="gap-2 cursor-pointer font-body text-[13px] text-(--ink-900) whitespace-nowrap">
+              <CopyPlus className="h-4 w-4 shrink-0 text-(--ink-400)" />
               Duplicate
             </DropdownMenuItem>
             <DropdownMenuSeparator className="bg-(--border-default)" />
             {invoice.status !== 'CANCELLED' && (
               <DropdownMenuItem
-                className="gap-2 cursor-pointer font-body text-[13px] text-(--warning)"
+                className="gap-2 cursor-pointer font-body text-[13px] text-(--warning) whitespace-nowrap"
                 onClick={handleCancelInvoice}
               >
-                <XCircle className="h-4 w-4" />
+                <XCircle className="h-4 w-4 shrink-0" />
                 Cancel Invoice
               </DropdownMenuItem>
             )}
             {invoice.status === 'DRAFT' && (
               <DropdownMenuItem
-                className="gap-2 cursor-pointer font-body text-[13px] text-(--error)"
+                className="gap-2 cursor-pointer font-body text-[13px] text-(--error) whitespace-nowrap"
               >
-                <Trash2 className="h-4 w-4" />
+                <Trash2 className="h-4 w-4 shrink-0" />
                 Delete
               </DropdownMenuItem>
             )}

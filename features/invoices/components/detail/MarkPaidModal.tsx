@@ -108,7 +108,7 @@ export function MarkPaidModal({ open, onOpenChange, invoice }: MarkPaidModalProp
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
-        className="sm:max-w-[460px] bg-(--surface-base) border-(--border-default)"
+        className="rounded sm:max-w-115 bg-(--surface-base) border-(--border-default)"
       >
         <DialogHeader>
           <DialogTitle className="font-display text-[17px] font-bold text-(--ink-900) tracking-[-0.02em]">
@@ -181,11 +181,11 @@ export function MarkPaidModal({ open, onOpenChange, invoice }: MarkPaidModalProp
               onValueChange={(val) => setValue('method', val as ZCreatePayment['method'], { shouldValidate: true })}
             >
               <SelectTrigger
-                className={`font-body text-[14px] rounded ${errors.method ? 'border-(--error)' : 'border-(--border-strong)'}`}
+                className={`rounded font-body text-[14px] w-full ${errors.method ? 'border-(--error)' : 'border-(--border-strong)'}`}
               >
                 <SelectValue placeholder="Select method" />
               </SelectTrigger>
-              <SelectContent className="border-(--border-default) bg-(--surface-base)">
+              <SelectContent className="rounded border-(--border-default) bg-(--surface-base)">
                 {Object.entries(PAYMENT_METHOD_LABELS).map(([value, label]) => (
                   <SelectItem
                     key={value}
@@ -231,13 +231,13 @@ export function MarkPaidModal({ open, onOpenChange, invoice }: MarkPaidModalProp
             </p>
           </div>
 
-          <DialogFooter className="gap-(--s2) pt-(--s2)">
+          <DialogFooter className="rounded-b gap-(--s2) pt-(--s2)">
             <Button
               type="button"
               variant="ghost"
               onClick={() => onOpenChange(false)}
               disabled={mutation.isPending}
-              className="font-display text-[13px] text-(--ink-400)"
+              className="rounded font-display text-[13px] text-(--ink-400)"
             >
               Cancel
             </Button>

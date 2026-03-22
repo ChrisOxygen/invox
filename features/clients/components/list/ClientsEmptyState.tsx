@@ -19,11 +19,11 @@ export function ClientsEmptyState({ variant, onAdd, onClear }: ClientsEmptyState
           <SearchX className="w-6 h-6" />
         </div>
 
-        <h3 className="[font-family:var(--font-display)] text-[16px] font-bold text-(--ink-900) tracking-[-0.02em] mb-[6px]">
+        <h3 className="font-display text-[16px] font-bold text-(--ink-900) tracking-[-0.02em] mb-[6px]">
           No results found
         </h3>
 
-        <p className="[font-family:var(--font-body)] text-[14px] text-(--ink-400) max-w-[300px] mb-5 leading-[1.5]">
+        <p className="font-body text-[14px] text-(--ink-400) max-w-[300px] mb-5 leading-[1.5]">
           Try adjusting your search — no clients match your current query.
         </p>
 
@@ -32,7 +32,7 @@ export function ClientsEmptyState({ variant, onAdd, onClear }: ClientsEmptyState
             variant="outline"
             onClick={onClear}
             size="sm"
-            className="[font-family:var(--font-display)] font-semibold text-[13px] border-(--border-strong) text-(--ink-700) rounded"
+            className="font-display font-semibold text-[13px] border-(--border-strong) text-(--ink-700) rounded"
           >
             <X className="w-3.5 h-3.5 mr-1.5" />
             Clear search
@@ -50,11 +50,11 @@ export function ClientsEmptyState({ variant, onAdd, onClear }: ClientsEmptyState
         <Users className="w-6 h-6" />
       </div>
 
-      <h3 className="[font-family:var(--font-display)] text-[16px] font-bold text-(--ink-900) tracking-[-0.02em] mb-[6px]">
+      <h3 className="font-display text-[16px] font-bold text-(--ink-900) tracking-[-0.02em] mb-[6px]">
         No clients yet
       </h3>
 
-      <p className="[font-family:var(--font-body)] text-[14px] text-(--ink-400) max-w-[300px] mb-5 leading-[1.5]">
+      <p className="font-body text-[14px] text-(--ink-400) max-w-[300px] mb-5 leading-[1.5]">
         Add your first client to get started managing your business relationships.
       </p>
 
@@ -62,7 +62,7 @@ export function ClientsEmptyState({ variant, onAdd, onClear }: ClientsEmptyState
         <Button
           onClick={onAdd}
           size="sm"
-          className="[font-family:var(--font-display)] font-semibold text-[13px] bg-(--blue-600) text-white border-0 rounded"
+          className="font-display font-semibold text-[13px] bg-(--blue-600) text-white border-0 rounded"
         >
           <Plus className="w-3.5 h-3.5 mr-1.5" />
           Add Client

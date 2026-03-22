@@ -47,18 +47,18 @@ function DueDateCell({
     const days = differenceInDays(new Date(), parseISO(dueDate));
     return (
       <div>
-        <span className="[font-family:var(--font-body)] text-[13px] text-(--error)">
+        <span className="font-body text-[13px] text-(--error)">
           {formatDisplayDate(dueDate)}
         </span>
         <br />
-        <span className="[font-family:var(--font-body)] text-[11px] text-(--error) opacity-75">
+        <span className="font-body text-[11px] text-(--error) opacity-75">
           {days > 0 ? `${days}d overdue` : "Due today"}
         </span>
       </div>
     );
   }
   return (
-    <span className="[font-family:var(--font-body)] text-[13px] text-(--ink-400)">
+    <span className="font-body text-[13px] text-(--ink-400)">
       {formatDisplayDate(dueDate)}
     </span>
   );
@@ -67,7 +67,7 @@ function DueDateCell({
 const columnHelper = createColumnHelper<RecentInvoice>();
 
 const thClassName =
-  "text-(--ink-400) [font-family:var(--font-display)] text-[11px] font-semibold tracking-[0.08em] uppercase py-[10px]";
+  "text-(--ink-400) font-display text-[11px] font-semibold tracking-[0.08em] uppercase py-[10px]";
 
 function SkeletonRows() {
   return (
@@ -108,7 +108,7 @@ export function DashboardRecentInvoices({
         <Link
           href={`/invoices/${info.row.original.id}`}
           onClick={(e) => e.stopPropagation()}
-          className="[font-family:var(--font-mono)] text-[13px] font-medium text-(--blue-600) no-underline"
+          className="font-mono text-[13px] font-medium text-(--blue-600) no-underline"
         >
           {info.getValue()}
         </Link>
@@ -120,11 +120,11 @@ export function DashboardRecentInvoices({
         const client = info.getValue();
         return (
           <div>
-            <p className="[font-family:var(--font-display)] text-[13px] font-semibold text-(--ink-900) tracking-[-0.01em]">
+            <p className="font-display text-[13px] font-semibold text-(--ink-900) tracking-[-0.01em]">
               {client.name}
             </p>
             {client.company && (
-              <p className="[font-family:var(--font-body)] text-[11px] text-(--ink-400) mt-[1px]">
+              <p className="font-body text-[11px] text-(--ink-400) mt-[1px]">
                 {client.company}
               </p>
             )}
@@ -144,7 +144,7 @@ export function DashboardRecentInvoices({
     columnHelper.accessor("total", {
       header: "Amount",
       cell: (info) => (
-        <span className="block text-right [font-family:var(--font-mono)] text-[13px] font-medium text-(--ink-900)">
+        <span className="block text-right font-mono text-[13px] font-medium text-(--ink-900)">
           {formatCurrency(info.getValue(), info.row.original.currency)}
         </span>
       ),
@@ -186,7 +186,7 @@ export function DashboardRecentInvoices({
           ) : invoices.length === 0 ? (
             <TableRow>
               <TableCell colSpan={5} className="text-center py-[40px]">
-                <p className="[font-family:var(--font-body)] text-[13px] text-(--ink-300)">
+                <p className="font-body text-[13px] text-(--ink-300)">
                   No invoices yet
                 </p>
               </TableCell>

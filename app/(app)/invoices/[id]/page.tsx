@@ -7,7 +7,7 @@ export default async function InvoiceDetailPage({ params }: { params: Promise<{ 
       <div
         className="border-b px-6 py-4 border-(--border-default) bg-(--surface-base)"
       >
-        <nav className="[font-family:var(--font-body)] text-[13px] text-(--ink-400)">
+        <nav className="font-body text-[13px] text-(--ink-400)">
           <a href="/invoices" className="text-(--ink-400)">
             Invoices
           </a>

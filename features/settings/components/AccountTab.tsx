@@ -20,14 +20,14 @@ import { useUpdatePassword } from '@/features/settings/hooks/use-update-password
 import { useDeleteAccount } from '@/features/settings/hooks/use-delete-account'
 
 const labelClass =
-  'text-[12px] font-semibold text-(--ink-700) [font-family:var(--font-display)]'
+  'text-[12px] font-semibold text-(--ink-700) font-display'
 const inputClass =
-  'h-10 w-full rounded border border-(--border-default) bg-(--surface-base) px-3.5 text-[14px] text-(--ink-900) placeholder:text-(--ink-300) transition-colors duration-200 focus:border-(--blue-600) focus:outline-none focus:ring-2 focus:ring-(--blue-600)/20 [font-family:var(--font-body)]'
+  'h-10 w-full rounded border border-(--border-default) bg-(--surface-base) px-3.5 text-[14px] text-(--ink-900) placeholder:text-(--ink-300) transition-colors duration-200 focus:border-(--blue-600) focus:outline-none focus:ring-2 focus:ring-(--blue-600)/20 font-body'
 
 function FieldError({ message }: { message?: string }) {
   if (!message) return null
   return (
-    <p className="text-[11px] text-(--error) [font-family:var(--font-body)]" role="alert">
+    <p className="text-[11px] text-(--error) font-body" role="alert">
       {message}
     </p>
   )
@@ -69,10 +69,10 @@ function ChangePasswordSection() {
           <KeyRound className="h-4 w-4 text-(--ink-500)" />
         </div>
         <div>
-          <h2 className="text-[15px] font-bold tracking-[-0.02em] text-(--ink-900) [font-family:var(--font-display)]">
+          <h2 className="text-[15px] font-bold tracking-[-0.02em] text-(--ink-900) font-display">
             Change Password
           </h2>
-          <p className="text-[12px] text-(--ink-400) [font-family:var(--font-body)]">
+          <p className="text-[12px] text-(--ink-400) font-body">
             Minimum 8 characters required
           </p>
         </div>
@@ -156,7 +156,7 @@ function ChangePasswordSection() {
           <button
             type="submit"
             disabled={isPending}
-            className="flex h-9 items-center justify-center gap-2 rounded bg-(--blue-600) px-5 text-[13px] font-semibold text-white transition-colors duration-200 hover:bg-(--blue-700) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--blue-600) focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 [font-family:var(--font-display)]"
+            className="flex h-9 items-center justify-center gap-2 rounded bg-(--blue-600) px-5 text-[13px] font-semibold text-white transition-colors duration-200 hover:bg-(--blue-700) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--blue-600) focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 font-display"
           >
             {isPending && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
             Update password
@@ -192,31 +192,31 @@ function DeleteAccountSection() {
         </div>
 
         <div className="flex-1 min-w-0">
-          <h2 className="text-[15px] font-bold tracking-[-0.02em] text-(--ink-900) [font-family:var(--font-display)]">
+          <h2 className="text-[15px] font-bold tracking-[-0.02em] text-(--ink-900) font-display">
             Delete Account
           </h2>
-          <p className="mt-1 text-[13px] text-(--ink-400) [font-family:var(--font-body)] leading-relaxed">
+          <p className="mt-1 text-[13px] text-(--ink-400) font-body leading-relaxed">
             Permanently delete your Invox account and all associated data — invoices, clients, and business profile. This action cannot be undone.
           </p>
 
           <div className="mt-4">
             <AlertDialog open={dialogOpen} onOpenChange={setDialogOpen}>
-              <AlertDialogTrigger className="flex h-9 items-center justify-center gap-2 rounded border border-(--error) bg-transparent px-4 text-[13px] font-semibold text-(--error) transition-all duration-200 hover:bg-(--error) hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--error) focus-visible:ring-offset-2 [font-family:var(--font-display)]">
+              <AlertDialogTrigger className="flex h-9 items-center justify-center gap-2 rounded border border-(--error) bg-transparent px-4 text-[13px] font-semibold text-(--error) transition-all duration-200 hover:bg-(--error) hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--error) focus-visible:ring-offset-2 font-display">
                 Delete my account
               </AlertDialogTrigger>
 
               <AlertDialogContent className="rounded border border-(--border-default) bg-(--surface-base) max-w-105">
                 <AlertDialogHeader>
-                  <AlertDialogTitle className="text-[18px] font-bold tracking-[-0.02em] text-(--ink-900) [font-family:var(--font-display)]">
+                  <AlertDialogTitle className="text-[18px] font-bold tracking-[-0.02em] text-(--ink-900) font-display">
                     Are you absolutely sure?
                   </AlertDialogTitle>
-                  <AlertDialogDescription className="text-[14px] text-(--ink-500) [font-family:var(--font-body)] leading-relaxed">
+                  <AlertDialogDescription className="text-[14px] text-(--ink-500) font-body leading-relaxed">
                     This will permanently delete your account, all invoices, clients, and business data. There is no way to recover your data after this.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
 
                 <div className="mt-2 flex flex-col gap-1.5">
-                  <label htmlFor="deleteConfirm" className="text-[12px] text-(--ink-700) [font-family:var(--font-body)]">
+                  <label htmlFor="deleteConfirm" className="text-[12px] text-(--ink-700) font-body">
                     Type{' '}
                     <span className="font-semibold text-(--error) font-mono">DELETE</span>
                     {' '}to confirm
@@ -235,7 +235,7 @@ function DeleteAccountSection() {
                 <AlertDialogFooter className="mt-4 gap-2">
                   <AlertDialogCancel
                     onClick={() => setConfirmInput('')}
-                    className="rounded h-9 text-[13px] [font-family:var(--font-display)]"
+                    className="rounded h-9 text-[13px] font-display"
                   >
                     Cancel
                   </AlertDialogCancel>
@@ -243,7 +243,7 @@ function DeleteAccountSection() {
                     type="button"
                     disabled={!isConfirmed || isPending}
                     onClick={handleConfirmDelete}
-                    className="flex h-9 items-center justify-center gap-2 rounded bg-(--error) px-5 text-[13px] font-semibold text-white transition-colors duration-200 hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--error) focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [font-family:var(--font-display)]"
+                    className="flex h-9 items-center justify-center gap-2 rounded bg-(--error) px-5 text-[13px] font-semibold text-white transition-colors duration-200 hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--error) focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 font-display"
                   >
                     {isPending && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
                     Delete account

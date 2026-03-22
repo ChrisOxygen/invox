@@ -25,7 +25,7 @@ function PaymentRow({ payment, currency }: { payment: InvoicePayment; currency: 
           <CreditCard className="h-3.5 w-3.5 text-(--ink-400)" />
         </div>
         <div className="min-w-0">
-          <p className="[font-family:var(--font-body)] text-[13px] text-(--ink-900) font-medium">
+          <p className="font-body text-[13px] text-(--ink-900) font-medium">
             {PAYMENT_METHOD_LABELS[payment.method] ?? payment.method}
             <span className="text-(--ink-300) mx-1">·</span>
             <span className="text-(--ink-400) font-normal">
@@ -33,7 +33,7 @@ function PaymentRow({ payment, currency }: { payment: InvoicePayment; currency: 
             </span>
           </p>
           {payment.note && (
-            <p className="mt-0.5 truncate [font-family:var(--font-body)] text-[12px] text-(--ink-400)">
+            <p className="mt-0.5 truncate font-body text-[12px] text-(--ink-400)">
               {payment.note}
             </p>
           )}
@@ -52,7 +52,7 @@ function EmptyPayments() {
       <div className="w-10 h-10 rounded flex items-center justify-center mb-(--s3) bg-(--surface-overlay)">
         <Receipt className="h-5 w-5 text-(--ink-300)" />
       </div>
-      <p className="[font-family:var(--font-body)] text-[13px] text-(--ink-400)">
+      <p className="font-body text-[13px] text-(--ink-400)">
         No payments recorded yet
       </p>
     </div>
@@ -73,14 +73,14 @@ export function PaymentLog({ invoice, onRecordPayment }: PaymentLogProps) {
     <div className="rounded border overflow-hidden bg-(--surface-base) border-(--border-default)">
       {/* Header */}
       <div className="px-(--s5) py-(--s4) border-b border-(--border-default) flex items-center justify-between">
-        <h3 className="[font-family:var(--font-display)] text-[15px] font-bold text-(--ink-900) tracking-[-0.02em]">
+        <h3 className="font-display text-[15px] font-bold text-(--ink-900) tracking-[-0.02em]">
           Payment History
         </h3>
         <Button
           variant="outline"
           size="sm"
           onClick={onRecordPayment}
-          className="[font-family:var(--font-display)] text-[12px] border-(--border-strong) text-(--ink-900) rounded"
+          className="font-display text-[12px] border-(--border-strong) text-(--ink-900) rounded"
         >
           Record Payment
         </Button>
@@ -113,7 +113,7 @@ export function PaymentLog({ invoice, onRecordPayment }: PaymentLogProps) {
             />
           </div>
           <div className="flex items-center justify-between">
-            <span className="[font-family:var(--font-body)] text-[12px] text-(--ink-400)">
+            <span className="font-body text-[12px] text-(--ink-400)">
               Total paid ({paidPercent}%)
             </span>
             <span className="font-mono text-[14px] font-semibold text-(--ink-900)">

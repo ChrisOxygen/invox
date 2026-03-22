@@ -60,7 +60,7 @@ export function InvoiceDefaultsForm({ defaultValues }: InvoiceDefaultsFormProps)
   }
 
   const labelClass =
-    'text-[12px] font-semibold uppercase tracking-[0.06em] text-(--ink-700) [font-family:var(--font-display)]'
+    'text-[12px] font-semibold uppercase tracking-[0.06em] text-(--ink-700) font-display'
   const inputClass =
     'h-11 w-full rounded border border-(--border-default) bg-(--surface-base) px-3.5 text-[14px] text-(--ink-900) placeholder:text-(--ink-300) transition-colors duration-200 focus:border-(--blue-600) focus:outline-none focus:ring-2 focus:ring-(--blue-600)/20'
 
@@ -82,7 +82,7 @@ export function InvoiceDefaultsForm({ defaultValues }: InvoiceDefaultsFormProps)
               >
                 <SelectTrigger
                   id="currency"
-                  className="h-11 rounded border-(--border-default) text-[14px] text-(--ink-900) [font-family:var(--font-body)]"
+                  className="h-11 rounded border-(--border-default) text-[14px] text-(--ink-900) font-body"
                 >
                   <SelectValue placeholder="Select currency" />
                 </SelectTrigger>
@@ -91,7 +91,7 @@ export function InvoiceDefaultsForm({ defaultValues }: InvoiceDefaultsFormProps)
                     <SelectItem
                       key={value}
                       value={value}
-                      className="[font-family:var(--font-body)]"
+                      className="font-body"
                     >
                       {label}
                     </SelectItem>
@@ -101,7 +101,7 @@ export function InvoiceDefaultsForm({ defaultValues }: InvoiceDefaultsFormProps)
             )}
           />
           {errors.currency && (
-            <p className="text-[11px] text-(--error) [font-family:var(--font-body)]" role="alert">
+            <p className="text-[11px] text-(--error) font-body" role="alert">
               {errors.currency.message}
             </p>
           )}
@@ -120,13 +120,13 @@ export function InvoiceDefaultsForm({ defaultValues }: InvoiceDefaultsFormProps)
             {...register('invoicePrefix')}
             className={`${inputClass} font-mono`}
           />
-          <p className="text-[12px] text-(--ink-400) [font-family:var(--font-body)]">
+          <p className="text-[12px] text-(--ink-400) font-body">
             Used in invoice numbers, e.g.{' '}
             <span className="font-mono">INV-2025-0001</span>. Only letters,
             numbers, and hyphens.
           </p>
           {errors.invoicePrefix && (
-            <p className="text-[11px] text-(--error) [font-family:var(--font-body)]" role="alert">
+            <p className="text-[11px] text-(--error) font-body" role="alert">
               {errors.invoicePrefix.message}
             </p>
           )}
@@ -137,7 +137,7 @@ export function InvoiceDefaultsForm({ defaultValues }: InvoiceDefaultsFormProps)
           <button
             type="submit"
             disabled={isPending}
-            className="flex h-11 items-center justify-center gap-2 rounded bg-(--blue-600) px-6 text-[14px] font-semibold text-white transition-colors duration-200 hover:bg-(--blue-700) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--blue-600) focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 [font-family:var(--font-display)]"
+            className="flex h-11 items-center justify-center gap-2 rounded bg-(--blue-600) px-6 text-[14px] font-semibold text-white transition-colors duration-200 hover:bg-(--blue-700) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--blue-600) focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 font-display"
           >
             {isPending && <Loader2 className="h-4 w-4 animate-spin" />}
             Save changes

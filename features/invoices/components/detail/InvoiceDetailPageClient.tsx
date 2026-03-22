@@ -41,15 +41,15 @@ function NotFound() {
       <div className="w-12 h-12 rounded flex items-center justify-center mb-(--s4) bg-(--surface-overlay)">
         <FileX className="h-6 w-6 text-(--ink-300)" />
       </div>
-      <h2 className="text-xl font-bold mb-2 text-(--ink-900) [font-family:var(--font-display)] tracking-[-0.025em]">
+      <h2 className="text-xl font-bold mb-2 text-(--ink-900) font-display tracking-[-0.025em]">
         Invoice not found
       </h2>
-      <p className="text-sm mb-[var(--s6)] text-center max-w-xs text-(--ink-400) [font-family:var(--font-body)]">
+      <p className="text-sm mb-[var(--s6)] text-center max-w-xs text-(--ink-400) font-body">
         This invoice may have been deleted or does not belong to your account.
       </p>
       <Link
         href="/invoices"
-        className="inline-flex items-center gap-1.5 rounded border px-3 py-1.5 text-sm font-medium transition-colors hover:bg-muted border-(--border-strong) text-(--ink-900) [font-family:var(--font-display)] text-[13px]"
+        className="inline-flex items-center gap-1.5 rounded border px-3 py-1.5 text-sm font-medium transition-colors hover:bg-muted border-(--border-strong) text-(--ink-900) font-display text-[13px]"
       >
         <ArrowLeft className="h-4 w-4" />
         Back to Invoices

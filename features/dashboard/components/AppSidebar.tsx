@@ -45,7 +45,7 @@ function InvoxLogo() {
           className="object-contain"
         />
       </div>
-      <span className="text-[17px] font-bold tracking-[-0.03em] [font-family:var(--font-display)] text-(--ink-900)">
+      <span className="text-[17px] font-bold tracking-[-0.03em] font-display text-(--ink-900)">
         Inv
         <span className="text-(--blue-600)">ox</span>
       </span>
@@ -78,7 +78,7 @@ function NavButton({ label, icon: Icon, onClick }: NavButtonProps) {
     <button
       type="button"
       onClick={onClick}
-      className="flex h-9 w-full items-center gap-3 rounded px-3 text-[13.5px] font-semibold transition-colors duration-100 [font-family:var(--font-display)] text-(--ink-400)"
+      className="flex h-9 w-full items-center gap-3 rounded px-3 text-[13.5px] font-semibold transition-colors duration-100 font-display text-(--ink-400)"
       onMouseEnter={(e) => {
         (e.currentTarget as HTMLButtonElement).style.color = "var(--blue-600)";
       }}
@@ -98,7 +98,7 @@ function NavButton({ label, icon: Icon, onClick }: NavButtonProps) {
 
 function NavGroupLabel({ children }: { children: React.ReactNode }) {
   return (
-    <p className="mb-1 px-3 text-[10px] font-semibold uppercase tracking-[0.08em] text-(--ink-300) [font-family:var(--font-display)]">
+    <p className="mb-1 px-3 text-[10px] font-semibold uppercase tracking-[0.08em] text-(--ink-300) font-display">
       {children}
     </p>
   );
@@ -167,12 +167,12 @@ export function AppSidebar({ user }: AppSidebarProps) {
       {/* User footer */}
       <div className="flex shrink-0 items-center gap-3 px-4 py-4">
         <Avatar className="size-8 shrink-0 rounded">
-          <AvatarFallback className="rounded text-[11px] font-semibold bg-(--blue-50) text-(--blue-700) [font-family:var(--font-display)]">
+          <AvatarFallback className="rounded text-[11px] font-semibold bg-(--blue-50) text-(--blue-700) font-display">
             {displayInitials}
           </AvatarFallback>
         </Avatar>
         <div className="flex min-w-0 flex-1 flex-col">
-          <span className="truncate text-[13px] font-semibold leading-tight [font-family:var(--font-display)] text-(--ink-900)">
+          <span className="truncate text-[13px] font-semibold leading-tight font-display text-(--ink-900)">
             {displayName}
           </span>
           <span className="truncate text-[11px] leading-tight text-(--ink-400)">
@@ -200,7 +200,7 @@ function NavLinkWithHover({ href, label, icon: Icon }: NavLinkProps) {
     <Link
       href={href}
       className={cn(
-        "flex h-9 items-center gap-3 rounded px-3 text-[13.5px] font-semibold transition-colors duration-100 [font-family:var(--font-display)]",
+        "flex h-9 items-center gap-3 rounded px-3 text-[13.5px] font-semibold transition-colors duration-100 font-display",
         isActive
           ? "bg-(--blue-50) text-(--blue-600)"
           : "text-(--ink-400) hover:text-(--blue-600)",

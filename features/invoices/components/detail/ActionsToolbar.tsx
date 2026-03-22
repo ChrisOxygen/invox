@@ -123,7 +123,7 @@ export function ActionsToolbar({ invoice, onRecordPayment }: ActionsToolbarProps
       <div className="flex flex-col gap-1">
         <InvoiceStatusBadge status={invoice.status} />
         {isOverdue && daysOverdue > 0 && (
-          <span className="[font-family:var(--font-body)] text-[12px] text-(--error)">
+          <span className="font-body text-[12px] text-(--error)">
             {daysOverdue} day{daysOverdue !== 1 ? 's' : ''} overdue
           </span>
         )}
@@ -137,7 +137,7 @@ export function ActionsToolbar({ invoice, onRecordPayment }: ActionsToolbarProps
             <Button
               variant="outline"
               size="sm"
-              className="[font-family:var(--font-display)] text-[13px] border-(--border-strong) text-(--ink-900) rounded"
+              className="font-display text-[13px] border-(--border-strong) text-(--ink-900) rounded"
             >
               Edit
             </Button>
@@ -151,7 +151,7 @@ export function ActionsToolbar({ invoice, onRecordPayment }: ActionsToolbarProps
             size="sm"
             onClick={handleMarkAsSent}
             disabled={isMarkingSent}
-            className="gap-1.5 [font-family:var(--font-display)] text-[13px] border-(--border-strong) text-(--ink-900) rounded"
+            className="gap-1.5 font-display text-[13px] border-(--border-strong) text-(--ink-900) rounded"
           >
             {isMarkingSent ? (
               <Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -169,7 +169,7 @@ export function ActionsToolbar({ invoice, onRecordPayment }: ActionsToolbarProps
           <Button
             size="sm"
             onClick={onRecordPayment}
-            className="gap-1.5 bg-(--blue-600) text-white [font-family:var(--font-display)] text-[13px] rounded"
+            className="gap-1.5 bg-(--blue-600) text-white font-display text-[13px] rounded"
           >
             Record Payment
           </Button>
@@ -181,7 +181,7 @@ export function ActionsToolbar({ invoice, onRecordPayment }: ActionsToolbarProps
           size="sm"
           onClick={handleShareLink}
           disabled={isShareLoading || generateShareToken.isPending}
-          className="gap-1.5 [font-family:var(--font-display)] text-[13px] border-(--border-strong) text-(--ink-900) rounded"
+          className="gap-1.5 font-display text-[13px] border-(--border-strong) text-(--ink-900) rounded"
         >
           {isShareLoading || generateShareToken.isPending ? (
             <Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -199,7 +199,7 @@ export function ActionsToolbar({ invoice, onRecordPayment }: ActionsToolbarProps
             variant="outline"
             size="sm"
             onClick={handleWhatsApp}
-            className="gap-1.5 [font-family:var(--font-display)] text-[13px] rounded"
+            className="gap-1.5 font-display text-[13px] rounded"
             style={{ borderColor: '#25D366', color: '#25D366' }}
           >
             <MessageCircle className="h-3.5 w-3.5" />
@@ -220,14 +220,14 @@ export function ActionsToolbar({ invoice, onRecordPayment }: ActionsToolbarProps
             className="border-(--border-default) bg-(--surface-base)"
           >
             <DropdownMenuItem
-              className="gap-2 cursor-pointer [font-family:var(--font-body)] text-[13px] text-(--ink-900)"
+              className="gap-2 cursor-pointer font-body text-[13px] text-(--ink-900)"
               onClick={() => window.open(`/invoices/${invoice.id}/preview`, '_self')}
             >
               <Eye className="h-4 w-4 text-(--ink-400)" />
               Preview PDF
             </DropdownMenuItem>
             <DropdownMenuItem
-              className="gap-2 cursor-pointer [font-family:var(--font-body)] text-[13px] text-(--ink-900)"
+              className="gap-2 cursor-pointer font-body text-[13px] text-(--ink-900)"
               onClick={() => window.location.assign(`/api/v1/invoices/${invoice.id}/pdf`)}
             >
               <FileDown className="h-4 w-4 text-(--ink-400)" />
@@ -240,7 +240,7 @@ export function ActionsToolbar({ invoice, onRecordPayment }: ActionsToolbarProps
             <DropdownMenuSeparator className="bg-(--border-default)" />
             {invoice.status !== 'CANCELLED' && (
               <DropdownMenuItem
-                className="gap-2 cursor-pointer [font-family:var(--font-body)] text-[13px] text-(--warning)"
+                className="gap-2 cursor-pointer font-body text-[13px] text-(--warning)"
                 onClick={handleCancelInvoice}
               >
                 <XCircle className="h-4 w-4" />
@@ -249,7 +249,7 @@ export function ActionsToolbar({ invoice, onRecordPayment }: ActionsToolbarProps
             )}
             {invoice.status === 'DRAFT' && (
               <DropdownMenuItem
-                className="gap-2 cursor-pointer [font-family:var(--font-body)] text-[13px] text-(--error)"
+                className="gap-2 cursor-pointer font-body text-[13px] text-(--error)"
               >
                 <Trash2 className="h-4 w-4" />
                 Delete

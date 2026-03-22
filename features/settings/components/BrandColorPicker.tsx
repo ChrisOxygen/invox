@@ -92,7 +92,7 @@ export function BrandColorPicker({ value, onChange }: BrandColorPickerProps) {
       </div>
 
       {hexError && (
-        <p className="text-[11px] text-(--error) [font-family:var(--font-body)]" role="alert">
+        <p className="text-[11px] text-(--error) font-body" role="alert">
           {hexError}
         </p>
       )}

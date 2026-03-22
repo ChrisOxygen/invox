@@ -39,7 +39,7 @@ function getInitials(name: string): string {
 function ClientAvatar({ name }: { name: string }) {
   return (
     <div
-      className="flex items-center justify-center rounded-full shrink-0 bg-(--ink-100) text-(--ink-700) [font-family:var(--font-display)] text-[12px] font-semibold tracking-[0.02em] w-8 h-8"
+      className="flex items-center justify-center rounded-full shrink-0 bg-(--ink-100) text-(--ink-700) font-display text-[12px] font-semibold tracking-[0.02em] w-8 h-8"
     >
       {getInitials(name)}
     </div>
@@ -71,7 +71,7 @@ function SkeletonRows() {
   )
 }
 
-const thClassName = "text-(--ink-400) [font-family:var(--font-display)] text-[11px] font-semibold tracking-[0.08em] uppercase py-3"
+const thClassName = "text-(--ink-400) font-display text-[11px] font-semibold tracking-[0.08em] uppercase py-3"
 
 export function ClientsTable({ clients, isLoading, onEdit, onDelete }: ClientsTableProps) {
   return (
@@ -102,32 +102,32 @@ export function ClientsTable({ clients, isLoading, onEdit, onDelete }: ClientsTa
                 <TableCell>
                   <Link href={`/clients/${client.id}`} className="flex items-center gap-3 no-underline">
                     <ClientAvatar name={client.name} />
-                    <p className="truncate [font-family:var(--font-display)] text-[14px] font-semibold text-(--ink-900) tracking-[-0.01em]">
+                    <p className="truncate font-display text-[14px] font-semibold text-(--ink-900) tracking-[-0.01em]">
                       {client.name}
                     </p>
                   </Link>
                 </TableCell>
 
                 <TableCell>
-                  <span className="[font-family:var(--font-body)] text-[13px] text-(--ink-400)">
+                  <span className="font-body text-[13px] text-(--ink-400)">
                     {client.company || '—'}
                   </span>
                 </TableCell>
 
                 <TableCell>
-                  <span className="[font-family:var(--font-body)] text-[13px] text-(--ink-400)">
+                  <span className="font-body text-[13px] text-(--ink-400)">
                     {client.email || '—'}
                   </span>
                 </TableCell>
 
                 <TableCell>
-                  <span className="[font-family:var(--font-body)] text-[13px] text-(--ink-400)">
+                  <span className="font-body text-[13px] text-(--ink-400)">
                     {client.phone || '—'}
                   </span>
                 </TableCell>
 
                 <TableCell>
-                  <span className="inline-flex items-center justify-center rounded-full px-2 py-0.5 [font-family:var(--font-mono)] text-[11px] font-medium bg-(--blue-50) text-(--blue-700) min-w-[28px]">
+                  <span className="inline-flex items-center justify-center rounded-full px-2 py-0.5 font-mono text-[11px] font-medium bg-(--blue-50) text-(--blue-700) min-w-[28px]">
                     {client._count.invoices}
                   </span>
                 </TableCell>
@@ -145,7 +145,7 @@ export function ClientsTable({ clients, isLoading, onEdit, onDelete }: ClientsTa
                       align="end"
                       className="min-w-[160px] border-(--border-default) bg-(--surface-base) rounded"
                     >
-                      <DropdownMenuItem className="[font-family:var(--font-body)] text-[13px] text-(--ink-900) cursor-pointer">
+                      <DropdownMenuItem className="font-body text-[13px] text-(--ink-900) cursor-pointer">
                         <Link href={`/clients/${client.id}`} className="flex items-center w-full">
                           <Eye className="h-3.5 w-3.5 mr-2" />
                           View
@@ -153,7 +153,7 @@ export function ClientsTable({ clients, isLoading, onEdit, onDelete }: ClientsTa
                       </DropdownMenuItem>
                       <DropdownMenuItem
                         onClick={(e) => { e.stopPropagation(); onEdit(client) }}
-                        className="[font-family:var(--font-body)] text-[13px] text-(--ink-900) cursor-pointer"
+                        className="font-body text-[13px] text-(--ink-900) cursor-pointer"
                       >
                         <Pencil className="h-3.5 w-3.5 mr-2" />
                         Edit
@@ -161,7 +161,7 @@ export function ClientsTable({ clients, isLoading, onEdit, onDelete }: ClientsTa
                       <DropdownMenuSeparator className="bg-(--border-default)" />
                       <DropdownMenuItem
                         onClick={(e) => { e.stopPropagation(); onDelete(client.id) }}
-                        className="[font-family:var(--font-body)] text-[13px] text-(--error) cursor-pointer"
+                        className="font-body text-[13px] text-(--error) cursor-pointer"
                       >
                         <Trash2 className="h-3.5 w-3.5 mr-2" />
                         Delete

@@ -31,7 +31,7 @@ function TypeToggle({
           type="button"
           disabled={disabled}
           onClick={() => onChange(opt)}
-          className={`px-2 text-xs font-medium transition-colors [font-family:var(--font-display)] ${
+          className={`px-2 text-xs font-medium transition-colors font-display ${
             opt === 'PERCENTAGE' ? 'border-r border-(--border-default)' : ''
           } ${
             value === opt
@@ -65,7 +65,7 @@ export function TotalsPanel({
     <div className="ml-auto mt-4 w-full max-w-85">
       {/* Subtotal */}
       <div className="flex items-center justify-between py-2">
-        <span className="text-sm [font-family:var(--font-body)] text-(--ink-400)">
+        <span className="text-sm font-body text-(--ink-400)">
           Subtotal
         </span>
         <span className="text-sm font-mono text-(--ink-900)">
@@ -75,7 +75,7 @@ export function TotalsPanel({
 
       {/* Discount row */}
       <div className="flex items-center gap-3 py-2">
-        <span className="text-sm shrink-0 [font-family:var(--font-body)] text-(--ink-400)">
+        <span className="text-sm shrink-0 font-body text-(--ink-400)">
           Discount
         </span>
         <div className="flex flex-1 items-center gap-2">
@@ -112,7 +112,7 @@ export function TotalsPanel({
 
       {/* Tax row */}
       <div className="flex items-center gap-3 py-2">
-        <span className="text-sm shrink-0 [font-family:var(--font-body)] text-(--ink-400)">
+        <span className="text-sm shrink-0 font-body text-(--ink-400)">
           VAT / Tax
         </span>
         <div className="flex flex-1 items-center gap-2">
@@ -152,7 +152,7 @@ export function TotalsPanel({
 
       {/* Total */}
       <div className="flex items-center justify-between py-2">
-        <span className="font-semibold [font-family:var(--font-display)] text-[15px] text-(--ink-900)">
+        <span className="font-semibold font-display text-[15px] text-(--ink-900)">
           Total
         </span>
         <span className="font-mono text-[20px] font-semibold text-(--ink-900) tracking-[-0.02em]">

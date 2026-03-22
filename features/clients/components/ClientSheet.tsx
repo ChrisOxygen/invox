@@ -111,10 +111,10 @@ export function ClientSheet({ open, onOpenChange, client = null, onSuccess }: Cl
         <SheetHeader
           className="border-b px-6 py-5 border-(--border-default)"
         >
-          <SheetTitle className="[font-family:var(--font-display)] text-(--ink-900) tracking-[-0.02em]">
+          <SheetTitle className="font-display text-(--ink-900) tracking-[-0.02em]">
             {isEditing ? 'Edit Client' : 'Add Client'}
           </SheetTitle>
-          <SheetDescription className="[font-family:var(--font-body)] text-(--ink-400)">
+          <SheetDescription className="font-body text-(--ink-400)">
             {isEditing ? 'Update the client information below.' : 'Fill in the details to create a new client.'}
           </SheetDescription>
         </SheetHeader>
@@ -127,7 +127,7 @@ export function ClientSheet({ open, onOpenChange, client = null, onSuccess }: Cl
               {duplicateWarning && (
                 <div className="flex items-start gap-3 rounded px-4 py-3 bg-[#FFF7EA] border-l-[3px] border-l-(--warning)">
                   <AlertTriangle size={14} className="mt-0.5 shrink-0 text-(--warning)" />
-                  <p className="text-xs leading-relaxed text-[#B57200] [font-family:var(--font-body)]">
+                  <p className="text-xs leading-relaxed text-[#B57200] font-body">
                     A client with this email already exists. You can still save.
                   </p>
                 </div>
@@ -135,7 +135,7 @@ export function ClientSheet({ open, onOpenChange, client = null, onSuccess }: Cl
 
               {/* Section 1: Contact Details */}
               <div className="space-y-4">
-                <p className="text-sm font-semibold [font-family:var(--font-display)] text-(--ink-900)">
+                <p className="text-sm font-semibold font-display text-(--ink-900)">
                   Contact Details
                 </p>
 
@@ -144,11 +144,11 @@ export function ClientSheet({ open, onOpenChange, client = null, onSuccess }: Cl
                   name="name"
                   render={({ field }) => (
                     <FormItem className="space-y-1.5">
-                      <FormLabel className="text-xs font-semibold uppercase [font-family:var(--font-display)] text-(--ink-400) tracking-[0.08em]">
+                      <FormLabel className="text-xs font-semibold uppercase font-display text-(--ink-400) tracking-[0.08em]">
                         Name *
                       </FormLabel>
                       <FormControl>
-                        <Input {...field} placeholder="e.g. Acme Technologies Ltd." disabled={isPending} className="[font-family:var(--font-body)]" />
+                        <Input {...field} placeholder="e.g. Acme Technologies Ltd." disabled={isPending} className="font-body" />
                       </FormControl>
                       <FormMessage className="text-xs text-(--error)" />
                     </FormItem>
@@ -160,11 +160,11 @@ export function ClientSheet({ open, onOpenChange, client = null, onSuccess }: Cl
                   name="company"
                   render={({ field }) => (
                     <FormItem className="space-y-1.5">
-                      <FormLabel className="text-xs font-semibold uppercase [font-family:var(--font-display)] text-(--ink-400) tracking-[0.08em]">
+                      <FormLabel className="text-xs font-semibold uppercase font-display text-(--ink-400) tracking-[0.08em]">
                         Company
                       </FormLabel>
                       <FormControl>
-                        <Input {...field} value={field.value ?? ''} placeholder="Company or organization (optional)" disabled={isPending} className="[font-family:var(--font-body)]" />
+                        <Input {...field} value={field.value ?? ''} placeholder="Company or organization (optional)" disabled={isPending} className="font-body" />
                       </FormControl>
                       <FormMessage className="text-xs text-(--error)" />
                     </FormItem>
@@ -177,7 +177,7 @@ export function ClientSheet({ open, onOpenChange, client = null, onSuccess }: Cl
                     name="email"
                     render={({ field }) => (
                       <FormItem className="space-y-1.5">
-                        <FormLabel className="text-xs font-semibold uppercase [font-family:var(--font-display)] text-(--ink-400) tracking-[0.08em]">
+                        <FormLabel className="text-xs font-semibold uppercase font-display text-(--ink-400) tracking-[0.08em]">
                           Email
                         </FormLabel>
                         <FormControl>
@@ -187,7 +187,7 @@ export function ClientSheet({ open, onOpenChange, client = null, onSuccess }: Cl
                             type="email"
                             placeholder="billing@client.com"
                             disabled={isPending}
-                            className="[font-family:var(--font-body)]"
+                            className="font-body"
                             onChange={(e) => { field.onChange(e); if (duplicateWarning) setDuplicateWarning(false) }}
                           />
                         </FormControl>
@@ -201,11 +201,11 @@ export function ClientSheet({ open, onOpenChange, client = null, onSuccess }: Cl
                     name="phone"
                     render={({ field }) => (
                       <FormItem className="space-y-1.5">
-                        <FormLabel className="text-xs font-semibold uppercase [font-family:var(--font-display)] text-(--ink-400) tracking-[0.08em]">
+                        <FormLabel className="text-xs font-semibold uppercase font-display text-(--ink-400) tracking-[0.08em]">
                           Phone
                         </FormLabel>
                         <FormControl>
-                          <Input {...field} value={field.value ?? ''} placeholder="+234 800 000 0000" disabled={isPending} className="[font-family:var(--font-body)]" />
+                          <Input {...field} value={field.value ?? ''} placeholder="+234 800 000 0000" disabled={isPending} className="font-body" />
                         </FormControl>
                         <FormMessage className="text-xs text-(--error)" />
                       </FormItem>
@@ -224,7 +224,7 @@ export function ClientSheet({ open, onOpenChange, client = null, onSuccess }: Cl
                   className="flex w-full items-center justify-between"
                   aria-expanded={showAddress}
                 >
-                  <p className="text-sm font-semibold [font-family:var(--font-display)] text-(--ink-900)">
+                  <p className="text-sm font-semibold font-display text-(--ink-900)">
                     Address Details
                   </p>
                   <span className="text-(--ink-400)">
@@ -239,11 +239,11 @@ export function ClientSheet({ open, onOpenChange, client = null, onSuccess }: Cl
                       name="address"
                       render={({ field }) => (
                         <FormItem className="space-y-1.5">
-                          <FormLabel className="text-xs font-semibold uppercase [font-family:var(--font-display)] text-(--ink-400) tracking-[0.08em]">
+                          <FormLabel className="text-xs font-semibold uppercase font-display text-(--ink-400) tracking-[0.08em]">
                             Street Address
                           </FormLabel>
                           <FormControl>
-                            <Textarea {...field} value={field.value ?? ''} placeholder="14 Broad Street, Victoria Island..." rows={2} className="resize-none [font-family:var(--font-body)]" disabled={isPending} />
+                            <Textarea {...field} value={field.value ?? ''} placeholder="14 Broad Street, Victoria Island..." rows={2} className="resize-none font-body" disabled={isPending} />
                           </FormControl>
                         </FormItem>
                       )}
@@ -255,11 +255,11 @@ export function ClientSheet({ open, onOpenChange, client = null, onSuccess }: Cl
                         name="city"
                         render={({ field }) => (
                           <FormItem className="space-y-1.5">
-                            <FormLabel className="text-xs font-semibold uppercase [font-family:var(--font-display)] text-(--ink-400) tracking-[0.08em]">
+                            <FormLabel className="text-xs font-semibold uppercase font-display text-(--ink-400) tracking-[0.08em]">
                               City
                             </FormLabel>
                             <FormControl>
-                              <Input {...field} value={field.value ?? ''} placeholder="Lagos" disabled={isPending} className="[font-family:var(--font-body)]" />
+                              <Input {...field} value={field.value ?? ''} placeholder="Lagos" disabled={isPending} className="font-body" />
                             </FormControl>
                           </FormItem>
                         )}
@@ -270,11 +270,11 @@ export function ClientSheet({ open, onOpenChange, client = null, onSuccess }: Cl
                         name="state"
                         render={({ field }) => (
                           <FormItem className="space-y-1.5">
-                            <FormLabel className="text-xs font-semibold uppercase [font-family:var(--font-display)] text-(--ink-400) tracking-[0.08em]">
+                            <FormLabel className="text-xs font-semibold uppercase font-display text-(--ink-400) tracking-[0.08em]">
                               State
                             </FormLabel>
                             <FormControl>
-                              <Input {...field} value={field.value ?? ''} placeholder="Lagos State" disabled={isPending} className="[font-family:var(--font-body)]" />
+                              <Input {...field} value={field.value ?? ''} placeholder="Lagos State" disabled={isPending} className="font-body" />
                             </FormControl>
                           </FormItem>
                         )}
@@ -286,11 +286,11 @@ export function ClientSheet({ open, onOpenChange, client = null, onSuccess }: Cl
                       name="country"
                       render={({ field }) => (
                         <FormItem className="space-y-1.5">
-                          <FormLabel className="text-xs font-semibold uppercase [font-family:var(--font-display)] text-(--ink-400) tracking-[0.08em]">
+                          <FormLabel className="text-xs font-semibold uppercase font-display text-(--ink-400) tracking-[0.08em]">
                             Country
                           </FormLabel>
                           <FormControl>
-                            <Input {...field} value={field.value ?? ''} placeholder="Nigeria" disabled={isPending} className="[font-family:var(--font-body)]" />
+                            <Input {...field} value={field.value ?? ''} placeholder="Nigeria" disabled={isPending} className="font-body" />
                           </FormControl>
                         </FormItem>
                       )}
@@ -306,14 +306,14 @@ export function ClientSheet({ open, onOpenChange, client = null, onSuccess }: Cl
                 variant="ghost"
                 onClick={() => onOpenChange(false)}
                 disabled={isPending}
-                className="flex-1 [font-family:var(--font-display)]"
+                className="flex-1 font-display"
               >
                 Cancel
               </Button>
               <Button
                 type="submit"
                 disabled={isPending}
-                className="flex-1 [font-family:var(--font-display)] bg-(--blue-600)"
+                className="flex-1 font-display bg-(--blue-600)"
               >
                 {isPending ? (
                   <>

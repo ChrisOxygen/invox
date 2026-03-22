@@ -62,7 +62,7 @@ export function InvoiceFilters({ filters, onFilterChange }: InvoiceFiltersProps)
               key={tab.value}
               type="button"
               onClick={() => handleStatusChange(tab.value)}
-              className="[font-family:var(--font-display)] text-[13px] rounded px-3 py-1.5 cursor-pointer transition-all leading-none whitespace-nowrap"
+              className="font-display text-[13px] rounded px-3 py-1.5 cursor-pointer transition-all leading-none whitespace-nowrap"
               style={{
                 fontWeight: isActive ? 600 : 500,
                 color: isActive ? 'var(--blue-600)' : 'var(--ink-400)',
@@ -98,7 +98,7 @@ export function InvoiceFilters({ filters, onFilterChange }: InvoiceFiltersProps)
           placeholder="Search by invoice # or client..."
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
-          className="pl-9 [font-family:var(--font-body)] text-[14px] border-(--border-default) bg-(--surface-base) text-(--ink-900) rounded h-9"
+          className="pl-9 font-body text-[14px] border-(--border-default) bg-(--surface-base) text-(--ink-900) rounded h-9"
         />
       </div>
     </div>

@@ -49,11 +49,11 @@ export function InvoicesEmptyState({ status, hasFilters, onClearFilters }: Invoi
           <SearchX className="w-6 h-6" />
         </div>
 
-        <h3 className="[font-family:var(--font-display)] text-[16px] font-bold text-(--ink-900) tracking-[-0.02em] mb-1.5">
+        <h3 className="font-display text-[16px] font-bold text-(--ink-900) tracking-[-0.02em] mb-1.5">
           No invoices match your filters
         </h3>
 
-        <p className="[font-family:var(--font-body)] text-[14px] text-(--ink-400) max-w-75 mb-5 leading-normal">
+        <p className="font-body text-[14px] text-(--ink-400) max-w-75 mb-5 leading-normal">
           Try adjusting your search or status filter to find what you are looking for.
         </p>
 
@@ -62,7 +62,7 @@ export function InvoicesEmptyState({ status, hasFilters, onClearFilters }: Invoi
             variant="outline"
             size="sm"
             onClick={onClearFilters}
-            className="[font-family:var(--font-display)] font-semibold text-[13px] border-(--border-strong) text-(--ink-700) rounded"
+            className="font-display font-semibold text-[13px] border-(--border-strong) text-(--ink-700) rounded"
           >
             <X className="w-3.5 h-3.5 mr-1.5" />
             Clear filters
@@ -91,19 +91,19 @@ export function InvoicesEmptyState({ status, hasFilters, onClearFilters }: Invoi
           <FileText className="w-6 h-6" />
         </div>
 
-        <h3 className="[font-family:var(--font-display)] text-[16px] font-bold text-(--ink-900) tracking-[-0.02em] mb-1.5">
+        <h3 className="font-display text-[16px] font-bold text-(--ink-900) tracking-[-0.02em] mb-1.5">
           {copy?.heading ?? `No ${status.toLowerCase()} invoices`}
           {isOverdue ? ' 🎉' : ''}
         </h3>
 
-        <p className="[font-family:var(--font-body)] text-[14px] text-(--ink-400) max-w-75 mb-5 leading-normal">
+        <p className="font-body text-[14px] text-(--ink-400) max-w-75 mb-5 leading-normal">
           {copy?.description ?? `No invoices with status "${status.toLowerCase()}" found.`}
         </p>
 
         {!isOverdue && (
           <Link
             href="/invoices/new"
-            className="inline-flex items-center gap-1.5 rounded text-sm font-semibold transition-colors hover:opacity-90 [font-family:var(--font-display)] bg-(--blue-600) text-white h-8 px-3"
+            className="inline-flex items-center gap-1.5 rounded text-sm font-semibold transition-colors hover:opacity-90 font-display bg-(--blue-600) text-white h-8 px-3"
           >
             <Plus className="w-3.5 h-3.5" />
             Create Invoice
@@ -120,17 +120,17 @@ export function InvoicesEmptyState({ status, hasFilters, onClearFilters }: Invoi
         <FileText className="w-6 h-6" />
       </div>
 
-      <h3 className="[font-family:var(--font-display)] text-[16px] font-bold text-(--ink-900) tracking-[-0.02em] mb-1.5">
+      <h3 className="font-display text-[16px] font-bold text-(--ink-900) tracking-[-0.02em] mb-1.5">
         Create your first invoice
       </h3>
 
-      <p className="[font-family:var(--font-body)] text-[14px] text-(--ink-400) max-w-75 mb-5 leading-normal">
+      <p className="font-body text-[14px] text-(--ink-400) max-w-75 mb-5 leading-normal">
         Send professional, branded invoices to your clients and track payments from draft to paid.
       </p>
 
       <Link
         href="/invoices/new"
-        className="inline-flex items-center gap-1.5 rounded text-sm font-semibold transition-colors hover:opacity-90 [font-family:var(--font-display)] bg-(--blue-600) text-white h-8 px-3"
+        className="inline-flex items-center gap-1.5 rounded text-sm font-semibold transition-colors hover:opacity-90 font-display bg-(--blue-600) text-white h-8 px-3"
       >
         <Plus className="w-3.5 h-3.5" />
         Create Invoice

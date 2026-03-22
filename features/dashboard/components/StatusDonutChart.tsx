@@ -36,9 +36,9 @@ function CustomTooltip({ active, payload }: TooltipProps) {
     <div
       className="bg-(--surface-base) border border-(--border-default) px-3 py-2 rounded-md"
     >
-      <p className="[font-family:var(--font-body)] text-[13px] text-(--ink-900)">
+      <p className="font-body text-[13px] text-(--ink-900)">
         {payload[0].name}:{' '}
-        <span className="[font-family:var(--font-mono)] font-medium">
+        <span className="font-mono font-medium">
           {payload[0].value}
         </span>
       </p>
@@ -52,7 +52,7 @@ export function StatusDonutChart({ data }: StatusDonutChartProps) {
   if (filtered.length === 0) {
     return (
       <div className="h-[220px] flex items-center justify-center">
-        <p className="[font-family:var(--font-body)] text-[13px] text-(--ink-300)">
+        <p className="font-body text-[13px] text-(--ink-300)">
           No invoices yet
         </p>
       </div>
@@ -91,7 +91,7 @@ export function StatusDonutChart({ data }: StatusDonutChartProps) {
           iconSize={7}
           wrapperStyle={{ fontSize: 11, paddingTop: 8 }}
           formatter={(value) => (
-            <span className="[font-family:var(--font-body)] text-[11px] text-(--ink-500)">
+            <span className="font-body text-[11px] text-(--ink-500)">
               {value}
             </span>
           )}

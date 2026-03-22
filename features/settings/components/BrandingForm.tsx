@@ -16,7 +16,7 @@ interface BrandingFormProps {
   businessName: string | null
 }
 
-const labelClass = 'text-[12px] font-semibold text-(--ink-700) [font-family:var(--font-display)]'
+const labelClass = 'text-[12px] font-semibold text-(--ink-700) font-display'
 
 export function BrandingForm({ defaultValues, businessName }: BrandingFormProps) {
   const [logoUrl, setLogoUrl] = useState<string | null>(defaultValues.logoUrl)
@@ -42,7 +42,7 @@ export function BrandingForm({ defaultValues, businessName }: BrandingFormProps)
         {/* Logo */}
         <div className="flex flex-col gap-2">
           <label className={labelClass}>Business Logo</label>
-          <p className="text-[13px] text-(--ink-400) [font-family:var(--font-body)]">
+          <p className="text-[13px] text-(--ink-400) font-body">
             Appears in the header of your PDF invoices.
           </p>
           <div className="mt-1">
@@ -57,7 +57,7 @@ export function BrandingForm({ defaultValues, businessName }: BrandingFormProps)
         {/* Brand color */}
         <div className="flex flex-col gap-2">
           <label className={labelClass}>Brand Color</label>
-          <p className="text-[13px] text-(--ink-400) [font-family:var(--font-body)]">
+          <p className="text-[13px] text-(--ink-400) font-body">
             Used in the invoice header and accents.
           </p>
           <div className="mt-1">
@@ -71,7 +71,7 @@ export function BrandingForm({ defaultValues, businessName }: BrandingFormProps)
             type="button"
             onClick={handleSave}
             disabled={isPending}
-            className="flex h-9 items-center justify-center gap-2 rounded bg-(--blue-600) px-5 text-[13px] font-semibold text-white transition-colors duration-200 hover:bg-(--blue-700) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--blue-600) focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 [font-family:var(--font-display)]"
+            className="flex h-9 items-center justify-center gap-2 rounded bg-(--blue-600) px-5 text-[13px] font-semibold text-white transition-colors duration-200 hover:bg-(--blue-700) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--blue-600) focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 font-display"
           >
             {isPending && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
             Save changes
@@ -87,10 +87,10 @@ export function BrandingForm({ defaultValues, businessName }: BrandingFormProps)
         >
           {/* Stage header */}
           <div className="flex items-center justify-between px-4 py-3 border-b border-(--border-default)">
-            <span className="text-[11px] font-semibold uppercase tracking-[0.08em] text-(--ink-400) [font-family:var(--font-display)]">
+            <span className="text-[11px] font-semibold uppercase tracking-[0.08em] text-(--ink-400) font-display">
               Preview
             </span>
-            <span className="flex items-center gap-1.5 text-[11px] text-(--ink-300) [font-family:var(--font-body)]">
+            <span className="flex items-center gap-1.5 text-[11px] text-(--ink-300) font-body">
               <span className="inline-block h-1.5 w-1.5 rounded-full bg-(--success)" />
               Live
             </span>

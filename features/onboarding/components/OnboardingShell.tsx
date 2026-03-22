@@ -29,7 +29,7 @@ export function OnboardingShell({ children }: OnboardingShellProps) {
           <rect x="11" y="7" width="6" height="17" rx="2" fill="var(--blue-600)" />
           <rect x="22" y="0" width="6" height="24" rx="2" fill="var(--cyan-400)" />
         </svg>
-        <span className="[font-family:var(--font-display)] font-extrabold tracking-tight text-[20px] text-(--ink-900)">
+        <span className="font-display font-extrabold tracking-tight text-[20px] text-(--ink-900)">
           Invox<span className="text-(--blue-600)">.</span>
         </span>
       </div>

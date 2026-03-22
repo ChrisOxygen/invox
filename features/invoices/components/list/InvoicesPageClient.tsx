@@ -147,7 +147,7 @@ export function InvoicesPageClient() {
 
           {/* Pagination */}
           {total > PAGE_SIZE && (
-            <div className="flex items-center justify-between mt-4 [font-family:var(--font-body)] text-[13px] text-(--ink-400)">
+            <div className="flex items-center justify-between mt-4 font-body text-[13px] text-(--ink-400)">
               <span>
                 Showing{" "}
                 <span className="font-mono font-medium text-(--ink-700)">
@@ -170,7 +170,7 @@ export function InvoicesPageClient() {
                     }))
                   }
                   disabled={page <= 1 || isPending}
-                  className="[font-family:var(--font-display)] font-semibold text-[12px] border-(--border-default) text-(--ink-700) rounded h-8"
+                  className="font-display font-semibold text-[12px] border-(--border-default) text-(--ink-700) rounded h-8"
                 >
                   Previous
                 </Button>
@@ -184,7 +184,7 @@ export function InvoicesPageClient() {
                     }))
                   }
                   disabled={page >= totalPages || isPending}
-                  className="[font-family:var(--font-display)] font-semibold text-[12px] border-(--border-default) text-(--ink-700) rounded h-8"
+                  className="font-display font-semibold text-[12px] border-(--border-default) text-(--ink-700) rounded h-8"
                 >
                   Next
                 </Button>
@@ -203,10 +203,10 @@ export function InvoicesPageClient() {
       >
         <DialogContent className="bg-(--surface-base) border border-(--border-default) rounded max-w-105">
           <DialogHeader>
-            <DialogTitle className="[font-family:var(--font-display)] text-[18px] font-bold text-(--ink-900) tracking-[-0.02em]">
+            <DialogTitle className="font-display text-[18px] font-bold text-(--ink-900) tracking-[-0.02em]">
               Delete invoice?
             </DialogTitle>
-            <DialogDescription className="[font-family:var(--font-body)] text-[14px] text-(--ink-400) leading-normal mt-1.5">
+            <DialogDescription className="font-body text-[14px] text-(--ink-400) leading-normal mt-1.5">
               This will permanently delete the invoice. This action cannot be
               undone.
             </DialogDescription>
@@ -217,14 +217,14 @@ export function InvoicesPageClient() {
               variant="outline"
               onClick={() => setDeletingInvoiceId(null)}
               disabled={isDeleting}
-              className="[font-family:var(--font-display)] font-semibold text-[13px] border-(--border-default) text-(--ink-700) rounded h-9"
+              className="font-display font-semibold text-[13px] border-(--border-default) text-(--ink-700) rounded h-9"
             >
               Cancel
             </Button>
             <Button
               onClick={handleDeleteConfirm}
               disabled={isDeleting}
-              className="[font-family:var(--font-display)] font-semibold text-[13px] bg-(--error) text-white border-none rounded h-9"
+              className="font-display font-semibold text-[13px] bg-(--error) text-white border-none rounded h-9"
             >
               {isDeleting ? (
                 <>

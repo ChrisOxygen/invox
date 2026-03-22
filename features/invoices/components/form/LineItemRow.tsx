@@ -46,7 +46,7 @@ export function LineItemRow({ index, control, setValue, remove, currency }: Line
               {...field}
               type="text"
               placeholder="Item description..."
-              className="w-full rounded px-2 py-1.5 text-sm outline-none transition-colors focus:bg-(--surface-overlay) placeholder:text-(--ink-300) [font-family:var(--font-body)] text-(--ink-900) bg-transparent"
+              className="w-full rounded px-2 py-1.5 text-sm outline-none transition-colors focus:bg-(--surface-overlay) placeholder:text-(--ink-300) font-body text-(--ink-900) bg-transparent"
               style={{
                 border: fieldState.error ? '1px solid var(--error)' : '1px solid transparent',
               }}
@@ -69,7 +69,7 @@ export function LineItemRow({ index, control, setValue, remove, currency }: Line
               min="0"
               step="any"
               onChange={(e) => field.onChange(e.target.value === '' ? 0 : parseFloat(e.target.value))}
-              className="w-full rounded px-2 py-1.5 text-sm outline-none transition-colors focus:bg-(--surface-overlay) text-center [font-family:var(--font-body)] text-(--ink-900) bg-transparent border border-transparent"
+              className="w-full rounded px-2 py-1.5 text-sm outline-none transition-colors focus:bg-(--surface-overlay) text-center font-body text-(--ink-900) bg-transparent border border-transparent"
             />
           </div>
         )}

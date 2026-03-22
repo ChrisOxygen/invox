@@ -73,7 +73,7 @@ export function ClientSelector({ value, onChange, disabled }: ClientSelectorProp
           type="button"
           onClick={() => !disabled && setOpen((v) => !v)}
           disabled={disabled}
-          className="flex w-full items-center justify-between rounded border px-3 py-2.5 text-sm transition-colors [font-family:var(--font-body)] bg-(--surface-base) min-h-10.5"
+          className="flex w-full items-center justify-between rounded border px-3 py-2.5 text-sm transition-colors font-body bg-(--surface-base) min-h-10.5"
           style={{
             borderColor: open ? 'var(--blue-600)' : 'var(--border-default)',
             color: selectedClient ? 'var(--ink-900)' : 'var(--ink-300)',
@@ -114,7 +114,7 @@ export function ClientSelector({ value, onChange, disabled }: ClientSelectorProp
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search clients..."
-                className="flex-1 bg-transparent text-sm outline-none [font-family:var(--font-body)] text-(--ink-900)"
+                className="flex-1 bg-transparent text-sm outline-none font-body text-(--ink-900)"
               />
               {isPending && <Loader2 size={12} className="animate-spin text-(--ink-300)" />}
             </div>
@@ -122,7 +122,7 @@ export function ClientSelector({ value, onChange, disabled }: ClientSelectorProp
             {/* List */}
             <div className="max-h-52 overflow-y-auto py-1">
               {clients.length === 0 && !isPending && (
-                <p className="px-3 py-4 text-center text-sm text-(--ink-400) [font-family:var(--font-body)]">
+                <p className="px-3 py-4 text-center text-sm text-(--ink-400) font-body">
                   {search ? 'No clients found' : 'No clients yet'}
                 </p>
               )}
@@ -139,11 +139,11 @@ export function ClientSelector({ value, onChange, disabled }: ClientSelectorProp
                     style={{ opacity: value === client.id ? 1 : 0 }}
                   />
                   <div className="min-w-0">
-                    <p className="truncate text-sm font-medium text-(--ink-900) [font-family:var(--font-body)]">
+                    <p className="truncate text-sm font-medium text-(--ink-900) font-body">
                       {client.name}
                     </p>
                     {(client.company || client.email) && (
-                      <p className="truncate text-xs text-(--ink-400) [font-family:var(--font-body)]">
+                      <p className="truncate text-xs text-(--ink-400) font-body">
                         {client.company ?? client.email}
                       </p>
                     )}
@@ -160,7 +160,7 @@ export function ClientSelector({ value, onChange, disabled }: ClientSelectorProp
                   setOpen(false)
                   setClientSheetOpen(true)
                 }}
-                className="flex w-full items-center gap-2 px-3 py-2.5 text-sm transition-colors hover:bg-(--surface-overlay) text-(--blue-600) [font-family:var(--font-body)]"
+                className="flex w-full items-center gap-2 px-3 py-2.5 text-sm transition-colors hover:bg-(--surface-overlay) text-(--blue-600) font-body"
               >
                 <Plus size={13} />
                 Add new client

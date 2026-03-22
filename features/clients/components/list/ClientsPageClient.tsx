@@ -98,12 +98,12 @@ export function ClientsPageClient() {
 
           {/* Pagination */}
           {totalPages > 1 && (
-            <div className="flex items-center justify-between mt-4 [font-family:var(--font-body)] text-[13px] text-(--ink-400)">
+            <div className="flex items-center justify-between mt-4 font-body text-[13px] text-(--ink-400)">
               <span>
                 Page{' '}
-                <span className="[font-family:var(--font-mono)] font-medium text-(--ink-700)">{page}</span>
+                <span className="font-mono font-medium text-(--ink-700)">{page}</span>
                 {' '}of{' '}
-                <span className="[font-family:var(--font-mono)] font-medium text-(--ink-700)">{totalPages}</span>
+                <span className="font-mono font-medium text-(--ink-700)">{totalPages}</span>
               </span>
               <div className="flex items-center gap-2">
                 <Button
@@ -111,7 +111,7 @@ export function ClientsPageClient() {
                   size="sm"
                   onClick={() => setPage((p) => Math.max(1, p - 1))}
                   disabled={page <= 1}
-                  className="[font-family:var(--font-display)] font-semibold text-[12px] border-(--border-default) text-(--ink-700) h-8 rounded"
+                  className="font-display font-semibold text-[12px] border-(--border-default) text-(--ink-700) h-8 rounded"
                 >
                   Previous
                 </Button>
@@ -120,7 +120,7 @@ export function ClientsPageClient() {
                   size="sm"
                   onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
                   disabled={page >= totalPages}
-                  className="[font-family:var(--font-display)] font-semibold text-[12px] border-(--border-default) text-(--ink-700) h-8 rounded"
+                  className="font-display font-semibold text-[12px] border-(--border-default) text-(--ink-700) h-8 rounded"
                 >
                   Next
                 </Button>
@@ -150,10 +150,10 @@ export function ClientsPageClient() {
           className="bg-(--surface-base) border-(--border-default) max-w-[420px] rounded"
         >
           <DialogHeader>
-            <DialogTitle className="[font-family:var(--font-display)] text-[18px] font-bold text-(--ink-900) tracking-[-0.02em]">
+            <DialogTitle className="font-display text-[18px] font-bold text-(--ink-900) tracking-[-0.02em]">
               Delete client?
             </DialogTitle>
-            <DialogDescription className="[font-family:var(--font-body)] text-[14px] text-(--ink-400) leading-[1.5] mt-[6px]">
+            <DialogDescription className="font-body text-[14px] text-(--ink-400) leading-[1.5] mt-[6px]">
               This will hide the client from your list. Their invoices will be retained.
             </DialogDescription>
           </DialogHeader>
@@ -163,14 +163,14 @@ export function ClientsPageClient() {
               variant="outline"
               onClick={() => setDeletingClientId(null)}
               disabled={deleteMutation.isPending}
-              className="[font-family:var(--font-display)] font-semibold text-[13px] border-(--border-default) text-(--ink-700) h-9 rounded"
+              className="font-display font-semibold text-[13px] border-(--border-default) text-(--ink-700) h-9 rounded"
             >
               Cancel
             </Button>
             <Button
               onClick={handleDeleteConfirm}
               disabled={deleteMutation.isPending}
-              className="[font-family:var(--font-display)] font-semibold text-[13px] bg-(--error) text-white border-0 h-9 rounded"
+              className="font-display font-semibold text-[13px] bg-(--error) text-white border-0 h-9 rounded"
             >
               {deleteMutation.isPending ? (
                 <>

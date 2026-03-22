@@ -69,7 +69,7 @@ function StatCard({ config, value, isPending, currency }: StatCardProps) {
   return (
     <div className="bg-(--surface-base) border border-(--border-default) rounded p-(--s5)">
       <div className="flex items-start justify-between mb-3">
-        <p className="[font-family:var(--font-display)] text-[11px] font-semibold text-(--ink-400) tracking-[0.08em] uppercase">
+        <p className="font-display text-[11px] font-semibold text-(--ink-400) tracking-[0.08em] uppercase">
           {config.label}
         </p>
         <Icon
@@ -82,7 +82,7 @@ function StatCard({ config, value, isPending, currency }: StatCardProps) {
         <Skeleton className="h-8 w-36 mb-2" />
       ) : (
         <p
-          className="[font-family:var(--font-mono)] font-medium leading-none tracking-[-0.02em] mb-2"
+          className="font-mono font-medium leading-none tracking-[-0.02em] mb-2"
           style={{
             fontSize: config.isCount ? 36 : 26,
             color: config.valueColor,
@@ -94,7 +94,7 @@ function StatCard({ config, value, isPending, currency }: StatCardProps) {
         </p>
       )}
 
-      <p className="[font-family:var(--font-body)] text-[12px] text-(--ink-300)">
+      <p className="font-body text-[12px] text-(--ink-300)">
         {config.description}
       </p>
     </div>

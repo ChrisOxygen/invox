@@ -48,7 +48,7 @@ export function SettingsPageClient() {
   if (error) {
     return (
       <div className="rounded border border-(--error)/20 bg-(--error)/5 p-5">
-        <p className="text-[14px] text-(--error) [font-family:var(--font-body)]">
+        <p className="text-[14px] text-(--error) font-body">
           Failed to load settings. Please refresh the page.
         </p>
       </div>
@@ -93,12 +93,12 @@ export function SettingsPageClient() {
                 />
                 <div className="flex flex-col gap-0.5 min-w-0">
                   <span
-                    className="text-[13px] font-semibold leading-none [font-family:var(--font-display)] truncate"
+                    className="text-[13px] font-semibold leading-none font-display truncate"
                     style={{ color: isActive ? 'var(--blue-700)' : 'var(--ink-700)' }}
                   >
                     {label}
                   </span>
-                  <span className="text-[11px] text-(--ink-400) [font-family:var(--font-body)] truncate leading-none mt-0.5">
+                  <span className="text-[11px] text-(--ink-400) font-body truncate leading-none mt-0.5">
                     {hint}
                   </span>
                 </div>
@@ -169,10 +169,10 @@ function SettingsCard({
     <div className="rounded border border-(--border-default) bg-(--surface-base) overflow-hidden">
       {/* Header */}
       <div className="border-b border-(--border-default) px-6 py-5">
-        <h2 className="text-[16px] font-bold tracking-[-0.02em] text-(--ink-900) [font-family:var(--font-display)]">
+        <h2 className="text-[16px] font-bold tracking-[-0.02em] text-(--ink-900) font-display">
           {title}
         </h2>
-        <p className="mt-1 text-[13px] text-(--ink-400) [font-family:var(--font-body)] leading-relaxed">
+        <p className="mt-1 text-[13px] text-(--ink-400) font-body leading-relaxed">
           {description}
         </p>
       </div>

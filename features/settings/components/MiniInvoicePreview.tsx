@@ -43,12 +43,12 @@ export function MiniInvoicePreview({
               {displayName.charAt(0).toUpperCase()}
             </div>
           )}
-          <span className="text-[12px] font-bold text-white [font-family:var(--font-display)] leading-none">
+          <span className="text-[12px] font-bold text-white font-display leading-none">
             {displayName}
           </span>
         </div>
         <span
-          className="text-[10px] font-semibold [font-family:var(--font-display)] leading-none"
+          className="text-[10px] font-semibold font-display leading-none"
           style={{ color: 'rgba(255,255,255,0.75)' }}
         >
           INVOICE
@@ -61,14 +61,14 @@ export function MiniInvoicePreview({
         {/* Meta row */}
         <div className="flex items-start justify-between">
           <div>
-            <p className="text-[10px] text-(--ink-300) [font-family:var(--font-body)] uppercase tracking-[0.05em]">Billed to</p>
-            <p className="text-[13px] font-semibold text-(--ink-900) [font-family:var(--font-display)] mt-0.5">Adaeze Okonkwo</p>
-            <p className="text-[11px] text-(--ink-400) [font-family:var(--font-body)] mt-0.5">Lagos, Nigeria</p>
+            <p className="text-[10px] text-(--ink-300) font-body uppercase tracking-[0.05em]">Billed to</p>
+            <p className="text-[13px] font-semibold text-(--ink-900) font-display mt-0.5">Adaeze Okonkwo</p>
+            <p className="text-[11px] text-(--ink-400) font-body mt-0.5">Lagos, Nigeria</p>
           </div>
           <div className="text-right">
-            <p className="text-[10px] text-(--ink-300) [font-family:var(--font-body)] uppercase tracking-[0.05em]">Invoice</p>
+            <p className="text-[10px] text-(--ink-300) font-body uppercase tracking-[0.05em]">Invoice</p>
             <p className="text-[12px] font-semibold font-mono mt-0.5" style={{ color }}>INV-2025-0001</p>
-            <p className="text-[11px] text-(--ink-400) [font-family:var(--font-body)] mt-0.5">Due 15 Apr 2025</p>
+            <p className="text-[11px] text-(--ink-400) font-body mt-0.5">Due 15 Apr 2025</p>
           </div>
         </div>
 
@@ -77,8 +77,8 @@ export function MiniInvoicePreview({
 
         {/* Line items header */}
         <div className="flex items-center justify-between">
-          <span className="text-[10px] font-semibold uppercase tracking-[0.06em] text-(--ink-300) [font-family:var(--font-display)]">Description</span>
-          <span className="text-[10px] font-semibold uppercase tracking-[0.06em] text-(--ink-300) [font-family:var(--font-display)]">Amount</span>
+          <span className="text-[10px] font-semibold uppercase tracking-[0.06em] text-(--ink-300) font-display">Description</span>
+          <span className="text-[10px] font-semibold uppercase tracking-[0.06em] text-(--ink-300) font-display">Amount</span>
         </div>
 
         {/* Line items */}
@@ -89,7 +89,7 @@ export function MiniInvoicePreview({
             { desc: 'Social Media Kit', amount: '₦45,000' },
           ].map(({ desc, amount }) => (
             <div key={desc} className="flex items-center justify-between">
-              <span className="text-[12px] text-(--ink-700) [font-family:var(--font-body)]">{desc}</span>
+              <span className="text-[12px] text-(--ink-700) font-body">{desc}</span>
               <span className="font-mono text-[12px] text-(--ink-900)">{amount}</span>
             </div>
           ))}
@@ -100,14 +100,14 @@ export function MiniInvoicePreview({
 
         {/* Total */}
         <div className="flex items-center justify-between">
-          <span className="text-[13px] font-bold text-(--ink-900) [font-family:var(--font-display)]">Total</span>
+          <span className="text-[13px] font-bold text-(--ink-900) font-display">Total</span>
           <span className="font-mono text-[15px] font-bold text-(--ink-900)">₦275,000</span>
         </div>
 
         {/* Status badge */}
         <div className="flex justify-end">
           <span
-            className="rounded-full px-3 py-1 text-[10px] font-semibold text-white [font-family:var(--font-display)]"
+            className="rounded-full px-3 py-1 text-[10px] font-semibold text-white font-display"
             style={{ backgroundColor: color }}
           >
             SENT
@@ -119,10 +119,10 @@ export function MiniInvoicePreview({
           className="rounded border px-4 py-3 mt-1"
           style={{ borderColor: `${color}30`, backgroundColor: `${color}08` }}
         >
-          <p className="text-[10px] font-semibold uppercase tracking-[0.06em] [font-family:var(--font-display)]" style={{ color }}>
+          <p className="text-[10px] font-semibold uppercase tracking-[0.06em] font-display" style={{ color }}>
             Payment Details
           </p>
-          <p className="text-[11px] text-(--ink-400) [font-family:var(--font-body)] mt-1">
+          <p className="text-[11px] text-(--ink-400) font-body mt-1">
             Zenith Bank · 2234567890
           </p>
         </div>

@@ -7,12 +7,12 @@ export default function NewInvoicePage() {
         className="border-b px-6 py-5 border-(--border-default) bg-(--surface-base)"
       >
         <h1
-          className="[font-family:var(--font-display)] text-[22px] font-bold text-(--ink-900) tracking-[-0.025em]"
+          className="font-display text-[22px] font-bold text-(--ink-900) tracking-[-0.025em]"
         >
           New Invoice
         </h1>
         <p
-          className="[font-family:var(--font-body)] text-(--ink-400) text-[13px] mt-0.5"
+          className="font-body text-(--ink-400) text-[13px] mt-0.5"
         >
           Create a professional invoice for your client
         </p>

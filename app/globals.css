@@ -216,3 +216,11 @@ body {
   font-weight: 500;
   letter-spacing: 0;
 }
+
+@utility font-display {
+  font-family: var(--font-display);
+}
+
+@utility font-body {
+  font-family: var(--font-body);
+}

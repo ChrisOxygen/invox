@@ -29,16 +29,16 @@ export function ClientFilters({ onSearch, total, isLoading }: ClientFiltersProps
           placeholder="Search clients…"
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
-          className="pl-9 [font-family:var(--font-body)] text-[14px] border-(--border-default) bg-(--surface-base) text-(--ink-900) rounded h-9"
+          className="pl-9 font-body text-[14px] border-(--border-default) bg-(--surface-base) text-(--ink-900) rounded h-9"
         />
       </div>
 
-      <span className="[font-family:var(--font-body)] text-[13px] text-(--ink-400) whitespace-nowrap text-right min-w-20">
+      <span className="font-body text-[13px] text-(--ink-400) whitespace-nowrap text-right min-w-20">
         {isLoading ? (
           <span className="inline-block h-3.5 w-16 rounded animate-pulse bg-(--border-default)" />
         ) : (
           <>
-            <span className="[font-family:var(--font-mono)] font-medium text-(--ink-700)">
+            <span className="font-mono font-medium text-(--ink-700)">
               {total}
             </span>
             {' '}{total === 1 ? 'client' : 'clients'}

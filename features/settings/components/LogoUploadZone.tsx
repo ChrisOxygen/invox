@@ -136,10 +136,10 @@ export function LogoUploadZone({
               />
             )}
             <div className="text-center">
-              <p className="text-[13px] font-medium text-(--ink-700) [font-family:var(--font-body)]">
+              <p className="text-[13px] font-medium text-(--ink-700) font-body">
                 {isDragActive ? 'Drop your logo here' : 'Drag & drop or click to upload'}
               </p>
-              <p className="mt-0.5 text-[11px] text-(--ink-300) [font-family:var(--font-body)]">
+              <p className="mt-0.5 text-[11px] text-(--ink-300) font-body">
                 PNG, JPG or SVG · Max 2MB
               </p>
             </div>
@@ -148,7 +148,7 @@ export function LogoUploadZone({
       </div>
 
       {error && (
-        <p className="text-[11px] text-(--error) [font-family:var(--font-body)]" role="alert">
+        <p className="text-[11px] text-(--error) font-body" role="alert">
           {error}
         </p>
       )}

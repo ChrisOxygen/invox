@@ -115,10 +115,10 @@ export function Step1BusinessProfile() {
   return (
     <div>
       {/* Heading block */}
-      <h1 className="text-[24px] font-extrabold leading-[1.2] tracking-[-0.025em] text-(--ink-900) [font-family:var(--font-display)]">
+      <h1 className="text-[24px] font-extrabold leading-[1.2] tracking-[-0.025em] text-(--ink-900) font-display">
         Tell us about your business
       </h1>
-      <p className="mt-1.5 text-[14px] text-(--ink-400) [font-family:var(--font-body)]">
+      <p className="mt-1.5 text-[14px] text-(--ink-400) font-body">
         This appears on every invoice you send.
       </p>
 
@@ -145,7 +145,7 @@ export function Step1BusinessProfile() {
               ) : (
                 <span className="flex flex-col items-center gap-1">
                   <UploadCloud className="h-6 w-6 text-(--ink-300)" />
-                  <span className="text-[12px] text-(--ink-300) [font-family:var(--font-body)]">
+                  <span className="text-[12px] text-(--ink-300) font-body">
                     Upload logo
                   </span>
                 </span>
@@ -175,13 +175,13 @@ export function Step1BusinessProfile() {
           />
 
           {/* Hint + upload error */}
-          <p className="mt-2 text-[11px] text-(--ink-300) [font-family:var(--font-body)]">
+          <p className="mt-2 text-[11px] text-(--ink-300) font-body">
             PNG, JPG or SVG · Max 2MB
           </p>
 
           {logoError && (
             <p
-              className="mt-1 text-[11px] text-(--error) [font-family:var(--font-body)]"
+              className="mt-1 text-[11px] text-(--error) font-body"
               role="alert"
             >
               {logoError}
@@ -195,7 +195,7 @@ export function Step1BusinessProfile() {
               onClick={() => {
                 setLogoError(null)
               }}
-              className="mt-2 text-[12px] text-(--blue-600) transition-colors duration-(--motion-fast) hover:text-(--blue-700) focus-visible:outline-none focus-visible:underline [font-family:var(--font-body)]"
+              className="mt-2 text-[12px] text-(--blue-600) transition-colors duration-(--motion-fast) hover:text-(--blue-700) focus-visible:outline-none focus-visible:underline font-body"
             >
               Skip logo for now
             </button>
@@ -206,7 +206,7 @@ export function Step1BusinessProfile() {
         <div className="mt-6 flex flex-col gap-1.5">
           <label
             htmlFor="businessName"
-            className="text-[12px] font-semibold uppercase tracking-[0.06em] text-(--ink-700) [font-family:var(--font-display)]"
+            className="text-[12px] font-semibold uppercase tracking-[0.06em] text-(--ink-700) font-display"
           >
             Business name
           </label>
@@ -224,12 +224,12 @@ export function Step1BusinessProfile() {
                 })
               },
             })}
-            className="h-11 w-full rounded-md border border-(--border-default) bg-(--surface-base) px-3.5 text-[14px] text-(--ink-900) placeholder:text-(--ink-300) transition-colors duration-(--motion-fast) focus:border-(--blue-600) focus:outline-none focus:ring-2 focus:ring-(--blue-600)/20 aria-invalid:border-(--error) aria-invalid:ring-2 aria-invalid:ring-(--error)/20 [font-family:var(--font-body)]"
+            className="h-11 w-full rounded-md border border-(--border-default) bg-(--surface-base) px-3.5 text-[14px] text-(--ink-900) placeholder:text-(--ink-300) transition-colors duration-(--motion-fast) focus:border-(--blue-600) focus:outline-none focus:ring-2 focus:ring-(--blue-600)/20 aria-invalid:border-(--error) aria-invalid:ring-2 aria-invalid:ring-(--error)/20 font-body"
           />
           {errors.businessName && (
             <p
               id="businessName-error"
-              className="text-[11px] text-(--error) [font-family:var(--font-body)]"
+              className="text-[11px] text-(--error) font-body"
               role="alert"
             >
               {errors.businessName.message}
@@ -243,7 +243,7 @@ export function Step1BusinessProfile() {
             className="mt-4 rounded-md border border-(--error)/20 bg-(--error)/5 px-4 py-3"
             role="alert"
           >
-            <p className="text-[13px] text-(--error) [font-family:var(--font-body)]">
+            <p className="text-[13px] text-(--error) font-body">
               {serverError}
             </p>
           </div>
@@ -253,7 +253,7 @@ export function Step1BusinessProfile() {
         <button
           type="submit"
           disabled={isSubmitting || logoUploading}
-          className="mt-6 flex h-11 w-full items-center justify-center gap-2 rounded-md bg-(--blue-600) text-[14px] font-semibold text-white transition-colors duration-(--motion-base) hover:bg-(--blue-700) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--blue-600) focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 [font-family:var(--font-display)]"
+          className="mt-6 flex h-11 w-full items-center justify-center gap-2 rounded-md bg-(--blue-600) text-[14px] font-semibold text-white transition-colors duration-(--motion-base) hover:bg-(--blue-700) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--blue-600) focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 font-display"
         >
           {isSubmitting && <Loader2 className="h-4 w-4 animate-spin" />}
           Continue

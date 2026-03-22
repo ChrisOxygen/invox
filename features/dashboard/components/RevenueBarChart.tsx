@@ -37,10 +37,10 @@ function CustomTooltip({ active, payload, label }: TooltipProps) {
       className="bg-(--surface-base) border border-(--border-default) px-[14px] py-2"
       style={{ borderRadius: 'var(--r-md)', boxShadow: '0 4px 16px rgba(13,13,26,0.08)' }}
     >
-      <p className="[font-family:var(--font-display)] text-[11px] text-(--ink-400) mb-[3px] tracking-[0.04em] uppercase">
+      <p className="font-display text-[11px] text-(--ink-400) mb-[3px] tracking-[0.04em] uppercase">
         {label}
       </p>
-      <p className="[font-family:var(--font-mono)] text-[15px] font-medium text-(--ink-900)">
+      <p className="font-mono text-[15px] font-medium text-(--ink-900)">
         ₦{value.toLocaleString('en-NG', { minimumFractionDigits: 2 })}
       </p>
     </div>
@@ -54,7 +54,7 @@ export function RevenueBarChart({ data }: RevenueBarChartProps) {
     <div className="relative h-[220px]">
       {!hasData && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-[1]">
-          <p className="[font-family:var(--font-body)] text-[13px] text-(--ink-300)">
+          <p className="font-body text-[13px] text-(--ink-300)">
             No revenue data yet
           </p>
         </div>

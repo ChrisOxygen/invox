@@ -34,10 +34,10 @@ function EmptyDashboard() {
         <FileText className="h-7 w-7 text-(--blue-600)" />
       </div>
       <div>
-        <h2 className="[font-family:var(--font-display)] text-[20px] font-bold text-(--ink-900) tracking-[-0.02em] mb-[6px]">
+        <h2 className="font-display text-[20px] font-bold text-(--ink-900) tracking-[-0.02em] mb-[6px]">
           Create your first invoice
         </h2>
-        <p className="[font-family:var(--font-body)] text-[14px] text-(--ink-400) max-w-[340px]">
+        <p className="font-body text-[14px] text-(--ink-400) max-w-[340px]">
           Start billing clients and tracking payments. Your dashboard will come
           alive once you create your first invoice.
         </p>
@@ -77,7 +77,7 @@ export function DashboardPageClient() {
             {/* Revenue chart */}
             <div className="bg-(--surface-base) border border-(--border-default) rounded p-(--s5)">
               <div className="flex items-center justify-between mb-4">
-                <p className="[font-family:var(--font-display)] text-[13px] font-bold text-(--ink-700) tracking-[-0.01em]">
+                <p className="font-display text-[13px] font-bold text-(--ink-700) tracking-[-0.01em]">
                   Revenue — Last 6 Months
                 </p>
               </div>
@@ -93,7 +93,7 @@ export function DashboardPageClient() {
 
             {/* Status distribution */}
             <div className="bg-(--surface-base) border border-(--border-default) rounded p-(--s5)">
-              <p className="[font-family:var(--font-display)] text-[13px] font-bold text-(--ink-700) tracking-[-0.01em] mb-4">
+              <p className="font-display text-[13px] font-bold text-(--ink-700) tracking-[-0.01em] mb-4">
                 Invoice Status
               </p>
               {isPending ? (
@@ -107,12 +107,12 @@ export function DashboardPageClient() {
           {/* Recent invoices */}
           <div>
             <div className="flex items-center justify-between mb-3">
-              <p className="[font-family:var(--font-display)] text-[13px] font-bold text-(--ink-700) tracking-[-0.01em]">
+              <p className="font-display text-[13px] font-bold text-(--ink-700) tracking-[-0.01em]">
                 Recent Invoices
               </p>
               <Link
                 href="/invoices"
-                className="[font-family:var(--font-display)] text-[12px] font-semibold text-(--blue-600) no-underline tracking-[-0.01em]"
+                className="font-display text-[12px] font-semibold text-(--blue-600) no-underline tracking-[-0.01em]"
               >
                 View all →
               </Link>

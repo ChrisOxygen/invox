@@ -20,7 +20,7 @@ const PDFPreview = dynamic(
       <div className="flex items-center justify-center w-full h-full bg-(--surface-overlay) rounded">
         <div className="text-center">
           <div className="w-9 h-9 rounded-full border-3 border-(--border-default) border-t-(--blue-600) animate-spin mx-auto mb-3" />
-          <p className="[font-family:var(--font-body)] text-[13px] text-(--ink-400)">
+          <p className="font-body text-[13px] text-(--ink-400)">
             Rendering PDF…
           </p>
         </div>
@@ -58,7 +58,7 @@ export function InvoicePreviewPageClient({ invoice }: InvoicePreviewPageClientPr
           <div className="flex items-center gap-(--s3)">
             <Link
               href={`/invoices/${invoice.id}`}
-              className="inline-flex items-center gap-1.5 [font-family:var(--font-display)] text-[13px] font-medium text-(--ink-400) no-underline px-2.5 py-1.5 rounded border border-(--border-default) transition-colors hover:text-(--ink-700) hover:border-(--border-strong)"
+              className="inline-flex items-center gap-1.5 font-display text-[13px] font-medium text-(--ink-400) no-underline px-2.5 py-1.5 rounded border border-(--border-default) transition-colors hover:text-(--ink-700) hover:border-(--border-strong)"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
               Back

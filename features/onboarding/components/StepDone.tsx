@@ -53,12 +53,12 @@ export function StepDone() {
       </div>
 
       {/* Heading */}
-      <h2 className="[font-family:var(--font-display)] font-extrabold text-[28px] text-(--ink-900) tracking-[-0.025em] mb-2">
+      <h2 className="font-display font-extrabold text-[28px] text-(--ink-900) tracking-[-0.025em] mb-2">
         {firstName ? `You're all set, ${firstName}! 🎉` : "You're all set! 🎉"}
       </h2>
 
       {/* Body */}
-      <p className="[font-family:var(--font-body)] text-[15px] text-(--ink-400) max-w-75 leading-[1.55] mx-auto">
+      <p className="font-body text-[15px] text-(--ink-400) max-w-75 leading-[1.55] mx-auto">
         Your Invox account is ready. Time to send your first invoice.
       </p>
 
@@ -75,7 +75,7 @@ export function StepDone() {
             >
               <Icon size={18} style={{ color: iconColor }} aria-hidden="true" />
             </div>
-            <span className="[font-family:var(--font-display)] font-semibold text-[12px] text-(--ink-700) leading-[1.3]">
+            <span className="font-display font-semibold text-[12px] text-(--ink-700) leading-[1.3]">
               {label}
             </span>
           </div>
@@ -84,7 +84,7 @@ export function StepDone() {
 
       {/* CTA */}
       <Button
-        className="w-full h-11 [font-family:var(--font-display)] font-semibold mt-8"
+        className="w-full h-11 font-display font-semibold mt-8"
         onClick={handleGoToDashboard}
         disabled={isPending}
       >

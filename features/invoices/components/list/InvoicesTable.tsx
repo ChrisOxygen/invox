@@ -96,11 +96,11 @@ function DueDateCell({ dueDate, status }: { dueDate: string; status: InvoiceList
     const daysOverdue = differenceInDays(new Date(), parseISO(dueDate))
     return (
       <div>
-        <span className="[font-family:var(--font-body)] text-[13px] text-(--error)">
+        <span className="font-body text-[13px] text-(--error)">
           {displayDate}
         </span>
         <br />
-        <span className="[font-family:var(--font-body)] text-[11px] text-(--error) opacity-80">
+        <span className="font-body text-[11px] text-(--error) opacity-80">
           {daysOverdue > 0 ? `${daysOverdue}d overdue` : 'Due today'}
         </span>
       </div>
@@ -108,7 +108,7 @@ function DueDateCell({ dueDate, status }: { dueDate: string; status: InvoiceList
   }
 
   return (
-    <span className="[font-family:var(--font-body)] text-[13px] text-(--ink-400)">
+    <span className="font-body text-[13px] text-(--ink-400)">
       {displayDate}
     </span>
   )
@@ -117,7 +117,7 @@ function DueDateCell({ dueDate, status }: { dueDate: string; status: InvoiceList
 const columnHelper = createColumnHelper<InvoiceListItem>()
 
 const thClassName =
-  'text-(--ink-400) [font-family:var(--font-display)] text-[11px] font-semibold tracking-[0.08em] uppercase py-3'
+  'text-(--ink-400) font-display text-[11px] font-semibold tracking-[0.08em] uppercase py-3'
 
 export function InvoicesTable({ invoices, isPending, onDuplicate, onDelete }: InvoicesTableProps) {
   const router = useRouter()
@@ -141,11 +141,11 @@ export function InvoicesTable({ invoices, isPending, onDuplicate, onDelete }: In
         const client = info.getValue()
         return (
           <div>
-            <p className="[font-family:var(--font-display)] text-[14px] font-semibold text-(--ink-900) tracking-[-0.01em] leading-[1.3]">
+            <p className="font-display text-[14px] font-semibold text-(--ink-900) tracking-[-0.01em] leading-[1.3]">
               {client.name}
             </p>
             {client.company && (
-              <p className="[font-family:var(--font-body)] text-[12px] text-(--ink-400) mt-0.5 leading-[1.2]">
+              <p className="font-body text-[12px] text-(--ink-400) mt-0.5 leading-[1.2]">
                 {client.company}
               </p>
             )}
@@ -156,7 +156,7 @@ export function InvoicesTable({ invoices, isPending, onDuplicate, onDelete }: In
     columnHelper.accessor('issueDate', {
       header: 'Issue Date',
       cell: (info) => (
-        <span className="[font-family:var(--font-body)] text-[13px] text-(--ink-400)">
+        <span className="font-body text-[13px] text-(--ink-400)">
           {formatDisplayDate(info.getValue())}
         </span>
       ),
@@ -201,7 +201,7 @@ export function InvoicesTable({ invoices, isPending, onDuplicate, onDelete }: In
                 className="min-w-42 border border-(--border-default) bg-(--surface-base) rounded"
               >
                 <DropdownMenuItem
-                  className="[font-family:var(--font-body)] text-[13px] text-(--ink-900) cursor-pointer"
+                  className="font-body text-[13px] text-(--ink-900) cursor-pointer"
                   onClick={(e) => e.stopPropagation()}
                 >
                   <Link href={`/invoices/${invoice.id}`} className="flex items-center w-full">
@@ -212,7 +212,7 @@ export function InvoicesTable({ invoices, isPending, onDuplicate, onDelete }: In
 
                 {isDraft && (
                   <DropdownMenuItem
-                    className="[font-family:var(--font-body)] text-[13px] text-(--ink-900) cursor-pointer"
+                    className="font-body text-[13px] text-(--ink-900) cursor-pointer"
                     onClick={(e) => {
                       e.stopPropagation()
                       router.push(`/invoices/${invoice.id}`)
@@ -224,7 +224,7 @@ export function InvoicesTable({ invoices, isPending, onDuplicate, onDelete }: In
                 )}
 
                 <DropdownMenuItem
-                  className="[font-family:var(--font-body)] text-[13px] text-(--ink-900) cursor-pointer"
+                  className="font-body text-[13px] text-(--ink-900) cursor-pointer"
                   onClick={(e) => e.stopPropagation()}
                 >
                   <Link href={`/invoices/${invoice.id}/preview`} className="flex items-center w-full">
@@ -234,7 +234,7 @@ export function InvoicesTable({ invoices, isPending, onDuplicate, onDelete }: In
                 </DropdownMenuItem>
 
                 <DropdownMenuItem
-                  className="[font-family:var(--font-body)] text-[13px] text-(--ink-900) cursor-pointer"
+                  className="font-body text-[13px] text-(--ink-900) cursor-pointer"
                   onClick={(e) => {
                     e.stopPropagation()
                     onDuplicate(invoice.id)
@@ -248,7 +248,7 @@ export function InvoicesTable({ invoices, isPending, onDuplicate, onDelete }: In
                   <>
                     <DropdownMenuSeparator className="bg-(--border-default)" />
                     <DropdownMenuItem
-                      className="[font-family:var(--font-body)] text-[13px] text-(--error) cursor-pointer"
+                      className="font-body text-[13px] text-(--error) cursor-pointer"
                       onClick={(e) => {
                         e.stopPropagation()
                         onDelete(invoice.id)

@@ -17,13 +17,13 @@ function InfoRow({ icon, label, value }: { icon: React.ReactNode; label: string;
     <div className="flex items-start gap-[var(--s3)]">
       <div className="mt-0.5 shrink-0 text-(--ink-300)">{icon}</div>
       <div className="min-w-0 flex-1">
-        <p className="text-xs font-semibold uppercase mb-0.5 text-(--ink-300) [font-family:var(--font-display)] tracking-[0.08em]">
+        <p className="text-xs font-semibold uppercase mb-0.5 text-(--ink-300) font-display tracking-[0.08em]">
           {label}
         </p>
         {value ? (
-          <p className="text-sm break-words text-(--ink-900) [font-family:var(--font-body)]">{value}</p>
+          <p className="text-sm break-words text-(--ink-900) font-body">{value}</p>
         ) : (
-          <p className="text-sm italic text-(--ink-300) [font-family:var(--font-body)]">Not provided</p>
+          <p className="text-sm italic text-(--ink-300) font-body">Not provided</p>
         )}
       </div>
     </div>
@@ -39,15 +39,15 @@ export function ClientInfoCard({ client, onEdit, onDelete }: {
     <div className="rounded border overflow-hidden bg-(--surface-base) border-(--border-default)">
       <div className="p-[var(--s5)] border-b border-(--border-default) flex items-start justify-between gap-[var(--s3)]">
         <div className="flex items-center gap-[var(--s4)]">
-          <div className="w-12 h-12 rounded flex items-center justify-center shrink-0 text-sm font-bold bg-(--blue-50) text-(--blue-600) [font-family:var(--font-display)] tracking-[-0.02em]">
+          <div className="w-12 h-12 rounded flex items-center justify-center shrink-0 text-sm font-bold bg-(--blue-50) text-(--blue-600) font-display tracking-[-0.02em]">
             {getInitials(client.name)}
           </div>
           <div>
-            <h3 className="font-bold leading-tight text-(--ink-900) [font-family:var(--font-display)] text-[17px] tracking-[-0.02em]">
+            <h3 className="font-bold leading-tight text-(--ink-900) font-display text-[17px] tracking-[-0.02em]">
               {client.name}
             </h3>
             {client.company && (
-              <p className="text-sm mt-0.5 text-(--ink-400) [font-family:var(--font-body)]">{client.company}</p>
+              <p className="text-sm mt-0.5 text-(--ink-400) font-body">{client.company}</p>
             )}
           </div>
         </div>

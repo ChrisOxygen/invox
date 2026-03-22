@@ -111,7 +111,7 @@ export function MarkPaidModal({ open, onOpenChange, invoice }: MarkPaidModalProp
         className="sm:max-w-[460px] bg-(--surface-base) border-(--border-default)"
       >
         <DialogHeader>
-          <DialogTitle className="[font-family:var(--font-display)] text-[17px] font-bold text-(--ink-900) tracking-[-0.02em]">
+          <DialogTitle className="font-display text-[17px] font-bold text-(--ink-900) tracking-[-0.02em]">
             Record Payment
           </DialogTitle>
           <p className="font-mono text-[12px] text-(--ink-400) mt-0.5">
@@ -121,13 +121,13 @@ export function MarkPaidModal({ open, onOpenChange, invoice }: MarkPaidModalProp
 
         {/* Outstanding balance summary */}
         <div className="rounded px-(--s4) py-(--s3) bg-(--surface-raised) border border-(--border-default)">
-          <p className="[font-family:var(--font-body)] text-[12px] text-(--ink-400)">
+          <p className="font-body text-[12px] text-(--ink-400)">
             Outstanding balance
           </p>
-          <p className="[font-family:var(--font-mono)] text-[22px] font-bold text-(--ink-900) tracking-[-0.03em] mt-0.5">
+          <p className="font-mono text-[22px] font-bold text-(--ink-900) tracking-[-0.03em] mt-0.5">
             {formatCurrency(remaining, invoice.currency)}
           </p>
-          <p className="[font-family:var(--font-body)] text-[12px] text-(--ink-400) mt-1">
+          <p className="font-body text-[12px] text-(--ink-400) mt-1">
             {formatCurrency(totalPaid, invoice.currency)} paid of{' '}
             {formatCurrency(invoice.total, invoice.currency)} total ({paidPercent}%)
           </p>
@@ -136,44 +136,44 @@ export function MarkPaidModal({ open, onOpenChange, invoice }: MarkPaidModalProp
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-(--s4)">
           {/* Amount */}
           <div className="space-y-(--s1)">
-            <Label className="[font-family:var(--font-display)] text-[12px] font-semibold text-(--ink-900) tracking-[-0.01em]">
+            <Label className="font-display text-[12px] font-semibold text-(--ink-900) tracking-[-0.01em]">
               Amount
             </Label>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none select-none [font-family:var(--font-mono)] text-[14px] text-(--ink-400)">
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none select-none font-mono text-[14px] text-(--ink-400)">
                 ₦
               </span>
               <Input
                 type="number"
                 step="0.01"
                 min="0.01"
-                className={`pl-7 [font-family:var(--font-mono)] text-[14px] rounded ${errors.amount ? 'border-(--error)' : 'border-(--border-strong)'}`}
+                className={`pl-7 font-mono text-[14px] rounded ${errors.amount ? 'border-(--error)' : 'border-(--border-strong)'}`}
                 {...register('amount', { valueAsNumber: true })}
               />
             </div>
             {errors.amount && (
-              <p className="[font-family:var(--font-body)] text-[11px] text-(--error)">{errors.amount.message}</p>
+              <p className="font-body text-[11px] text-(--error)">{errors.amount.message}</p>
             )}
           </div>
 
           {/* Date Paid */}
           <div className="space-y-(--s1)">
-            <Label className="[font-family:var(--font-display)] text-[12px] font-semibold text-(--ink-900) tracking-[-0.01em]">
+            <Label className="font-display text-[12px] font-semibold text-(--ink-900) tracking-[-0.01em]">
               Date Paid
             </Label>
             <Input
               type="date"
-              className={`[font-family:var(--font-body)] text-[14px] rounded ${errors.datePaid ? 'border-(--error)' : 'border-(--border-strong)'}`}
+              className={`font-body text-[14px] rounded ${errors.datePaid ? 'border-(--error)' : 'border-(--border-strong)'}`}
               {...register('datePaid')}
             />
             {errors.datePaid && (
-              <p className="[font-family:var(--font-body)] text-[11px] text-(--error)">{errors.datePaid.message}</p>
+              <p className="font-body text-[11px] text-(--error)">{errors.datePaid.message}</p>
             )}
           </div>
 
           {/* Payment Method */}
           <div className="space-y-(--s1)">
-            <Label className="[font-family:var(--font-display)] text-[12px] font-semibold text-(--ink-900) tracking-[-0.01em]">
+            <Label className="font-display text-[12px] font-semibold text-(--ink-900) tracking-[-0.01em]">
               Payment Method
             </Label>
             <Select
@@ -181,7 +181,7 @@ export function MarkPaidModal({ open, onOpenChange, invoice }: MarkPaidModalProp
               onValueChange={(val) => setValue('method', val as ZCreatePayment['method'], { shouldValidate: true })}
             >
               <SelectTrigger
-                className={`[font-family:var(--font-body)] text-[14px] rounded ${errors.method ? 'border-(--error)' : 'border-(--border-strong)'}`}
+                className={`font-body text-[14px] rounded ${errors.method ? 'border-(--error)' : 'border-(--border-strong)'}`}
               >
                 <SelectValue placeholder="Select method" />
               </SelectTrigger>
@@ -190,7 +190,7 @@ export function MarkPaidModal({ open, onOpenChange, invoice }: MarkPaidModalProp
                   <SelectItem
                     key={value}
                     value={value}
-                    className="[font-family:var(--font-body)] text-[14px] text-(--ink-900)"
+                    className="font-body text-[14px] text-(--ink-900)"
                   >
                     {label}
                   </SelectItem>
@@ -198,33 +198,33 @@ export function MarkPaidModal({ open, onOpenChange, invoice }: MarkPaidModalProp
               </SelectContent>
             </Select>
             {errors.method && (
-              <p className="[font-family:var(--font-body)] text-[11px] text-(--error)">{errors.method.message}</p>
+              <p className="font-body text-[11px] text-(--error)">{errors.method.message}</p>
             )}
           </div>
 
           {/* Note */}
           <div className="space-y-(--s1)">
-            <Label className="[font-family:var(--font-display)] text-[12px] font-semibold text-(--ink-900) tracking-[-0.01em]">
+            <Label className="font-display text-[12px] font-semibold text-(--ink-900) tracking-[-0.01em]">
               Note{' '}
               <span className="font-normal text-(--ink-300)">(optional)</span>
             </Label>
             <Textarea
               rows={2}
               placeholder="e.g. Reference: TXN-00432"
-              className="[font-family:var(--font-body)] text-[14px] resize-none border-(--border-strong) rounded"
+              className="font-body text-[14px] resize-none border-(--border-strong) rounded"
               {...register('note')}
             />
           </div>
 
           {/* Running total */}
           <div className="rounded px-(--s3) py-(--s2) bg-(--blue-50) border border-(--blue-100)">
-            <p className="[font-family:var(--font-body)] text-[12px] text-(--blue-700)">
+            <p className="font-body text-[12px] text-(--blue-700)">
               After this payment:{' '}
-              <span className="[font-family:var(--font-mono)] font-semibold">
+              <span className="font-mono font-semibold">
                 {formatCurrency(Math.min(newTotalPaid, invoice.total), invoice.currency)}
               </span>{' '}
               paid of{' '}
-              <span className="[font-family:var(--font-mono)]">
+              <span className="font-mono">
                 {formatCurrency(invoice.total, invoice.currency)}
               </span>{' '}
               ({newPercent}%)
@@ -237,14 +237,14 @@ export function MarkPaidModal({ open, onOpenChange, invoice }: MarkPaidModalProp
               variant="ghost"
               onClick={() => onOpenChange(false)}
               disabled={mutation.isPending}
-              className="[font-family:var(--font-display)] text-[13px] text-(--ink-400)"
+              className="font-display text-[13px] text-(--ink-400)"
             >
               Cancel
             </Button>
             <Button
               type="submit"
               disabled={mutation.isPending}
-              className="gap-1.5 bg-(--blue-600) text-white [font-family:var(--font-display)] text-[13px] rounded"
+              className="gap-1.5 bg-(--blue-600) text-white font-display text-[13px] rounded"
             >
               {mutation.isPending ? (
                 <>

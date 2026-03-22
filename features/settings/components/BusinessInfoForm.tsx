@@ -15,7 +15,7 @@ interface BusinessInfoFormProps {
 function FieldError({ message }: { message?: string }) {
   if (!message) return null
   return (
-    <p className="text-[11px] text-(--error) [font-family:var(--font-body)]" role="alert">
+    <p className="text-[11px] text-(--error) font-body" role="alert">
       {message}
     </p>
   )
@@ -24,7 +24,7 @@ function FieldError({ message }: { message?: string }) {
 function SubsectionLabel({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex items-center gap-3 pt-2">
-      <span className="text-[11px] font-semibold uppercase tracking-[0.08em] text-(--ink-300) [font-family:var(--font-display)] whitespace-nowrap">
+      <span className="text-[11px] font-semibold uppercase tracking-[0.08em] text-(--ink-300) font-display whitespace-nowrap">
         {children}
       </span>
       <div className="h-px flex-1 bg-(--border-default)" />
@@ -63,9 +63,9 @@ export function BusinessInfoForm({ defaultValues }: BusinessInfoFormProps) {
   }
 
   const inputClass =
-    'h-10 w-full rounded border border-(--border-default) bg-(--surface-base) px-3.5 text-[14px] text-(--ink-900) placeholder:text-(--ink-300) transition-colors duration-200 focus:border-(--blue-600) focus:outline-none focus:ring-2 focus:ring-(--blue-600)/20 [font-family:var(--font-body)]'
+    'h-10 w-full rounded border border-(--border-default) bg-(--surface-base) px-3.5 text-[14px] text-(--ink-900) placeholder:text-(--ink-300) transition-colors duration-200 focus:border-(--blue-600) focus:outline-none focus:ring-2 focus:ring-(--blue-600)/20 font-body'
   const labelClass =
-    'text-[12px] font-semibold text-(--ink-700) [font-family:var(--font-display)]'
+    'text-[12px] font-semibold text-(--ink-700) font-display'
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate>
@@ -228,7 +228,7 @@ export function BusinessInfoForm({ defaultValues }: BusinessInfoFormProps) {
           <button
             type="submit"
             disabled={isPending}
-            className="flex h-9 items-center justify-center gap-2 rounded bg-(--blue-600) px-5 text-[13px] font-semibold text-white transition-colors duration-200 hover:bg-(--blue-700) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--blue-600) focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 [font-family:var(--font-display)]"
+            className="flex h-9 items-center justify-center gap-2 rounded bg-(--blue-600) px-5 text-[13px] font-semibold text-white transition-colors duration-200 hover:bg-(--blue-700) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--blue-600) focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 font-display"
           >
             {isPending && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
             Save changes

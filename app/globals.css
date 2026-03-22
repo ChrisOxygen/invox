@@ -145,6 +145,30 @@
 * {
   border-color: var(--border-default);
   box-sizing: border-box;
+  scrollbar-width: thin;
+  scrollbar-color: var(--ink-200) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: var(--ink-200);
+  border-radius: 999px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background-color: var(--blue-400);
+}
+
+button, [role="button"], [type="button"], [type="submit"], [type="reset"] {
+  cursor: pointer;
 }
 
 body {

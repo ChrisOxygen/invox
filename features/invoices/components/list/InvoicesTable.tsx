@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { format, parseISO, differenceInDays } from 'date-fns'
+import { format, parseISO } from 'date-fns'
 import {
   MoreHorizontal,
   Eye,
@@ -65,8 +65,8 @@ function SkeletonRows() {
           <TableCell>
             <Skeleton className="h-3.5 w-24" />
           </TableCell>
-          <TableCell className="text-right">
-            <Skeleton className="h-3.5 w-20 ml-auto" />
+          <TableCell>
+            <Skeleton className="h-3.5 w-20" />
           </TableCell>
           <TableCell>
             <Skeleton className="h-5 w-16 rounded-full" />
@@ -93,17 +93,10 @@ function DueDateCell({ dueDate, status }: { dueDate: string; status: InvoiceList
   const displayDate = formatDisplayDate(dueDate)
 
   if (isOverdue) {
-    const daysOverdue = differenceInDays(new Date(), parseISO(dueDate))
     return (
-      <div>
-        <span className="font-body text-[13px] text-(--error)">
-          {displayDate}
-        </span>
-        <br />
-        <span className="font-body text-[11px] text-(--error) opacity-80">
-          {daysOverdue > 0 ? `${daysOverdue}d overdue` : 'Due today'}
-        </span>
-      </div>
+      <span className="font-body text-[13px] text-(--error)">
+        {displayDate}
+      </span>
     )
   }
 
@@ -170,7 +163,7 @@ export function InvoicesTable({ invoices, isPending, onDuplicate, onDelete }: In
     columnHelper.accessor('total', {
       header: 'Amount',
       cell: (info) => (
-        <span className="block text-right font-mono text-[13px] font-medium text-(--ink-900)">
+        <span className="font-mono text-[13px] font-medium text-(--ink-900)">
           {formatCurrency(info.getValue(), info.row.original.currency)}
         </span>
       ),

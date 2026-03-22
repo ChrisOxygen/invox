@@ -197,49 +197,50 @@ export function InvoiceForm({ invoice, onSuccess }: InvoiceFormProps) {
           <div className="space-y-8">
 
             {/* Section: Header */}
-            <div className="rounded border p-6 border-(--border-default) bg-(--surface-base)">
-              <p className="mb-5 text-sm font-semibold font-display text-(--ink-900)">
-                Invoice Details
-              </p>
-
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-                {/* Invoice number preview */}
-                <div className="space-y-1.5">
-                  <label className="block text-xs font-semibold uppercase font-display text-(--ink-400) tracking-[0.08em]">
+            <div className="rounded border border-(--border-default) bg-(--surface-base)">
+              <div className="flex items-center justify-between px-6 py-4 border-b border-(--border-default)">
+                <p className="text-sm font-semibold font-display text-(--ink-900)">
+                  Invoice Details
+                </p>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-semibold uppercase font-display text-(--ink-400) tracking-[0.08em]">
                     Invoice #
-                  </label>
-                  <div
-                    className="flex h-10 items-center rounded px-3 text-sm border border-(--border-default) bg-(--surface-raised) font-mono"
+                  </span>
+                  <span
+                    className="font-mono text-sm font-medium"
                     style={{ color: invoice ? 'var(--blue-600)' : 'var(--ink-300)' }}
                   >
                     {invoice?.invoiceNumber ?? 'Auto-generated'}
-                  </div>
+                  </span>
                 </div>
+              </div>
 
-                {/* Issue date */}
-                <FormField
-                  control={form.control}
-                  name="issueDate"
-                  render={({ field }) => (
-                    <FormItem className="space-y-1.5">
-                      <FormLabel className="text-xs font-semibold uppercase font-display text-(--ink-400) tracking-[0.08em]">
-                        Issue Date
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          {...field}
-                          type="date"
-                          disabled={isPending}
-                          className="font-body"
-                        />
-                      </FormControl>
-                      <FormMessage className="text-xs text-(--error)" />
-                    </FormItem>
-                  )}
-                />
+              <div className="p-6 space-y-4">
+                {/* Dates row */}
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                  {/* Issue date */}
+                  <FormField
+                    control={form.control}
+                    name="issueDate"
+                    render={({ field }) => (
+                      <FormItem className="space-y-1.5">
+                        <FormLabel className="text-xs font-semibold uppercase font-display text-(--ink-400) tracking-[0.08em]">
+                          Issue Date
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            {...field}
+                            type="date"
+                            disabled={isPending}
+                            className="rounded font-body"
+                          />
+                        </FormControl>
+                        <FormMessage className="text-xs text-(--error)" />
+                      </FormItem>
+                    )}
+                  />
 
-                {/* Due date */}
-                <div className="space-y-1.5">
+                  {/* Due date */}
                   <FormField
                     control={form.control}
                     name="dueDate"
@@ -253,26 +254,27 @@ export function InvoiceForm({ invoice, onSuccess }: InvoiceFormProps) {
                             {...field}
                             type="date"
                             disabled={isPending}
-                            className="font-body"
+                            className="rounded font-body"
                           />
                         </FormControl>
                         <FormMessage className="text-xs text-(--error)" />
                       </FormItem>
                     )}
                   />
-                  {/* Presets */}
-                  <div className="flex flex-wrap gap-1.5 pt-1">
-                    {DUE_DATE_PRESETS.map((preset) => (
-                      <button
-                        key={preset.label}
-                        type="button"
-                        onClick={() => setDueDatePreset(preset.days)}
-                        className="rounded px-2 py-0.5 text-xs transition-colors hover:bg-(--blue-50) hover:text-(--blue-600) font-body text-(--ink-400) border border-(--border-default) bg-(--surface-base)"
-                      >
-                        {preset.label}
-                      </button>
-                    ))}
-                  </div>
+                </div>
+
+                {/* Presets */}
+                <div className="flex flex-wrap gap-1.5">
+                  {DUE_DATE_PRESETS.map((preset) => (
+                    <button
+                      key={preset.label}
+                      type="button"
+                      onClick={() => setDueDatePreset(preset.days)}
+                      className="rounded px-2 py-0.5 text-xs transition-colors hover:bg-(--blue-50) hover:text-(--blue-600) font-body text-(--ink-400) border border-(--border-default) bg-(--surface-base)"
+                    >
+                      {preset.label}
+                    </button>
+                  ))}
                 </div>
               </div>
             </div>
@@ -392,7 +394,7 @@ export function InvoiceForm({ invoice, onSuccess }: InvoiceFormProps) {
                           value={field.value ?? ''}
                           placeholder="Payment terms, bank account details, thank you note..."
                           rows={3}
-                          className="resize-none font-body"
+                          className="rounded resize-none font-body"
                           disabled={isPending}
                         />
                       </FormControl>
@@ -416,7 +418,7 @@ export function InvoiceForm({ invoice, onSuccess }: InvoiceFormProps) {
                           value={field.value ?? ''}
                           placeholder="Private notes — not shown on the invoice..."
                           rows={2}
-                          className="resize-none font-body"
+                          className="rounded resize-none font-body"
                           disabled={isPending}
                         />
                       </FormControl>
@@ -436,7 +438,7 @@ export function InvoiceForm({ invoice, onSuccess }: InvoiceFormProps) {
                 variant="ghost"
                 onClick={() => router.back()}
                 disabled={isPending}
-                className="font-display"
+                className="rounded font-display"
               >
                 Cancel
               </Button>
@@ -445,7 +447,7 @@ export function InvoiceForm({ invoice, onSuccess }: InvoiceFormProps) {
                   type="submit"
                   variant="outline"
                   disabled={isPending}
-                  className="font-display"
+                  className="rounded font-display"
                 >
                   {isPending && createMutation.isPending ? (
                     <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Saving...</>
@@ -457,7 +459,7 @@ export function InvoiceForm({ invoice, onSuccess }: InvoiceFormProps) {
                   type="button"
                   disabled={isPending}
                   onClick={form.handleSubmit((v) => onSubmit(v, true))}
-                  className="bg-(--blue-600) font-display"
+                  className="rounded bg-(--blue-600) font-display"
                 >
                   {isPending && updateMutation.isPending ? (
                     <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Saving...</>
@@ -513,7 +515,7 @@ export function InvoiceForm({ invoice, onSuccess }: InvoiceFormProps) {
 
               {/* Draft badge */}
               <div className="mt-5">
-                <span className="rounded-full px-3 py-1 text-xs font-semibold bg-(--blue-50) text-(--blue-700) font-display">
+                <span className="rounded px-3 py-1 text-xs font-semibold bg-(--blue-50) text-(--blue-700) font-display">
                   {isEditing ? invoice?.status : 'DRAFT'}
                 </span>
               </div>

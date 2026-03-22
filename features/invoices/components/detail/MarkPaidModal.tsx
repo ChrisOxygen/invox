@@ -124,7 +124,7 @@ export function MarkPaidModal({ open, onOpenChange, invoice }: MarkPaidModalProp
           <p className="font-body text-[12px] text-(--ink-400)">
             Outstanding balance
           </p>
-          <p className="font-mono text-[22px] font-bold text-(--ink-900) tracking-[-0.03em] mt-0.5">
+          <p className="font-mono text-[22px] text-(--ink-900) tracking-[-0.03em] mt-0.5">
             {formatCurrency(remaining, invoice.currency)}
           </p>
           <p className="font-body text-[12px] text-(--ink-400) mt-1">
@@ -220,7 +220,7 @@ export function MarkPaidModal({ open, onOpenChange, invoice }: MarkPaidModalProp
           <div className="rounded px-(--s3) py-(--s2) bg-(--blue-50) border border-(--blue-100)">
             <p className="font-body text-[12px] text-(--blue-700)">
               After this payment:{' '}
-              <span className="font-mono font-semibold">
+              <span className="font-mono">
                 {formatCurrency(Math.min(newTotalPaid, invoice.total), invoice.currency)}
               </span>{' '}
               paid of{' '}

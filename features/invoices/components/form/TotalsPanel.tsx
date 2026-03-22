@@ -155,7 +155,7 @@ export function TotalsPanel({
         <span className="font-semibold font-display text-[15px] text-(--ink-900)">
           Total
         </span>
-        <span className="font-mono text-[20px] font-semibold text-(--ink-900) tracking-[-0.02em]">
+        <span className="font-mono text-[20px] text-(--ink-900) tracking-[-0.02em]">
           {formatCurrency(total, currency)}
         </span>
       </div>

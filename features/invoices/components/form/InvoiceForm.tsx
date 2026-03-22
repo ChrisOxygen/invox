@@ -481,7 +481,7 @@ export function InvoiceForm({ invoice, onSuccess }: InvoiceFormProps) {
               {/* Total amount */}
               <div className="mb-4">
                 <div
-                  className="font-mono font-semibold text-(--ink-900) tracking-[-0.04em]"
+                  className="font-mono text-(--ink-900) tracking-[-0.04em]"
                   style={{ fontSize: '28px' }}
                 >
                   {formatCurrency(totals.total, watchedCurrency ?? 'NGN')}

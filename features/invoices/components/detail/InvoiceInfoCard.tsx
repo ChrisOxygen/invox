@@ -23,7 +23,7 @@ export function InvoiceInfoCard({ invoice }: InvoiceInfoCardProps) {
           <p className="font-body text-[11px] font-semibold tracking-[0.08em] uppercase text-(--ink-300) mb-1">
             Invoice
           </p>
-          <span className="font-mono text-[22px] font-bold text-(--blue-600) tracking-[-0.03em]">
+          <span className="font-mono text-[22px] text-(--blue-600) tracking-[-0.03em]">
             {invoice.invoiceNumber}
           </span>
         </div>
@@ -167,7 +167,7 @@ export function InvoiceInfoCard({ invoice }: InvoiceInfoCardProps) {
             <span className="font-display text-[15px] font-bold text-(--ink-900) tracking-[-0.02em]">
               Total
             </span>
-            <span className="font-mono text-[20px] font-bold text-(--ink-900) tracking-[-0.03em]">
+            <span className="font-mono text-[20px] text-(--ink-900) tracking-[-0.03em]">
               {formatCurrency(invoice.total, invoice.currency)}
             </span>
           </div>

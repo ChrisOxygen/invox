@@ -39,7 +39,7 @@ function PaymentRow({ payment, currency }: { payment: InvoicePayment; currency: 
           )}
         </div>
       </div>
-      <span className="font-mono text-[13px] font-semibold text-(--success) shrink-0">
+      <span className="font-mono text-[13px] text-(--success) shrink-0">
         +{formatCurrency(payment.amount, currency)}
       </span>
     </div>
@@ -116,7 +116,7 @@ export function PaymentLog({ invoice, onRecordPayment }: PaymentLogProps) {
             <span className="font-body text-[12px] text-(--ink-400)">
               Total paid ({paidPercent}%)
             </span>
-            <span className="font-mono text-[14px] font-semibold text-(--ink-900)">
+            <span className="font-mono text-[14px] text-(--ink-900)">
               {formatCurrency(totalPaid, invoice.currency)}
             </span>
           </div>

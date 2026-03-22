@@ -218,7 +218,7 @@ function DeleteAccountSection() {
                 <div className="mt-2 flex flex-col gap-1.5">
                   <label htmlFor="deleteConfirm" className="text-[12px] text-(--ink-700) font-body">
                     Type{' '}
-                    <span className="font-semibold text-(--error) font-mono">DELETE</span>
+                    <span className="text-(--error) font-mono">DELETE</span>
                     {' '}to confirm
                   </label>
                   <input

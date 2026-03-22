@@ -27,7 +27,7 @@ function StatCard({ label, value, accentColor, isMono = false, subLabel }: {
         {label}
       </p>
       <p
-        className="text-2xl font-bold leading-tight"
+        className="text-2xl leading-tight"
         style={{
           color: accentColor,
           fontFamily: isMono ? 'var(--font-mono)' : 'var(--font-display)',

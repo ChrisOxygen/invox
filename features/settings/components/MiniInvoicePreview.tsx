@@ -67,7 +67,7 @@ export function MiniInvoicePreview({
           </div>
           <div className="text-right">
             <p className="text-[10px] text-(--ink-300) font-body uppercase tracking-[0.05em]">Invoice</p>
-            <p className="text-[12px] font-semibold font-mono mt-0.5" style={{ color }}>INV-2025-0001</p>
+            <p className="text-[12px] font-mono mt-0.5" style={{ color }}>INV-2025-0001</p>
             <p className="text-[11px] text-(--ink-400) font-body mt-0.5">Due 15 Apr 2025</p>
           </div>
         </div>
@@ -101,7 +101,7 @@ export function MiniInvoicePreview({
         {/* Total */}
         <div className="flex items-center justify-between">
           <span className="text-[13px] font-bold text-(--ink-900) font-display">Total</span>
-          <span className="font-mono text-[15px] font-bold text-(--ink-900)">₦275,000</span>
+          <span className="font-mono text-[15px] text-(--ink-900)">₦275,000</span>
         </div>
 
         {/* Status badge */}

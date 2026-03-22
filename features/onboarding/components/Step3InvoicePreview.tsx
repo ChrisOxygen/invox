@@ -123,7 +123,7 @@ export function Step3InvoicePreview() {
             </div>
             <div className="flex items-center gap-8 pt-1.5 border-t border-(--border-default)">
               <span className="font-display font-bold text-[16px] text-(--ink-900)">Total Due</span>
-              <span className="font-mono font-bold text-[18px] text-(--blue-600)">₦450,000.00</span>
+              <span className="font-mono text-[18px] text-(--blue-600)">₦450,000.00</span>
             </div>
           </div>
 

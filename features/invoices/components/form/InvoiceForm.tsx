@@ -354,7 +354,7 @@ export function InvoiceForm({ invoice, onSuccess }: InvoiceFormProps) {
                   variant="ghost"
                   size="sm"
                   onClick={() => append({ description: '', quantity: 1, unitPrice: 0, subtotal: 0 })}
-                  className="h-8 gap-1.5 text-sm text-(--blue-600) font-body"
+                  className="rounded h-8 gap-1.5 text-sm text-(--blue-600) font-body"
                 >
                   <Plus size={13} />
                   Add item

@@ -47,7 +47,7 @@ export function AppHeader() {
   const isClientsPage = pathname === "/clients";
 
   return (
-    <header className="flex shrink-0 items-center gap-4  py-4">
+    <header className="flex shrink-0 items-center gap-4  py-4 pr-4">
       {/* Page title + description */}
       <div className="flex flex-col gap-0.5">
         <h1 className="text-[20px] font-bold leading-tight tracking-[-0.025em] font-display text-(--ink-900)">
@@ -79,7 +79,9 @@ export function AppHeader() {
           <Button
             size="sm"
             className="h-9 gap-1.5 rounded px-4"
-            onClick={() => window.dispatchEvent(new CustomEvent("invox:add-client"))}
+            onClick={() =>
+              window.dispatchEvent(new CustomEvent("invox:add-client"))
+            }
           >
             <Plus className="size-3.5" />
             Add Client

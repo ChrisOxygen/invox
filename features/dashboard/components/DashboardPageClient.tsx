@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Plus, FileText } from "lucide-react";
 import { buttonVariants } from "@/shared/components/ui/button";
 import { Skeleton } from "@/shared/components/ui/skeleton";
+import { ScrollArea } from "@/shared/components/ui/scroll-area";
 import { useDashboardStats } from "../hooks/use-dashboard-stats";
 import { StatsCards } from "./StatsCards";
 import { DashboardRecentInvoices } from "./DashboardRecentInvoices";
@@ -59,71 +60,73 @@ export function DashboardPageClient() {
   const isEmpty = !isPending && (stats?.totalInvoices ?? 0) === 0;
 
   return (
-    <div className="flex flex-col gap-[var(--s6)]">
-      {/* Page header */}
+    <ScrollArea className="h-[calc(100vh-90px)]">
+      <div className="flex flex-col gap-(--s6) py-5 pr-4">
+        {/* Page header */}
 
-      {/* Stats cards */}
-      <StatsCards stats={stats} isPending={isPending} />
+        {/* Stats cards */}
+        <StatsCards stats={stats} isPending={isPending} />
 
-      {/* Empty state */}
-      {isEmpty ? (
-        <div className="bg-(--surface-base) border border-(--border-default) rounded">
-          <EmptyDashboard />
-        </div>
-      ) : (
-        <>
-          {/* Charts row */}
-          <div className="grid grid-cols-1 gap-5 lg:grid-cols-[3fr_2fr]">
-            {/* Revenue chart */}
-            <div className="bg-(--surface-base) border border-(--border-default) rounded p-(--s5)">
-              <div className="flex items-center justify-between mb-4">
-                <p className="font-display text-[13px] font-bold text-(--ink-700) tracking-[-0.01em]">
-                  Revenue — Last 6 Months
-                </p>
+        {/* Empty state */}
+        {isEmpty ? (
+          <div className="bg-(--surface-base) border border-(--border-default) rounded">
+            <EmptyDashboard />
+          </div>
+        ) : (
+          <>
+            {/* Charts row */}
+            <div className="grid grid-cols-1 gap-5 lg:grid-cols-[3fr_2fr]">
+              {/* Revenue chart */}
+              <div className="bg-(--surface-base) border border-(--border-default) rounded p-(--s5)">
+                <div className="flex items-center justify-between mb-4">
+                  <p className="font-display text-[13px] font-bold text-(--ink-700) tracking-[-0.01em]">
+                    Revenue — Last 6 Months
+                  </p>
+                </div>
+                {isPending ? (
+                  <Skeleton className="h-55 w-full" />
+                ) : (
+                  <RevenueBarChart
+                    data={stats?.monthlyRevenue ?? []}
+                    currency={stats?.currency ?? "NGN"}
+                  />
+                )}
               </div>
-              {isPending ? (
-                <Skeleton className="h-55 w-full" />
-              ) : (
-                <RevenueBarChart
-                  data={stats?.monthlyRevenue ?? []}
-                  currency={stats?.currency ?? "NGN"}
-                />
-              )}
+
+              {/* Status distribution */}
+              <div className="bg-(--surface-base) border border-(--border-default) rounded p-(--s5)">
+                <p className="font-display text-[13px] font-bold text-(--ink-700) tracking-[-0.01em] mb-4">
+                  Invoice Status
+                </p>
+                {isPending ? (
+                  <Skeleton className="h-55 w-full" />
+                ) : (
+                  <StatusDonutChart data={stats?.statusCounts ?? []} />
+                )}
+              </div>
             </div>
 
-            {/* Status distribution */}
-            <div className="bg-(--surface-base) border border-(--border-default) rounded p-(--s5)">
-              <p className="font-display text-[13px] font-bold text-(--ink-700) tracking-[-0.01em] mb-4">
-                Invoice Status
-              </p>
-              {isPending ? (
-                <Skeleton className="h-55 w-full" />
-              ) : (
-                <StatusDonutChart data={stats?.statusCounts ?? []} />
-              )}
+            {/* Recent invoices */}
+            <div>
+              <div className="flex items-center justify-between mb-3">
+                <p className="font-display text-[13px] font-bold text-(--ink-700) tracking-[-0.01em]">
+                  Recent Invoices
+                </p>
+                <Link
+                  href="/invoices"
+                  className="font-display text-[12px] font-semibold text-(--blue-600) no-underline tracking-[-0.01em]"
+                >
+                  View all →
+                </Link>
+              </div>
+              <DashboardRecentInvoices
+                invoices={stats?.recentInvoices ?? []}
+                isPending={isPending}
+              />
             </div>
-          </div>
-
-          {/* Recent invoices */}
-          <div>
-            <div className="flex items-center justify-between mb-3">
-              <p className="font-display text-[13px] font-bold text-(--ink-700) tracking-[-0.01em]">
-                Recent Invoices
-              </p>
-              <Link
-                href="/invoices"
-                className="font-display text-[12px] font-semibold text-(--blue-600) no-underline tracking-[-0.01em]"
-              >
-                View all →
-              </Link>
-            </div>
-            <DashboardRecentInvoices
-              invoices={stats?.recentInvoices ?? []}
-              isPending={isPending}
-            />
-          </div>
-        </>
-      )}
-    </div>
+          </>
+        )}
+      </div>
+    </ScrollArea>
   );
 }

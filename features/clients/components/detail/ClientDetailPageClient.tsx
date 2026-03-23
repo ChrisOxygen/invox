@@ -1,12 +1,12 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import Link from 'next/link'
-import { useRouter } from 'next/navigation'
-import { ArrowLeft, Edit, Trash2, Loader2 } from 'lucide-react'
-import { toast } from 'sonner'
-import { Button } from '@/shared/components/ui/button'
-import { Skeleton } from '@/shared/components/ui/skeleton'
+import { useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { ArrowLeft, Edit, Trash2, Loader2 } from "lucide-react";
+import { toast } from "sonner";
+import { Button } from "@/shared/components/ui/button";
+import { Skeleton } from "@/shared/components/ui/skeleton";
 import {
   Dialog,
   DialogContent,
@@ -14,13 +14,14 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/shared/components/ui/dialog'
-import { useClient } from '../../hooks/use-client'
-import { useDeleteClient } from '../../hooks/use-delete-client'
-import { ClientSheet } from '../ClientSheet'
-import { ClientStatCards } from './ClientStatCards'
-import { ClientInfoCard } from './ClientInfoCard'
-import { ClientInvoiceHistory } from './ClientInvoiceHistory'
+} from "@/shared/components/ui/dialog";
+import { ScrollArea } from "@/shared/components/ui/scroll-area";
+import { useClient } from "../../hooks/use-client";
+import { useDeleteClient } from "../../hooks/use-delete-client";
+import { ClientSheet } from "../ClientSheet";
+import { ClientStatCards } from "./ClientStatCards";
+import { ClientInfoCard } from "./ClientInfoCard";
+import { ClientInvoiceHistory } from "./ClientInvoiceHistory";
 
 function DetailSkeleton() {
   return (
@@ -30,14 +31,18 @@ function DetailSkeleton() {
         <Skeleton className="h-8 w-48 rounded" />
       </div>
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-[var(--s4)]">
-        {[...Array(4)].map((_, i) => <Skeleton key={i} className="h-24 rounded" />)}
+        {[...Array(4)].map((_, i) => (
+          <Skeleton key={i} className="h-24 rounded" />
+        ))}
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-[var(--s5)]">
         <Skeleton className="h-64 rounded" />
-        <div className="lg:col-span-2"><Skeleton className="h-64 rounded" /></div>
+        <div className="lg:col-span-2">
+          <Skeleton className="h-64 rounded" />
+        </div>
       </div>
     </div>
-  )
+  );
 }
 
 function NotFound() {
@@ -49,45 +54,54 @@ function NotFound() {
       <p className="text-sm mb-[var(--s6)] text-center max-w-xs text-(--ink-400) font-body">
         This client may have been deleted or does not belong to your account.
       </p>
-      <Link href="/clients" className="inline-flex items-center gap-1.5 rounded border px-2.5 py-1 text-[0.8rem] font-medium transition-colors hover:bg-muted border-(--border-strong) font-display">
-        <ArrowLeft className="h-4 w-4" />Back to Clients
+      <Link
+        href="/clients"
+        className="inline-flex items-center gap-1.5 rounded border px-2.5 py-1 text-[0.8rem] font-medium transition-colors hover:bg-muted border-(--border-strong) font-display"
+      >
+        <ArrowLeft className="h-4 w-4" />
+        Back to Clients
       </Link>
     </div>
-  )
+  );
 }
 
 export function ClientDetailPageClient({ id }: { id: string }) {
-  const router = useRouter()
-  const [editOpen, setEditOpen] = useState(false)
-  const [deleteOpen, setDeleteOpen] = useState(false)
+  const router = useRouter();
+  const [editOpen, setEditOpen] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
 
-  const { data: client, isPending, isError } = useClient(id)
-  const deleteMutation = useDeleteClient()
+  const { data: client, isPending, isError } = useClient(id);
+  const deleteMutation = useDeleteClient();
 
   const handleDeleteConfirm = () => {
-    if (!client) return
+    if (!client) return;
     deleteMutation.mutate(client.id, {
       onSuccess: () => {
-        toast.success('Client deleted')
-        router.push('/clients')
+        toast.success("Client deleted");
+        router.push("/clients");
       },
       onError: (err) => {
-        toast.error(err.message || 'Failed to delete client')
-        setDeleteOpen(false)
+        toast.error(err.message || "Failed to delete client");
+        setDeleteOpen(false);
       },
-    })
-  }
+    });
+  };
 
-  if (isPending) return <DetailSkeleton />
-  if (isError || !client) return <NotFound />
+  if (isPending) return <DetailSkeleton />;
+  if (isError || !client) return <NotFound />;
 
   return (
-    <div className="space-y-[var(--s6)]">
+    <ScrollArea className="h-[calc(100vh-90px)]">
+      <div className="space-y-(--s6) p-(--s6)">
       {/* Top bar */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-[var(--s4)]">
-        <div className="flex items-center gap-[var(--s3)]">
-          <Link href="/clients" className="inline-flex items-center gap-1.5 px-2 h-8 rounded text-[0.8rem] font-medium transition-colors hover:bg-muted text-(--ink-400) font-display text-[13px]">
-            <ArrowLeft className="h-4 w-4" />Clients
+        <div className="flex items-center gap-(--s3)">
+          <Link
+            href="/clients"
+            className="inline-flex items-center gap-1.5 px-2 h-8 rounded text-[0.8rem] font-medium transition-colors hover:bg-muted text-(--ink-400) font-display text-[13px]"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Clients
           </Link>
           <span className="text-(--border-strong)">/</span>
           <h1 className="font-bold truncate max-w-[200px] sm:max-w-none text-(--ink-900) font-display text-[20px] tracking-[-0.025em]">
@@ -96,11 +110,23 @@ export function ClientDetailPageClient({ id }: { id: string }) {
         </div>
 
         <div className="flex items-center gap-[var(--s2)] flex-shrink-0">
-          <Button variant="ghost" size="sm" onClick={() => setEditOpen(true)} className="gap-1.5 text-(--ink-400) font-display text-[13px]">
-            <Edit className="h-4 w-4" />Edit
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setEditOpen(true)}
+            className="gap-1.5 text-(--ink-400) font-display text-[13px]"
+          >
+            <Edit className="h-4 w-4" />
+            Edit
           </Button>
-          <Button variant="ghost" size="sm" onClick={() => setDeleteOpen(true)} className="gap-1.5 text-(--error) font-display text-[13px]">
-            <Trash2 className="h-4 w-4" />Delete
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setDeleteOpen(true)}
+            className="gap-1.5 text-(--error) font-display text-[13px]"
+          >
+            <Trash2 className="h-4 w-4" />
+            Delete
           </Button>
         </div>
       </div>
@@ -111,15 +137,28 @@ export function ClientDetailPageClient({ id }: { id: string }) {
       {/* Two-column grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-[var(--s5)]">
         <div className="lg:col-span-1">
-          <ClientInfoCard client={client} onEdit={() => setEditOpen(true)} onDelete={() => setDeleteOpen(true)} />
+          <ClientInfoCard
+            client={client}
+            onEdit={() => setEditOpen(true)}
+            onDelete={() => setDeleteOpen(true)}
+          />
         </div>
         <div className="lg:col-span-2">
-          <ClientInvoiceHistory invoices={client.invoices} isLoading={false} clientId={id} />
+          <ClientInvoiceHistory
+            invoices={client.invoices}
+            isLoading={false}
+            clientId={id}
+          />
         </div>
       </div>
 
       {/* Edit sheet */}
-      <ClientSheet open={editOpen} onOpenChange={setEditOpen} client={client} onSuccess={() => setEditOpen(false)} />
+      <ClientSheet
+        open={editOpen}
+        onOpenChange={setEditOpen}
+        client={client}
+        onSuccess={() => setEditOpen(false)}
+      />
 
       {/* Delete dialog */}
       <Dialog open={deleteOpen} onOpenChange={setDeleteOpen}>
@@ -132,19 +171,40 @@ export function ClientDetailPageClient({ id }: { id: string }) {
               Delete {client.name}?
             </DialogTitle>
             <DialogDescription className="text-(--ink-400) font-body text-[14px]">
-              This will hide the client from your list. Their invoices will be retained.
+              This will hide the client from your list. Their invoices will be
+              retained.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="gap-[var(--s2)]">
-            <Button variant="outline" onClick={() => setDeleteOpen(false)} disabled={deleteMutation.isPending} className="border-(--border-strong) font-display text-[13px]">
+            <Button
+              variant="outline"
+              onClick={() => setDeleteOpen(false)}
+              disabled={deleteMutation.isPending}
+              className="border-(--border-strong) font-display text-[13px]"
+            >
               Cancel
             </Button>
-            <Button onClick={handleDeleteConfirm} disabled={deleteMutation.isPending} className="bg-(--error) text-white font-display text-[13px] gap-1.5">
-              {deleteMutation.isPending ? <><Loader2 className="h-4 w-4 animate-spin" />Deleting...</> : <><Trash2 className="h-4 w-4" />Delete Client</>}
+            <Button
+              onClick={handleDeleteConfirm}
+              disabled={deleteMutation.isPending}
+              className="bg-(--error) text-white font-display text-[13px] gap-1.5"
+            >
+              {deleteMutation.isPending ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  Deleting...
+                </>
+              ) : (
+                <>
+                  <Trash2 className="h-4 w-4" />
+                  Delete Client
+                </>
+              )}
             </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </div>
-  )
+      </div>
+    </ScrollArea>
+  );
 }

@@ -49,7 +49,7 @@ export default async function AppLayout({
           {/* Main area */}
           <div className="flex flex-1 flex-col overflow-hidden  rounded-lg bg-(--surface-page)">
             <AppHeader />
-            <main className="flex flex-1 flex-col overflow-y-auto bg-(--surface-page)">
+            <main className="flex flex-1 flex-col overflow-hidden bg-(--surface-page)">
               {children}
             </main>
           </div>

@@ -1,14 +1,15 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import Link from 'next/link'
-import { ArrowLeft, FileX } from 'lucide-react'
-import { Skeleton } from '@/shared/components/ui/skeleton'
-import { useInvoice } from '../../hooks/use-invoice'
-import { ActionsToolbar } from './ActionsToolbar'
-import { InvoiceInfoCard } from './InvoiceInfoCard'
-import { PaymentLog } from './PaymentLog'
-import { MarkPaidModal } from './MarkPaidModal'
+import { useState } from "react";
+import Link from "next/link";
+import { ArrowLeft, FileX } from "lucide-react";
+import { Skeleton } from "@/shared/components/ui/skeleton";
+import { ScrollArea } from "@/shared/components/ui/scroll-area";
+import { useInvoice } from "../../hooks/use-invoice";
+import { ActionsToolbar } from "./ActionsToolbar";
+import { InvoiceInfoCard } from "./InvoiceInfoCard";
+import { PaymentLog } from "./PaymentLog";
+import { MarkPaidModal } from "./MarkPaidModal";
 
 function DetailSkeleton() {
   return (
@@ -32,7 +33,7 @@ function DetailSkeleton() {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 function NotFound() {
@@ -55,43 +56,51 @@ function NotFound() {
         Back to Invoices
       </Link>
     </div>
-  )
+  );
 }
 
 export function InvoiceDetailPageClient({ id }: { id: string }) {
-  const [markPaidOpen, setMarkPaidOpen] = useState(false)
+  const [markPaidOpen, setMarkPaidOpen] = useState(false);
 
-  const { data: invoice, isPending, isError } = useInvoice(id)
+  const { data: invoice, isPending, isError } = useInvoice(id);
 
-  if (isPending) return <DetailSkeleton />
-  if (isError || !invoice) return <NotFound />
+  if (isPending) return <DetailSkeleton />;
+  if (isError || !invoice) return <NotFound />;
 
   return (
-    <div className="space-y-[var(--s5)]">
-      {/* Actions toolbar */}
-      <div className="rounded border px-(--s5) py-(--s4) bg-(--surface-base) border-(--border-default)">
-        <ActionsToolbar invoice={invoice} onRecordPayment={() => setMarkPaidOpen(true)} />
-      </div>
-
-      {/* Two-column layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-5 gap-[var(--s5)]">
-        {/* Left: invoice details (~60%) */}
-        <div className="lg:col-span-3">
-          <InvoiceInfoCard invoice={invoice} />
+    <ScrollArea className="h-[calc(100vh-90px)]">
+      <div className="space-y-(--s5) py-4 pr-4">
+        {/* Actions toolbar */}
+        <div className="rounded border px-(--s5) py-(--s4) bg-(--surface-base) border-(--border-default)">
+          <ActionsToolbar
+            invoice={invoice}
+            onRecordPayment={() => setMarkPaidOpen(true)}
+          />
         </div>
 
-        {/* Right: payment log (~40%) */}
-        <div className="lg:col-span-2">
-          <PaymentLog invoice={invoice} onRecordPayment={() => setMarkPaidOpen(true)} />
-        </div>
-      </div>
+        {/* Two-column layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-[var(--s5)]">
+          {/* Left: invoice details (~60%) */}
+          <div className="lg:col-span-3">
+            <InvoiceInfoCard invoice={invoice} />
+          </div>
 
-      {/* Mark paid modal */}
-      <MarkPaidModal
-        open={markPaidOpen}
-        onOpenChange={setMarkPaidOpen}
-        invoice={invoice}
-      />
-    </div>
-  )
+          {/* Right: payment log (~40%) */}
+          <div className="lg:col-span-2">
+            <PaymentLog
+              invoice={invoice}
+              onRecordPayment={() => setMarkPaidOpen(true)}
+            />
+          </div>
+        </div>
+
+        {/* Mark paid modal */}
+        <MarkPaidModal
+          open={markPaidOpen}
+          onOpenChange={setMarkPaidOpen}
+          invoice={invoice}
+        />
+      </div>
+    </ScrollArea>
+  );
 }

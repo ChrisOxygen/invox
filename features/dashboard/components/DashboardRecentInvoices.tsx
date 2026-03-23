@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { format, parseISO, differenceInDays } from "date-fns";
+import { format, parseISO } from "date-fns";
 import {
   useReactTable,
   getCoreRowModel,
@@ -43,22 +43,9 @@ function DueDateCell({
   dueDate: string;
   status: InvoiceStatus;
 }) {
-  if (status === "OVERDUE") {
-    const days = differenceInDays(new Date(), parseISO(dueDate));
-    return (
-      <div>
-        <span className="font-body text-[13px] text-(--error)">
-          {formatDisplayDate(dueDate)}
-        </span>
-        <br />
-        <span className="font-body text-[11px] text-(--error) opacity-75">
-          {days > 0 ? `${days}d overdue` : "Due today"}
-        </span>
-      </div>
-    );
-  }
+  const isOverdue = status === "OVERDUE";
   return (
-    <span className="font-body text-[13px] text-(--ink-400)">
+    <span className={`font-body text-[13px] ${isOverdue ? "text-(--error)" : "text-(--ink-400)"}`}>
       {formatDisplayDate(dueDate)}
     </span>
   );
@@ -67,7 +54,7 @@ function DueDateCell({
 const columnHelper = createColumnHelper<RecentInvoice>();
 
 const thClassName =
-  "text-(--ink-400) font-display text-[11px] font-semibold tracking-[0.08em] uppercase py-[10px]";
+  "text-(--ink-400) font-display text-[11px] font-semibold tracking-[0.08em] uppercase py-3";
 
 function SkeletonRows() {
   return (
@@ -120,11 +107,11 @@ export function DashboardRecentInvoices({
         const client = info.getValue();
         return (
           <div>
-            <p className="font-display text-[13px] font-semibold text-(--ink-900) tracking-[-0.01em]">
+            <p className="font-display text-[14px] font-semibold text-(--ink-900) tracking-[-0.01em] leading-[1.3]">
               {client.name}
             </p>
             {client.company && (
-              <p className="font-body text-[11px] text-(--ink-400) mt-[1px]">
+              <p className="font-body text-[12px] text-(--ink-400) mt-0.5 leading-[1.2]">
                 {client.company}
               </p>
             )}
@@ -144,7 +131,7 @@ export function DashboardRecentInvoices({
     columnHelper.accessor("total", {
       header: "Amount",
       cell: (info) => (
-        <span className="block text-right font-mono text-[13px] font-medium text-(--ink-900)">
+        <span className="font-mono text-[13px] font-medium text-(--ink-900)">
           {formatCurrency(info.getValue(), info.row.original.currency)}
         </span>
       ),
@@ -192,31 +179,22 @@ export function DashboardRecentInvoices({
               </TableCell>
             </TableRow>
           ) : (
-            table.getRowModel().rows.map((row, idx) => {
-              const isOverdue = row.original.status === "OVERDUE";
-              return (
+            table.getRowModel().rows.map((row, idx) => (
                 <TableRow
                   key={row.id}
-                  className="group cursor-pointer"
+                  className="group cursor-pointer transition-colors duration-100"
                   style={{
                     borderBottom:
                       idx < table.getRowModel().rows.length - 1
                         ? "1px solid var(--border-default)"
                         : "none",
-                    backgroundColor: isOverdue
-                      ? "rgba(245,58,58,0.025)"
-                      : undefined,
                   }}
                   onClick={() => router.push(`/invoices/${row.original.id}`)}
                   onMouseEnter={(e) => {
-                    (e.currentTarget as HTMLElement).style.backgroundColor =
-                      isOverdue
-                        ? "rgba(245,58,58,0.05)"
-                        : "var(--surface-raised)";
+                    (e.currentTarget as HTMLElement).style.backgroundColor = "var(--surface-raised)";
                   }}
                   onMouseLeave={(e) => {
-                    (e.currentTarget as HTMLElement).style.backgroundColor =
-                      isOverdue ? "rgba(245,58,58,0.025)" : "";
+                    (e.currentTarget as HTMLElement).style.backgroundColor = "";
                   }}
                 >
                   {row.getVisibleCells().map((cell) => (
@@ -228,8 +206,7 @@ export function DashboardRecentInvoices({
                     </TableCell>
                   ))}
                 </TableRow>
-              );
-            })
+            ))
           )}
         </TableBody>
       </Table>

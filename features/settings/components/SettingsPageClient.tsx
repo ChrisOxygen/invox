@@ -90,38 +90,19 @@ export function SettingsPageClient() {
                 key={id}
                 type="button"
                 onClick={() => setActive(id)}
-                className="w-full rounded border px-3.5 py-3 text-left transition-all duration-150 cursor-pointer"
-                style={{
-                  backgroundColor: isActive ? "var(--blue-50)" : "transparent",
-                  borderColor: isActive ? "var(--blue-200)" : "transparent",
-                }}
-                onMouseEnter={(e) => {
-                  if (!isActive) {
-                    e.currentTarget.style.backgroundColor =
-                      "var(--surface-overlay)";
-                    e.currentTarget.style.borderColor = "var(--border-default)";
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  if (!isActive) {
-                    e.currentTarget.style.backgroundColor = "transparent";
-                    e.currentTarget.style.borderColor = "transparent";
-                  }
-                }}
+                className={`w-full rounded border px-3.5 py-3 text-left transition-all duration-150 cursor-pointer ${
+                  isActive
+                    ? "bg-(--blue-50) border-(--blue-200)"
+                    : "bg-transparent border-transparent hover:bg-(--surface-overlay) hover:border-(--border-default)"
+                }`}
               >
                 <div className="flex items-center gap-2.5">
                   <Icon
-                    className="h-3.75 w-3.75 shrink-0"
-                    style={{
-                      color: isActive ? "var(--blue-600)" : "var(--ink-400)",
-                    }}
+                    className={`h-3.75 w-3.75 shrink-0 ${isActive ? "text-(--blue-600)" : "text-(--ink-400)"}`}
                   />
                   <div className="flex flex-col gap-0.5 min-w-0">
                     <span
-                      className="text-[13px] font-semibold leading-none font-display truncate"
-                      style={{
-                        color: isActive ? "var(--blue-700)" : "var(--ink-700)",
-                      }}
+                      className={`text-[13px] font-semibold leading-none font-display truncate ${isActive ? "text-(--blue-700)" : "text-(--ink-700)"}`}
                     >
                       {label}
                     </span>

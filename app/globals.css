@@ -167,6 +167,18 @@
   background-color: var(--blue-400);
 }
 
+[data-slot="scroll-area-scrollbar"] {
+  border-color: transparent;
+}
+
+[data-slot="scroll-area-thumb"] {
+  background-color: var(--ink-200);
+}
+
+[data-slot="scroll-area-thumb"]:hover {
+  background-color: var(--ink-300);
+}
+
 button, [role="button"], [type="button"], [type="submit"], [type="reset"] {
   cursor: pointer;
 }

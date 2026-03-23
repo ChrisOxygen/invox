@@ -45,6 +45,8 @@ next-env.d.ts
 # Keep schema.prisma but ignore generated files
 /prisma/migrations/
 /prisma/generated/
+/prisma/seed.ts
+/prisma/seed-data/
 
 # React Email specific files
 /react-email-starter/node_modules

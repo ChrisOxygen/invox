@@ -1,60 +1,57 @@
-import { Button } from "../ui/button";
-import Link from "next/link";
+import { Button } from '@/shared/components/ui/button'
+import Link from 'next/link'
+import { RevealOnScroll } from '../RevealOnScroll'
 
 function CTASection() {
+  const trustItems = ['Free to start', 'No credit card required', '30-day money back guarantee']
+
   return (
-    <section className="bg-white">
+    <section className="bg-(--surface-base)">
       <div className="content-wrapper">
-        <div className="rounded-3xl flex flex-col bg-cover bg-center bg-[url('/assets/cta-bg-1.webp')] relative overflow-hidden">
-          {/* Overlay for better text readability */}
-          <div className="absolute inset-0 bg-blue-900/20 rounded-3xl"></div>
+        <RevealOnScroll>
+          <div className="rounded-(--r-2xl) bg-(--ink-950) relative overflow-hidden px-8 sm:px-12 lg:px-16 py-16 sm:py-20">
+            {/* Radial glow */}
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-150 h-150 rounded-full bg-(--blue-600)/8 blur-3xl pointer-events-none" />
 
-          <div className="relative z-10 my-8 sm:my-10 lg:my-16 py-6 sm:py-8 lg:py-12 px-6 sm:px-8 lg:px-12 flex flex-col gap-6 sm:gap-8 items-center w-full mx-auto max-w-[800px]">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-center leading-tight bg-gradient-to-r from-white to-cyan-100 bg-clip-text text-transparent drop-shadow-lg">
-              Take your invoicing to the next level!
-            </h2>
+            <div className="relative z-10 flex flex-col gap-7 items-center text-center max-w-2xl mx-auto">
+              <h2 className="font-display font-extrabold text-3xl sm:text-4xl lg:text-5xl text-white leading-tight tracking-[-0.03em]">
+                Take your invoicing to the next level
+              </h2>
+              <p className="text-base text-(--ink-300) leading-relaxed font-body">
+                Join thousands of satisfied users and streamline your invoicing
+                process today with our powerful, intuitive platform.
+              </p>
 
-            <p className="text-sm sm:text-base lg:text-lg text-white/90 max-w-[600px] text-center leading-relaxed drop-shadow-md">
-              Join thousands of satisfied users and streamline your invoicing
-              process today with our powerful, intuitive platform!
-            </p>
-
-            <div className="flex flex-col sm:flex-row gap-4 sm:gap-5 items-center justify-center w-full sm:w-auto">
-              <Button
-                asChild
-                className="w-full sm:w-auto bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white font-medium py-6 px-6 sm:px-8 lg:px-12 rounded-lg border-0 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 text-base sm:text-lg cursor-pointer"
-              >
-                <Link href="/signup">Create Your First Invoice</Link>
-              </Button>
-
-              <Button
-                asChild
-                className="w-full sm:w-auto bg-white/10 backdrop-blur-sm border-2 border-white/30 text-white hover:bg-white/20 hover:border-white/50 font-medium py-6 px-6 sm:px-8 lg:px-12 rounded-lg shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 text-base sm:text-lg cursor-pointer"
-              >
-                <Link href="/about">Learn More</Link>
-              </Button>
-            </div>
-
-            {/* Trust indicators */}
-            <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-6 text-white/80 text-xs sm:text-sm">
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></div>
-                <span>Free to start</span>
+              <div className="flex flex-col sm:flex-row gap-3 items-center w-full sm:w-auto">
+                <Button
+                  render={<Link href="/signup" />}
+                  className="w-full sm:w-auto bg-(--blue-600) hover:bg-(--blue-700) text-white font-semibold px-8 py-6 rounded-(--r-md) text-base shadow-none transition-colors duration-200 font-display"
+                >
+                  Create Your First Invoice
+                </Button>
+                <Button
+                  render={<Link href="/about" />}
+                  variant="ghost"
+                  className="w-full sm:w-auto text-(--ink-300) hover:text-white hover:bg-white/8 font-medium px-8 py-6 rounded-(--r-md) text-base"
+                >
+                  Learn More
+                </Button>
               </div>
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></div>
-                <span>No credit card required</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></div>
-                <span>30-day money back guarantee</span>
+
+              <div className="flex flex-wrap gap-6 items-center justify-center">
+                {trustItems.map((item) => (
+                  <div key={item} className="flex items-center gap-2 text-(--ink-400) text-xs font-body">
+                    <span className="w-1.5 h-1.5 rounded-full bg-(--success)" />
+                    {item}
+                  </div>
+                ))}
               </div>
             </div>
           </div>
-        </div>
+        </RevealOnScroll>
       </div>
     </section>
-  );
+  )
 }
 
-export default CTASection;
+export default CTASection

@@ -1,65 +1,66 @@
-import { FaStar } from "react-icons/fa";
+import { Star } from 'lucide-react'
+import { RevealOnScroll } from '../RevealOnScroll'
 
 export default function TestimonialsSection() {
   return (
-    <section id="testimonials" className=" bg-white">
-      <div className="content-wrapper flex flex-col items-center gap-16">
-        <div className="flex flex-col items-center gap-6 text-center">
-          <span className="uppercase font-semibold text-blue-600 text-xs sm:text-sm tracking-wider">
+    <section id="testimonials" className="bg-(--ink-950)">
+      <div className="content-wrapper flex flex-col items-center gap-14">
+        <RevealOnScroll className="flex flex-col items-center gap-4 text-center">
+          <span className="text-xs font-semibold text-(--blue-400) uppercase tracking-widest font-display">
             Hear from our customers
           </span>
-          <h2 className="font-bold text-2xl sm:text-3xl lg:text-4xl text-center max-w-[500px] text-gray-900 leading-tight">
-            What our users are saying about
-            <span className="bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
-              {" "}
-              Invox
-            </span>
+          <h2 className="font-display font-bold text-3xl lg:text-4xl text-white leading-tight tracking-[-0.025em] max-w-120">
+            What our users are saying about{' '}
+            <span className="text-(--blue-400)">Invox</span>
           </h2>
-          <p className="text-base sm:text-lg lg:text-xl text-gray-600 max-w-[600px] leading-relaxed">
-            Don&apos;t just take our word for it - see what our customers have
-            to say about their experience
+          <p className="text-base text-(--ink-300) max-w-125 leading-relaxed font-body">
+            Don&apos;t just take our word for it — see what our customers have to say
           </p>
-        </div>
-        <div className="flex flex-col items-center gap-10 w-full">
-          <div className="flex flex-col gap-8 items-center text-center max-w-[900px] p-10 rounded-2xl relative overflow-hidden">
-            {/* Background decoration */}
-            <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-200/20 to-cyan-200/20 rounded-full blur-3xl"></div>
-            <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-br from-cyan-200/20 to-blue-200/20 rounded-full blur-3xl"></div>
+        </RevealOnScroll>
 
-            <div className="flex gap-1 items-center text-2xl sm:text-3xl text-yellow-400 relative z-10">
-              <FaStar />
-              <FaStar />
-              <FaStar />
-              <FaStar />
-              <FaStar />
+        <RevealOnScroll delay={150} className="w-full max-w-3xl">
+          <figure className="flex flex-col gap-7 p-8 sm:p-10 rounded-(--r-2xl) bg-(--ink-900) border border-(--ink-700)">
+            <div className="flex gap-1 text-(--warning)">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <Star key={i} className="w-5 h-5 fill-current" />
+              ))}
             </div>
-            <blockquote className="font-medium text-lg sm:text-xl lg:text-2xl text-gray-800 leading-relaxed italic relative z-10">
+            <blockquote className="text-lg sm:text-xl text-white leading-relaxed font-body">
               &ldquo;Invox has completely streamlined my invoicing process. The
-              interface is clean and intuitive - I can create professional
-              invoices in minutes instead of hours. The automated payment
-              reminders have improved my cash flow significantly, and clients
-              love how easy it is to pay online. Customer support is responsive
-              and helpful too. Highly recommend Invox to any business owner
-              looking to simplify their billing!&rdquo;
+              interface is clean and intuitive — I can create professional invoices
+              in minutes instead of hours. The automated payment reminders have
+              improved my cash flow significantly, and clients love how easy it is
+              to pay online. Highly recommend Invox to any business owner looking
+              to simplify their billing!&rdquo;
             </blockquote>
-            <div className="flex flex-col items-center gap-2 relative z-10">
-              <span className="font-bold text-gray-900 text-lg sm:text-xl">
-                Sarah M.
-              </span>
-              <span className="text-blue-600 font-medium text-sm sm:text-base">
-                Freelance Designer
-              </span>
-            </div>
-          </div>
-          <div className="flex items-center gap-4">
-            <button className="w-4 h-4 rounded-full bg-gray-300 hover:bg-blue-500 transition-all duration-300 transform hover:scale-110 shadow-sm"></button>
-            <button className="w-4 h-4 rounded-full bg-gray-300 hover:bg-blue-500 transition-all duration-300 transform hover:scale-110 shadow-sm"></button>
-            <button className="w-6 h-6 rounded-full bg-gradient-to-r from-blue-600 to-cyan-500 shadow-lg transform scale-110"></button>
-            <button className="w-4 h-4 rounded-full bg-gray-300 hover:bg-blue-500 transition-all duration-300 transform hover:scale-110 shadow-sm"></button>
-            <button className="w-4 h-4 rounded-full bg-gray-300 hover:bg-blue-500 transition-all duration-300 transform hover:scale-110 shadow-sm"></button>
-          </div>
+            <figcaption className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-(--blue-600) flex items-center justify-center text-white font-display font-bold text-sm shrink-0">
+                SM
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-white font-display">Sarah M.</p>
+                <p className="text-xs text-(--ink-400) font-body mt-0.5">
+                  Freelance Designer
+                </p>
+              </div>
+            </figcaption>
+          </figure>
+        </RevealOnScroll>
+
+        <div className="flex items-center gap-2">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <button
+              key={i}
+              aria-label={`Testimonial ${i + 1}`}
+              className={`rounded-full transition-all duration-200 ${
+                i === 2
+                  ? 'w-6 h-2 bg-(--blue-600)'
+                  : 'w-2 h-2 bg-(--ink-700) hover:bg-(--ink-500)'
+              }`}
+            />
+          ))}
         </div>
       </div>
     </section>
-  );
+  )
 }

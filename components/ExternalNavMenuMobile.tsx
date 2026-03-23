@@ -1,100 +1,85 @@
-"use client";
+'use client'
 
-import { Button } from "@/components/ui/button";
 import {
   Sheet,
+  SheetClose,
   SheetContent,
   SheetFooter,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@/components/ui/sheet";
+} from '@/shared/components/ui/sheet'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import { NAVIGATION_LINKS } from '@/constants'
+import { Menu } from 'lucide-react'
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { NAVIGATION_LINKS } from "@/constants";
-import { FiMenu } from "react-icons/fi";
+interface ExternalNavMenuMobileProps {
+  isScrolled?: boolean
+}
 
-export function ExternalNavMenuMobile() {
-  const pathname = usePathname();
+export function ExternalNavMenuMobile({ isScrolled }: ExternalNavMenuMobileProps) {
+  const pathname = usePathname()
 
-  const isActiveLink = (href: string) => {
-    if (href === "/") {
-      return pathname === "/";
-    }
-    return pathname.startsWith(href);
-  };
+  const isActiveLink = (href: string) =>
+    href === '/' ? pathname === '/' : pathname.startsWith(href)
 
   return (
     <Sheet>
-      <SheetTrigger asChild>
-        <span className=" cursor-pointer text-gray-700 hover:text-blue-600 transition-all duration-200">
-          <FiMenu className="md:text-4xl text-2xl" />
-        </span>
+      <SheetTrigger
+        aria-label="Open menu"
+        className={`cursor-pointer transition-colors duration-200 ${
+          isScrolled
+            ? 'text-(--ink-700) hover:text-(--ink-900)'
+            : 'text-(--ink-100) hover:text-white'
+        }`}
+      >
+        <Menu className="w-6 h-6" />
       </SheetTrigger>
-      <SheetContent className="w-80 sm:w-96">
-        <SheetHeader className="border-b border-gray-100 pb-4 mb-6">
-          <SheetTitle className="text-xl font-bold bg-gradient-to-r from-blue-600 to-cyan-400 bg-clip-text text-transparent">
-            Navigation
+
+      <SheetContent className="w-80 sm:w-96 bg-(--surface-base)">
+        <SheetHeader className="border-b border-(--border-default) pb-4 mb-4">
+          <SheetTitle className="font-display font-bold text-(--ink-900) text-lg tracking-[-0.02em]">
+            Menu
           </SheetTitle>
         </SheetHeader>
 
-        <nav className="flex-1 p-5">
-          <menu className="flex flex-col gap-2 list-none">
+        <nav className="flex-1 px-1">
+          <menu className="flex flex-col gap-1 list-none">
             {NAVIGATION_LINKS.map((link) => (
               <li key={link.href}>
-                <SheetTrigger asChild>
-                  <Link
-                    href={link.href}
-                    className={`
-                      block w-full text-left px-4 py-3 font-medium transition-all duration-200 transform hover:scale-[1.02] cursor-pointer
-                      ${
-                        isActiveLink(link.href)
-                          ? "bg-gradient-to-r from-transparent to-blue-600 border-r-2 border-blue-600 via-cyan-500 text-gray-700"
-                          : "text-gray-700 hover:text-blue-600 hover:bg-blue-50"
-                      }
-                    `}
-                  >
-                    {link.label}
-                  </Link>
-                </SheetTrigger>
+                <SheetClose
+                  render={<Link href={link.href} />}
+                  className={`block w-full text-left px-4 py-3 rounded-(--r-lg) text-sm font-medium font-display transition-colors duration-200 ${
+                    isActiveLink(link.href)
+                      ? 'bg-(--blue-50) text-(--blue-600)'
+                      : 'text-(--ink-700) hover:text-(--ink-900) hover:bg-(--surface-overlay)'
+                  }`}
+                >
+                  {link.label}
+                </SheetClose>
               </li>
             ))}
           </menu>
         </nav>
 
-        <SheetFooter className="border-t border-gray-100 pt-6 mt-auto">
-          <div className="flex flex-col gap-3 w-full">
-            <SheetTrigger asChild>
-              <Button
-                asChild
-                className="w-full bg-transparent text-blue-600 hover:bg-blue-50 hover:text-blue-700 font-medium py-3 px-6 rounded-lg border-2 border-blue-600 hover:border-blue-700 transition-all duration-200 transform hover:scale-[1.02] cursor-pointer"
-              >
-                <Link
-                  href="/login"
-                  className="flex items-center justify-center gap-2"
-                >
-                  Login
-                </Link>
-              </Button>
-            </SheetTrigger>
-
-            <SheetTrigger asChild>
-              <Button
-                asChild
-                className="w-full bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white font-medium py-3 px-6 rounded-lg border-0 shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02] cursor-pointer"
-              >
-                <Link
-                  href="/signup"
-                  className="flex items-center justify-center gap-2 text-white"
-                >
-                  Get Started
-                </Link>
-              </Button>
-            </SheetTrigger>
+        <SheetFooter className="border-t border-(--border-default) pt-5 mt-auto">
+          <div className="flex flex-col gap-2.5 w-full">
+            <SheetClose
+              render={<Link href="/login" />}
+              className="w-full inline-flex items-center justify-center border border-(--border-strong) text-(--ink-700) hover:bg-(--surface-overlay) rounded-(--r-md) py-2 px-4 text-sm font-semibold font-display transition-colors duration-200"
+            >
+              Login
+            </SheetClose>
+            <SheetClose
+              render={<Link href="/signup" />}
+              className="w-full inline-flex items-center justify-center bg-(--blue-600) hover:bg-(--blue-700) text-white rounded-(--r-md) py-2 px-4 text-sm font-semibold font-display transition-colors duration-200"
+            >
+              Get Started
+            </SheetClose>
           </div>
         </SheetFooter>
       </SheetContent>
     </Sheet>
-  );
+  )
 }

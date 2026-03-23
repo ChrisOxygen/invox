@@ -1,52 +1,27 @@
-import Image from "next/image";
+import Image from 'next/image'
 
 export default function SeenOnSection() {
   return (
-    <section className=" lg:pt-[300px] pt-5 sm:pt-[200px]">
-      <div className="max-w-[1250px] mx-auto flex flex-col items-center py-20 gap-5">
-        <span className=" uppercase text-gray-500 text-xs sm:text-sm font-semibold">
-          as seen on
+    <section className="bg-(--surface-page) pt-5 sm:pt-52 lg:pt-96">
+      <div className="max-w-312.5 mx-auto px-5 lg:px-0 py-16 flex flex-col items-center gap-5">
+        <span className="text-xs font-semibold text-(--ink-300) uppercase tracking-widest font-display">
+          As seen on
         </span>
-        <div className=" flex items-center gap-7 relative overflow-x-clip">
-          <span className="absolute top-1/2 -translate-y-1/2 h-[80px] w-[110px] bg-gradient-to-r from-white to-transparent left-0"></span>
-          <span className="absolute top-1/2 -translate-y-1/2 h-[80px] w-[110px] bg-gradient-to-l from-white to-transparent right-0"></span>
-          <Image
-            src="/assets/invox-main-logo.webp"
-            alt="Logo"
-            width={120}
-            height={50}
-            className="object-contain"
-          />
-          <Image
-            src="/assets/invox-main-logo.webp"
-            alt="Logo"
-            width={120}
-            height={50}
-            className="object-contain"
-          />
-          <Image
-            src="/assets/invox-main-logo.webp"
-            alt="Logo"
-            width={120}
-            height={50}
-            className="object-contain"
-          />
-          <Image
-            src="/assets/invox-main-logo.webp"
-            alt="Logo"
-            width={120}
-            height={50}
-            className="object-contain"
-          />
-          <Image
-            src="/assets/invox-main-logo.webp"
-            alt="Logo"
-            width={120}
-            height={50}
-            className="object-contain"
-          />
+        <div className="relative flex items-center gap-10 overflow-x-clip w-full justify-center">
+          <span className="absolute top-1/2 -translate-y-1/2 h-full w-20 bg-linear-to-r from-(--surface-page) to-transparent left-0 z-10 pointer-events-none" />
+          <span className="absolute top-1/2 -translate-y-1/2 h-full w-20 bg-linear-to-l from-(--surface-page) to-transparent right-0 z-10 pointer-events-none" />
+          {Array.from({ length: 5 }).map((_, i) => (
+            <Image
+              key={i}
+              src="/assets/invox-main-logo.webp"
+              alt="Invox"
+              width={100}
+              height={40}
+              className="object-contain opacity-35 grayscale"
+            />
+          ))}
         </div>
       </div>
     </section>
-  );
+  )
 }

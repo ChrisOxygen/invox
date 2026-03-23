@@ -1,105 +1,79 @@
-import Image from "next/image";
+import { FileText, Bell, CreditCard, BarChart3 } from 'lucide-react'
+import { RevealOnScroll } from '../RevealOnScroll'
+
+const FEATURES = [
+  {
+    icon: FileText,
+    title: 'Smart Invoice Creation',
+    description:
+      'Create professional invoices in seconds with customizable templates designed for your industry.',
+  },
+  {
+    icon: Bell,
+    title: 'Automated Reminders',
+    description:
+      'Never chase payments again with smart, automated follow-up reminders that get results.',
+  },
+  {
+    icon: CreditCard,
+    title: 'Instant Payments',
+    description:
+      'Accept bank transfers, Paystack, and digital payments with seamless integration.',
+  },
+  {
+    icon: BarChart3,
+    title: 'Real-time Analytics',
+    description:
+      'Track your revenue, outstanding payments, and cash flow with detailed reporting dashboards.',
+  },
+]
 
 export default function FeaturesSection() {
   return (
-    <section className=" bg-white">
-      <div className="content-wrapper flex flex-col gap-16">
-        <div className="flex flex-col lg:flex-row justify-between items-start gap-12">
-          <div className="flex flex-col gap-6">
-            <span className="uppercase font-semibold text-blue-600 text-xs sm:text-sm tracking-wider">
+    <section className="bg-(--surface-page)">
+      <div className="content-wrapper flex flex-col gap-14">
+        <div className="flex flex-col lg:flex-row justify-between items-start gap-10">
+          <RevealOnScroll className="flex flex-col gap-3">
+            <span className="text-xs font-semibold text-(--blue-600) uppercase tracking-widest font-display">
               Built for Small Business
             </span>
-            <h2 className="font-bold text-2xl sm:text-3xl lg:text-4xl max-w-[500px] text-gray-900 leading-tight">
-              Streamlining invoicing for
-              <span className="bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
-                {" "}
-                entrepreneurs
-              </span>
+            <h2 className="font-display font-bold text-3xl lg:text-4xl text-(--ink-900) leading-tight tracking-[-0.025em] max-w-96">
+              Streamlining invoicing for{' '}
+              <span className="text-(--blue-600)">entrepreneurs</span>
             </h2>
-          </div>
-          <p className="lg:max-w-[600px] max-w-full text-gray-600 text-base sm:text-lg lg:text-xl leading-relaxed">
-            At Invox, we understand the challenges small business owners face
-            with invoicing. Our platform is designed to simplify every step of
-            the process, from creation to payment. Each feature reflects our
-            commitment to helping entrepreneurs get paid faster and focus on
-            what matters most - growing their business.
-          </p>
+          </RevealOnScroll>
+          <RevealOnScroll delay={120} className="lg:max-w-lg">
+            <p className="text-base text-(--ink-400) leading-relaxed font-body">
+              At Invox, we understand the challenges small business owners face with
+              invoicing. Our platform simplifies every step of the process, from
+              creation to payment — so you can focus on growing your business.
+            </p>
+          </RevealOnScroll>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          <div className="flex flex-col gap-6 p-8 bg-gradient-to-br from-blue-50 to-cyan-50 rounded-2xl border border-blue-100 hover:border-blue-200 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-            <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-cyan-500 rounded-xl flex items-center justify-center shadow-lg">
-              <Image
-                src="/assets/disruptive-innovation.png"
-                alt="Smart Invoice Creation"
-                width={32}
-                height={32}
-                className="object-contain filter brightness-0 invert"
-              />
-            </div>
-            <h4 className="font-bold text-lg sm:text-xl text-gray-900">
-              Smart Invoice Creation
-            </h4>
-            <p className="text-gray-600 text-sm sm:text-base leading-relaxed">
-              Create professional invoices in seconds with customizable
-              templates designed for your industry.
-            </p>
-          </div>
-          <div className="flex flex-col gap-6 p-8 bg-gradient-to-br from-cyan-50 to-blue-50 rounded-2xl border border-cyan-100 hover:border-cyan-200 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-            <div className="w-16 h-16 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
-              <Image
-                src="/assets/reminder.png"
-                alt="Automated Reminders"
-                width={32}
-                height={32}
-                className="object-contain filter brightness-0 invert"
-              />
-            </div>
-            <h4 className="font-bold text-lg sm:text-xl text-gray-900">
-              Automated Reminders
-            </h4>
-            <p className="text-gray-600 text-sm sm:text-base leading-relaxed">
-              Never chase payments again with smart, automated follow-up
-              reminders that get results.
-            </p>
-          </div>
-          <div className="flex flex-col gap-6 p-8 bg-gradient-to-br from-blue-50 to-cyan-50 rounded-2xl border border-blue-100 hover:border-blue-200 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-            <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-cyan-500 rounded-xl flex items-center justify-center shadow-lg">
-              <Image
-                src="/assets/mobile.png"
-                alt="Instant Payments"
-                width={32}
-                height={32}
-                className="object-contain filter brightness-0 invert"
-              />
-            </div>
-            <h4 className="font-bold text-lg sm:text-xl text-gray-900">
-              Instant Payments
-            </h4>
-            <p className="text-gray-600 text-sm sm:text-base leading-relaxed">
-              Accept credit cards, bank transfers, and digital payments with
-              seamless integration.
-            </p>
-          </div>
-          <div className="flex flex-col gap-6 p-8 bg-gradient-to-br from-cyan-50 to-blue-50 rounded-2xl border border-cyan-100 hover:border-cyan-200 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-            <div className="w-16 h-16 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
-              <Image
-                src="/assets/real-time-monitoring.png"
-                alt="Real-time Analytics"
-                width={32}
-                height={32}
-                className="object-contain filter brightness-0 invert"
-              />
-            </div>
-            <h4 className="font-bold text-lg sm:text-xl text-gray-900">
-              Real-time Analytics
-            </h4>
-            <p className="text-gray-600 text-sm sm:text-base leading-relaxed">
-              Track your revenue, outstanding payments, and cash flow with
-              detailed reporting dashboards.
-            </p>
-          </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          {FEATURES.map((feature, i) => {
+            const Icon = feature.icon
+            return (
+              <RevealOnScroll key={i} delay={i * 80} className="h-full">
+                <div className="flex flex-col gap-5 p-6 h-full bg-(--surface-base) rounded-(--r-xl) border border-(--border-default) hover:border-(--blue-200) hover:shadow-sm transition-all duration-200 group">
+                  <div className="w-10 h-10 rounded-(--r-md) bg-(--blue-50) border border-(--blue-100) flex items-center justify-center text-(--blue-600) group-hover:bg-(--blue-600) group-hover:text-white group-hover:border-(--blue-600) transition-colors duration-200 shrink-0">
+                    <Icon className="w-5 h-5" />
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <h4 className="font-display font-bold text-sm text-(--ink-900) tracking-[-0.015em]">
+                      {feature.title}
+                    </h4>
+                    <p className="text-sm text-(--ink-400) leading-relaxed font-body">
+                      {feature.description}
+                    </p>
+                  </div>
+                </div>
+              </RevealOnScroll>
+            )
+          })}
         </div>
       </div>
     </section>
-  );
+  )
 }

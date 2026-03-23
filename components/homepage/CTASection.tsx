@@ -25,12 +25,14 @@ function CTASection() {
               <div className="flex flex-col sm:flex-row gap-3 items-center w-full sm:w-auto">
                 <Button
                   render={<Link href="/signup" />}
+                  nativeButton={false}
                   className="w-full sm:w-auto bg-(--blue-600) hover:bg-(--blue-700) text-white font-semibold px-8 py-6 rounded-(--r-md) text-base shadow-none transition-colors duration-200 font-display"
                 >
                   Create Your First Invoice
                 </Button>
                 <Button
                   render={<Link href="/about" />}
+                  nativeButton={false}
                   variant="ghost"
                   className="w-full sm:w-auto text-(--ink-300) hover:text-white hover:bg-white/8 font-medium px-8 py-6 rounded-(--r-md) text-base"
                 >

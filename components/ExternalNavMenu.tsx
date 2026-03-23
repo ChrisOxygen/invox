@@ -67,6 +67,7 @@ function ExternalNavMenu() {
         <div className="hidden lg:flex gap-2.5 items-center">
           <Button
             render={<Link href="/login" />}
+            nativeButton={false}
             variant="ghost"
             className={`font-medium px-5 h-9 rounded-(--r-md) text-sm transition-all duration-200 shadow-none flex items-center gap-2 ${
               isScrolled
@@ -79,6 +80,7 @@ function ExternalNavMenu() {
           </Button>
           <Button
             render={<Link href="/signup" />}
+            nativeButton={false}
             className="bg-(--blue-600) hover:bg-(--blue-700) text-white font-semibold px-5 h-9 rounded-(--r-md) text-sm shadow-none transition-colors duration-200 flex items-center gap-2"
           >
             Get Started
@@ -89,6 +91,7 @@ function ExternalNavMenu() {
         <div className="lg:hidden flex gap-3 items-center">
           <Button
             render={<Link href="/signup" />}
+            nativeButton={false}
             className="bg-(--blue-600) hover:bg-(--blue-700) text-white font-semibold py-2 px-4 rounded-(--r-md) text-sm shadow-none flex items-center gap-1"
           >
             Get Started

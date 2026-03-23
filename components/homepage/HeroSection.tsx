@@ -51,12 +51,14 @@ export default function HeroSection() {
         >
           <Button
             render={<Link href="/signup" />}
+            nativeButton={false}
             className="bg-(--blue-600) hover:bg-(--blue-700) text-white font-semibold px-8 py-6 rounded-(--r-md) text-base shadow-none transition-colors duration-200 font-display"
           >
             Create Your First Invoice
           </Button>
           <Button
             render={<Link href="/about" />}
+            nativeButton={false}
             variant="ghost"
             className="text-(--ink-300) hover:text-white hover:bg-white/8 font-medium px-8 py-6 rounded-(--r-md) text-base"
           >

@@ -50,6 +50,7 @@ export function ExternalNavMenuMobile({ isScrolled }: ExternalNavMenuMobileProps
               <li key={link.href}>
                 <SheetClose
                   render={<Link href={link.href} />}
+                  nativeButton={false}
                   className={`block w-full text-left px-4 py-3 rounded-(--r-lg) text-sm font-medium font-display transition-colors duration-200 ${
                     isActiveLink(link.href)
                       ? 'bg-(--blue-50) text-(--blue-600)'
@@ -67,12 +68,14 @@ export function ExternalNavMenuMobile({ isScrolled }: ExternalNavMenuMobileProps
           <div className="flex flex-col gap-2.5 w-full">
             <SheetClose
               render={<Link href="/login" />}
+              nativeButton={false}
               className="w-full inline-flex items-center justify-center border border-(--border-strong) text-(--ink-700) hover:bg-(--surface-overlay) rounded-(--r-md) py-2 px-4 text-sm font-semibold font-display transition-colors duration-200"
             >
               Login
             </SheetClose>
             <SheetClose
               render={<Link href="/signup" />}
+              nativeButton={false}
               className="w-full inline-flex items-center justify-center bg-(--blue-600) hover:bg-(--blue-700) text-white rounded-(--r-md) py-2 px-4 text-sm font-semibold font-display transition-colors duration-200"
             >
               Get Started

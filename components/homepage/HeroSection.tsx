@@ -76,7 +76,7 @@ export default function HeroSection() {
           <Button
             render={<Link href="/about" />}
             nativeButton={false}
-            className="bg-white/55 hover:bg-white/80 text-(--ink-700) hover:text-(--ink-900) font-medium px-8 py-6 rounded-lg text-base border-none  shadow-none backdrop-blur-sm transition-all duration-100 ease-linear font-display"
+            className="bg-white/90 hover:bg-white [a]:hover:bg-white text-(--ink-700) hover:text-(--ink-900) font-medium px-8 py-6 rounded-lg text-base border-none shadow-none hover:shadow-md backdrop-blur-sm transition-all duration-200 ease-out hover:scale-[1.02] active:scale-[0.98] font-display"
           >
             See how it works →
           </Button>

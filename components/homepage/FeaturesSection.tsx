@@ -1,79 +1,127 @@
-import { FileText, Bell, CreditCard, BarChart3 } from 'lucide-react'
-import { RevealOnScroll } from '../RevealOnScroll'
+import { FileText, BellRing, Landmark, ShieldCheck } from "lucide-react";
+import Image from "next/image";
+import { RevealOnScroll } from "../RevealOnScroll";
 
 const FEATURES = [
   {
     icon: FileText,
-    title: 'Smart Invoice Creation',
-    description:
-      'Create professional invoices in seconds with customizable templates designed for your industry.',
+    label: "Invoice in Seconds",
+    description: "Create polished, branded invoices in under a minute.",
   },
   {
-    icon: Bell,
-    title: 'Automated Reminders',
+    icon: BellRing,
+    label: "Automated Follow-ups",
     description:
-      'Never chase payments again with smart, automated follow-up reminders that get results.',
+      "Stop chasing clients manually. Smart reminders go out at exactly the right time — without you lifting a finger.",
   },
   {
-    icon: CreditCard,
-    title: 'Instant Payments',
+    icon: Landmark,
+    label: "Built for Bank Transfers",
     description:
-      'Accept bank transfers, Paystack, and digital payments with seamless integration.',
+      "Your account details sit prominently on every invoice. Designed for how Nigeria actually pays — no PayPal required.",
   },
   {
-    icon: BarChart3,
-    title: 'Real-time Analytics',
-    description:
-      'Track your revenue, outstanding payments, and cash flow with detailed reporting dashboards.',
+    icon: ShieldCheck,
+    label: "Track Every Payment",
+    description: "Paid, pending, or overdue — always at a glance.",
   },
-]
+];
 
 export default function FeaturesSection() {
   return (
-    <section className="bg-(--surface-page)">
+    <section className="bg-(--surface-page) py-16 overflow-hidden">
       <div className="content-wrapper flex flex-col gap-14">
-        <div className="flex flex-col lg:flex-row justify-between items-start gap-10">
-          <RevealOnScroll className="flex flex-col gap-3">
-            <span className="text-xs font-semibold text-(--blue-600) uppercase tracking-widest font-display">
-              Built for Small Business
-            </span>
-            <h2 className="font-display font-bold text-3xl lg:text-4xl text-(--ink-900) leading-tight tracking-[-0.025em] max-w-96">
-              Streamlining invoicing for{' '}
-              <span className="text-(--blue-600)">entrepreneurs</span>
-            </h2>
-          </RevealOnScroll>
-          <RevealOnScroll delay={120} className="lg:max-w-lg">
-            <p className="text-base text-(--ink-400) leading-relaxed font-body">
-              At Invox, we understand the challenges small business owners face with
-              invoicing. Our platform simplifies every step of the process, from
-              creation to payment — so you can focus on growing your business.
-            </p>
-          </RevealOnScroll>
-        </div>
+        {/* Header */}
+        <RevealOnScroll className="flex flex-col items-center text-center gap-4">
+          <span className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-(--border-default) bg-(--surface-base) text-xs font-semibold text-(--ink-400) uppercase tracking-widest font-display">
+            <span className="w-1.5 h-1.5 rounded-full bg-(--blue-500)" />
+            Why Invox?
+          </span>
+          <h2 className="font-display font-bold text-3xl sm:text-4xl lg:text-[38px] text-(--ink-900) leading-tight tracking-[-0.03em] max-w-2xl">
+            The invoice tool built{" "}
+            <span className="text-(--blue-600) italic">for how you work</span>
+          </h2>
+          <p className="text-base text-(--ink-400) leading-relaxed font-body max-w-xl">
+            Nigerian freelancers and small businesses deserve tools that
+            understand their workflow — not generic software designed for
+            someone else.
+          </p>
+        </RevealOnScroll>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {FEATURES.map((feature, i) => {
-            const Icon = feature.icon
-            return (
-              <RevealOnScroll key={i} delay={i * 80} className="h-full">
-                <div className="flex flex-col gap-5 p-6 h-full bg-(--surface-base) rounded-(--r-xl) border border-(--border-default) hover:border-(--blue-200) hover:shadow-sm transition-all duration-200 group">
-                  <div className="w-10 h-10 rounded-(--r-md) bg-(--blue-50) border border-(--blue-100) flex items-center justify-center text-(--blue-600) group-hover:bg-(--blue-600) group-hover:text-white group-hover:border-(--blue-600) transition-colors duration-200 shrink-0">
-                    <Icon className="w-5 h-5" />
-                  </div>
-                  <div className="flex flex-col gap-2">
-                    <h4 className="font-display font-bold text-sm text-(--ink-900) tracking-[-0.015em]">
-                      {feature.title}
-                    </h4>
-                    <p className="text-sm text-(--ink-400) leading-relaxed font-body">
+        {/* Body — image + feature grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-[5fr_7fr] gap-5 items-stretch">
+          {/* Left — image */}
+          <RevealOnScroll className="h-full min-h-[360px]">
+            <div className="relative h-full min-h-90 rounded-(--r-xl) overflow-hidden border border-(--border-default) bg-(--surface-overlay)">
+              <Image
+                src="/assets/lady-typing.png"
+                alt="A freelancer using Invox to manage invoices"
+                fill
+                className="object-cover object-center"
+                sizes="(max-width: 1024px) 100vw, 42vw"
+              />
+            </div>
+          </RevealOnScroll>
+
+          {/* Right — 3-col grid: narrow|wide then wide|narrow */}
+          <div className="grid grid-cols-3 gap-4 items-stretch">
+            {FEATURES.map((feature, i) => {
+              const Icon = feature.icon;
+              const isWide = i === 1 || i === 2; // second and third cards span 2 cols
+              const isAccent = i === 1;
+
+              return (
+                <RevealOnScroll
+                  key={i}
+                  delay={i * 70}
+                  className={`${isWide ? "col-span-2" : "col-span-1"} h-full`}
+                >
+                  <div
+                    className={[
+                      "flex flex-col gap-4 p-6 h-full rounded-(--r-xl) border transition-all duration-200 group",
+                      isAccent
+                        ? "bg-(--blue-50) border-(--blue-100) hover:border-(--blue-300)"
+                        : "bg-(--surface-base) border-(--border-default) hover:border-(--blue-200) hover:bg-(--surface-raised)",
+                    ].join(" ")}
+                  >
+                    {/* Icon */}
+                    <div
+                      className={[
+                        "w-9 h-9 rounded-(--r-md) flex items-center justify-center shrink-0 transition-colors duration-200",
+                        isAccent
+                          ? "bg-(--blue-100) text-(--blue-700) group-hover:bg-(--blue-600) group-hover:text-white"
+                          : "bg-(--surface-overlay) text-(--ink-400) group-hover:bg-(--blue-600) group-hover:text-white",
+                      ].join(" ")}
+                    >
+                      <Icon className="w-4 h-4" />
+                    </div>
+
+                    {/* Label */}
+                    <span
+                      className={[
+                        "text-[10px] font-bold uppercase tracking-widest font-display",
+                        isAccent ? "text-(--blue-700)" : "text-(--ink-300)",
+                      ].join(" ")}
+                    >
+                      {feature.label}
+                    </span>
+
+                    {/* Description */}
+                    <p
+                      className={[
+                        "text-sm leading-relaxed font-body font-medium",
+                        isAccent ? "text-(--ink-700)" : "text-(--ink-500)",
+                      ].join(" ")}
+                    >
                       {feature.description}
                     </p>
                   </div>
-                </div>
-              </RevealOnScroll>
-            )
-          })}
+                </RevealOnScroll>
+              );
+            })}
+          </div>
         </div>
       </div>
     </section>
-  )
+  );
 }

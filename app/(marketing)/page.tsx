@@ -13,12 +13,9 @@ export default function HomePage() {
   return (
     <>
       <HeroSection />
-      <SeenOnSection />
       <FeaturesSection />
 
       <AnalyticsInsightsSection />
-
-      <MovingTextSection />
 
       <TestimonialsSection />
       <FAQSection />

@@ -56,8 +56,8 @@ const FEATURES = [
 
 export default function AnalyticsInsightsSection() {
   return (
-    <section className="bg-(--surface-base) py-24 overflow-hidden">
-      <div className="content-wrapper grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+    <section className="bg-(--surface-base) py-16 lg:py-24 overflow-hidden">
+      <div className="content-wrapper grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
 
         {/* ── Left: text ── */}
         <RevealOnScroll className="flex flex-col gap-10">

@@ -269,8 +269,26 @@ body {
   margin-right: auto;
   padding-left: 1.25rem;
   padding-right: 1.25rem;
-  padding-top: 6.25rem;
-  padding-bottom: 6.25rem;
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+}
+
+@media (min-width: 640px) {
+  .content-wrapper {
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .content-wrapper {
+    padding-top: 6.25rem;
+    padding-bottom: 6.25rem;
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+  }
 }
 
 /* ─── Scroll Reveal Animations ──────────────────────────────── */

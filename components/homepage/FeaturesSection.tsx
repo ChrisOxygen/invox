@@ -29,7 +29,7 @@ const FEATURES = [
 
 export default function FeaturesSection() {
   return (
-    <section className="bg-(--surface-page) py-16 overflow-hidden">
+    <section className="bg-(--surface-page) overflow-hidden">
       <div className="content-wrapper flex flex-col gap-14">
         {/* Header */}
         <RevealOnScroll className="flex flex-col items-center text-center gap-4">
@@ -63,18 +63,18 @@ export default function FeaturesSection() {
             </div>
           </RevealOnScroll>
 
-          {/* Right — 3-col grid: narrow|wide then wide|narrow */}
-          <div className="grid grid-cols-3 gap-4 items-stretch">
+          {/* Right — 3-col grid: narrow|wide then wide|narrow (stacks on mobile, 2-col on sm, asymmetric on lg) */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 items-stretch">
             {FEATURES.map((feature, i) => {
               const Icon = feature.icon;
-              const isWide = i === 1 || i === 2; // second and third cards span 2 cols
+              const isWide = i === 1 || i === 2; // second and third cards span 2 cols on lg
               const isAccent = i === 1;
 
               return (
                 <RevealOnScroll
                   key={i}
                   delay={i * 70}
-                  className={`${isWide ? "col-span-2" : "col-span-1"} h-full`}
+                  className={`${isWide ? "sm:col-span-1 lg:col-span-2" : "col-span-1"} h-full`}
                 >
                   <div
                     className={[

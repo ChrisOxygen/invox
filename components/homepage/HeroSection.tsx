@@ -1,46 +1,63 @@
-import { Button } from '@/shared/components/ui/button'
-import Image from 'next/image'
-import Link from 'next/link'
-import ExternalNavMenu from '../ExternalNavMenu'
-import { RevealOnScroll } from '../RevealOnScroll'
+import { Button } from "@/shared/components/ui/button";
+import Image from "next/image";
+import Link from "next/link";
+import ExternalNavMenu from "../ExternalNavMenu";
+import { RevealOnScroll } from "../RevealOnScroll";
 
 export default function HeroSection() {
   const stats = [
-    { val: '₦2.4B+', label: 'processed' },
-    { val: '12K+', label: 'invoices created' },
-    { val: '4.9★', label: 'avg rating' },
-  ]
+    { val: "₦2.4B+", label: "processed" },
+    { val: "12K+", label: "invoices created" },
+    { val: "4.9★", label: "avg rating" },
+  ];
 
   return (
-    <section className="min-h-screen bg-(--ink-950) relative overflow-hidden flex flex-col">
-      {/* Subtle grid pattern */}
-      <div className="absolute inset-0 opacity-[0.035] bg-[url('/assets/shape-grid-top.svg')] bg-size-[600px] bg-repeat" />
+    <section className="min-h-screen relative overflow-hidden flex flex-col m-3 rounded-xl bg-[#F3F0FF]">
+      {/* Cloud background image */}
+      <Image
+        src="/assets/cloud-bg-hero.png"
+        alt=""
+        fill
+        className="object-cover object-center"
+        priority
+        aria-hidden
+      />
+
+      {/* Subtle overlay to keep text readable */}
+      <div className="absolute inset-0 bg-white/20" />
 
       <ExternalNavMenu />
 
       <div className="relative z-10 flex flex-col items-center flex-1 pt-36 pb-0 px-5">
         {/* Eyebrow */}
         <RevealOnScroll className="flex justify-center mb-8">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-(--blue-900)/60 border border-(--blue-800) text-(--blue-200) text-xs font-semibold tracking-wider uppercase font-display">
-            <span className="w-1.5 h-1.5 rounded-full bg-(--blue-400) animate-pulse" />
-            For Nigerian Freelancers &amp; SMBs
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/70 backdrop-blur-sm border border-white/80 text-(--ink-500) text-xs font-semibold tracking-wider uppercase font-display shadow-sm">
+            <span className="w-1.5 h-1.5 rounded-full bg-(--blue-500) animate-pulse" />
+            Invoicing for freelancers &amp; small businesses
           </div>
         </RevealOnScroll>
 
         {/* Heading */}
-        <RevealOnScroll className="text-center max-w-3xl mx-auto mb-6" delay={100}>
-          <h1 className="font-display font-extrabold text-4xl sm:text-5xl lg:text-[56px] leading-[1.07] tracking-[-0.04em] text-white">
-            From Draft to Payment:{' '}
-            <span className="text-(--blue-400)">Professional Invoices</span>{' '}
-            in Minutes
+        <RevealOnScroll
+          className="text-center max-w-3xl mx-auto mb-6"
+          delay={100}
+        >
+          <h1 className="font-display font-bold text-4xl sm:text-5xl lg:text-[50px] leading-[1.07] tracking-[-0.04em] text-(--ink-900)">
+            The smarter way to invoice,{" "}
+            <span className="text-(--blue-600) italic">track,</span>
+            <br className="hidden sm:block" />
+            and get paid.
           </h1>
         </RevealOnScroll>
 
         {/* Body */}
-        <RevealOnScroll className="text-center max-w-xl mx-auto mb-10" delay={200}>
-          <p className="text-base text-(--ink-300) leading-relaxed font-body">
-            Create, send, and track invoices effortlessly. Get paid faster with
-            automated reminders and seamless payment processing.
+        <RevealOnScroll
+          className="text-center max-w-xl mx-auto mb-10"
+          delay={200}
+        >
+          <p className="text-base text-(--ink-400) leading-relaxed font-body">
+            Create polished invoices in seconds, automate follow-ups, and track
+            every payment — all in one clean workspace.
           </p>
         </RevealOnScroll>
 
@@ -52,15 +69,14 @@ export default function HeroSection() {
           <Button
             render={<Link href="/signup" />}
             nativeButton={false}
-            className="bg-(--blue-600) hover:bg-(--blue-700) text-white font-semibold px-8 py-6 rounded-(--r-md) text-base shadow-none transition-colors duration-200 font-display"
+            className="bg-(--blue-600) hover:bg-(--blue-700) text-white font-semibold px-8 py-6 rounded text-base shadow-none border-none transition-colors duration-100 ease-linear font-display"
           >
-            Create Your First Invoice
+            Start for free
           </Button>
           <Button
             render={<Link href="/about" />}
             nativeButton={false}
-            variant="ghost"
-            className="text-(--ink-300) hover:text-white hover:bg-white/8 font-medium px-8 py-6 rounded-(--r-md) text-base"
+            className="bg-white/55 hover:bg-white/80 text-(--ink-700) hover:text-(--ink-900) font-medium px-8 py-6 rounded-lg text-base border-none  shadow-none backdrop-blur-sm transition-all duration-100 ease-linear font-display"
           >
             See how it works →
           </Button>
@@ -74,14 +90,16 @@ export default function HeroSection() {
           {stats.map((stat, i) => (
             <div key={i} className="flex items-center gap-2.5">
               <span
-                className="text-sm font-semibold text-(--blue-400)"
-                style={{ fontFamily: 'var(--font-mono)' }}
+                className="text-sm font-semibold text-(--ink-900)"
+                style={{ fontFamily: "var(--font-mono)" }}
               >
                 {stat.val}
               </span>
-              <span className="text-xs text-(--ink-400) font-body">{stat.label}</span>
+              <span className="text-xs text-(--ink-400) font-body">
+                {stat.label}
+              </span>
               {i < stats.length - 1 && (
-                <span className="ml-2 hidden sm:block w-px h-3.5 bg-(--ink-700)" />
+                <span className="ml-2 hidden sm:block w-px h-3.5 bg-(--ink-200)" />
               )}
             </div>
           ))}
@@ -92,18 +110,28 @@ export default function HeroSection() {
           className="w-full max-w-5xl -mb-16 sm:-mb-44 lg:-mb-96"
           delay={500}
         >
-          <div className="rounded-t-2xl overflow-hidden border border-white/10 shadow-[0_32px_80px_rgba(0,0,0,0.55)]">
-            <Image
-              src="/assets/custom-img-08.webp"
-              alt="Invox Dashboard Preview"
-              width={2000}
-              height={2000}
-              className="w-full object-cover"
-              priority
-            />
+          {/* Stacked card depth layers */}
+          <div className="relative pt-8">
+            {/* Layer 3 — furthest back, narrowest, most transparent */}
+            <div className="absolute top-0 left-8 right-8 bottom-0 rounded-t-2xl bg-white/25" />
+            {/* Layer 2 — middle */}
+            <div className="absolute top-4 left-4 right-4 bottom-0 rounded-t-2xl bg-white/45" />
+            {/* Main card */}
+            <div className="relative rounded-t-2xl bg-white p-3 shadow-[0_32px_80px_rgba(74,94,235,0.20),0_8px_32px_rgba(0,0,0,0.10)]">
+              <div className="rounded-xl overflow-hidden border border-(--border-default)">
+                <Image
+                  src="/assets/dashboard-view.png"
+                  alt="Invox Dashboard Preview"
+                  width={2000}
+                  height={1200}
+                  className="w-full object-cover object-top"
+                  priority
+                />
+              </div>
+            </div>
           </div>
         </RevealOnScroll>
       </div>
     </section>
-  )
+  );
 }

@@ -23,9 +23,9 @@ export const FAQ_DATA = [
       'Your clients can pay via bank transfer, Paystack, Flutterwave, Wise, or PayPal. Bank transfer details are prominently displayed on every invoice, which is the most common method for Nigerian businesses.',
   },
   {
-    question: 'Do you charge transaction fees?',
+    question: 'Do you charge any fees?',
     answer:
-      'Invox does not charge transaction fees on payments. We charge a flat subscription fee for the platform. Any payment processor fees (e.g. Paystack) are set by those providers and paid directly to them.',
+      'No — Invox is completely free during our early access period. There are no subscription fees, no transaction fees, and no hidden charges. Any payment processor fees (e.g. Paystack) are set by those providers and paid directly to them.',
   },
   {
     question: 'Can I track which invoices have been viewed or paid?',
@@ -33,8 +33,8 @@ export const FAQ_DATA = [
       'Yes. Every invoice has a real-time status — Draft, Sent, Viewed, Paid, Partial, or Overdue. You can see exactly when a client opened your invoice and receive a notification when payment is made.',
   },
   {
-    question: 'Is there a free trial available?',
+    question: 'Is Invox really free right now?',
     answer:
-      'Yes, you can start for free with no credit card required. The free plan lets you create and send invoices right away. Upgrade to unlock advanced features like automated reminders, analytics, and custom branding.',
+      'Yes — Invox is 100% free during our early access period. You get full access to every feature: unlimited invoices, automated reminders, WhatsApp sharing, and analytics. No subscription, no credit card, no hidden fees. We\'ll give you advance notice before any paid plans are introduced.',
   },
 ]

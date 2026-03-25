@@ -33,7 +33,7 @@ export default function HeroSection() {
         <RevealOnScroll className="flex justify-center mb-8">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/70 backdrop-blur-sm border border-white/80 text-(--ink-500) text-xs font-semibold tracking-wider uppercase font-display shadow-sm">
             <span className="w-1.5 h-1.5 rounded-full bg-(--blue-500) animate-pulse" />
-            Invoicing for freelancers &amp; small businesses
+            Early access · 100% free right now
           </div>
         </RevealOnScroll>
 
@@ -57,7 +57,7 @@ export default function HeroSection() {
         >
           <p className="text-base text-(--ink-400) leading-relaxed font-body">
             Create polished invoices in seconds, automate follow-ups, and track
-            every payment — all in one clean workspace.
+            every payment — all in one clean workspace. Free during early access. No card, no catch.
           </p>
         </RevealOnScroll>
 
@@ -71,14 +71,7 @@ export default function HeroSection() {
             nativeButton={false}
             className="bg-(--blue-600) hover:bg-(--blue-700) text-white font-semibold px-8 py-6 rounded text-base shadow-none border-none transition-colors duration-100 ease-linear font-display"
           >
-            Start for free
-          </Button>
-          <Button
-            render={<Link href="/about" />}
-            nativeButton={false}
-            className="bg-white/90 hover:bg-white [a]:hover:bg-white text-(--ink-700) hover:text-(--ink-900) font-medium px-8 py-6 rounded-lg text-base border-none shadow-none hover:shadow-md backdrop-blur-sm transition-all duration-200 ease-out hover:scale-[1.02] active:scale-[0.98] font-display"
-          >
-            See how it works →
+            Get free access →
           </Button>
         </RevealOnScroll>
 

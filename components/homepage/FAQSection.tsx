@@ -9,7 +9,7 @@ export default function FAQSection() {
   const [openFaqIndex, setOpenFaqIndex] = useState<null | number>(null)
 
   return (
-    <section className="bg-(--surface-page)">
+    <section className="bg-(--surface-base)">
       <div className="content-wrapper flex flex-col items-center gap-14">
         <RevealOnScroll className="flex flex-col items-center gap-4 text-center">
           <span className="text-xs font-semibold text-(--blue-600) uppercase tracking-widest font-display">

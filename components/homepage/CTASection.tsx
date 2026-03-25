@@ -4,9 +4,9 @@ import { RevealOnScroll } from '../RevealOnScroll'
 import { CheckCircle2, ArrowRight } from 'lucide-react'
 
 const trustItems = [
-  'Free to start',
+  'All features included',
   'No credit card required',
-  '30-day money back guarantee',
+  'Free while we grow',
 ]
 
 const lineItems = [
@@ -121,7 +121,7 @@ function CTASection() {
               {/* Eyebrow */}
               <span className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-(--blue-600) font-display">
                 <span className="w-5 h-px bg-(--blue-600)" />
-                Start for free
+                Free during early access
               </span>
 
               <div className="flex flex-col gap-4">
@@ -132,7 +132,7 @@ function CTASection() {
                 </h2>
                 <p className="text-base text-(--ink-400) leading-relaxed font-body max-w-md">
                   Built for Nigerian freelancers and small businesses — create branded invoices,
-                  track payments, and share via WhatsApp in under two minutes.
+                  track payments, and share via WhatsApp in under two minutes. Every feature, completely free right now.
                 </p>
               </div>
 
@@ -145,14 +145,6 @@ function CTASection() {
                 >
                   Create Your First Invoice
                   <ArrowRight className="w-4 h-4" />
-                </Button>
-                <Button
-                  render={<Link href="/about" />}
-                  nativeButton={false}
-                  variant="outline"
-                  className="border border-(--border-strong) text-(--ink-700) hover:bg-(--surface-overlay) hover:border-(--blue-400) font-medium px-7 py-5 rounded-(--r-md) text-sm bg-transparent shadow-none transition-colors duration-200 font-display w-full sm:w-auto"
-                >
-                  See How It Works
                 </Button>
               </div>
 

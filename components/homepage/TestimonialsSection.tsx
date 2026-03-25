@@ -1,65 +1,132 @@
 import { Star } from 'lucide-react'
 import { RevealOnScroll } from '../RevealOnScroll'
 
+const testimonials = [
+  {
+    quote:
+      'Before Invox, I was attaching Word docs and calling it an invoice. Now I send a branded PDF in under two minutes — my clients\' response changed overnight. They actually pay faster.',
+    name: 'Adaeze Nwosu',
+    role: 'Freelance Graphic Designer',
+    location: 'Lagos',
+    initials: 'AN',
+    avatarBg: 'var(--blue-600)',
+    rating: 5,
+  },
+  {
+    quote:
+      'We manage 30+ client projects monthly. Invox\'s dashboard shows paid, pending, and overdue at a glance. Our outstanding invoices dropped by half in the first month.',
+    name: 'Emeka Obi',
+    role: 'Co-founder, Buildwise Consultants',
+    location: 'Abuja',
+    initials: 'EO',
+    avatarBg: 'var(--ink-500)',
+    rating: 5,
+  },
+  {
+    quote:
+      'The WhatsApp share button is the feature I didn\'t know I needed. One tap and my invoice is in the client\'s chat. It\'s exactly how business works here.',
+    name: 'Temi Adeyemi',
+    role: 'Copywriter & Brand Strategist',
+    location: 'Lagos',
+    initials: 'TA',
+    avatarBg: 'var(--success)',
+    rating: 5,
+  },
+]
+
+function StarRating({ count }: { count: number }) {
+  return (
+    <div className="flex gap-0.5">
+      {Array.from({ length: count }).map((_, i) => (
+        <Star
+          key={i}
+          className="w-4 h-4 fill-current text-(--warning)"
+        />
+      ))}
+    </div>
+  )
+}
+
 export default function TestimonialsSection() {
   return (
-    <section id="testimonials" className="bg-(--ink-950)">
-      <div className="content-wrapper flex flex-col items-center gap-14">
-        <RevealOnScroll className="flex flex-col items-center gap-4 text-center">
-          <span className="text-xs font-semibold text-(--blue-400) uppercase tracking-widest font-display">
-            Hear from our customers
-          </span>
-          <h2 className="font-display font-bold text-3xl lg:text-4xl text-white leading-tight tracking-[-0.025em] max-w-120">
-            What our users are saying about{' '}
-            <span className="text-(--blue-400)">Invox</span>
-          </h2>
-          <p className="text-base text-(--ink-300) max-w-125 leading-relaxed font-body">
-            Don&apos;t just take our word for it — see what our customers have to say
-          </p>
-        </RevealOnScroll>
+    <section id="testimonials" className="bg-(--surface-page)">
+      <div className="content-wrapper flex flex-col gap-14">
 
-        <RevealOnScroll delay={150} className="w-full max-w-3xl">
-          <figure className="flex flex-col gap-7 p-8 sm:p-10 rounded-(--r-2xl) bg-(--ink-900) border border-(--ink-700)">
-            <div className="flex gap-1 text-(--warning)">
-              {Array.from({ length: 5 }).map((_, i) => (
-                <Star key={i} className="w-5 h-5 fill-current" />
-              ))}
+        {/* Header — split layout */}
+        <RevealOnScroll className="flex flex-col lg:flex-row lg:items-end justify-between gap-8">
+          <div className="flex flex-col gap-3 max-w-xl">
+            <span className="text-xs font-semibold text-(--blue-600) uppercase tracking-widest font-display">
+              Customer stories
+            </span>
+            <h2 className="font-display font-extrabold text-3xl lg:text-4xl text-(--ink-900) leading-tight tracking-[-0.025em]">
+              Trusted by freelancers and
+              <br className="hidden sm:block" />
+              businesses across Nigeria
+            </h2>
+            <p className="text-sm text-(--ink-400) leading-relaxed font-body">
+              Real invoices. Real clients. Real results — from people running
+              businesses just like yours.
+            </p>
+          </div>
+
+          {/* Aggregate rating callout */}
+          <div className="flex items-center gap-4 shrink-0 lg:pb-1">
+            <div className="flex flex-col items-center gap-1.5 px-6 py-4 rounded-(--r-lg) border border-(--border-default) bg-(--surface-base) min-w-28">
+              <span
+                className="text-3xl font-medium text-(--ink-900) leading-none"
+                style={{ fontFamily: 'var(--font-mono)' }}
+              >
+                4.9
+              </span>
+              <StarRating count={5} />
+              <span className="text-[10px] text-(--ink-300) uppercase tracking-widest font-display">
+                500+ reviews
+              </span>
             </div>
-            <blockquote className="text-lg sm:text-xl text-white leading-relaxed font-body">
-              &ldquo;Invox has completely streamlined my invoicing process. The
-              interface is clean and intuitive — I can create professional invoices
-              in minutes instead of hours. The automated payment reminders have
-              improved my cash flow significantly, and clients love how easy it is
-              to pay online. Highly recommend Invox to any business owner looking
-              to simplify their billing!&rdquo;
-            </blockquote>
-            <figcaption className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-(--blue-600) flex items-center justify-center text-white font-display font-bold text-sm shrink-0">
-                SM
-              </div>
-              <div>
-                <p className="text-sm font-semibold text-white font-display">Sarah M.</p>
-                <p className="text-xs text-(--ink-400) font-body mt-0.5">
-                  Freelance Designer
-                </p>
-              </div>
-            </figcaption>
-          </figure>
+          </div>
         </RevealOnScroll>
 
-        <div className="flex items-center gap-2">
-          {Array.from({ length: 5 }).map((_, i) => (
-            <button
-              key={i}
-              aria-label={`Testimonial ${i + 1}`}
-              className={`rounded-full transition-all duration-200 ${
-                i === 2
-                  ? 'w-6 h-2 bg-(--blue-600)'
-                  : 'w-2 h-2 bg-(--ink-700) hover:bg-(--ink-500)'
-              }`}
-            />
+        {/* Card grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          {testimonials.map((t, i) => (
+            <RevealOnScroll key={t.name} delay={i * 100}>
+              <article className="relative flex flex-col gap-5 rounded-(--r-lg) border border-(--border-default) bg-(--surface-base) p-6 h-full overflow-hidden">
+                {/* Blue top accent */}
+                <div className="absolute top-0 left-0 right-0 h-0.5 bg-(--blue-600)" aria-hidden="true" />
+
+                {/* Stars */}
+                <StarRating count={t.rating} />
+
+                {/* Quote */}
+                <blockquote className="flex-1">
+                  <p className="text-sm text-(--ink-700) leading-relaxed font-body">
+                    &ldquo;{t.quote}&rdquo;
+                  </p>
+                </blockquote>
+
+                {/* Attribution */}
+                <figcaption className="flex items-center gap-3 pt-1 border-t border-(--border-default)">
+                  <div
+                    className="w-9 h-9 rounded-full flex items-center justify-center text-white font-display font-bold text-xs shrink-0"
+                    style={{ backgroundColor: t.avatarBg }}
+                    aria-hidden="true"
+                  >
+                    {t.initials}
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-sm font-semibold text-(--ink-900) font-display leading-tight">
+                      {t.name}
+                    </p>
+                    <p className="text-xs text-(--ink-400) font-body mt-0.5 truncate">
+                      {t.role} · {t.location}
+                    </p>
+                  </div>
+                </figcaption>
+              </article>
+            </RevealOnScroll>
           ))}
         </div>
+
       </div>
     </section>
   )

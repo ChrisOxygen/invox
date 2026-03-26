@@ -10,7 +10,7 @@ function ExternalFooter() {
         {/* Main row */}
         <div className="flex flex-col lg:flex-row justify-between gap-10 mb-10">
           {/* Brand column */}
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-4 lg:max-w-xs">
             <Link href="/">
               <Image
                 src="/assets/invox-main-logo.webp"

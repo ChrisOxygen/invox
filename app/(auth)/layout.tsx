@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
 import type { ReactNode } from 'react'
@@ -11,19 +12,15 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
       >
         {/* Logo + back link */}
         <div className="flex items-center justify-between mb-auto">
-          {/* Invox logo mark — 3 ascending cyan bars */}
-          <svg
-            width="28"
-            height="24"
-            viewBox="0 0 28 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            aria-hidden="true"
-          >
-            <rect x="0" y="14" width="6" height="10" rx="2" fill="var(--blue-600)" />
-            <rect x="11" y="7" width="6" height="17" rx="2" fill="var(--blue-600)" />
-            <rect x="22" y="0" width="6" height="24" rx="2" fill="var(--cyan-400)" />
-          </svg>
+          <div className="flex size-7 shrink-0 items-center justify-center rounded bg-(--blue-600)">
+            <Image
+              src="/assets/logo-white-icon.webp"
+              alt="Invox"
+              width={16}
+              height={16}
+              className="object-contain"
+            />
+          </div>
           <span
             className="text-[22px] font-[family-name:var(--font-display)] font-extrabold tracking-tight text-[var(--ink-900)]"
           >
@@ -46,7 +43,7 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
         {/* Footer */}
         <div className="mt-auto pt-6">
           <p
-            className="text-[12px] font-[family-name:var(--font-body)] text-[var(--ink-300)] text-center"
+            className="text-[12px] font-[family-name:var(--font-body)] text-[var(--ink-300)] text-center w-fit mx-auto"
           >
             &copy; {new Date().getFullYear()} Invox Technologies Ltd. All rights reserved.
           </p>

@@ -73,7 +73,7 @@ function ExternalNavMenu() {
             Log in
           </Button>
           <Button
-            render={<Link href="/signup" />}
+            render={<Link href="/register" />}
             nativeButton={false}
             className="bg-(--blue-600) hover:bg-(--blue-700) text-white  px-4 h-8 rounded-lg text-sm shadow-none transition-colors duration-200 flex items-center gap-1.5"
           >
@@ -85,7 +85,7 @@ function ExternalNavMenu() {
         {/* Mobile */}
         <div className="lg:hidden flex gap-2 items-center">
           <Button
-            render={<Link href="/signup" />}
+            render={<Link href="/register" />}
             nativeButton={false}
             className="bg-(--blue-600) hover:bg-(--blue-700) text-white font-semibold py-1.5 px-3.5 rounded-lg text-sm shadow-none flex items-center gap-1"
           >

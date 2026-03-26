@@ -87,7 +87,7 @@ export function ExternalNavMenuMobile({ isScrolled }: ExternalNavMenuMobileProps
             Log in
           </SheetClose>
           <SheetClose
-            render={<Link href="/signup" />}
+            render={<Link href="/register" />}
             nativeButton={false}
             className="w-full inline-flex items-center justify-center gap-2 bg-(--blue-600) hover:bg-(--blue-700) text-white rounded-lg py-2.5 px-4 text-sm font-semibold font-display transition-colors duration-100"
           >

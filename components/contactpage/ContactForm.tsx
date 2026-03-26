@@ -1,7 +1,15 @@
 'use client'
 
 import { useState } from 'react'
-import { ArrowRight, CheckCircle, ChevronDown, Phone, Mail, MapPin, MessageSquare, Building, User } from 'lucide-react'
+import {
+  ArrowRight,
+  CheckCircle,
+  ChevronDown,
+  Mail,
+  MessageSquare,
+  Building,
+  User,
+} from 'lucide-react'
 
 const inquiryOptions = [
   'General Inquiry',
@@ -46,7 +54,7 @@ function SelectField({
         <button
           type="button"
           onClick={() => setOpen(!open)}
-          className="w-full flex items-center gap-3 px-4 py-3 rounded border border-(--border-default) bg-(--surface-base) text-sm text-left focus:outline-none focus:border-(--ink-900) transition-colors duration-150 group"
+          className="w-full flex items-center gap-3 px-4 py-3 rounded border border-(--border-default) bg-(--surface-base) text-sm text-left focus:outline-none focus:border-(--ink-900) transition-colors duration-150"
         >
           <Icon className="w-4 h-4 text-(--ink-300) shrink-0" />
           <span className={value ? 'text-(--ink-900) font-body flex-1' : 'text-(--ink-300) font-body flex-1'}>
@@ -94,7 +102,7 @@ export function ContactForm() {
   if (submitted) {
     return (
       <div className="flex flex-col items-center justify-center gap-5 py-20 text-center">
-        <div className="w-14 h-14 rounded-full bg-(--success)/10 flex items-center justify-center">
+        <div className="w-14 h-14 rounded bg-(--success)/10 flex items-center justify-center">
           <CheckCircle className="w-7 h-7 text-(--success)" />
         </div>
         <div className="flex flex-col gap-2">
@@ -110,165 +118,111 @@ export function ContactForm() {
   }
 
   return (
-    <div className="flex flex-col gap-8">
-      {/* Contact info row */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-        {[
-          {
-            icon: Phone,
-            lines: ['+234 800 468 690', 'support@invox.ng'],
-          },
-          {
-            icon: Mail,
-            lines: ['support@invox.ng', 'hello@invox.ng'],
-          },
-          {
-            icon: MapPin,
-            lines: ['Lagos, Nigeria', 'Victoria Island, LA'],
-          },
-        ].map(({ icon: Icon, lines }, i) => (
-          <div key={i} className="flex flex-col gap-3">
-            <div className="w-9 h-9 rounded border border-(--border-default) bg-(--surface-base) flex items-center justify-center">
-              <Icon className="w-4 h-4 text-(--ink-700)" strokeWidth={1.5} />
-            </div>
-            <div className="flex flex-col gap-0.5">
-              {lines.map((line) => (
-                <span key={line} className="text-sm text-(--ink-500) font-body">
-                  {line}
-                </span>
-              ))}
-            </div>
-          </div>
-        ))}
+    <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+      {/* Row 1: inquiry type + who you are */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <SelectField
+          label="Inquiry Type"
+          required
+          options={inquiryOptions}
+          placeholder="Choose one..."
+          icon={MessageSquare}
+        />
+        <SelectField
+          label="Best describes you"
+          options={descriptionOptions}
+          placeholder="Choose one..."
+          icon={User}
+        />
       </div>
 
-      {/* Divider */}
-      <div className="h-px bg-(--border-default)" />
-
-      {/* Form heading */}
-      <h3 className="font-display font-semibold text-xl text-(--ink-900) tracking-[-0.02em]">
-        Or fill out the form below
-      </h3>
-
-      {/* Form */}
-      <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-        {/* Row 1: selects */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <SelectField
-            label="Inquiry Purpose"
-            required
-            options={inquiryOptions}
-            placeholder="Choose one option..."
-            icon={MessageSquare}
-          />
-          <SelectField
-            label="Description that fits you"
-            required
-            options={descriptionOptions}
-            placeholder="Choose one option..."
-            icon={User}
-          />
-        </div>
-
-        {/* Row 2: name + email */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div className="flex flex-col gap-2">
-            <label className="text-xs font-semibold text-(--ink-900) font-display">
-              Full Name
-            </label>
-            <div className="relative flex items-center">
-              <User className="absolute left-4 w-4 h-4 text-(--ink-300) pointer-events-none" strokeWidth={1.5} />
-              <input
-                type="text"
-                placeholder="Enter your full name..."
-                className={`${inputClass} pl-11`}
-              />
-            </div>
-          </div>
-          <div className="flex flex-col gap-2">
-            <label className="text-xs font-semibold text-(--ink-900) font-display">
-              Email Address
-            </label>
-            <div className="relative flex items-center">
-              <Mail className="absolute left-4 w-4 h-4 text-(--ink-300) pointer-events-none" strokeWidth={1.5} />
-              <input
-                type="email"
-                placeholder="Enter your email address..."
-                className={`${inputClass} pl-11`}
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Row 3: org + phone */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div className="flex flex-col gap-2">
-            <label className="text-xs font-semibold text-(--ink-900) font-display">
-              Organization
-            </label>
-            <div className="relative flex items-center">
-              <Building className="absolute left-4 w-4 h-4 text-(--ink-300) pointer-events-none" strokeWidth={1.5} />
-              <input
-                type="text"
-                placeholder="Enter your organization..."
-                className={`${inputClass} pl-11`}
-              />
-            </div>
-          </div>
-          <div className="flex flex-col gap-2">
-            <label className="text-xs font-semibold text-(--ink-900) font-display">
-              Phone Number
-            </label>
-            <div className="relative flex items-center">
-              <Phone className="absolute left-4 w-4 h-4 text-(--ink-300) pointer-events-none" strokeWidth={1.5} />
-              <input
-                type="tel"
-                placeholder="Enter your phone number..."
-                className={`${inputClass} pl-11`}
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Row 4: message */}
+      {/* Row 2: name + email */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="flex flex-col gap-2">
           <label className="text-xs font-semibold text-(--ink-900) font-display">
-            Message
-            <span className="text-(--error) ml-0.5">*</span>
+            Full Name <span className="text-(--error)">*</span>
           </label>
-          <div className="relative">
-            <MessageSquare
-              className="absolute left-4 top-3.5 w-4 h-4 text-(--ink-300) pointer-events-none"
-              strokeWidth={1.5}
-            />
-            <textarea
+          <div className="relative flex items-center">
+            <User className="absolute left-4 w-4 h-4 text-(--ink-300) pointer-events-none" strokeWidth={1.5} />
+            <input
+              type="text"
               required
-              rows={5}
-              placeholder="Enter your message here..."
-              className={`${inputClass} pl-11 resize-none`}
+              placeholder="Your full name"
+              className={`${inputClass} pl-11`}
             />
           </div>
         </div>
+        <div className="flex flex-col gap-2">
+          <label className="text-xs font-semibold text-(--ink-900) font-display">
+            Email Address <span className="text-(--error)">*</span>
+          </label>
+          <div className="relative flex items-center">
+            <Mail className="absolute left-4 w-4 h-4 text-(--ink-300) pointer-events-none" strokeWidth={1.5} />
+            <input
+              type="email"
+              required
+              placeholder="you@example.com"
+              className={`${inputClass} pl-11`}
+            />
+          </div>
+        </div>
+      </div>
 
-        {/* Submit */}
-        <button
-          type="submit"
-          disabled={isSubmitting}
-          className="self-start flex items-center gap-2.5 px-8 py-3.5 rounded bg-(--ink-900) hover:bg-(--ink-700) text-white text-sm font-semibold font-display transition-colors duration-150 disabled:opacity-60 disabled:cursor-not-allowed"
-        >
-          {isSubmitting ? (
-            <>
-              <span className="w-4 h-4 rounded-full border-2 border-white/30 border-t-white animate-spin" />
-              Sending...
-            </>
-          ) : (
-            <>
-              Submit Form
-              <ArrowRight className="w-4 h-4" />
-            </>
-          )}
-        </button>
-      </form>
-    </div>
+      {/* Row 3: organization (optional) */}
+      <div className="flex flex-col gap-2">
+        <label className="text-xs font-semibold text-(--ink-900) font-display">
+          Organization{' '}
+          <span className="text-(--ink-300) font-normal font-body normal-case tracking-normal text-[11px]">
+            — optional
+          </span>
+        </label>
+        <div className="relative flex items-center">
+          <Building className="absolute left-4 w-4 h-4 text-(--ink-300) pointer-events-none" strokeWidth={1.5} />
+          <input
+            type="text"
+            placeholder="Your business or agency name"
+            className={`${inputClass} pl-11`}
+          />
+        </div>
+      </div>
+
+      {/* Row 4: message */}
+      <div className="flex flex-col gap-2">
+        <label className="text-xs font-semibold text-(--ink-900) font-display">
+          Message <span className="text-(--error)">*</span>
+        </label>
+        <div className="relative">
+          <MessageSquare
+            className="absolute left-4 top-3.5 w-4 h-4 text-(--ink-300) pointer-events-none"
+            strokeWidth={1.5}
+          />
+          <textarea
+            required
+            rows={5}
+            placeholder="Tell us what's on your mind..."
+            className={`${inputClass} pl-11 resize-none`}
+          />
+        </div>
+      </div>
+
+      {/* Submit */}
+      <button
+        type="submit"
+        disabled={isSubmitting}
+        className="self-start flex items-center gap-2.5 px-8 py-3.5 rounded bg-(--blue-600) hover:bg-(--blue-700) text-white text-sm font-semibold font-display transition-colors duration-150 disabled:opacity-60 disabled:cursor-not-allowed"
+      >
+        {isSubmitting ? (
+          <>
+            <span className="w-4 h-4 rounded border-2 border-white/30 border-t-white animate-spin" />
+            Sending...
+          </>
+        ) : (
+          <>
+            Send Message
+            <ArrowRight className="w-4 h-4" />
+          </>
+        )}
+      </button>
+    </form>
   )
 }

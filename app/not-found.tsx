@@ -1,8 +1,6 @@
-import Link from 'next/link'
+'use client'
 
-export const metadata = {
-  title: '404 — Page Not Found | Invox',
-}
+import Link from 'next/link'
 
 export default function NotFound() {
   return (

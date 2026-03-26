@@ -40,7 +40,7 @@ export default function FAQSection() {
                 <span className="font-display font-semibold text-sm text-(--ink-900) leading-snug">
                   {faq.question}
                 </span>
-                <span className="shrink-0 w-7 h-7 rounded-(--r-sm) border border-(--border-default) flex items-center justify-center text-(--blue-600) bg-(--surface-base)">
+                <span className="shrink-0 w-7 h-7 rounded-lg border border-(--border-default) flex items-center justify-center text-(--blue-600) bg-(--surface-base)">
                   {openFaqIndex === index ? (
                     <Minus className="w-3.5 h-3.5" />
                   ) : (

@@ -51,8 +51,8 @@ export default function FeaturesSection() {
         {/* Body — image + feature grid */}
         <div className="grid grid-cols-1 lg:grid-cols-[5fr_7fr] gap-5 items-stretch">
           {/* Left — image */}
-          <RevealOnScroll className="h-full min-h-[360px]">
-            <div className="relative h-full min-h-90 rounded-(--r-xl) overflow-hidden border border-(--border-default) bg-(--surface-overlay)">
+          <RevealOnScroll className="h-full min-h-120">
+            <div className="relative h-full min-h-120 rounded-2xl overflow-hidden border border-(--border-default) bg-(--surface-overlay)">
               <Image
                 src="/assets/lady-typing.png"
                 alt="A freelancer using Invox to manage invoices"
@@ -78,7 +78,7 @@ export default function FeaturesSection() {
                 >
                   <div
                     className={[
-                      "flex flex-col gap-4 p-6 h-full rounded-(--r-xl) border transition-all duration-200 group",
+                      "flex flex-col gap-4 p-6 h-full rounded-2xl border transition-all duration-200 group",
                       isAccent
                         ? "bg-(--blue-50) border-(--blue-100) hover:border-(--blue-300)"
                         : "bg-(--surface-base) border-(--border-default) hover:border-(--blue-200) hover:bg-(--surface-raised)",
@@ -87,7 +87,7 @@ export default function FeaturesSection() {
                     {/* Icon */}
                     <div
                       className={[
-                        "w-9 h-9 rounded-(--r-md) flex items-center justify-center shrink-0 transition-colors duration-200",
+                        "w-9 h-9 rounded-lg flex items-center justify-center shrink-0 transition-colors duration-200",
                         isAccent
                           ? "bg-(--blue-100) text-(--blue-700) group-hover:bg-(--blue-600) group-hover:text-white"
                           : "bg-(--surface-overlay) text-(--ink-400) group-hover:bg-(--blue-600) group-hover:text-white",

@@ -183,7 +183,14 @@ button, [role="button"], [type="button"], [type="submit"], [type="reset"] {
   cursor: pointer;
 }
 
+html {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
 body {
+  overflow-x: hidden;
+  max-width: 100vw;
   background-color: var(--surface-page);
   color: var(--ink-900);
   font-family: var(--font-body);
@@ -264,7 +271,7 @@ body {
 /* ─── Marketing Layout ──────────────────────────────────────── */
 .content-wrapper {
   width: 100%;
-  max-width: 1250px;
+  max-width: 42rem;
   margin-left: auto;
   margin-right: auto;
   padding-left: 1.25rem;
@@ -284,6 +291,7 @@ body {
 
 @media (min-width: 1024px) {
   .content-wrapper {
+    max-width: 1250px;
     padding-top: 6.25rem;
     padding-bottom: 6.25rem;
     padding-left: 1.25rem;

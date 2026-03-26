@@ -17,7 +17,7 @@ const lineItems = [
 
 function InvoicePreview() {
   return (
-    <div className="relative w-full max-w-sm mx-auto lg:mx-0 lg:ml-auto">
+    <div className="relative w-full lg:max-w-lg lg:mx-0 lg:ml-auto">
       {/* Floating accent card behind */}
       <div
         className="absolute -top-3 -right-3 w-full h-full rounded-(--r-xl) border border-(--border-default) bg-(--surface-raised)"
@@ -114,7 +114,7 @@ function CTASection() {
     <section className="bg-(--surface-page)">
       <div className="content-wrapper py-20 sm:py-28">
         <RevealOnScroll>
-          <div className="flex flex-col lg:flex-row items-center gap-14 lg:gap-20">
+          <div className="flex flex-col lg:flex-row lg:items-center gap-14 lg:gap-20">
 
             {/* Left — copy */}
             <div className="flex flex-col gap-8 flex-1 min-w-0">
@@ -141,7 +141,7 @@ function CTASection() {
                 <Button
                   render={<Link href="/register" />}
                   nativeButton={false}
-                  className="bg-(--blue-600) hover:bg-(--blue-700) text-white font-semibold px-7 py-5 rounded-(--r-md) text-sm shadow-none transition-colors duration-200 font-display inline-flex items-center gap-2 w-full sm:w-auto justify-center"
+                  className="bg-(--blue-600) hover:bg-(--blue-700) text-white font-semibold px-7 py-5 rounded-lg text-sm shadow-none transition-colors duration-200 font-display inline-flex items-center gap-2 w-full sm:w-auto justify-center"
                 >
                   Create Your First Invoice
                   <ArrowRight className="w-4 h-4" />
@@ -163,7 +163,7 @@ function CTASection() {
             </div>
 
             {/* Right — invoice preview */}
-            <div className="w-full lg:shrink-0 lg:w-90">
+            <div className="w-full lg:shrink-0 lg:w-120">
               <InvoicePreview />
             </div>
 

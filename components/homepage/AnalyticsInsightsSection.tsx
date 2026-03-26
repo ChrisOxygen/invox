@@ -83,7 +83,7 @@ export default function AnalyticsInsightsSection() {
               const Icon = f.icon;
               return (
                 <div key={i} className="flex gap-4 items-start">
-                  <div className="w-9 h-9 rounded-(--r-md) bg-(--blue-50) border border-(--blue-100) flex items-center justify-center text-(--blue-600) shrink-0 mt-0.5">
+                  <div className="w-9 h-9 rounded-lg bg-(--blue-50) border border-(--blue-100) flex items-center justify-center text-(--blue-600) shrink-0 mt-0.5">
                     <Icon className="w-4 h-4" />
                   </div>
                   <div className="flex flex-col gap-1">
@@ -104,7 +104,7 @@ export default function AnalyticsInsightsSection() {
         <RevealOnScroll delay={150} className="relative">
 
           {/* ── Revenue Overview card ── */}
-          <div className="relative z-10 bg-(--surface-base) border border-(--border-default) rounded-(--r-xl) p-5 flex flex-col gap-5 shadow-sm">
+          <div className="relative z-10 bg-(--surface-base) border border-(--border-default) rounded-2xl p-5 flex flex-col gap-5 shadow-sm">
 
             {/* Header row */}
             <div className="flex items-start justify-between gap-4">
@@ -173,7 +173,7 @@ export default function AnalyticsInsightsSection() {
             </div>
 
             {/* ── Outstanding badge — overlaps downward out of this card ── */}
-            <div className="absolute -bottom-6 right-6 z-20 bg-(--surface-base) border border-(--border-default) rounded-(--r-lg) px-4 py-2.5 shadow-sm flex flex-col gap-0.5">
+            <div className="absolute -bottom-6 right-6 z-20 bg-(--surface-base) border border-(--border-default) rounded-2xl px-4 py-2.5 shadow-sm flex flex-col gap-0.5">
               <span className="text-[10px] font-bold uppercase tracking-widest text-(--ink-300) font-display">
                 Outstanding
               </span>
@@ -196,7 +196,7 @@ export default function AnalyticsInsightsSection() {
                   188 invoices
                 </span>
               </div>
-              <div className="bg-(--surface-base) border border-(--border-default) rounded-(--r-xl) pt-7 px-5 pb-5 flex flex-col gap-4">
+              <div className="bg-(--surface-base) border border-(--border-default) rounded-2xl pt-7 px-5 pb-5 flex flex-col gap-4">
                 <span className="text-xs font-semibold text-(--ink-300) uppercase tracking-widest font-display">
                   Invoice Pipeline
                 </span>
@@ -238,7 +238,7 @@ export default function AnalyticsInsightsSection() {
             </div>
 
             {/* Recent Activity card */}
-            <div className="bg-(--surface-base) border border-(--border-default) rounded-(--r-xl) p-5 flex flex-col gap-4">
+            <div className="bg-(--surface-base) border border-(--border-default) rounded-2xl p-5 flex flex-col gap-4">
               <span className="text-xs font-semibold text-(--ink-300) uppercase tracking-widest font-display">
                 Recent Activity
               </span>

@@ -6,11 +6,11 @@ import { FaLinkedinIn, FaXTwitter, FaGithub } from "react-icons/fa6";
 function ExternalFooter() {
   return (
     <footer className="relative bg-(--surface-base) border-t border-(--border-default) overflow-hidden">
-      <div className="relative max-w-312.5 mx-auto px-5 lg:px-0 py-14">
+      <div className="content-wrapper relative py-14">
         {/* Main row */}
         <div className="flex flex-col lg:flex-row justify-between gap-10 mb-10">
           {/* Brand column */}
-          <div className="flex flex-col gap-4 max-w-xs">
+          <div className="flex flex-col gap-4">
             <Link href="/">
               <Image
                 src="/assets/invox-main-logo.webp"

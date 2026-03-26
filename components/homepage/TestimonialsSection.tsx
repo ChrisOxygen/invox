@@ -71,7 +71,7 @@ export default function TestimonialsSection() {
 
           {/* Aggregate rating callout */}
           <div className="flex items-center gap-4 shrink-0 lg:pb-1">
-            <div className="flex flex-col items-center gap-1.5 px-6 py-4 rounded-(--r-lg) border border-(--border-default) bg-(--surface-base) min-w-28">
+            <div className="flex flex-col items-center gap-1.5 px-6 py-4 rounded-2xl border border-(--border-default) bg-(--surface-base) min-w-28">
               <span
                 className="text-3xl font-medium text-(--ink-900) leading-none"
                 style={{ fontFamily: 'var(--font-mono)' }}
@@ -87,10 +87,10 @@ export default function TestimonialsSection() {
         </RevealOnScroll>
 
         {/* Card grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
           {testimonials.map((t, i) => (
             <RevealOnScroll key={t.name} delay={i * 100}>
-              <article className="relative flex flex-col gap-5 rounded-(--r-lg) border border-(--border-default) bg-(--surface-base) p-6 h-full overflow-hidden">
+              <article className="relative flex flex-col gap-5 rounded-2xl border border-(--border-default) bg-(--surface-base) p-6 h-full overflow-hidden">
                 {/* Blue top accent */}
                 <div className="absolute top-0 left-0 right-0 h-0.5 bg-(--blue-600)" aria-hidden="true" />
 

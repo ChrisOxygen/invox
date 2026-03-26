@@ -9,10 +9,11 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/shared/components/ui/sheet'
+import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { NAVIGATION_LINKS } from '@/constants'
-import { Menu } from 'lucide-react'
+import { Menu, UserPlus, LogIn } from 'lucide-react'
 
 interface ExternalNavMenuMobileProps {
   isScrolled?: boolean
@@ -26,61 +27,73 @@ export function ExternalNavMenuMobile({ isScrolled }: ExternalNavMenuMobileProps
 
   return (
     <Sheet>
+      {/* 44×44px tap target (Apple HIG / Material minimum) */}
       <SheetTrigger
-        aria-label="Open menu"
-        className={`cursor-pointer transition-colors duration-200 ${
+        aria-label="Open navigation menu"
+        className={`flex items-center justify-center w-9 h-9 rounded-lg transition-colors duration-100 cursor-pointer ${
           isScrolled
-            ? 'text-(--ink-700) hover:text-(--ink-900)'
+            ? 'text-(--ink-700) hover:text-(--ink-900) hover:bg-(--surface-overlay)'
             : 'text-(--ink-100) hover:text-white'
         }`}
       >
-        <Menu className="w-6 h-6" />
+        <Menu className="w-5 h-5" />
       </SheetTrigger>
 
-      <SheetContent className="w-80 sm:w-96 bg-(--surface-base)">
-        <SheetHeader className="border-b border-(--border-default) pb-4 mb-4">
-          <SheetTitle className="font-display font-bold text-(--ink-900) text-lg tracking-[-0.02em]">
-            Menu
-          </SheetTitle>
+      <SheetContent
+        side="right"
+        className="w-[82vw] max-w-75 bg-(--surface-base) flex flex-col p-0 gap-0 border-l border-(--border-default)"
+      >
+        {/* Header — logo instead of generic "Menu" title */}
+        <SheetHeader className="px-5 py-4 border-b border-(--border-default) shrink-0">
+          <SheetTitle className="sr-only">Navigation</SheetTitle>
+          <Image
+            src="/assets/invox-main-logo.webp"
+            alt="Invox"
+            width={100}
+            height={36}
+            className="object-contain h-7 w-auto"
+          />
         </SheetHeader>
 
-        <nav className="flex-1 px-1">
-          <menu className="flex flex-col gap-1 list-none">
+        {/* Nav links — 48px rows for comfortable touch targets */}
+        <nav className="flex-1 overflow-y-auto px-3 py-3">
+          <ul className="flex flex-col gap-0.5 list-none m-0 p-0">
             {NAVIGATION_LINKS.map((link) => (
               <li key={link.href}>
                 <SheetClose
                   render={<Link href={link.href} />}
                   nativeButton={false}
-                  className={`block w-full text-left px-4 py-3 rounded-(--r-lg) text-sm font-medium font-display transition-colors duration-200 ${
+                  className={`flex w-full items-center px-4 py-3 rounded-lg text-sm font-semibold font-display tracking-[-0.01em] transition-colors duration-100 ${
                     isActiveLink(link.href)
                       ? 'bg-(--blue-50) text-(--blue-600)'
-                      : 'text-(--ink-700) hover:text-(--ink-900) hover:bg-(--surface-overlay)'
+                      : 'text-(--ink-500) hover:text-(--ink-900) hover:bg-(--surface-overlay)'
                   }`}
                 >
                   {link.label}
                 </SheetClose>
               </li>
             ))}
-          </menu>
+          </ul>
         </nav>
 
-        <SheetFooter className="border-t border-(--border-default) pt-5 mt-auto">
-          <div className="flex flex-col gap-2.5 w-full">
-            <SheetClose
-              render={<Link href="/login" />}
-              nativeButton={false}
-              className="w-full inline-flex items-center justify-center border border-(--border-strong) text-(--ink-700) hover:bg-(--surface-overlay) rounded-(--r-md) py-2 px-4 text-sm font-semibold font-display transition-colors duration-200"
-            >
-              Login
-            </SheetClose>
-            <SheetClose
-              render={<Link href="/signup" />}
-              nativeButton={false}
-              className="w-full inline-flex items-center justify-center bg-(--blue-600) hover:bg-(--blue-700) text-white rounded-(--r-md) py-2 px-4 text-sm font-semibold font-display transition-colors duration-200"
-            >
-              Get Started
-            </SheetClose>
-          </div>
+        {/* CTA buttons — pinned to bottom */}
+        <SheetFooter className="px-4 py-5 border-t border-(--border-default) shrink-0 flex-col gap-2">
+          <SheetClose
+            render={<Link href="/login" />}
+            nativeButton={false}
+            className="w-full inline-flex items-center justify-center gap-2 border border-(--border-strong) text-(--ink-700) hover:bg-(--surface-overlay) rounded-lg py-2.5 px-4 text-sm font-semibold font-display transition-colors duration-100"
+          >
+            <LogIn className="w-4 h-4" />
+            Log in
+          </SheetClose>
+          <SheetClose
+            render={<Link href="/signup" />}
+            nativeButton={false}
+            className="w-full inline-flex items-center justify-center gap-2 bg-(--blue-600) hover:bg-(--blue-700) text-white rounded-lg py-2.5 px-4 text-sm font-semibold font-display transition-colors duration-100"
+          >
+            Get started free
+            <UserPlus className="w-4 h-4" />
+          </SheetClose>
         </SheetFooter>
       </SheetContent>
     </Sheet>

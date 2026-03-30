@@ -5,7 +5,7 @@ import { NextResponse, type NextRequest } from 'next/server'
 export async function GET(request: NextRequest) {
   const { searchParams, origin } = new URL(request.url)
   const code = searchParams.get('code')
-  const next = searchParams.get('next') ?? '/dashboard'
+  const nextParam = searchParams.get('next')
 
   if (code) {
     const supabase = await createClient()
@@ -15,6 +15,11 @@ export async function GET(request: NextRequest) {
       const { data: { user } } = await supabase.auth.getUser()
 
       if (user) {
+        // If next is explicitly provided (e.g. /reset-password for recovery flow), always respect it
+        if (nextParam) {
+          return NextResponse.redirect(new URL(nextParam, origin))
+        }
+
         const profile = await prisma.profile.upsert({
           where: { id: user.id },
           create: { id: user.id },
@@ -22,7 +27,7 @@ export async function GET(request: NextRequest) {
           select: { onboardingDone: true },
         })
 
-        const destination = profile.onboardingDone === false ? '/onboarding' : next
+        const destination = profile.onboardingDone === false ? '/onboarding' : '/dashboard'
         return NextResponse.redirect(new URL(destination, origin))
       }
     }

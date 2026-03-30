@@ -71,7 +71,7 @@ export async function _sendResetEmail(
 ): Promise<{ error?: string }> {
   const supabase = await createClient()
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/reset-password`,
+    redirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/api/v1/auth/callback?next=/reset-password`,
   })
   if (error) return { error: friendlyAuthError(error.message) }
   return {}

@@ -148,6 +148,9 @@
   --tracking-h3:      -0.02em;
   --tracking-h4:      -0.02em;
   --tracking-mono:     0.08em;
+  --duration-fast:       100ms;
+  --duration-base:       200ms;
+  --duration-deliberate: 350ms;
 }
 
 * {

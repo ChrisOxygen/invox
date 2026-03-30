@@ -11,7 +11,7 @@ export function PrintButton({ size = 'sm' }: PrintButtonProps) {
     <button
       type="button"
       onClick={() => window.print()}
-      className={`inline-flex items-center gap-1.5 font-display font-semibold text-(--ink-900) bg-transparent border border-(--border-strong) rounded cursor-pointer transition-[background] duration-[200ms] ease-[ease] hover:bg-(--surface-overlay) ${size === 'sm' ? 'text-[13px] px-3 py-1.5' : 'text-[14px] px-4 py-2'}`}
+      className={`inline-flex items-center gap-1.5 font-display font-semibold text-(--ink-900) bg-transparent border border-(--border-strong) rounded cursor-pointer transition-[background] duration-base ease-[ease] hover:bg-(--surface-overlay) ${size === 'sm' ? 'text-[13px] px-3 py-1.5' : 'text-[14px] px-4 py-2'}`}
     >
       <Printer className="w-[14px] h-[14px]" />
       Print

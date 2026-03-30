@@ -28,7 +28,7 @@ export function DownloadButton({ invoice, variant = 'default', size = 'md' }: Do
     >
       {({ loading }) => (
         <span
-          className={`inline-flex items-center gap-1.5 rounded font-display font-semibold border cursor-pointer transition-[background,border-color,color] duration-[200ms] ease-[ease] ${sizeClasses} ${variantClasses}`}
+          className={`inline-flex items-center gap-1.5 rounded font-display font-semibold border cursor-pointer transition-[background,border-color,color] duration-base ease-[ease] ${sizeClasses} ${variantClasses}`}
         >
           {loading ? (
             <Loader2 className="w-[14px] h-[14px] animate-spin" />

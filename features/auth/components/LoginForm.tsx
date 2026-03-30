@@ -68,7 +68,7 @@ export function LoginForm() {
       <button
         type="button"
         onClick={handleGoogleSignIn}
-        className="w-full flex items-center justify-center gap-3 h-11 rounded-md border border-(--border-strong) bg-(--surface-base) text-[14px] font-sans font-medium text-(--ink-700) transition-colors duration-[200ms] hover:bg-(--surface-overlay) hover:border-(--ink-300) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--blue-600) focus-visible:ring-offset-2"
+        className="w-full flex items-center justify-center gap-3 h-11 rounded-md border border-(--border-strong) bg-(--surface-base) text-[14px] font-sans font-medium text-(--ink-700) transition-colors duration-base hover:bg-(--surface-overlay) hover:border-(--ink-300) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--blue-600) focus-visible:ring-offset-2"
       >
         {/* Google G SVG */}
         <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">
@@ -123,7 +123,7 @@ export function LoginForm() {
             autoComplete="email"
             placeholder="you@example.com"
             aria-invalid={!!errors.email}
-            className="h-11 rounded-md border-(--border-default) bg-(--surface-base) px-3.5 text-[14px] font-sans text-(--ink-900) placeholder:text-(--ink-300) focus-visible:ring-(--blue-600) focus-visible:border-(--blue-600) transition-colors duration-[100ms]"
+            className="h-11 rounded-md border-(--border-default) bg-(--surface-base) px-3.5 text-[14px] font-sans text-(--ink-900) placeholder:text-(--ink-300) focus-visible:ring-(--blue-600) focus-visible:border-(--blue-600) transition-colors duration-fast"
             {...register('email')}
           />
           {errors.email && (
@@ -146,7 +146,7 @@ export function LoginForm() {
             </Label>
             <Link
               href="/forgot-password"
-              className="text-[12px] font-sans text-(--blue-600) hover:text-(--blue-700) transition-colors duration-[100ms]"
+              className="text-[12px] font-sans text-(--blue-600) hover:text-(--blue-700) transition-colors duration-fast"
             >
               Forgot password?
             </Link>
@@ -158,14 +158,14 @@ export function LoginForm() {
               autoComplete="current-password"
               placeholder="••••••••"
               aria-invalid={!!errors.password}
-              className="h-11 rounded-md border-(--border-default) bg-(--surface-base) px-3.5 pr-10 text-[14px] font-sans text-(--ink-900) placeholder:text-(--ink-300) focus-visible:ring-(--blue-600) focus-visible:border-(--blue-600) transition-colors duration-[100ms]"
+              className="h-11 rounded-md border-(--border-default) bg-(--surface-base) px-3.5 pr-10 text-[14px] font-sans text-(--ink-900) placeholder:text-(--ink-300) focus-visible:ring-(--blue-600) focus-visible:border-(--blue-600) transition-colors duration-fast"
               {...register('password')}
             />
             <button
               type="button"
               aria-label={showPassword ? 'Hide password' : 'Show password'}
               onClick={() => setShowPassword((v) => !v)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-(--ink-300) hover:text-(--ink-500) transition-colors duration-[100ms]"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-(--ink-300) hover:text-(--ink-500) transition-colors duration-fast"
             >
               {showPassword ? (
                 <EyeOff className="w-4 h-4" />
@@ -187,7 +187,7 @@ export function LoginForm() {
         <button
           type="submit"
           disabled={isSubmitting || isPending}
-          className="w-full h-11 rounded-md bg-(--blue-600) hover:bg-(--blue-700) text-white text-[14px] font-display font-semibold transition-colors duration-[200ms] disabled:opacity-60 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--blue-600) focus-visible:ring-offset-2"
+          className="w-full h-11 rounded-md bg-(--blue-600) hover:bg-(--blue-700) text-white text-[14px] font-display font-semibold transition-colors duration-base disabled:opacity-60 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--blue-600) focus-visible:ring-offset-2"
         >
           {isSubmitting ? (
             <span className="flex items-center justify-center gap-2">
@@ -226,7 +226,7 @@ export function LoginForm() {
         Don&apos;t have an account?{' '}
         <Link
           href="/register"
-          className="font-semibold text-(--blue-600) hover:text-(--blue-700) transition-colors duration-[100ms]"
+          className="font-semibold text-(--blue-600) hover:text-(--blue-700) transition-colors duration-fast"
         >
           Sign up
         </Link>

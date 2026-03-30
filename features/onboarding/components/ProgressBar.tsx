@@ -19,7 +19,7 @@ export function ProgressBar({ currentStep, totalSteps }: ProgressBarProps) {
       >
         {/* Fill */}
         <div
-          className="h-full rounded-(--r-sm) bg-(--blue-600) transition-[width] duration-[350ms] ease-[ease]"
+          className="h-full rounded-(--r-sm) bg-(--blue-600) transition-[width] duration-deliberate ease-[ease]"
           style={{ width: `${fillPercent}%` }}
         />
       </div>

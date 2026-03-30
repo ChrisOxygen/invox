@@ -1,30 +1,30 @@
-'use client'
+"use client";
 
-import { useState, useTransition } from 'react'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
-import Link from 'next/link'
-import { Eye, EyeOff, Mail } from 'lucide-react'
-import { Input } from '@/shared/components/ui/input'
-import { Label } from '@/shared/components/ui/label'
-import { _signUp, _signInWithGoogle } from '@/features/auth/server'
+import { useState, useTransition } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import Link from "next/link";
+import { Eye, EyeOff, Mail } from "lucide-react";
+import { Input } from "@/shared/components/ui/input";
+import { Label } from "@/shared/components/ui/label";
+import { _signUp, _signInWithGoogle } from "@/features/auth/server";
 
 const ZRegisterSchema = z.object({
-  name: z.string().min(1, 'Full name is required'),
+  name: z.string().min(1, "Full name is required"),
   email: z.email(),
-  password: z.string().min(8, 'Password must be at least 8 characters'),
-  terms: z.literal(true, { error: 'You must accept the terms to continue' }),
-})
+  password: z.string().min(8, "Password must be at least 8 characters"),
+  terms: z.literal(true, { error: "You must accept the terms to continue" }),
+});
 
-type ZRegister = z.infer<typeof ZRegisterSchema>
+type ZRegister = z.infer<typeof ZRegisterSchema>;
 
 export function RegisterForm() {
-  const [showPassword, setShowPassword] = useState(false)
-  const [serverError, setServerError] = useState<string | null>(null)
-  const [showVerification, setShowVerification] = useState(false)
-  const [emailForVerification, setEmailForVerification] = useState('')
-  const [isPending, startTransition] = useTransition()
+  const [showPassword, setShowPassword] = useState(false);
+  const [serverError, setServerError] = useState<string | null>(null);
+  const [showVerification, setShowVerification] = useState(false);
+  const [emailForVerification, setEmailForVerification] = useState("");
+  const [isPending, startTransition] = useTransition();
 
   const {
     register,
@@ -32,24 +32,24 @@ export function RegisterForm() {
     formState: { errors, isSubmitting },
   } = useForm<ZRegister>({
     resolver: zodResolver(ZRegisterSchema),
-  })
+  });
 
   async function onSubmit(data: ZRegister) {
-    setServerError(null)
-    const result = await _signUp(data.name, data.email, data.password)
+    setServerError(null);
+    const result = await _signUp(data.name, data.email, data.password);
     if (result?.error) {
-      setServerError(result.error)
+      setServerError(result.error);
     } else {
-      setEmailForVerification(data.email)
-      setShowVerification(true)
+      setEmailForVerification(data.email);
+      setShowVerification(true);
     }
   }
 
   function handleGoogleSignIn() {
     startTransition(async () => {
-      const result = await _signInWithGoogle()
-      if (result?.error) setServerError(result.error)
-    })
+      const result = await _signInWithGoogle();
+      if (result?.error) setServerError(result.error);
+    });
   }
 
   if (showVerification) {
@@ -63,29 +63,32 @@ export function RegisterForm() {
             Check your inbox
           </h2>
           <p className="text-[14px] font-sans text-(--ink-400) leading-relaxed">
-            We sent a verification link to <span className="font-semibold text-(--ink-700)">{emailForVerification}</span>.<br />
+            We sent a verification link to{" "}
+            <span className="font-semibold text-(--ink-700)">
+              {emailForVerification}
+            </span>
+            .<br />
             Click the link to activate your account.
           </p>
         </div>
-        <Link href="/login" className="inline-block text-[13px] font-sans text-(--blue-600) hover:text-(--blue-700)">
+        <Link
+          href="/login"
+          className="inline-block text-[13px] font-sans text-(--blue-600) hover:text-(--blue-700)"
+        >
           Back to sign in
         </Link>
       </div>
-    )
+    );
   }
 
   return (
     <div className="w-full">
       {/* Heading */}
       <div className="mb-8">
-        <h1
-          className="text-[32px] font-display font-extrabold text-(--ink-900) leading-tight mb-2 tracking-[-0.03em]"
-        >
+        <h1 className="text-[32px] font-display font-extrabold text-(--ink-900) leading-tight mb-2 tracking-[-0.03em]">
           Create your account
         </h1>
-        <p
-          className="text-[14px] font-sans font-normal text-(--ink-400)"
-        >
+        <p className="text-[14px] font-sans font-normal text-(--ink-400)">
           Start sending professional invoices today
         </p>
       </div>
@@ -94,7 +97,7 @@ export function RegisterForm() {
       <button
         type="button"
         onClick={handleGoogleSignIn}
-        className="w-full flex items-center justify-center gap-3 h-11 rounded-md border border-(--border-strong) bg-(--surface-base) text-[14px] font-sans font-medium text-(--ink-700) transition-colors duration-[200ms] hover:bg-(--surface-overlay) hover:border-(--ink-300) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--blue-600) focus-visible:ring-offset-2"
+        className="w-full flex items-center justify-center gap-3 h-11 rounded-md border border-(--border-strong) bg-(--surface-base) text-[14px] font-sans font-medium text-(--ink-700) transition-colors duration-base hover:bg-(--surface-overlay) hover:border-(--ink-300) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--blue-600) focus-visible:ring-offset-2"
       >
         {/* Google G SVG */}
         <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">
@@ -121,18 +124,16 @@ export function RegisterForm() {
       {/* Divider */}
       <div className="flex items-center gap-3 my-6">
         <div className="flex-1 h-px bg-(--border-default)" />
-        <span
-          className="text-[12px] font-sans text-(--ink-300) px-1"
-        >
-          or
-        </span>
+        <span className="text-[12px] font-sans text-(--ink-300) px-1">or</span>
         <div className="flex-1 h-px bg-(--border-default)" />
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-5">
         {serverError && (
           <div className="rounded-md bg-[color-mix(in_srgb,var(--error)_10%,transparent)] border border-[color-mix(in_srgb,var(--error)_30%,transparent)] px-4 py-3 mb-5">
-            <p className="text-[13px] font-sans text-(--error)">{serverError}</p>
+            <p className="text-[13px] font-sans text-(--error)">
+              {serverError}
+            </p>
           </div>
         )}
         {/* Full name */}
@@ -149,13 +150,11 @@ export function RegisterForm() {
             autoComplete="name"
             placeholder="Chidi Okeke"
             aria-invalid={!!errors.name}
-            className="h-11 rounded-md border-(--border-default) bg-(--surface-base) px-3.5 text-[14px] font-sans text-(--ink-900) placeholder:text-(--ink-300) focus-visible:ring-(--blue-600) focus-visible:border-(--blue-600) transition-colors duration-[100ms]"
-            {...register('name')}
+            className="h-11 rounded-md border-(--border-default) bg-(--surface-base) px-3.5 text-[14px] font-sans text-(--ink-900) placeholder:text-(--ink-300) focus-visible:ring-(--blue-600) focus-visible:border-(--blue-600) transition-colors duration-fast"
+            {...register("name")}
           />
           {errors.name && (
-            <p
-              className="text-[11px] font-sans text-(--error)"
-            >
+            <p className="text-[11px] font-sans text-(--error)">
               {errors.name.message}
             </p>
           )}
@@ -175,13 +174,11 @@ export function RegisterForm() {
             autoComplete="email"
             placeholder="you@example.com"
             aria-invalid={!!errors.email}
-            className="h-11 rounded-md border-(--border-default) bg-(--surface-base) px-3.5 text-[14px] font-sans text-(--ink-900) placeholder:text-(--ink-300) focus-visible:ring-(--blue-600) focus-visible:border-(--blue-600) transition-colors duration-[100ms]"
-            {...register('email')}
+            className="h-11 rounded-md border-(--border-default) bg-(--surface-base) px-3.5 text-[14px] font-sans text-(--ink-900) placeholder:text-(--ink-300) focus-visible:ring-(--blue-600) focus-visible:border-(--blue-600) transition-colors duration-fast"
+            {...register("email")}
           />
           {errors.email && (
-            <p
-              className="text-[11px] font-sans text-(--error)"
-            >
+            <p className="text-[11px] font-sans text-(--error)">
               {errors.email.message}
             </p>
           )}
@@ -198,18 +195,18 @@ export function RegisterForm() {
           <div className="relative">
             <Input
               id="register-password"
-              type={showPassword ? 'text' : 'password'}
+              type={showPassword ? "text" : "password"}
               autoComplete="new-password"
               placeholder="••••••••"
               aria-invalid={!!errors.password}
-              className="h-11 rounded-md border-(--border-default) bg-(--surface-base) px-3.5 pr-10 text-[14px] font-sans text-(--ink-900) placeholder:text-(--ink-300) focus-visible:ring-(--blue-600) focus-visible:border-(--blue-600) transition-colors duration-[100ms]"
-              {...register('password')}
+              className="h-11 rounded-md border-(--border-default) bg-(--surface-base) px-3.5 pr-10 text-[14px] font-sans text-(--ink-900) placeholder:text-(--ink-300) focus-visible:ring-(--blue-600) focus-visible:border-(--blue-600) transition-colors duration-fast"
+              {...register("password")}
             />
             <button
               type="button"
-              aria-label={showPassword ? 'Hide password' : 'Show password'}
+              aria-label={showPassword ? "Hide password" : "Show password"}
               onClick={() => setShowPassword((v) => !v)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-(--ink-300) hover:text-(--ink-500) transition-colors duration-[100ms]"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-(--ink-300) hover:text-(--ink-500) transition-colors duration-fast"
             >
               {showPassword ? (
                 <EyeOff className="w-4 h-4" />
@@ -219,15 +216,11 @@ export function RegisterForm() {
             </button>
           </div>
           {errors.password ? (
-            <p
-              className="text-[11px] font-sans text-(--error)"
-            >
+            <p className="text-[11px] font-sans text-(--error)">
               {errors.password.message}
             </p>
           ) : (
-            <p
-              className="text-[11px] font-sans text-(--ink-300)"
-            >
+            <p className="text-[11px] font-sans text-(--ink-300)">
               Minimum 8 characters
             </p>
           )}
@@ -242,13 +235,11 @@ export function RegisterForm() {
                 type="checkbox"
                 aria-invalid={!!errors.terms}
                 className="sr-only peer"
-                {...register('terms')}
+                {...register("terms")}
               />
-              <div
-                className="w-4 h-4 rounded-[4px] border-2 border-(--border-strong) bg-(--surface-base) transition-colors duration-[100ms] peer-checked:bg-(--blue-600) peer-checked:border-(--blue-600) peer-focus-visible:ring-2 peer-focus-visible:ring-(--blue-600) peer-focus-visible:ring-offset-1"
-              />
+              <div className="w-4 h-4 rounded-[4px] border-2 border-(--border-strong) bg-(--surface-base) transition-colors duration-fast peer-checked:bg-(--blue-600) peer-checked:border-(--blue-600) peer-focus-visible:ring-2 peer-focus-visible:ring-(--blue-600) peer-focus-visible:ring-offset-1" />
               <svg
-                className="absolute inset-0 w-4 h-4 text-white opacity-0 peer-checked:opacity-100 transition-opacity duration-[100ms] pointer-events-none"
+                className="absolute inset-0 w-4 h-4 text-white opacity-0 peer-checked:opacity-100 transition-opacity duration-fast pointer-events-none"
                 viewBox="0 0 16 16"
                 fill="none"
                 aria-hidden="true"
@@ -262,29 +253,25 @@ export function RegisterForm() {
                 />
               </svg>
             </div>
-            <span
-              className="text-[13px] font-sans text-(--ink-500) leading-snug"
-            >
-              I agree to the{' '}
+            <span className="text-[13px] font-sans text-(--ink-500) leading-snug">
+              I agree to the{" "}
               <Link
                 href="/terms"
-                className="font-medium text-(--blue-600) hover:text-(--blue-700) transition-colors duration-[100ms]"
+                className="font-medium text-(--blue-600) hover:text-(--blue-700) transition-colors duration-fast"
               >
                 Terms of Service
-              </Link>{' '}
-              and{' '}
+              </Link>{" "}
+              and{" "}
               <Link
                 href="/privacy"
-                className="font-medium text-(--blue-600) hover:text-(--blue-700) transition-colors duration-[100ms]"
+                className="font-medium text-(--blue-600) hover:text-(--blue-700) transition-colors duration-fast"
               >
                 Privacy Policy
               </Link>
             </span>
           </label>
           {errors.terms && (
-            <p
-              className="text-[11px] font-sans text-(--error) pl-7"
-            >
+            <p className="text-[11px] font-sans text-(--error) pl-7">
               {errors.terms.message}
             </p>
           )}
@@ -294,7 +281,7 @@ export function RegisterForm() {
         <button
           type="submit"
           disabled={isSubmitting || isPending}
-          className="w-full h-11 rounded-md bg-(--blue-600) hover:bg-(--blue-700) text-white text-[14px] font-display font-semibold transition-colors duration-[200ms] disabled:opacity-60 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--blue-600) focus-visible:ring-offset-2"
+          className="w-full h-11 rounded-md bg-(--blue-600) hover:bg-(--blue-700) text-white text-[14px] font-display font-semibold transition-colors duration-base disabled:opacity-60 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--blue-600) focus-visible:ring-offset-2"
         >
           {isSubmitting ? (
             <span className="flex items-center justify-center gap-2">
@@ -321,23 +308,21 @@ export function RegisterForm() {
               Creating account…
             </span>
           ) : (
-            'Create account'
+            "Create account"
           )}
         </button>
       </form>
 
       {/* Bottom link */}
-      <p
-        className="mt-8 text-center text-[13px] font-sans text-(--ink-400)"
-      >
-        Already have an account?{' '}
+      <p className="mt-8 text-center text-[13px] font-sans text-(--ink-400)">
+        Already have an account?{" "}
         <Link
           href="/login"
-          className="font-semibold text-(--blue-600) hover:text-(--blue-700) transition-colors duration-[100ms]"
+          className="font-semibold text-(--blue-600) hover:text-(--blue-700) transition-colors duration-fast"
         >
           Sign in
         </Link>
       </p>
     </div>
-  )
+  );
 }

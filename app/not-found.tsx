@@ -72,14 +72,14 @@ export default function NotFound() {
         <div className="flex gap-[var(--s3)] flex-wrap justify-center mt-[var(--s2)]">
           <Link
             href="/dashboard"
-            className="inline-flex items-center gap-[var(--s2)] px-[var(--s5)] py-[10px] rounded-(--r-md) bg-(--blue-600) text-white font-display font-semibold text-[14px] no-underline transition-[background-color] duration-[100ms] hover:bg-(--blue-700)"
+            className="inline-flex items-center gap-[var(--s2)] px-[var(--s5)] py-[10px] rounded-(--r-md) bg-(--blue-600) text-white font-display font-semibold text-[14px] no-underline transition-[background-color] duration-fast hover:bg-(--blue-700)"
           >
             Go to Dashboard
           </Link>
 
           <Link
             href="/"
-            className="inline-flex items-center px-[var(--s5)] py-[10px] rounded-(--r-md) border border-(--ink-700) bg-transparent text-(--ink-300) font-display font-medium text-[14px] no-underline transition-[border-color,color] duration-[100ms] hover:border-(--ink-500) hover:text-(--ink-100)"
+            className="inline-flex items-center px-[var(--s5)] py-[10px] rounded-(--r-md) border border-(--ink-700) bg-transparent text-(--ink-300) font-display font-medium text-[14px] no-underline transition-[border-color,color] duration-fast hover:border-(--ink-500) hover:text-(--ink-100)"
           >
             Back to Home
           </Link>

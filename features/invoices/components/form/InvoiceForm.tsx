@@ -128,7 +128,8 @@ export function InvoiceForm({ invoice, onSuccess }: InvoiceFormProps) {
         discountType: values.discountType ?? 'PERCENTAGE',
       })
       try {
-        await updateMutation.mutateAsync({ ...values, ...currentTotals, id: invoice.id })
+        const parsed = ZInvoiceFormInputSchema.parse(values)
+        await updateMutation.mutateAsync({ ...parsed, ...currentTotals, id: invoice.id })
       } catch {
         // Silent auto-save failure
       }
@@ -148,7 +149,8 @@ export function InvoiceForm({ invoice, onSuccess }: InvoiceFormProps) {
   }
 
   const onSubmit = async (values: ZInvoiceFormInput, markAsSent = false) => {
-    const payload = { ...values, ...totals }
+    const parsed = ZInvoiceFormInputSchema.parse(values)
+    const payload = { ...parsed, ...totals }
     try {
       if (isEditing && invoice) {
         await updateMutation.mutateAsync({ ...payload, id: invoice.id })

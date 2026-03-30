@@ -5,14 +5,14 @@ import { GripVertical, Trash2 } from 'lucide-react'
 import type { Control, UseFormWatch, UseFormSetValue } from 'react-hook-form'
 import { useWatch } from 'react-hook-form'
 import { Controller } from 'react-hook-form'
-import type { ZCreateInvoice } from '../../schemas'
+import type { ZInvoiceFormInput } from '../../schemas'
 import { formatCurrency } from '@/shared/lib/calculate-totals'
 
 type LineItemRowProps = {
   index: number
-  control: Control<ZCreateInvoice>
-  watch: UseFormWatch<ZCreateInvoice>
-  setValue: UseFormSetValue<ZCreateInvoice>
+  control: Control<ZInvoiceFormInput>
+  watch: UseFormWatch<ZInvoiceFormInput>
+  setValue: UseFormSetValue<ZInvoiceFormInput>
   remove: () => void
   currency: string
 }

@@ -50,7 +50,7 @@ export const ZUpdateInvoiceStatusSchema = z.object({
 
 export type ZCreateInvoice = z.infer<typeof ZCreateInvoiceSchema>
 export type ZUpdateInvoice = z.infer<typeof ZUpdateInvoiceSchema>
-export type ZInvoiceFormInput = z.infer<typeof ZInvoiceFormInputSchema>
+export type ZInvoiceFormInput = z.input<typeof ZInvoiceFormInputSchema>
 export type ZCreatePayment = z.infer<typeof ZCreatePaymentSchema>
 export type ZInvoiceItem = z.infer<typeof ZInvoiceItemSchema>
 export type ZUpdateInvoiceStatus = z.infer<typeof ZUpdateInvoiceStatusSchema>

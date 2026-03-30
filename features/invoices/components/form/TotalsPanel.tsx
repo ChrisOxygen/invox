@@ -2,11 +2,11 @@
 
 import type { Control } from 'react-hook-form'
 import { Controller, useWatch } from 'react-hook-form'
-import type { ZCreateInvoice } from '../../schemas'
+import type { ZInvoiceFormInput } from '../../schemas'
 import { formatCurrency } from '@/shared/lib/calculate-totals'
 
 type TotalsPanelProps = {
-  control: Control<ZCreateInvoice>
+  control: Control<ZInvoiceFormInput>
   subtotal: number
   taxAmount: number
   discountAmount: number
@@ -99,7 +99,7 @@ export function TotalsPanel({
             control={control}
             name="discountType"
             render={({ field }) => (
-              <TypeToggle value={field.value} onChange={field.onChange} />
+              <TypeToggle value={field.value ?? 'PERCENTAGE'} onChange={field.onChange} />
             )}
           />
         </div>
@@ -136,7 +136,7 @@ export function TotalsPanel({
             control={control}
             name="taxType"
             render={({ field }) => (
-              <TypeToggle value={field.value} onChange={field.onChange} />
+              <TypeToggle value={field.value ?? 'PERCENTAGE'} onChange={field.onChange} />
             )}
           />
         </div>

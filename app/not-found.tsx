@@ -4,7 +4,7 @@ import Link from 'next/link'
 
 export default function NotFound() {
   return (
-    <div className="min-h-dvh bg-(--ink-950) font-[family-name:var(--font-body)] flex flex-col items-center justify-center p-[var(--s6)] relative overflow-hidden">
+    <div className="min-h-dvh bg-(--ink-950) font-sans flex flex-col items-center justify-center p-[var(--s6)] relative overflow-hidden">
       {/* Background grid */}
       <div
         aria-hidden
@@ -33,14 +33,14 @@ export default function NotFound() {
           href="/"
           className="inline-flex items-center gap-[var(--s2)] no-underline mb-[var(--s4)]"
         >
-          <span className="font-[family-name:var(--font-display)] font-bold text-[18px] text-(--ink-100) tracking-[-0.02em]">
+          <span className="font-display font-bold text-[18px] text-(--ink-100) tracking-[-0.02em]">
             invox
           </span>
         </Link>
 
         {/* 404 number */}
         <div
-          className="font-[family-name:var(--font-mono)] font-medium leading-none tracking-[-0.04em] select-none"
+          className="font-mono font-medium leading-none tracking-[-0.04em] select-none"
           style={{
             fontSize: 'clamp(96px, 18vw, 160px)',
             color: 'transparent',
@@ -57,12 +57,12 @@ export default function NotFound() {
         <div className="w-10 h-0.5 bg-(--blue-600) rounded-full" />
 
         {/* Heading */}
-        <h1 className="font-[family-name:var(--font-display)] font-bold text-(--ink-50) tracking-[-0.025em] m-0" style={{ fontSize: 'clamp(20px, 4vw, 28px)' }}>
+        <h1 className="font-display font-bold text-(--ink-50) tracking-[-0.025em] m-0" style={{ fontSize: 'clamp(20px, 4vw, 28px)' }}>
           Page not found
         </h1>
 
         {/* Body */}
-        <p className="font-[family-name:var(--font-body)] text-[15px] leading-[1.6] text-(--ink-400) m-0">
+        <p className="font-sans text-[15px] leading-[1.6] text-(--ink-400) m-0">
           This page doesn&apos;t exist or may have been moved.
           <br />
           Head back to your dashboard to keep things moving.
@@ -72,21 +72,21 @@ export default function NotFound() {
         <div className="flex gap-[var(--s3)] flex-wrap justify-center mt-[var(--s2)]">
           <Link
             href="/dashboard"
-            className="inline-flex items-center gap-[var(--s2)] px-[var(--s5)] py-[10px] rounded-(--r-md) bg-(--blue-600) text-white font-[family-name:var(--font-display)] font-semibold text-[14px] no-underline transition-[background-color] duration-[100ms] hover:bg-(--blue-700)"
+            className="inline-flex items-center gap-[var(--s2)] px-[var(--s5)] py-[10px] rounded-(--r-md) bg-(--blue-600) text-white font-display font-semibold text-[14px] no-underline transition-[background-color] duration-[100ms] hover:bg-(--blue-700)"
           >
             Go to Dashboard
           </Link>
 
           <Link
             href="/"
-            className="inline-flex items-center px-[var(--s5)] py-[10px] rounded-(--r-md) border border-(--ink-700) bg-transparent text-(--ink-300) font-[family-name:var(--font-display)] font-medium text-[14px] no-underline transition-[border-color,color] duration-[100ms] hover:border-(--ink-500) hover:text-(--ink-100)"
+            className="inline-flex items-center px-[var(--s5)] py-[10px] rounded-(--r-md) border border-(--ink-700) bg-transparent text-(--ink-300) font-display font-medium text-[14px] no-underline transition-[border-color,color] duration-[100ms] hover:border-(--ink-500) hover:text-(--ink-100)"
           >
             Back to Home
           </Link>
         </div>
 
         {/* Footer note */}
-        <p className="font-[family-name:var(--font-mono)] text-[11px] text-(--ink-500) tracking-[0.08em] uppercase mt-[var(--s4)]">
+        <p className="font-mono text-[11px] text-(--ink-500) tracking-[0.08em] uppercase mt-[var(--s4)]">
           Error 404 · Page not found
         </p>
       </div>

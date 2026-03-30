@@ -59,15 +59,15 @@ export function RegisterForm() {
           <Mail className="w-7 h-7 text-(--blue-600)" />
         </div>
         <div>
-          <h2 className="text-[24px] font-[family-name:var(--font-display)] font-bold text-(--ink-900) mb-2 tracking-[-0.02em]">
+          <h2 className="text-[24px] font-display font-bold text-(--ink-900) mb-2 tracking-[-0.02em]">
             Check your inbox
           </h2>
-          <p className="text-[14px] font-[family-name:var(--font-body)] text-(--ink-400) leading-relaxed">
+          <p className="text-[14px] font-sans text-(--ink-400) leading-relaxed">
             We sent a verification link to <span className="font-semibold text-(--ink-700)">{emailForVerification}</span>.<br />
             Click the link to activate your account.
           </p>
         </div>
-        <Link href="/login" className="inline-block text-[13px] font-[family-name:var(--font-body)] text-(--blue-600) hover:text-(--blue-700)">
+        <Link href="/login" className="inline-block text-[13px] font-sans text-(--blue-600) hover:text-(--blue-700)">
           Back to sign in
         </Link>
       </div>
@@ -79,12 +79,12 @@ export function RegisterForm() {
       {/* Heading */}
       <div className="mb-8">
         <h1
-          className="text-[32px] font-[family-name:var(--font-display)] font-extrabold text-(--ink-900) leading-tight mb-2 tracking-[-0.03em]"
+          className="text-[32px] font-display font-extrabold text-(--ink-900) leading-tight mb-2 tracking-[-0.03em]"
         >
           Create your account
         </h1>
         <p
-          className="text-[14px] font-[family-name:var(--font-body)] font-normal text-(--ink-400)"
+          className="text-[14px] font-sans font-normal text-(--ink-400)"
         >
           Start sending professional invoices today
         </p>
@@ -94,7 +94,7 @@ export function RegisterForm() {
       <button
         type="button"
         onClick={handleGoogleSignIn}
-        className="w-full flex items-center justify-center gap-3 h-11 rounded-md border border-(--border-strong) bg-(--surface-base) text-[14px] font-[family-name:var(--font-body)] font-medium text-(--ink-700) transition-colors duration-[200ms] hover:bg-(--surface-overlay) hover:border-(--ink-300) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--blue-600) focus-visible:ring-offset-2"
+        className="w-full flex items-center justify-center gap-3 h-11 rounded-md border border-(--border-strong) bg-(--surface-base) text-[14px] font-sans font-medium text-(--ink-700) transition-colors duration-[200ms] hover:bg-(--surface-overlay) hover:border-(--ink-300) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--blue-600) focus-visible:ring-offset-2"
       >
         {/* Google G SVG */}
         <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">
@@ -122,7 +122,7 @@ export function RegisterForm() {
       <div className="flex items-center gap-3 my-6">
         <div className="flex-1 h-px bg-(--border-default)" />
         <span
-          className="text-[12px] font-[family-name:var(--font-body)] text-(--ink-300) px-1"
+          className="text-[12px] font-sans text-(--ink-300) px-1"
         >
           or
         </span>
@@ -132,14 +132,14 @@ export function RegisterForm() {
       <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-5">
         {serverError && (
           <div className="rounded-md bg-[color-mix(in_srgb,var(--error)_10%,transparent)] border border-[color-mix(in_srgb,var(--error)_30%,transparent)] px-4 py-3 mb-5">
-            <p className="text-[13px] font-[family-name:var(--font-body)] text-(--error)">{serverError}</p>
+            <p className="text-[13px] font-sans text-(--error)">{serverError}</p>
           </div>
         )}
         {/* Full name */}
         <div className="space-y-1.5">
           <Label
             htmlFor="register-name"
-            className="text-[12px] font-[family-name:var(--font-display)] font-semibold text-(--ink-700) uppercase tracking-[0.06em]"
+            className="text-[12px] font-display font-semibold text-(--ink-700) uppercase tracking-[0.06em]"
           >
             Full name
           </Label>
@@ -149,12 +149,12 @@ export function RegisterForm() {
             autoComplete="name"
             placeholder="Chidi Okeke"
             aria-invalid={!!errors.name}
-            className="h-11 rounded-md border-(--border-default) bg-(--surface-base) px-3.5 text-[14px] font-[family-name:var(--font-body)] text-(--ink-900) placeholder:text-(--ink-300) focus-visible:ring-(--blue-600) focus-visible:border-(--blue-600) transition-colors duration-[100ms]"
+            className="h-11 rounded-md border-(--border-default) bg-(--surface-base) px-3.5 text-[14px] font-sans text-(--ink-900) placeholder:text-(--ink-300) focus-visible:ring-(--blue-600) focus-visible:border-(--blue-600) transition-colors duration-[100ms]"
             {...register('name')}
           />
           {errors.name && (
             <p
-              className="text-[11px] font-[family-name:var(--font-body)] text-(--error)"
+              className="text-[11px] font-sans text-(--error)"
             >
               {errors.name.message}
             </p>
@@ -165,7 +165,7 @@ export function RegisterForm() {
         <div className="space-y-1.5">
           <Label
             htmlFor="register-email"
-            className="text-[12px] font-[family-name:var(--font-display)] font-semibold text-(--ink-700) uppercase tracking-[0.06em]"
+            className="text-[12px] font-display font-semibold text-(--ink-700) uppercase tracking-[0.06em]"
           >
             Email address
           </Label>
@@ -175,12 +175,12 @@ export function RegisterForm() {
             autoComplete="email"
             placeholder="you@example.com"
             aria-invalid={!!errors.email}
-            className="h-11 rounded-md border-(--border-default) bg-(--surface-base) px-3.5 text-[14px] font-[family-name:var(--font-body)] text-(--ink-900) placeholder:text-(--ink-300) focus-visible:ring-(--blue-600) focus-visible:border-(--blue-600) transition-colors duration-[100ms]"
+            className="h-11 rounded-md border-(--border-default) bg-(--surface-base) px-3.5 text-[14px] font-sans text-(--ink-900) placeholder:text-(--ink-300) focus-visible:ring-(--blue-600) focus-visible:border-(--blue-600) transition-colors duration-[100ms]"
             {...register('email')}
           />
           {errors.email && (
             <p
-              className="text-[11px] font-[family-name:var(--font-body)] text-(--error)"
+              className="text-[11px] font-sans text-(--error)"
             >
               {errors.email.message}
             </p>
@@ -191,7 +191,7 @@ export function RegisterForm() {
         <div className="space-y-1.5">
           <Label
             htmlFor="register-password"
-            className="text-[12px] font-[family-name:var(--font-display)] font-semibold text-(--ink-700) uppercase tracking-[0.06em]"
+            className="text-[12px] font-display font-semibold text-(--ink-700) uppercase tracking-[0.06em]"
           >
             Password
           </Label>
@@ -202,7 +202,7 @@ export function RegisterForm() {
               autoComplete="new-password"
               placeholder="••••••••"
               aria-invalid={!!errors.password}
-              className="h-11 rounded-md border-(--border-default) bg-(--surface-base) px-3.5 pr-10 text-[14px] font-[family-name:var(--font-body)] text-(--ink-900) placeholder:text-(--ink-300) focus-visible:ring-(--blue-600) focus-visible:border-(--blue-600) transition-colors duration-[100ms]"
+              className="h-11 rounded-md border-(--border-default) bg-(--surface-base) px-3.5 pr-10 text-[14px] font-sans text-(--ink-900) placeholder:text-(--ink-300) focus-visible:ring-(--blue-600) focus-visible:border-(--blue-600) transition-colors duration-[100ms]"
               {...register('password')}
             />
             <button
@@ -220,13 +220,13 @@ export function RegisterForm() {
           </div>
           {errors.password ? (
             <p
-              className="text-[11px] font-[family-name:var(--font-body)] text-(--error)"
+              className="text-[11px] font-sans text-(--error)"
             >
               {errors.password.message}
             </p>
           ) : (
             <p
-              className="text-[11px] font-[family-name:var(--font-body)] text-(--ink-300)"
+              className="text-[11px] font-sans text-(--ink-300)"
             >
               Minimum 8 characters
             </p>
@@ -263,7 +263,7 @@ export function RegisterForm() {
               </svg>
             </div>
             <span
-              className="text-[13px] font-[family-name:var(--font-body)] text-(--ink-500) leading-snug"
+              className="text-[13px] font-sans text-(--ink-500) leading-snug"
             >
               I agree to the{' '}
               <Link
@@ -283,7 +283,7 @@ export function RegisterForm() {
           </label>
           {errors.terms && (
             <p
-              className="text-[11px] font-[family-name:var(--font-body)] text-(--error) pl-7"
+              className="text-[11px] font-sans text-(--error) pl-7"
             >
               {errors.terms.message}
             </p>
@@ -294,7 +294,7 @@ export function RegisterForm() {
         <button
           type="submit"
           disabled={isSubmitting || isPending}
-          className="w-full h-11 rounded-md bg-(--blue-600) hover:bg-(--blue-700) text-white text-[14px] font-[family-name:var(--font-display)] font-semibold transition-colors duration-[200ms] disabled:opacity-60 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--blue-600) focus-visible:ring-offset-2"
+          className="w-full h-11 rounded-md bg-(--blue-600) hover:bg-(--blue-700) text-white text-[14px] font-display font-semibold transition-colors duration-[200ms] disabled:opacity-60 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--blue-600) focus-visible:ring-offset-2"
         >
           {isSubmitting ? (
             <span className="flex items-center justify-center gap-2">
@@ -328,7 +328,7 @@ export function RegisterForm() {
 
       {/* Bottom link */}
       <p
-        className="mt-8 text-center text-[13px] font-[family-name:var(--font-body)] text-(--ink-400)"
+        className="mt-8 text-center text-[13px] font-sans text-(--ink-400)"
       >
         Already have an account?{' '}
         <Link

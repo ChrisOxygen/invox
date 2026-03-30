@@ -22,13 +22,13 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
             />
           </div>
           <span
-            className="text-[22px] font-[family-name:var(--font-display)] font-extrabold tracking-tight text-(--ink-900)"
+            className="text-[22px] font-display font-extrabold tracking-tight text-(--ink-900)"
           >
             Invox<span className="text-(--blue-600)">.</span>
           </span>
           <Link
             href="/"
-            className="flex items-center gap-1.5 text-[12px] font-[family-name:var(--font-body)] text-(--ink-300) hover:text-(--ink-500) transition-colors duration-100"
+            className="flex items-center gap-1.5 text-[12px] font-sans text-(--ink-300) hover:text-(--ink-500) transition-colors duration-100"
           >
             <ArrowLeft className="w-3 h-3" />
             Home
@@ -43,7 +43,7 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
         {/* Footer */}
         <div className="mt-auto pt-6">
           <p
-            className="text-[12px] font-[family-name:var(--font-body)] text-(--ink-300) text-center w-fit mx-auto"
+            className="text-[12px] font-sans text-(--ink-300) text-center w-fit mx-auto"
           >
             &copy; {new Date().getFullYear()} Invox Technologies Ltd. All rights reserved.
           </p>
@@ -73,19 +73,19 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
             <div className="flex items-start justify-between mb-5">
               <div>
                 <p
-                  className="text-[11px] font-[family-name:var(--font-mono)] font-medium tracking-widest uppercase text-(--ink-300) mb-1"
+                  className="text-[11px] font-mono font-medium tracking-widest uppercase text-(--ink-300) mb-1"
                 >
                   Invoice
                 </p>
                 <p
-                  className="text-[13px] font-[family-name:var(--font-mono)] font-medium text-(--blue-600)"
+                  className="text-[13px] font-mono font-medium text-(--blue-600)"
                 >
                   INV-2025-0042
                 </p>
               </div>
               {/* SENT badge */}
               <span
-                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-[family-name:var(--font-body)] font-medium border"
+                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-sans font-medium border"
                 style={{
                   background: 'color-mix(in srgb, var(--cyan-400) 10%, transparent)',
                   color: 'var(--cyan-500)',
@@ -101,12 +101,12 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
 
             {/* Client name */}
             <p
-              className="text-[13px] font-[family-name:var(--font-body)] text-(--ink-400) mb-1"
+              className="text-[13px] font-sans text-(--ink-400) mb-1"
             >
               Billed to
             </p>
             <p
-              className="text-[15px] font-[family-name:var(--font-display)] font-semibold text-(--ink-900) mb-5"
+              className="text-[15px] font-display font-semibold text-(--ink-900) mb-5"
             >
               Acme Corp
             </p>
@@ -117,24 +117,24 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
             >
               <div className="flex items-center justify-between">
                 <span
-                  className="text-[13px] font-[family-name:var(--font-body)] text-(--ink-500)"
+                  className="text-[13px] font-sans text-(--ink-500)"
                 >
                   Brand Identity Design
                 </span>
                 <span
-                  className="text-[12px] font-[family-name:var(--font-mono)] font-medium text-(--ink-900)"
+                  className="text-[12px] font-mono font-medium text-(--ink-900)"
                 >
                   ₦250,000.00
                 </span>
               </div>
               <div className="flex items-center justify-between">
                 <span
-                  className="text-[13px] font-[family-name:var(--font-body)] text-(--ink-500)"
+                  className="text-[13px] font-sans text-(--ink-500)"
                 >
                   Website Development
                 </span>
                 <span
-                  className="text-[12px] font-[family-name:var(--font-mono)] font-medium text-(--ink-900)"
+                  className="text-[12px] font-mono font-medium text-(--ink-900)"
                 >
                   ₦200,000.00
                 </span>
@@ -146,12 +146,12 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
               className="border-t border-(--border-default) pt-4 flex items-center justify-between"
             >
               <span
-                className="text-[12px] font-[family-name:var(--font-display)] font-semibold uppercase tracking-widest text-(--ink-400)"
+                className="text-[12px] font-display font-semibold uppercase tracking-widest text-(--ink-400)"
               >
                 Total
               </span>
               <span
-                className="text-[26px] font-[family-name:var(--font-mono)] font-medium tracking-tight text-(--blue-600)"
+                className="text-[26px] font-mono font-medium tracking-tight text-(--blue-600)"
               >
                 ₦450,000.00
               </span>
@@ -161,12 +161,12 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
           {/* Tagline */}
           <div className="text-center">
             <p
-              className="text-[20px] font-[family-name:var(--font-display)] font-semibold text-white leading-snug tracking-tight max-w-[280px]"
+              className="text-[20px] font-display font-semibold text-white leading-snug tracking-tight max-w-[280px]"
             >
               Professional invoices for Nigerian freelancers
             </p>
             <p
-              className="mt-2 text-[13px] font-[family-name:var(--font-body)] text-(--ink-400)"
+              className="mt-2 text-[13px] font-sans text-(--ink-400)"
             >
               Create, send, and track. Built for ₦.
             </p>

@@ -21,12 +21,12 @@ export function EmailSentConfirmation({ email, onResend }: EmailSentConfirmation
 
       {/* Heading + body */}
       <div className="flex flex-col gap-2">
-        <h1 className="font-[family-name:var(--font-display)] text-[30px] font-[800] tracking-[-0.025em] text-(--ink-900) leading-[1.15]">
+        <h1 className="font-display text-[30px] font-[800] tracking-[-0.025em] text-(--ink-900) leading-[1.15]">
           Check your inbox
         </h1>
-        <p className="font-[family-name:var(--font-body)] text-[15px] text-(--ink-400) leading-[1.6]">
+        <p className="font-sans text-[15px] text-(--ink-400) leading-[1.6]">
           We sent a password reset link to{' '}
-          <strong className="font-[family-name:var(--font-body)] text-(--ink-900) font-semibold">
+          <strong className="font-sans text-(--ink-900) font-semibold">
             {email}
           </strong>
           . Check your spam folder if you don&apos;t see it.
@@ -38,18 +38,18 @@ export function EmailSentConfirmation({ email, onResend }: EmailSentConfirmation
         <a href="https://mail.google.com" target="_blank" rel="noopener noreferrer" className="w-full">
           <Button
             variant="outline"
-            className="w-full h-11 font-[family-name:var(--font-display)] text-sm font-semibold border-(--border-default) text-(--ink-900) rounded-md"
+            className="w-full h-11 font-display text-sm font-semibold border-(--border-default) text-(--ink-900) rounded-md"
           >
             Open Gmail
           </Button>
         </a>
 
-        <p className="font-[family-name:var(--font-body)] text-[13px] text-(--ink-400)">
+        <p className="font-sans text-[13px] text-(--ink-400)">
           Didn&apos;t receive it?{' '}
           <button
             type="button"
             onClick={onResend}
-            className="font-[family-name:var(--font-body)] text-[13px] text-(--blue-600) font-semibold transition-colors bg-transparent border-0 p-0 cursor-pointer hover:text-(--blue-700)"
+            className="font-sans text-[13px] text-(--blue-600) font-semibold transition-colors bg-transparent border-0 p-0 cursor-pointer hover:text-(--blue-700)"
           >
             Resend email
           </button>
@@ -59,7 +59,7 @@ export function EmailSentConfirmation({ email, onResend }: EmailSentConfirmation
       {/* Back to login */}
       <Link
         href="/login"
-        className="inline-flex items-center gap-1.5 font-[family-name:var(--font-body)] text-[13px] text-(--ink-400) no-underline transition-colors hover:text-(--ink-900)"
+        className="inline-flex items-center gap-1.5 font-sans text-[13px] text-(--ink-400) no-underline transition-colors hover:text-(--ink-900)"
       >
         <ArrowLeft size={13} strokeWidth={2} />
         Back to sign in

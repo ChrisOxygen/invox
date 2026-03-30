@@ -25,7 +25,7 @@ export function ProgressBar({ currentStep, totalSteps }: ProgressBarProps) {
       </div>
 
       {/* Step label */}
-      <p className="mt-2 text-right font-[family-name:var(--font-body)] text-[11px] text-(--ink-300)">
+      <p className="mt-2 text-right font-sans text-[11px] text-(--ink-300)">
         Step {currentStep} of {totalSteps}
       </p>
     </div>

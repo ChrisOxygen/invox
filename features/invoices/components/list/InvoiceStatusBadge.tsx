@@ -59,7 +59,7 @@ export function InvoiceStatusBadge({ status, size = 'default' }: InvoiceStatusBa
 
   return (
     <span
-      className="inline-flex items-center gap-1.5 select-none whitespace-nowrap font-[family-name:var(--font-display)] font-semibold leading-none"
+      className="inline-flex items-center gap-1.5 select-none whitespace-nowrap font-display font-semibold leading-none"
       style={{
         backgroundColor: config.background,
         color: config.color,

@@ -52,10 +52,10 @@ export function ResetPasswordForm() {
     <div className="flex flex-col gap-7">
       {/* Header */}
       <div className="flex flex-col gap-2">
-        <h1 className="font-[family-name:var(--font-display)] text-[30px] font-[800] tracking-[-0.025em] text-(--ink-900) leading-[1.15]">
+        <h1 className="font-display text-[30px] font-[800] tracking-[-0.025em] text-(--ink-900) leading-[1.15]">
           Set new password
         </h1>
-        <p className="font-[family-name:var(--font-body)] text-[15px] text-(--ink-400) leading-[1.6]">
+        <p className="font-sans text-[15px] text-(--ink-400) leading-[1.6]">
           Choose a strong password for your account.
         </p>
       </div>
@@ -68,7 +68,7 @@ export function ResetPasswordForm() {
             strokeWidth={2}
             className="text-(--success) shrink-0"
           />
-          <p className="font-[family-name:var(--font-body)] text-[13px] text-(--success) font-medium">
+          <p className="font-sans text-[13px] text-(--success) font-medium">
             Password updated! Redirecting...
           </p>
         </div>
@@ -78,14 +78,14 @@ export function ResetPasswordForm() {
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5" noValidate>
         {serverError && (
           <div className="rounded-md bg-[color-mix(in_srgb,var(--error)_10%,transparent)] border border-[color-mix(in_srgb,var(--error)_30%,transparent)] px-4 py-3">
-            <p className="text-[13px] font-[family-name:var(--font-body)] text-(--error)">{serverError}</p>
+            <p className="text-[13px] font-sans text-(--error)">{serverError}</p>
           </div>
         )}
         {/* New password */}
         <div className="flex flex-col gap-1.5">
           <Label
             htmlFor="password"
-            className="font-[family-name:var(--font-display)] text-[12px] font-semibold text-(--ink-900)"
+            className="font-display text-[12px] font-semibold text-(--ink-900)"
           >
             New password
           </Label>
@@ -96,7 +96,7 @@ export function ResetPasswordForm() {
               placeholder="Min. 8 characters"
               autoComplete="new-password"
               aria-invalid={!!errors.password}
-              className="font-[family-name:var(--font-body)] text-[14px] text-(--ink-900) pr-11 h-10.5 rounded-md pl-3.5 border-(--border-default) aria-[invalid=true]:border-(--error)"
+              className="font-sans text-[14px] text-(--ink-900) pr-11 h-10.5 rounded-md pl-3.5 border-(--border-default) aria-[invalid=true]:border-(--error)"
               {...register('password')}
             />
             <button
@@ -109,11 +109,11 @@ export function ResetPasswordForm() {
             </button>
           </div>
           {errors.password ? (
-            <p className="font-[family-name:var(--font-body)] text-[11px] text-(--error) mt-0.5">
+            <p className="font-sans text-[11px] text-(--error) mt-0.5">
               {errors.password.message}
             </p>
           ) : (
-            <p className="font-[family-name:var(--font-body)] text-[11px] text-(--ink-300) mt-0.5">
+            <p className="font-sans text-[11px] text-(--ink-300) mt-0.5">
               Must be at least 8 characters
             </p>
           )}
@@ -123,7 +123,7 @@ export function ResetPasswordForm() {
         <div className="flex flex-col gap-1.5">
           <Label
             htmlFor="confirmPassword"
-            className="font-[family-name:var(--font-display)] text-[12px] font-semibold text-(--ink-900)"
+            className="font-display text-[12px] font-semibold text-(--ink-900)"
           >
             Confirm password
           </Label>
@@ -134,7 +134,7 @@ export function ResetPasswordForm() {
               placeholder="Re-enter your password"
               autoComplete="new-password"
               aria-invalid={!!errors.confirmPassword}
-              className="font-[family-name:var(--font-body)] text-[14px] text-(--ink-900) pr-11 h-10.5 rounded-md pl-3.5 border-(--border-default) aria-[invalid=true]:border-(--error)"
+              className="font-sans text-[14px] text-(--ink-900) pr-11 h-10.5 rounded-md pl-3.5 border-(--border-default) aria-[invalid=true]:border-(--error)"
               {...register('confirmPassword')}
             />
             <button
@@ -147,7 +147,7 @@ export function ResetPasswordForm() {
             </button>
           </div>
           {errors.confirmPassword && (
-            <p className="font-[family-name:var(--font-body)] text-[11px] text-(--error) mt-0.5">
+            <p className="font-sans text-[11px] text-(--error) mt-0.5">
               {errors.confirmPassword.message}
             </p>
           )}
@@ -156,7 +156,7 @@ export function ResetPasswordForm() {
         <Button
           type="submit"
           disabled={isSubmitting || success}
-          className="w-full font-[family-name:var(--font-display)] text-[14px] font-semibold bg-(--blue-600) text-white border-0 h-10.5 rounded-md"
+          className="w-full font-display text-[14px] font-semibold bg-(--blue-600) text-white border-0 h-10.5 rounded-md"
         >
           {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
           Reset password

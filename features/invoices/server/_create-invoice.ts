@@ -1,5 +1,5 @@
 import { prisma } from '@/shared/lib/prisma'
-import { AppError, NotFoundError } from '@/shared/lib/api-error'
+import { NotFoundError } from '@/shared/lib/api-error'
 import type { ZCreateInvoice } from '../schemas'
 import type { InvoiceDetail } from '../types'
 
@@ -36,9 +36,8 @@ export async function _createInvoice(profileId: string, data: ZCreateInvoice): P
   const year = new Date().getFullYear()
   const invoiceNumber = `${profile.invoicePrefix}-${year}-${zeroPad(invoiceCount + 1, 4)}`
 
-  const invoice = await prisma.$transaction(async (tx) => {
-    const created = await tx.invoice.create({
-      data: {
+  const invoice = await prisma.invoice.create({
+    data: {
         profileId,
         clientId: data.clientId,
         invoiceNumber,
@@ -100,8 +99,6 @@ export async function _createInvoice(profileId: string, data: ZCreateInvoice): P
         },
       },
     })
-    return created
-  })
 
   return {
     ...invoice,

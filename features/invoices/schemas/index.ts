@@ -25,6 +25,14 @@ export const ZCreateInvoiceSchema = z.object({
   items: z.array(ZInvoiceItemSchema).min(1, 'At least one item is required'),
 })
 
+// Form-only schema — omits server-computed totals so the resolver has no input/output mismatch
+export const ZInvoiceFormInputSchema = ZCreateInvoiceSchema.omit({
+  subtotal: true,
+  taxAmount: true,
+  discountAmount: true,
+  total: true,
+})
+
 export const ZUpdateInvoiceSchema = ZCreateInvoiceSchema.extend({
   id: z.string().min(1),
 }).partial({ items: true, clientId: true, issueDate: true, dueDate: true })
@@ -42,6 +50,7 @@ export const ZUpdateInvoiceStatusSchema = z.object({
 
 export type ZCreateInvoice = z.infer<typeof ZCreateInvoiceSchema>
 export type ZUpdateInvoice = z.infer<typeof ZUpdateInvoiceSchema>
+export type ZInvoiceFormInput = z.infer<typeof ZInvoiceFormInputSchema>
 export type ZCreatePayment = z.infer<typeof ZCreatePaymentSchema>
 export type ZInvoiceItem = z.infer<typeof ZInvoiceItemSchema>
 export type ZUpdateInvoiceStatus = z.infer<typeof ZUpdateInvoiceStatusSchema>

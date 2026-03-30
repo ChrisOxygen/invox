@@ -20,11 +20,12 @@ import { Input } from '@/shared/components/ui/input'
 import { Textarea } from '@/shared/components/ui/textarea'
 import { Separator } from '@/shared/components/ui/separator'
 
-import { ZCreateInvoiceSchema } from '../../schemas'
-import type { ZCreateInvoice } from '../../schemas'
+import { ZInvoiceFormInputSchema } from '../../schemas'
+import type { ZInvoiceFormInput } from '../../schemas'
 import type { InvoiceDetail } from '../../types'
 import { useCreateInvoice } from '../../hooks/use-create-invoice'
 import { useUpdateInvoice } from '../../hooks/use-update-invoice'
+import { useUpdateInvoiceStatus } from '../../hooks/use-update-invoice-status'
 import { calculateTotals, formatCurrency } from '@/shared/lib/calculate-totals'
 
 import { ClientSelector } from './ClientSelector'
@@ -54,15 +55,15 @@ export function InvoiceForm({ invoice, onSuccess }: InvoiceFormProps) {
 
   const createMutation = useCreateInvoice({ onSuccess })
   const updateMutation = useUpdateInvoice()
-  const isPending = createMutation.isPending || updateMutation.isPending
+  const updateStatusMutation = useUpdateInvoiceStatus()
+  const isPending = createMutation.isPending || updateMutation.isPending || updateStatusMutation.isPending
 
   const today = new Date()
   const defaultDueDate = new Date(today)
   defaultDueDate.setDate(defaultDueDate.getDate() + 30)
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const form = useForm<ZCreateInvoice>({
-    resolver: zodResolver(ZCreateInvoiceSchema) as any,
+  const form = useForm<ZInvoiceFormInput>({
+    resolver: zodResolver(ZInvoiceFormInputSchema),
     defaultValues: invoice
       ? {
           clientId: invoice.client?.id ?? '',
@@ -73,10 +74,6 @@ export function InvoiceForm({ invoice, onSuccess }: InvoiceFormProps) {
           taxType: invoice.taxType,
           discount: invoice.discount,
           discountType: invoice.discountType,
-          subtotal: invoice.subtotal,
-          taxAmount: invoice.taxAmount,
-          discountAmount: invoice.discountAmount,
-          total: invoice.total,
           notes: invoice.notes ?? '',
           internalNotes: invoice.internalNotes ?? '',
           items: invoice.items.map((item) => ({
@@ -95,10 +92,6 @@ export function InvoiceForm({ invoice, onSuccess }: InvoiceFormProps) {
           taxType: 'PERCENTAGE',
           discount: 0,
           discountType: 'PERCENTAGE',
-          subtotal: 0,
-          taxAmount: 0,
-          discountAmount: 0,
-          total: 0,
           notes: '',
           internalNotes: '',
           items: [{ description: '', quantity: 1, unitPrice: 0, subtotal: 0 }],
@@ -123,14 +116,6 @@ export function InvoiceForm({ invoice, onSuccess }: InvoiceFormProps) {
     discountType: watchedDiscountType ?? 'PERCENTAGE',
   })
 
-  // Sync calculated totals back to form
-  useEffect(() => {
-    form.setValue('subtotal', totals.subtotal)
-    form.setValue('taxAmount', totals.taxAmount)
-    form.setValue('discountAmount', totals.discountAmount)
-    form.setValue('total', totals.total)
-  }, [totals.subtotal, totals.taxAmount, totals.discountAmount, totals.total, form])
-
   // Auto-save draft (edit mode only)
   const autoSaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const handleAutoSave = useCallback(() => {
@@ -138,8 +123,15 @@ export function InvoiceForm({ invoice, onSuccess }: InvoiceFormProps) {
     if (autoSaveTimer.current) clearTimeout(autoSaveTimer.current)
     autoSaveTimer.current = setTimeout(async () => {
       const values = form.getValues()
+      const currentTotals = calculateTotals({
+        items: values.items ?? [],
+        taxRate: Number(values.taxRate) || 0,
+        taxType: values.taxType ?? 'PERCENTAGE',
+        discount: Number(values.discount) || 0,
+        discountType: values.discountType ?? 'PERCENTAGE',
+      })
       try {
-        await updateMutation.mutateAsync({ ...values, id: invoice.id })
+        await updateMutation.mutateAsync({ ...values, ...currentTotals, id: invoice.id })
       } catch {
         // Silent auto-save failure
       }
@@ -158,27 +150,20 @@ export function InvoiceForm({ invoice, onSuccess }: InvoiceFormProps) {
     form.setValue('dueDate', toDateInput(due))
   }
 
-  const onSubmit = async (values: ZCreateInvoice, markAsSent = false) => {
+  const onSubmit = async (values: ZInvoiceFormInput, markAsSent = false) => {
+    const payload = { ...values, ...totals }
     try {
       if (isEditing && invoice) {
-        await updateMutation.mutateAsync({ ...values, id: invoice.id })
+        await updateMutation.mutateAsync({ ...payload, id: invoice.id })
         if (markAsSent) {
-          await fetch(`/api/v1/invoices/${invoice.id}/status`, {
-            method: 'PATCH',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ status: 'SENT' }),
-          })
+          await updateStatusMutation.mutateAsync({ invoiceId: invoice.id, status: 'SENT' })
         }
         toast.success(markAsSent ? 'Invoice marked as sent' : 'Invoice saved')
         router.push(`/invoices/${invoice.id}`)
       } else {
-        const result = await createMutation.mutateAsync(values)
+        const result = await createMutation.mutateAsync(payload)
         if (markAsSent) {
-          await fetch(`/api/v1/invoices/${result.id}/status`, {
-            method: 'PATCH',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ status: 'SENT' }),
-          })
+          await updateStatusMutation.mutateAsync({ invoiceId: result.id, status: 'SENT' })
         }
         toast.success(markAsSent ? 'Invoice created and marked as sent' : 'Draft saved')
         router.push(`/invoices/${result.id}`)

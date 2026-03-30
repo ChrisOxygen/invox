@@ -92,7 +92,7 @@ export function ExternalNavMenu() {
             Try free
             <UserPlus className="w-3.5 h-3.5" />
           </Button>
-          <ExternalNavMenuMobile isScrolled={true} />
+          <ExternalNavMenuMobile isScrolled={isScrolled} />
         </div>
       </div>
     </div>

@@ -1,44 +1,52 @@
-import Image from 'next/image'
-import Link from 'next/link'
-import { ChevronRight, Mail, MapPin, Zap, MessageCircle, ArrowUpRight, Clock } from 'lucide-react'
-import ExternalNavMenu from '@/components/ExternalNavMenu'
-import { FAQSection } from '@/components/homepage'
-import CTASection from '@/components/homepage/CTASection'
-import { ContactForm } from '@/components/contactpage'
-import { RevealOnScroll } from '@/components/RevealOnScroll'
+import Image from "next/image";
+import Link from "next/link";
+import {
+  ChevronRight,
+  Mail,
+  MapPin,
+  Zap,
+  MessageCircle,
+  ArrowUpRight,
+  Clock,
+} from "lucide-react";
+import ExternalNavMenu from "@/components/ExternalNavMenu";
+import { FAQSection } from "@/components/homepage";
+import CTASection from "@/components/homepage/CTASection";
+import { ContactForm } from "@/components/contactpage";
+import { RevealOnScroll } from "@/components/RevealOnScroll";
 
 const CONTACT_CHANNELS = [
   {
-    num: '01',
+    num: "01",
     icon: Mail,
-    label: 'General Support',
-    description: 'Questions, account issues, or just getting started.',
-    value: 'support@invox.ng',
-    href: 'mailto:support@invox.ng',
+    label: "General Support",
+    description: "Questions, account issues, or just getting started.",
+    value: "support@invox.ng",
+    href: "mailto:support@invox.ng",
   },
   {
-    num: '02',
+    num: "02",
     icon: MessageCircle,
-    label: 'Say Hello',
-    description: 'Feedback, partnerships, or anything on your mind.',
-    value: 'hello@invox.ng',
-    href: 'mailto:hello@invox.ng',
+    label: "Say Hello",
+    description: "Feedback, partnerships, or anything on your mind.",
+    value: "hello@invox.ng",
+    href: "mailto:hello@invox.ng",
   },
   {
-    num: '03',
+    num: "03",
     icon: Zap,
-    label: 'Feature Requests',
+    label: "Feature Requests",
     description: "Got an idea that would make Invox better for you?",
-    value: 'hello@invox.ng',
-    href: 'mailto:hello@invox.ng?subject=Feature%20Request',
+    value: "hello@invox.ng",
+    href: "mailto:hello@invox.ng?subject=Feature%20Request",
   },
-]
+];
 
 const NEXT_STEPS = [
-  'You send us a message using the form.',
-  'We read it carefully and get context.',
-  'You hear back within 24 hours, guaranteed.',
-]
+  "You send us a message using the form.",
+  "We read it carefully and get context.",
+  "You hear back within 24 hours, guaranteed.",
+];
 
 export default function ContactPage() {
   return (
@@ -60,7 +68,10 @@ export default function ContactPage() {
         <div className="relative z-10 content-wrapper pt-6 pb-14 flex flex-col w-full gap-8">
           {/* Breadcrumb */}
           <RevealOnScroll className="flex items-center gap-1.5 text-xs text-(--ink-400) font-body">
-            <Link href="/" className="hover:text-(--ink-700) transition-colors duration-200">
+            <Link
+              href="/"
+              className="hover:text-(--ink-700) transition-colors duration-200"
+            >
               Home
             </Link>
             <ChevronRight className="w-3 h-3" />
@@ -80,15 +91,17 @@ export default function ContactPage() {
 
               <RevealOnScroll delay={100}>
                 <h1 className="font-display font-extrabold text-4xl sm:text-5xl lg:text-[3.5rem] leading-[1.05] tracking-[-0.04em] text-(--ink-900)">
-                  Let&apos;s have a{' '}
-                  <span className="text-(--blue-600) italic">real conversation.</span>
+                  Let&apos;s have a{" "}
+                  <span className="text-(--blue-600) italic">
+                    real conversation.
+                  </span>
                 </h1>
               </RevealOnScroll>
 
               <RevealOnScroll delay={180}>
                 <p className="text-base text-(--ink-400) leading-relaxed font-body max-w-md">
-                  Whether it&apos;s a question, a bug, a wild idea, or just a hello — we read
-                  every message and reply personally.
+                  Whether it&apos;s a question, a bug, a wild idea, or just a
+                  hello — we read every message and reply personally.
                 </p>
               </RevealOnScroll>
 
@@ -101,16 +114,22 @@ export default function ContactPage() {
             </div>
 
             {/* Right: response time stat */}
-            <RevealOnScroll delay={200} className="flex flex-col items-start lg:items-end gap-1 shrink-0">
+            <RevealOnScroll
+              delay={200}
+              className="flex flex-col items-start lg:items-end gap-1 shrink-0"
+            >
               <span className="text-[5rem] sm:text-[6.5rem] font-display font-extrabold text-(--blue-600) leading-none tracking-[-0.05em]">
                 24h
               </span>
               <span className="text-sm text-(--ink-400) font-body lg:text-right leading-snug">
-                avg. response<br className="hidden lg:block" /> time
+                avg. response
+                <br className="hidden lg:block" /> time
               </span>
               <div className="flex items-center gap-1.5 mt-2">
                 <Clock className="w-3 h-3 text-(--success)" />
-                <span className="text-xs text-(--success) font-semibold font-body">Usually faster</span>
+                <span className="text-xs text-(--success) font-semibold font-body">
+                  Usually faster
+                </span>
               </div>
             </RevealOnScroll>
           </div>
@@ -121,51 +140,54 @@ export default function ContactPage() {
       <section className="bg-(--surface-page)">
         <div className="content-wrapper">
           <div className="grid grid-cols-1 lg:grid-cols-[5fr_7fr] gap-12 xl:gap-20 items-start">
-
             {/* Left sidebar — sticky */}
             <div className="flex flex-col gap-10 lg:sticky lg:top-28">
-
               {/* Contact channels — numbered directory */}
               <RevealOnScroll>
                 <div className="flex flex-col">
                   <span className="text-[10px] font-semibold text-(--ink-300) uppercase tracking-[0.08em] font-display mb-5">
                     Reach us directly
                   </span>
-                  {CONTACT_CHANNELS.map(({ num, icon: Icon, label, description, value, href }) => (
-                    <a
-                      key={label}
-                      href={href}
-                      className="group flex items-start gap-4 py-5 border-t border-(--border-default) last:border-b hover:bg-(--surface-raised) transition-colors duration-150 -mx-3 px-3 rounded"
-                    >
-                      <span className="shrink-0 text-[10px] text-(--ink-300) font-mono mt-0.5 w-5 tracking-widest pt-0.5">
-                        {num}
-                      </span>
-                      <div className="flex flex-col gap-1 flex-1 min-w-0">
-                        <div className="flex items-center gap-1.5">
-                          <Icon className="w-3.5 h-3.5 text-(--blue-500) shrink-0" strokeWidth={1.5} />
-                          <span className="text-sm font-semibold text-(--ink-900) font-display tracking-[-0.01em]">
-                            {label}
+                  {CONTACT_CHANNELS.map(
+                    ({ num, icon: Icon, label, description, value, href }) => (
+                      <a
+                        key={label}
+                        href={href}
+                        className="group flex items-start gap-4 py-5 border-t border-(--border-default) last:border-b hover:bg-(--surface-raised) transition-colors duration-150 -mx-3 px-3"
+                      >
+                        <span className="shrink-0 text-[10px] text-(--ink-300) font-mono mt-0.5 w-5 tracking-widest pt-0.5">
+                          {num}
+                        </span>
+                        <div className="flex flex-col gap-1 flex-1 min-w-0">
+                          <div className="flex items-center gap-1.5">
+                            <Icon
+                              className="w-3.5 h-3.5 text-(--blue-500) shrink-0"
+                              strokeWidth={1.5}
+                            />
+                            <span className="text-sm font-semibold text-(--ink-900) font-display tracking-[-0.01em]">
+                              {label}
+                            </span>
+                          </div>
+                          <p className="text-xs text-(--ink-400) font-body leading-relaxed">
+                            {description}
+                          </p>
+                          <span
+                            className="text-xs text-(--blue-600) group-hover:underline underline-offset-2 mt-1 truncate"
+                            style={{ fontFamily: "var(--font-mono)" }}
+                          >
+                            {value}
                           </span>
                         </div>
-                        <p className="text-xs text-(--ink-400) font-body leading-relaxed">
-                          {description}
-                        </p>
-                        <span
-                          className="text-xs text-(--blue-600) group-hover:underline underline-offset-2 mt-1 truncate"
-                          style={{ fontFamily: 'var(--font-mono)' }}
-                        >
-                          {value}
-                        </span>
-                      </div>
-                      <ArrowUpRight className="w-3.5 h-3.5 text-(--ink-300) group-hover:text-(--blue-500) shrink-0 transition-colors duration-150 mt-0.5" />
-                    </a>
-                  ))}
+                        <ArrowUpRight className="w-3.5 h-3.5 text-(--ink-300) group-hover:text-(--blue-500) shrink-0 transition-colors duration-150 mt-0.5" />
+                      </a>
+                    ),
+                  )}
                 </div>
               </RevealOnScroll>
 
               {/* What to expect — numbered steps */}
               <RevealOnScroll delay={100}>
-                <div className="flex flex-col gap-4 p-5 rounded bg-(--surface-base) border border-(--border-default)">
+                <div className="flex flex-col -mx-3 gap-4 p-5 bg-(--surface-base) border border-(--border-default)">
                   <span className="text-[10px] font-semibold text-(--ink-300) uppercase tracking-[0.08em] font-display">
                     What happens next
                   </span>
@@ -177,7 +199,9 @@ export default function ContactPage() {
                             {i + 1}
                           </span>
                         </div>
-                        <p className="text-xs text-(--ink-500) font-body leading-relaxed">{step}</p>
+                        <p className="text-xs text-(--ink-500) font-body leading-relaxed">
+                          {step}
+                        </p>
                       </div>
                     ))}
                   </div>
@@ -196,5 +220,5 @@ export default function ContactPage() {
       <FAQSection />
       <CTASection />
     </>
-  )
+  );
 }

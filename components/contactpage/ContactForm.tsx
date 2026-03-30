@@ -1,35 +1,41 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { ArrowRight, CheckCircle, Mail, User, Building2 } from 'lucide-react'
+import { useState } from "react";
+import { ArrowRight, CheckCircle, Mail, User, Building2 } from "lucide-react";
 
 const TOPICS = [
-  'General Inquiry',
-  'Billing & Payments',
-  'Technical Support',
-  'Feature Request',
-  'Partnership',
-  'Other',
-]
+  "General Inquiry",
+  "Billing & Payments",
+  "Technical Support",
+  "Feature Request",
+  "Partnership",
+  "Other",
+];
 
-const WHO_OPTIONS = ['Freelancer', 'Small Business', 'Agency', 'Just Evaluating', 'Developer']
+const WHO_OPTIONS = [
+  "Freelancer",
+  "Small Business",
+  "Agency",
+  "Just Evaluating",
+  "Developer",
+];
 
-const MAX_CHARS = 500
+const MAX_CHARS = 500;
 
 export function ContactForm() {
-  const [topic, setTopic] = useState('')
-  const [who, setWho] = useState('')
-  const [charCount, setCharCount] = useState(0)
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [submitted, setSubmitted] = useState(false)
+  const [topic, setTopic] = useState("");
+  const [who, setWho] = useState("");
+  const [charCount, setCharCount] = useState(0);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    setIsSubmitting(true)
-    await new Promise((resolve) => setTimeout(resolve, 1400))
-    setIsSubmitting(false)
-    setSubmitted(true)
-  }
+    e.preventDefault();
+    setIsSubmitting(true);
+    await new Promise((resolve) => setTimeout(resolve, 1400));
+    setIsSubmitting(false);
+    setSubmitted(true);
+  };
 
   if (submitted) {
     return (
@@ -47,25 +53,30 @@ export function ContactForm() {
             Message delivered.
           </h3>
           <p className="text-sm text-(--ink-400) font-body max-w-65 leading-relaxed">
-            We&apos;ll review it and get back to you within 24 hours — usually much sooner.
+            We&apos;ll review it and get back to you within 24 hours — usually
+            much sooner.
           </p>
         </div>
         <div className="flex flex-col gap-2 w-full max-w-xs pt-4 border-t border-(--border-default)">
-          {['Message received', 'Being reviewed', 'Reply coming soon'].map((s, i) => (
-            <div key={i} className="flex items-center gap-3">
-              <div className="w-5 h-5 rounded bg-(--blue-50) flex items-center justify-center shrink-0">
-                <span className="text-[10px] font-mono font-semibold text-(--blue-600)">{i + 1}</span>
+          {["Message received", "Being reviewed", "Reply coming soon"].map(
+            (s, i) => (
+              <div key={i} className="flex items-center gap-3">
+                <div className="w-5 h-5 rounded bg-(--blue-50) flex items-center justify-center shrink-0">
+                  <span className="text-[10px] font-mono font-semibold text-(--blue-600)">
+                    {i + 1}
+                  </span>
+                </div>
+                <span className="text-xs text-(--ink-500) font-body">{s}</span>
               </div>
-              <span className="text-xs text-(--ink-500) font-body">{s}</span>
-            </div>
-          ))}
+            ),
+          )}
         </div>
       </div>
-    )
+    );
   }
 
   const underlineInput =
-    'w-full py-3.5 border-b border-(--border-default) bg-transparent text-sm text-(--ink-900) font-body placeholder:text-(--ink-300) focus:outline-none focus:border-(--blue-600) transition-colors duration-150'
+    "w-full py-3.5 border-b border-(--border-default) bg-transparent text-sm text-(--ink-900) font-body placeholder:text-(--ink-300) focus:outline-none focus:border-(--blue-600) transition-colors duration-150";
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-9">
@@ -95,11 +106,11 @@ export function ContactForm() {
             <button
               key={t}
               type="button"
-              onClick={() => setTopic(topic === t ? '' : t)}
+              onClick={() => setTopic(topic === t ? "" : t)}
               className={`px-3.5 py-1.5 rounded-full text-xs font-semibold font-display transition-all duration-150 border ${
                 topic === t
-                  ? 'bg-(--blue-600) text-white border-(--blue-600)'
-                  : 'bg-(--surface-base) text-(--ink-500) border-(--border-default) hover:border-(--blue-400) hover:text-(--blue-600)'
+                  ? "bg-(--blue-600) text-white border-(--blue-600)"
+                  : "bg-(--surface-base) text-(--ink-500) border-(--border-default) hover:border-(--blue-400) hover:text-(--blue-600)"
               }`}
             >
               {t}
@@ -118,11 +129,11 @@ export function ContactForm() {
             <button
               key={w}
               type="button"
-              onClick={() => setWho(who === w ? '' : w)}
+              onClick={() => setWho(who === w ? "" : w)}
               className={`px-3.5 py-1.5 rounded-full text-xs font-semibold font-display transition-all duration-150 border ${
                 who === w
-                  ? 'bg-(--ink-900) text-white border-(--ink-900)'
-                  : 'bg-(--surface-base) text-(--ink-500) border-(--border-default) hover:border-(--ink-500) hover:text-(--ink-700)'
+                  ? "bg-(--ink-900) text-white border-(--ink-900)"
+                  : "bg-(--surface-base) text-(--ink-500) border-(--border-default) hover:border-(--ink-500) hover:text-(--ink-700)"
               }`}
             >
               {w}
@@ -144,7 +155,10 @@ export function ContactForm() {
               placeholder="Your full name"
               className={`${underlineInput} pr-7`}
             />
-            <User className="absolute right-0 w-4 h-4 text-(--ink-300) pointer-events-none" strokeWidth={1.5} />
+            <User
+              className="absolute right-0 w-4 h-4 text-(--ink-300) pointer-events-none"
+              strokeWidth={1.5}
+            />
           </div>
         </div>
 
@@ -159,7 +173,10 @@ export function ContactForm() {
               placeholder="you@example.com"
               className={`${underlineInput} pr-7`}
             />
-            <Mail className="absolute right-0 w-4 h-4 text-(--ink-300) pointer-events-none" strokeWidth={1.5} />
+            <Mail
+              className="absolute right-0 w-4 h-4 text-(--ink-300) pointer-events-none"
+              strokeWidth={1.5}
+            />
           </div>
         </div>
       </div>
@@ -167,7 +184,7 @@ export function ContactForm() {
       {/* Organization */}
       <div className="flex flex-col gap-1.5">
         <label className="text-[10px] font-semibold text-(--ink-400) font-display uppercase tracking-[0.08em]">
-          Organization{' '}
+          Organization{" "}
           <span className="normal-case tracking-normal font-normal text-(--ink-300) text-[10px]">
             — optional
           </span>
@@ -178,7 +195,10 @@ export function ContactForm() {
             placeholder="Your business or agency name"
             className={`${underlineInput} pr-7`}
           />
-          <Building2 className="absolute right-0 w-4 h-4 text-(--ink-300) pointer-events-none" strokeWidth={1.5} />
+          <Building2
+            className="absolute right-0 w-4 h-4 text-(--ink-300) pointer-events-none"
+            strokeWidth={1.5}
+          />
         </div>
       </div>
 
@@ -190,7 +210,9 @@ export function ContactForm() {
           </label>
           <span
             className={`text-[10px] font-mono tabular-nums ${
-              charCount > MAX_CHARS * 0.9 ? 'text-(--warning)' : 'text-(--ink-300)'
+              charCount > MAX_CHARS * 0.9
+                ? "text-(--warning)"
+                : "text-(--ink-300)"
             }`}
           >
             {charCount}/{MAX_CHARS}
@@ -207,9 +229,9 @@ export function ContactForm() {
       </div>
 
       {/* Submit row */}
-      <div className="flex items-center justify-between gap-4 pt-2 border-t border-(--border-default)">
+      <div className="flex items-center justify-between gap-4 pt-2 border-(--border-default)">
         <p className="text-[11px] text-(--ink-300) font-body leading-relaxed">
-          By submitting, you agree to our{' '}
+          By submitting, you agree to our{" "}
           <a
             href="/privacy-policy"
             className="underline underline-offset-2 hover:text-(--ink-500) transition-colors duration-150"
@@ -237,5 +259,5 @@ export function ContactForm() {
         </button>
       </div>
     </form>
-  )
+  );
 }

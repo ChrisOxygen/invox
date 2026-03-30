@@ -251,7 +251,7 @@ export function WelcomeEmail({ name, dashboardUrl }: WelcomeEmailProps) {
               margin: 0,
             }}
           >
-            — The Invox team
+            — Chris, founder of Invox
           </Text>
         </Section>
       </Section>
@@ -262,7 +262,7 @@ export function WelcomeEmail({ name, dashboardUrl }: WelcomeEmailProps) {
 // Preview props for react-email dev server
 WelcomeEmail.PreviewProps = {
   name: 'Chidi',
-  dashboardUrl: 'https://invox.app/onboarding',
+  dashboardUrl: 'https://invox.cc/onboarding',
 } satisfies WelcomeEmailProps
 
 export default WelcomeEmail

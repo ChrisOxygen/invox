@@ -175,7 +175,7 @@ export function ResetPasswordEmail({ email, resetUrl }: ResetPasswordEmailProps)
           }}
         >
           Locked out or need help?{' '}
-          <Link href="mailto:support@invox.app" style={{ color: colors.blue600 }}>
+          <Link href="mailto:support@invox.cc" style={{ color: colors.blue600 }}>
             Reply to this email
           </Link>{' '}
           and we'll sort it out.
@@ -219,7 +219,7 @@ export function ResetPasswordEmail({ email, resetUrl }: ResetPasswordEmailProps)
 // Preview props for react-email dev server
 ResetPasswordEmail.PreviewProps = {
   email: 'chidi@example.com',
-  resetUrl: 'https://invox.app/api/v1/auth/callback?type=recovery&token=abc123',
+  resetUrl: 'https://invox.cc/api/v1/auth/callback?type=recovery&token=abc123',
 } satisfies ResetPasswordEmailProps
 
 export default ResetPasswordEmail

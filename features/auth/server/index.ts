@@ -49,7 +49,10 @@ export async function _signUp(
       emailRedirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/api/v1/auth/callback`,
     },
   })
-  if (error) return { error: friendlyAuthError(error.message) }
+  if (error) {
+    console.error('[_signUp] Supabase error:', error.message, error.status)
+    return { error: friendlyAuthError(error.message) }
+  }
   return {}
 }
 

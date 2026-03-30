@@ -166,7 +166,7 @@ export function VerifyEmail({ name, verificationUrl }: VerifyEmailProps) {
 // Preview props for react-email dev server
 VerifyEmail.PreviewProps = {
   name: 'Chidi',
-  verificationUrl: 'https://invox.app/api/v1/auth/callback?code=abc123',
+  verificationUrl: 'https://invox.cc/api/v1/auth/callback?code=abc123',
 } satisfies VerifyEmailProps
 
 export default VerifyEmail

@@ -35,7 +35,7 @@ interface EmailLayoutProps {
 }
 
 export function EmailLayout({ preview, children, showUnsubscribe = false }: EmailLayoutProps) {
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://invox.app'
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://invox.cc'
 
   return (
     <Html lang="en" dir="ltr">
@@ -144,10 +144,10 @@ export function EmailLayout({ preview, children, showUnsubscribe = false }: Emai
               )}
               {' · '}
               <Link
-                href={`mailto:support@invox.app`}
+                href={`mailto:support@invox.cc`}
                 style={{ color: colors.ink300, textDecoration: 'underline' }}
               >
-                support@invox.app
+                support@invox.cc
               </Link>
             </Text>
           </Section>

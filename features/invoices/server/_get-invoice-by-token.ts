@@ -1,5 +1,6 @@
 import { prisma } from '@/shared/lib/prisma'
 import { NotFoundError } from '@/shared/lib/api-error'
+import type { InvoiceStatus, TaxType, DiscountType } from '@/prisma/generated/client/enums'
 
 export type PublicInvoiceItem = {
   id: string
@@ -40,14 +41,14 @@ export type PublicInvoiceClient = {
 export type PublicInvoice = {
   id: string
   invoiceNumber: string
-  status: string
+  status: InvoiceStatus
   issueDate: string
   dueDate: string
   currency: string
   taxRate: number
-  taxType: string
+  taxType: TaxType
   discount: number
-  discountType: string
+  discountType: DiscountType
   subtotal: number
   taxAmount: number
   discountAmount: number
@@ -129,9 +130,6 @@ export async function _getInvoiceByToken(token: string): Promise<PublicInvoice> 
 
   return {
     ...invoice,
-    status: invoice.status as string,
-    taxType: invoice.taxType as string,
-    discountType: invoice.discountType as string,
     issueDate: invoice.issueDate.toISOString(),
     dueDate: invoice.dueDate.toISOString(),
   }

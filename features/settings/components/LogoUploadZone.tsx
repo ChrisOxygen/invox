@@ -62,6 +62,7 @@ export function LogoUploadZone({
         setPreview(currentLogoUrl)
       } finally {
         setUploading(false)
+        URL.revokeObjectURL(objectUrl)
       }
     },
     onDropRejected: (fileRejections) => {

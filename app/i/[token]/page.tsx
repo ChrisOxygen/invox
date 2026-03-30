@@ -3,6 +3,7 @@ import { Globe, Mail, Phone } from 'lucide-react'
 import { _getInvoiceByToken } from '@/features/invoices/server/_get-invoice-by-token'
 import { formatCurrency, formatDate } from '@/shared/lib/utils'
 import { PrintButton } from '@/features/invoices/components/pdf/PrintButton'
+import { InvoiceStatusBadge } from '@/features/invoices/components/list/InvoiceStatusBadge'
 import type { PublicInvoice } from '@/features/invoices/server/_get-invoice-by-token'
 
 export default async function PublicInvoicePage({
@@ -21,38 +22,6 @@ export default async function PublicInvoicePage({
 
   const { profile, client, items } = invoice
   const brandColor = profile.brandColor ?? 'var(--blue-600)'
-
-  const STATUS_LABELS: Record<string, string> = {
-    DRAFT: 'Draft',
-    SENT: 'Sent',
-    PAID: 'Paid',
-    PARTIAL: 'Partial Payment',
-    OVERDUE: 'Overdue',
-    CANCELLED: 'Cancelled',
-  }
-
-  // className strings — uses CSS variables where tokens exist, Tailwind arbitrary values otherwise
-  const STATUS_BADGE_CLASSES: Record<string, string> = {
-    DRAFT: 'bg-[var(--blue-50)] text-[var(--blue-700)]',
-    SENT: 'bg-[#E6F7FA] text-[#006A7A]',
-    PAID: 'bg-[#EDFAF3] text-[#0A8F52]',
-    PARTIAL: 'bg-[#FFF7EA] text-[#B57200]',
-    OVERDUE: 'bg-[#FFF0F0] text-[#C72020]',
-    CANCELLED: 'bg-[var(--ink-50)] text-[var(--ink-500)]',
-  }
-  const STATUS_DOT_CLASSES: Record<string, string> = {
-    DRAFT: 'bg-[var(--blue-700)]',
-    SENT: 'bg-[#006A7A]',
-    PAID: 'bg-[var(--success)]',
-    PARTIAL: 'bg-[var(--warning)]',
-    OVERDUE: 'bg-[#C72020]',
-    CANCELLED: 'bg-[var(--ink-500)]',
-  }
-
-  const statusBadgeClass =
-    STATUS_BADGE_CLASSES[invoice.status] ?? 'bg-[var(--ink-50)] text-[var(--ink-500)]'
-  const statusDotClass = STATUS_DOT_CLASSES[invoice.status] ?? 'bg-[var(--ink-500)]'
-  const statusLabel = STATUS_LABELS[invoice.status] ?? invoice.status
 
   const businessLocation = [profile.city, profile.state, profile.country]
     .filter(Boolean)
@@ -148,11 +117,8 @@ export default async function PublicInvoicePage({
             >
               {invoice.invoiceNumber}
             </p>
-            <div
-              className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 font-[family-name:var(--font-display)] text-[12px] font-semibold mb-4 ${statusBadgeClass}`}
-            >
-              <span className={`w-1.5 h-1.5 rounded-full ${statusDotClass}`} />
-              {statusLabel}
+            <div className="mb-4">
+              <InvoiceStatusBadge status={invoice.status} />
             </div>
             <div className="flex flex-col gap-1">
               <div className="flex justify-between gap-6">

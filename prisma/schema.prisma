@@ -26,7 +26,14 @@ model Profile {
   invoicePrefix  String    @default("INV")
   taxNumber      String?
   rcNumber       String?
-  onboardingDone Boolean   @default(false)
+  onboardingDone      Boolean   @default(false)
+  // Auth email (Supabase auth.users.email) — stored here so we can look up profiles
+  // from Resend webhook events, which only know the recipient email address.
+  authEmail           String?   @unique
+  // Set to true when Resend reports a hard bounce — prevents future sends
+  emailBounced        Boolean   @default(false)
+  // Set to true when user marks our email as spam or unsubscribes
+  emailUnsubscribed   Boolean   @default(false)
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
 

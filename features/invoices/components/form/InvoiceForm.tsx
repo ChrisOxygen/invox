@@ -58,9 +58,10 @@ export function InvoiceForm({ invoice, onSuccess }: InvoiceFormProps) {
   const updateStatusMutation = useUpdateInvoiceStatus()
   const isPending = createMutation.isPending || updateMutation.isPending || updateStatusMutation.isPending
 
-  const today = new Date()
-  const defaultDueDate = new Date(today)
-  defaultDueDate.setDate(defaultDueDate.getDate() + 30)
+  const defaultDates = useRef({
+    today: toDateInput(new Date()),
+    dueDate: (() => { const d = new Date(); d.setDate(d.getDate() + 30); return toDateInput(d) })(),
+  })
 
   const form = useForm<ZInvoiceFormInput>({
     resolver: zodResolver(ZInvoiceFormInputSchema),
@@ -85,8 +86,8 @@ export function InvoiceForm({ invoice, onSuccess }: InvoiceFormProps) {
         }
       : {
           clientId: '',
-          issueDate: toDateInput(today),
-          dueDate: toDateInput(defaultDueDate),
+          issueDate: defaultDates.current.today,
+          dueDate: defaultDates.current.dueDate,
           currency: 'NGN',
           taxRate: 0,
           taxType: 'PERCENTAGE',
@@ -101,12 +102,8 @@ export function InvoiceForm({ invoice, onSuccess }: InvoiceFormProps) {
   const { fields, append, remove } = useFieldArray({ control: form.control, name: 'items' })
 
   // Watch fields for live totals calculation
-  const watchedItems = useWatch({ control: form.control, name: 'items' })
-  const watchedTaxRate = useWatch({ control: form.control, name: 'taxRate' })
-  const watchedTaxType = useWatch({ control: form.control, name: 'taxType' })
-  const watchedDiscount = useWatch({ control: form.control, name: 'discount' })
-  const watchedDiscountType = useWatch({ control: form.control, name: 'discountType' })
-  const watchedCurrency = useWatch({ control: form.control, name: 'currency' })
+  const [watchedItems, watchedTaxRate, watchedTaxType, watchedDiscount, watchedDiscountType, watchedCurrency] =
+    useWatch({ control: form.control, name: ['items', 'taxRate', 'taxType', 'discount', 'discountType', 'currency'] })
 
   const totals = calculateTotals({
     items: watchedItems ?? [],

@@ -9,7 +9,6 @@ import {
   ArrowUpRight,
   Clock,
 } from "lucide-react";
-import ExternalNavMenu from "@/components/ExternalNavMenu";
 import { FAQSection } from "@/components/homepage";
 import CTASection from "@/components/homepage/CTASection";
 import { ContactForm } from "@/components/contactpage";
@@ -63,9 +62,7 @@ export default function ContactPage() {
         />
         <div className="absolute inset-0 bg-white/20" />
 
-        <ExternalNavMenu />
-
-        <div className="relative z-10 content-wrapper pt-6 pb-14 flex flex-col w-full gap-8">
+        <div className="relative z-10 content-wrapper pt-24 pb-14 flex flex-col w-full gap-8">
           {/* Breadcrumb */}
           <RevealOnScroll className="flex items-center gap-1.5 text-xs text-(--ink-400) font-body">
             <Link

@@ -23,7 +23,7 @@ function ExternalNavMenu() {
     href === "/" ? pathname === "/" : pathname.startsWith(href);
 
   return (
-    <div className="w-full relatived top-4 z-50 px-4 pt-4">
+    <div className="w-full fixed top-4 left-0 z-50 px-4">
       <div
         className={` mx-auto w-full flex items-center justify-between h-14 px-4 rounded transition-all duration-300 ${
           isScrolled

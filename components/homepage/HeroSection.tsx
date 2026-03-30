@@ -1,7 +1,6 @@
 import { Button } from "@/shared/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
-import ExternalNavMenu from "../ExternalNavMenu";
 import { RevealOnScroll } from "../RevealOnScroll";
 
 export default function HeroSection() {
@@ -25,8 +24,6 @@ export default function HeroSection() {
 
       {/* Subtle overlay to keep text readable */}
       <div className="absolute inset-0 bg-white/20" />
-
-      <ExternalNavMenu />
 
       <div className="relative z-10 flex flex-col items-center flex-1 pt-36 pb-0 px-5">
         {/* Eyebrow */}

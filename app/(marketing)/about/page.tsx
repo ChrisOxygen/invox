@@ -1,4 +1,3 @@
-import ExternalNavMenu from "@/components/ExternalNavMenu";
 import { FAQSection, TestimonialsSection } from "@/components/homepage";
 import CTASection from "@/components/homepage/CTASection";
 import MovingTextSection from "@/components/homepage/MovingTextSection";
@@ -52,9 +51,7 @@ export default function AboutPage() {
         {/* Fade the dot-grid out at the bottom */}
         <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-(--surface-page) to-transparent pointer-events-none" />
 
-        <ExternalNavMenu />
-
-        <div className="relative z-10 content-wrapper pt-6 pb-20 flex flex-col w-full gap-10">
+        <div className="relative z-10 content-wrapper pt-24 pb-20 flex flex-col w-full gap-10">
           {/* Breadcrumb + meta row */}
           <RevealOnScroll className="flex items-center justify-between">
             <div className="flex items-center gap-1.5 text-xs text-(--ink-400) font-body">

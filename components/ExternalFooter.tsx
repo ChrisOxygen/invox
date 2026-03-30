@@ -106,7 +106,7 @@ function ExternalFooter() {
             &copy; {new Date().getFullYear()} Invox. All rights reserved.
           </p>
           <p className="text-xs text-(--ink-400) font-body">
-            Built with <span className="text-(--error)">♥</span> by{" "}
+            Built with <span className="text-(--error)">&hearts;</span> by{" "}
             <Link
               href="https://github.com/ChrisOxygen"
               target="_blank"

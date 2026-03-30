@@ -1,5 +1,5 @@
 import ExternalFooter from "@/components/ExternalFooter";
-import ExternalNavMenu from "@/components/ExternalNavMenu";
+import { ExternalNavMenu } from "@/components/ExternalNavMenu";
 import React from "react";
 
 function WebsiteLayout({ children }: { children: React.ReactNode }) {

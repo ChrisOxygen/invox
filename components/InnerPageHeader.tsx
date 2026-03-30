@@ -1,4 +1,4 @@
-import ExternalNavMenu from '@/components/ExternalNavMenu'
+import { ExternalNavMenu } from '@/components/ExternalNavMenu'
 import Link from 'next/link'
 import { ChevronRight } from 'lucide-react'
 

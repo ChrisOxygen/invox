@@ -9,7 +9,7 @@ import { usePathname } from "next/navigation";
 import { NAVIGATION_LINKS } from "@/constants";
 import { ExternalNavMenuMobile } from "./ExternalNavMenuMobile";
 
-function ExternalNavMenu() {
+export function ExternalNavMenu() {
   const [isScrolled, setIsScrolled] = useState(false);
   const pathname = usePathname();
 
@@ -99,4 +99,3 @@ function ExternalNavMenu() {
   );
 }
 
-export default ExternalNavMenu;

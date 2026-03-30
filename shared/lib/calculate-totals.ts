@@ -45,17 +45,4 @@ export function calculateTotals(input: TotalsInput): TotalsResult {
   }
 }
 
-export function formatCurrency(amount: number, currency = 'NGN'): string {
-  if (currency === 'NGN') {
-    return `₦${amount.toLocaleString('en-NG', {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    })}`
-  }
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency,
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  }).format(amount)
-}
+export { formatCurrency } from '@/shared/lib/utils'

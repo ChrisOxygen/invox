@@ -1,8 +1,7 @@
 import { notFound } from 'next/navigation'
-import { format, parseISO } from 'date-fns'
 import { Globe, Mail, Phone } from 'lucide-react'
 import { _getInvoiceByToken } from '@/features/invoices/server/_get-invoice-by-token'
-import { formatCurrency } from '@/shared/lib/utils'
+import { formatCurrency, formatDate } from '@/shared/lib/utils'
 import { PrintButton } from '@/features/invoices/components/pdf/PrintButton'
 import type { PublicInvoice } from '@/features/invoices/server/_get-invoice-by-token'
 
@@ -22,14 +21,6 @@ export default async function PublicInvoicePage({
 
   const { profile, client, items } = invoice
   const brandColor = profile.brandColor ?? 'var(--blue-600)'
-
-  function formatDate(iso: string) {
-    try {
-      return format(parseISO(iso), 'd MMM yyyy')
-    } catch {
-      return '—'
-    }
-  }
 
   const STATUS_LABELS: Record<string, string> = {
     DRAFT: 'Draft',

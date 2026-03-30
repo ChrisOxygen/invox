@@ -42,7 +42,7 @@ function InvoxLogo() {
           alt="Invox"
           width={20}
           height={20}
-          className="object-contain"
+          className="w-5 h-5 object-contain"
         />
       </div>
       <span className="text-[17px] font-bold tracking-[-0.03em] font-display text-(--ink-900)">

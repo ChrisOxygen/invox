@@ -18,7 +18,7 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
               alt="Invox"
               width={16}
               height={16}
-              className="object-contain"
+              className="w-4 h-4 object-contain"
             />
           </div>
           <span

@@ -55,12 +55,11 @@ interface InvoiceStatusBadgeProps {
 
 export function InvoiceStatusBadge({ status, size = 'default' }: InvoiceStatusBadgeProps) {
   const config = STATUS_CONFIG[status]
-
   const isSmall = size === 'sm'
 
   return (
     <span
-      className="inline-flex items-center gap-1.5"
+      className="inline-flex items-center gap-1.5 select-none whitespace-nowrap font-[family-name:var(--font-display)] font-semibold leading-none"
       style={{
         backgroundColor: config.background,
         color: config.color,
@@ -69,23 +68,12 @@ export function InvoiceStatusBadge({ status, size = 'default' }: InvoiceStatusBa
         paddingRight: isSmall ? 8 : 12,
         paddingTop: isSmall ? 2 : 4,
         paddingBottom: isSmall ? 2 : 4,
-        fontFamily: 'var(--font-display)',
         fontSize: isSmall ? 11 : 12,
-        fontWeight: 600,
-        lineHeight: 1,
-        whiteSpace: 'nowrap' as const,
-        userSelect: 'none' as const,
       }}
     >
       <span
-        style={{
-          width: 6,
-          height: 6,
-          borderRadius: '50%',
-          backgroundColor: config.dotColor,
-          flexShrink: 0,
-          display: 'inline-block',
-        }}
+        className="inline-block shrink-0 rounded-full w-[6px] h-[6px]"
+        style={{ backgroundColor: config.dotColor }}
       />
       {config.label}
     </span>

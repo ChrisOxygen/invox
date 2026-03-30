@@ -31,14 +31,13 @@ function TypeToggle({
           type="button"
           disabled={disabled}
           onClick={() => onChange(opt)}
-          className={`px-2 text-xs font-medium transition-colors font-display ${
+          className={`px-2 text-xs font-medium transition-colors font-display cursor-pointer disabled:cursor-not-allowed ${
             opt === 'PERCENTAGE' ? 'border-r border-(--border-default)' : ''
           } ${
             value === opt
               ? 'bg-(--blue-50) text-(--blue-600)'
               : 'bg-(--surface-base) text-(--ink-400)'
           }`}
-          style={{ cursor: disabled ? 'not-allowed' : 'pointer' }}
         >
           {opt === 'PERCENTAGE' ? '%' : '₦'}
         </button>

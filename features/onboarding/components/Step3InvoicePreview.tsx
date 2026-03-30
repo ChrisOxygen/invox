@@ -78,14 +78,12 @@ export function Step3InvoicePreview() {
           <div className="flex flex-col rounded-md overflow-hidden border border-(--border-default)">
             {/* Column headers */}
             <div
-              className="grid bg-(--surface-overlay)"
-              style={{ gridTemplateColumns: '1fr 40px 90px 90px', padding: '6px 10px' }}
+              className="grid bg-(--surface-overlay) px-[10px] py-[6px] [grid-template-columns:1fr_40px_90px_90px]"
             >
               {(['Description', 'Qty', 'Unit Price', 'Total'] as const).map((h) => (
                 <span
                   key={h}
-                  className="font-display font-semibold uppercase text-[10px] text-(--ink-300) tracking-[0.08em]"
-                  style={{ textAlign: h === 'Description' ? 'left' : 'right' }}
+                  className={`font-display font-semibold uppercase text-[10px] text-(--ink-300) tracking-[0.08em] ${h === 'Description' ? 'text-left' : 'text-right'}`}
                 >
                   {h}
                 </span>
@@ -94,8 +92,7 @@ export function Step3InvoicePreview() {
 
             {/* Row 1 */}
             <div
-              className="grid bg-(--surface-base)"
-              style={{ gridTemplateColumns: '1fr 40px 90px 90px', padding: '7px 10px' }}
+              className="grid bg-(--surface-base) px-[10px] py-[7px] [grid-template-columns:1fr_40px_90px_90px]"
             >
               <span className="font-body text-[13px] text-(--ink-900)">Design Services</span>
               <span className="font-mono text-right text-[13px] text-(--ink-900)">1</span>
@@ -105,8 +102,7 @@ export function Step3InvoicePreview() {
 
             {/* Row 2 */}
             <div
-              className="grid bg-(--surface-raised)"
-              style={{ gridTemplateColumns: '1fr 40px 90px 90px', padding: '7px 10px' }}
+              className="grid bg-(--surface-raised) px-[10px] py-[7px] [grid-template-columns:1fr_40px_90px_90px]"
             >
               <span className="font-body text-[13px] text-(--ink-900)">Brand Strategy</span>
               <span className="font-mono text-right text-[13px] text-(--ink-900)">2</span>

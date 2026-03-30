@@ -10,20 +10,20 @@ const QUICK_ACCESS_CARDS = [
   {
     icon: FileText,
     label: 'Create invoice',
-    bgColor: 'var(--blue-50)',
-    iconColor: 'var(--ink-500)',
+    bgClass: 'bg-(--blue-50)',
+    iconClass: 'text-(--ink-500)',
   },
   {
     icon: Users,
     label: 'Add a client',
-    bgColor: 'var(--ink-50)',
-    iconColor: 'var(--ink-500)',
+    bgClass: 'bg-(--ink-50)',
+    iconClass: 'text-(--ink-500)',
   },
   {
     icon: LayoutDashboard,
     label: 'View dashboard',
-    bgColor: 'var(--ink-50)',
-    iconColor: 'var(--ink-500)',
+    bgClass: 'bg-(--ink-50)',
+    iconClass: 'text-(--ink-500)',
   },
 ] as const
 
@@ -63,17 +63,16 @@ export function StepDone() {
       </p>
 
       {/* Quick-access cards */}
-      <div className="grid w-full mt-8 gap-3" style={{ gridTemplateColumns: 'repeat(3, 1fr)' }}>
-        {QUICK_ACCESS_CARDS.map(({ icon: Icon, label, bgColor, iconColor }) => (
+      <div className="grid grid-cols-3 w-full mt-8 gap-3">
+        {QUICK_ACCESS_CARDS.map(({ icon: Icon, label, bgClass, iconClass }) => (
           <div
             key={label}
             className="flex flex-col items-center gap-2 bg-(--surface-base) border border-(--border-default) rounded-lg p-4"
           >
             <div
-              className="flex items-center justify-center w-9 h-9 rounded-md"
-              style={{ backgroundColor: bgColor }}
+              className={`flex items-center justify-center w-9 h-9 rounded-md ${bgClass}`}
             >
-              <Icon size={18} style={{ color: iconColor }} aria-hidden="true" />
+              <Icon size={18} className={iconClass} aria-hidden="true" />
             </div>
             <span className="font-display font-semibold text-[12px] text-(--ink-700) leading-[1.3]">
               {label}

@@ -191,8 +191,7 @@ export function InvoiceForm({ invoice, onSuccess }: InvoiceFormProps) {
                     Invoice #
                   </span>
                   <span
-                    className="font-mono text-sm font-medium"
-                    style={{ color: invoice ? 'var(--blue-600)' : 'var(--ink-300)' }}
+                    className={`font-mono text-sm font-medium ${invoice ? 'text-(--blue-600)' : 'text-(--ink-300)'}`}
                   >
                     {invoice?.invoiceNumber ?? 'Auto-generated'}
                   </span>
@@ -465,8 +464,7 @@ export function InvoiceForm({ invoice, onSuccess }: InvoiceFormProps) {
               {/* Total amount */}
               <div className="mb-4">
                 <div
-                  className="font-mono text-(--ink-900) tracking-[-0.04em]"
-                  style={{ fontSize: '28px' }}
+                  className="font-mono text-(--ink-900) tracking-[-0.04em] text-[28px]"
                 >
                   {formatCurrency(totals.total, watchedCurrency ?? 'NGN')}
                 </div>

@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { TrendingUp, AlertCircle, CheckCircle2, FileText } from "lucide-react";
 import { Skeleton } from "@/shared/components/ui/skeleton";
 import { formatCurrency } from "@/shared/lib/utils";
@@ -73,8 +74,8 @@ function StatCard({ config, value, isPending, currency }: StatCardProps) {
           {config.label}
         </p>
         <Icon
-          className="h-4 w-4 shrink-0 opacity-60"
-          style={{ color: config.accentColor }}
+          className="h-4 w-4 shrink-0 opacity-60 text-(--accent)"
+          style={{ '--accent': config.accentColor } as React.CSSProperties}
         />
       </div>
 
@@ -82,11 +83,8 @@ function StatCard({ config, value, isPending, currency }: StatCardProps) {
         <Skeleton className="h-8 w-36 mb-2" />
       ) : (
         <p
-          className="font-mono font-medium leading-none tracking-[-0.02em] mb-2"
-          style={{
-            fontSize: config.isCount ? 36 : 26,
-            color: config.valueColor,
-          }}
+          className={`font-mono font-medium leading-none tracking-[-0.02em] mb-2 text-(--value-color) ${config.isCount ? 'text-[36px]' : 'text-[26px]'}`}
+          style={{ '--value-color': config.valueColor } as React.CSSProperties}
         >
           {config.isCount
             ? value.toLocaleString()
@@ -112,7 +110,7 @@ export function StatsCards({ stats, isPending }: StatsCardsProps) {
   };
 
   return (
-    <div className="grid gap-[var(--s4)] grid-cols-[repeat(auto-fit,minmax(200px,1fr))]">
+    <div className="grid gap-(--s4) grid-cols-[repeat(auto-fit,minmax(200px,1fr))]">
       {CARD_CONFIGS.map((config) => (
         <StatCard
           key={config.key}

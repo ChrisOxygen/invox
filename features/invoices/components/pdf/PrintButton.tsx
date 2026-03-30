@@ -11,29 +11,9 @@ export function PrintButton({ size = 'sm' }: PrintButtonProps) {
     <button
       type="button"
       onClick={() => window.print()}
-      style={{
-        display: 'inline-flex',
-        alignItems: 'center',
-        gap: '6px',
-        fontFamily: 'var(--font-display)',
-        fontSize: size === 'sm' ? '13px' : '14px',
-        fontWeight: 600,
-        color: 'var(--ink-900)',
-        background: 'transparent',
-        border: '1px solid var(--border-strong)',
-        borderRadius: '4px',
-        padding: size === 'sm' ? '6px 12px' : '8px 16px',
-        cursor: 'pointer',
-        transition: 'background 200ms ease',
-      }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.background = 'var(--surface-overlay)'
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.background = 'transparent'
-      }}
+      className={`inline-flex items-center gap-1.5 font-[family-name:var(--font-display)] font-semibold text-(--ink-900) bg-transparent border border-(--border-strong) rounded cursor-pointer transition-[background] duration-[200ms] ease-[ease] hover:bg-(--surface-overlay) ${size === 'sm' ? 'text-[13px] px-3 py-1.5' : 'text-[14px] px-4 py-2'}`}
     >
-      <Printer style={{ width: '14px', height: '14px' }} />
+      <Printer className="w-[14px] h-[14px]" />
       Print
     </button>
   )

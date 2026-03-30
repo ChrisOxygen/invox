@@ -90,6 +90,13 @@ pnpm-lock.yaml
 *.temp
 .cache/
 
+# AI agent tooling
+.agents/
+.claude/skills/
+.claude/worktrees/
+.goose/
+skills-lock.json
+
 # Local planning and reference docs
 REBUILD.md
 COMMIT_MESSAGE.md

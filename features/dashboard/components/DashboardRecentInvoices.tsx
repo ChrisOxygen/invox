@@ -182,20 +182,8 @@ export function DashboardRecentInvoices({
             table.getRowModel().rows.map((row, idx) => (
                 <TableRow
                   key={row.id}
-                  className="group cursor-pointer transition-colors duration-100"
-                  style={{
-                    borderBottom:
-                      idx < table.getRowModel().rows.length - 1
-                        ? "1px solid var(--border-default)"
-                        : "none",
-                  }}
+                  className="group cursor-pointer transition-colors duration-100 hover:bg-(--surface-raised) [&:not(:last-child)]:border-b [&:not(:last-child)]:border-(--border-default)"
                   onClick={() => router.push(`/invoices/${row.original.id}`)}
-                  onMouseEnter={(e) => {
-                    (e.currentTarget as HTMLElement).style.backgroundColor = "var(--surface-raised)";
-                  }}
-                  onMouseLeave={(e) => {
-                    (e.currentTarget as HTMLElement).style.backgroundColor = "";
-                  }}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>

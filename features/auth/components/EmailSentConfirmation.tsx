@@ -49,9 +49,7 @@ export function EmailSentConfirmation({ email, onResend }: EmailSentConfirmation
           <button
             type="button"
             onClick={onResend}
-            className="font-[family-name:var(--font-body)] text-[13px] text-(--blue-600) font-semibold transition-colors bg-transparent border-0 p-0 cursor-pointer"
-            onMouseEnter={(e) => ((e.target as HTMLElement).style.color = 'var(--blue-700)')}
-            onMouseLeave={(e) => ((e.target as HTMLElement).style.color = 'var(--blue-600)')}
+            className="font-[family-name:var(--font-body)] text-[13px] text-(--blue-600) font-semibold transition-colors bg-transparent border-0 p-0 cursor-pointer hover:text-(--blue-700)"
           >
             Resend email
           </button>
@@ -61,9 +59,7 @@ export function EmailSentConfirmation({ email, onResend }: EmailSentConfirmation
       {/* Back to login */}
       <Link
         href="/login"
-        className="inline-flex items-center gap-1.5 font-[family-name:var(--font-body)] text-[13px] text-(--ink-400) no-underline transition-colors"
-        onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = 'var(--ink-900)')}
-        onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = 'var(--ink-400)')}
+        className="inline-flex items-center gap-1.5 font-[family-name:var(--font-body)] text-[13px] text-(--ink-400) no-underline transition-colors hover:text-(--ink-900)"
       >
         <ArrowLeft size={13} strokeWidth={2} />
         Back to sign in

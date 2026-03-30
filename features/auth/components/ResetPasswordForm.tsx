@@ -78,7 +78,7 @@ export function ResetPasswordForm() {
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5" noValidate>
         {serverError && (
           <div className="rounded-md bg-[color-mix(in_srgb,var(--error)_10%,transparent)] border border-[color-mix(in_srgb,var(--error)_30%,transparent)] px-4 py-3">
-            <p className="text-[13px] font-[family-name:var(--font-body)] text-[var(--error)]">{serverError}</p>
+            <p className="text-[13px] font-[family-name:var(--font-body)] text-(--error)">{serverError}</p>
           </div>
         )}
         {/* New password */}
@@ -96,19 +96,14 @@ export function ResetPasswordForm() {
               placeholder="Min. 8 characters"
               autoComplete="new-password"
               aria-invalid={!!errors.password}
-              className="font-[family-name:var(--font-body)] text-[14px] text-(--ink-900) pr-11 h-10.5 rounded-md pl-3.5"
-              style={{
-                borderColor: errors.password ? 'var(--error)' : 'var(--border-default)',
-              }}
+              className="font-[family-name:var(--font-body)] text-[14px] text-(--ink-900) pr-11 h-10.5 rounded-md pl-3.5 border-(--border-default) aria-[invalid=true]:border-(--error)"
               {...register('password')}
             />
             <button
               type="button"
               onClick={() => setShowPassword((v) => !v)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center justify-center text-(--ink-300) bg-transparent border-0 p-0 cursor-pointer transition-colors"
+              className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center justify-center text-(--ink-300) bg-transparent border-0 p-0 cursor-pointer transition-colors hover:text-(--ink-400)"
               aria-label={showPassword ? 'Hide password' : 'Show password'}
-              onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = 'var(--ink-400)')}
-              onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = 'var(--ink-300)')}
             >
               {showPassword ? <EyeOff size={16} strokeWidth={2} /> : <Eye size={16} strokeWidth={2} />}
             </button>
@@ -139,19 +134,14 @@ export function ResetPasswordForm() {
               placeholder="Re-enter your password"
               autoComplete="new-password"
               aria-invalid={!!errors.confirmPassword}
-              className="font-[family-name:var(--font-body)] text-[14px] text-(--ink-900) pr-11 h-10.5 rounded-md pl-3.5"
-              style={{
-                borderColor: errors.confirmPassword ? 'var(--error)' : 'var(--border-default)',
-              }}
+              className="font-[family-name:var(--font-body)] text-[14px] text-(--ink-900) pr-11 h-10.5 rounded-md pl-3.5 border-(--border-default) aria-[invalid=true]:border-(--error)"
               {...register('confirmPassword')}
             />
             <button
               type="button"
               onClick={() => setShowConfirm((v) => !v)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center justify-center text-(--ink-300) bg-transparent border-0 p-0 cursor-pointer transition-colors"
+              className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center justify-center text-(--ink-300) bg-transparent border-0 p-0 cursor-pointer transition-colors hover:text-(--ink-400)"
               aria-label={showConfirm ? 'Hide password' : 'Show password'}
-              onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = 'var(--ink-400)')}
-              onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = 'var(--ink-300)')}
             >
               {showConfirm ? <EyeOff size={16} strokeWidth={2} /> : <Eye size={16} strokeWidth={2} />}
             </button>

@@ -23,21 +23,17 @@ function StatCard({ label, value, accentColor, isMono = false, subLabel }: {
       className="relative overflow-hidden rounded border p-(--s5) bg-(--surface-base) border-(--border-default)"
       style={{ borderLeft: `3px solid ${accentColor}` }}
     >
-      <p className="text-xs font-semibold uppercase mb-[var(--s2)] text-(--ink-400) font-display tracking-[0.08em]">
+      <p className="text-xs font-semibold uppercase mb-(--s2) text-(--ink-400) font-display tracking-[0.08em]">
         {label}
       </p>
       <p
-        className="text-2xl leading-tight"
-        style={{
-          color: accentColor,
-          fontFamily: isMono ? 'var(--font-mono)' : 'var(--font-display)',
-          letterSpacing: isMono ? '0' : '-0.02em',
-        }}
+        className={`text-2xl leading-tight ${isMono ? 'font-[family-name:var(--font-mono)] tracking-[0]' : 'font-[family-name:var(--font-display)] tracking-[-0.02em]'}`}
+        style={{ color: accentColor }}
       >
         {value}
       </p>
       {subLabel && (
-        <p className="text-xs mt-[var(--s1)] text-(--ink-300) font-body">
+        <p className="text-xs mt-(--s1) text-(--ink-300) font-body">
           {subLabel}
         </p>
       )}
@@ -55,7 +51,7 @@ export function ClientStatCards({ client }: { client: ClientWithInvoices }) {
     : 'var(--success)'
 
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-4 gap-[var(--s4)]">
+    <div className="grid grid-cols-2 lg:grid-cols-4 gap-(--s4)">
       <StatCard label="Total Billed" value={formatCurrency(stats.totalBilled)} accentColor="var(--blue-600)" isMono />
       <StatCard label="Total Paid" value={formatCurrency(stats.totalPaid)} accentColor="var(--success)" isMono />
       <StatCard label="Outstanding" value={formatCurrency(stats.outstanding)} accentColor={outstandingColor} isMono subLabel={stats.hasOverdue ? 'Includes overdue' : undefined} />

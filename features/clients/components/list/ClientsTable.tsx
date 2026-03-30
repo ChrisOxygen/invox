@@ -94,10 +94,7 @@ export function ClientsTable({ clients, isLoading, onEdit, onDelete }: ClientsTa
             clients.map((client, idx) => (
               <TableRow
                 key={client.id}
-                className="group cursor-pointer transition-colors duration-100"
-                style={{ borderBottom: idx < clients.length - 1 ? '1px solid var(--border-default)' : 'none' }}
-                onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = 'var(--surface-overlay)' }}
-                onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = '' }}
+                className="group cursor-pointer transition-colors duration-100 hover:bg-(--surface-overlay) [&:not(:last-child)]:border-b [&:not(:last-child)]:border-(--border-default)"
               >
                 <TableCell>
                   <Link href={`/clients/${client.id}`} className="flex items-center gap-3 no-underline">

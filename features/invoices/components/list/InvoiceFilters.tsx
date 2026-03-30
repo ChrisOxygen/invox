@@ -62,27 +62,8 @@ export function InvoiceFilters({ filters, onFilterChange }: InvoiceFiltersProps)
               key={tab.value}
               type="button"
               onClick={() => handleStatusChange(tab.value)}
-              className="font-display text-[13px] rounded px-3 py-1.5 cursor-pointer transition-all leading-none whitespace-nowrap"
-              style={{
-                fontWeight: isActive ? 600 : 500,
-                color: isActive ? 'var(--blue-600)' : 'var(--ink-400)',
-                backgroundColor: isActive ? 'var(--blue-50)' : 'transparent',
-                border: isActive ? '1px solid var(--blue-200)' : '1px solid transparent',
-              }}
-              onMouseEnter={(e) => {
-                if (!isActive) {
-                  const el = e.currentTarget
-                  el.style.color = 'var(--ink-700)'
-                  el.style.backgroundColor = 'var(--surface-overlay)'
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (!isActive) {
-                  const el = e.currentTarget
-                  el.style.color = 'var(--ink-400)'
-                  el.style.backgroundColor = 'transparent'
-                }
-              }}
+              data-active={isActive}
+              className="font-display text-[13px] rounded px-3 py-1.5 cursor-pointer transition-all leading-none whitespace-nowrap border border-transparent font-medium text-(--ink-400) hover:text-(--ink-700) hover:bg-(--surface-overlay) data-[active=true]:font-semibold data-[active=true]:text-(--blue-600) data-[active=true]:bg-(--blue-50) data-[active=true]:border-(--blue-200) data-[active=true]:hover:bg-(--blue-50) data-[active=true]:hover:text-(--blue-600)"
             >
               {tab.label}
             </button>

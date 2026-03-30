@@ -25,17 +25,17 @@ import { ClientInvoiceHistory } from "./ClientInvoiceHistory";
 
 function DetailSkeleton() {
   return (
-    <div className="space-y-[var(--s6)]">
-      <div className="flex items-center gap-[var(--s3)]">
+    <div className="space-y-(--s6)">
+      <div className="flex items-center gap-(--s3)">
         <Skeleton className="h-8 w-8 rounded" />
         <Skeleton className="h-8 w-48 rounded" />
       </div>
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-[var(--s4)]">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-(--s4)">
         {[...Array(4)].map((_, i) => (
           <Skeleton key={i} className="h-24 rounded" />
         ))}
       </div>
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-[var(--s5)]">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-(--s5)">
         <Skeleton className="h-64 rounded" />
         <div className="lg:col-span-2">
           <Skeleton className="h-64 rounded" />
@@ -51,7 +51,7 @@ function NotFound() {
       <h2 className="text-xl font-bold mb-2 text-(--ink-900) font-display tracking-[-0.025em]">
         Client not found
       </h2>
-      <p className="text-sm mb-[var(--s6)] text-center max-w-xs text-(--ink-400) font-body">
+      <p className="text-sm mb-(--s6) text-center max-w-xs text-(--ink-400) font-body">
         This client may have been deleted or does not belong to your account.
       </p>
       <Link
@@ -94,7 +94,7 @@ export function ClientDetailPageClient({ id }: { id: string }) {
     <ScrollArea className="h-[calc(100vh-90px)]">
       <div className="space-y-(--s6) p-(--s6)">
       {/* Top bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-[var(--s4)]">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-(--s4)">
         <div className="flex items-center gap-(--s3)">
           <Link
             href="/clients"
@@ -109,7 +109,7 @@ export function ClientDetailPageClient({ id }: { id: string }) {
           </h1>
         </div>
 
-        <div className="flex items-center gap-[var(--s2)] flex-shrink-0">
+        <div className="flex items-center gap-(--s2) flex-shrink-0">
           <Button
             variant="ghost"
             size="sm"
@@ -135,7 +135,7 @@ export function ClientDetailPageClient({ id }: { id: string }) {
       <ClientStatCards client={client} />
 
       {/* Two-column grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-[var(--s5)]">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-(--s5)">
         <div className="lg:col-span-1">
           <ClientInfoCard
             client={client}
@@ -164,7 +164,7 @@ export function ClientDetailPageClient({ id }: { id: string }) {
       <Dialog open={deleteOpen} onOpenChange={setDeleteOpen}>
         <DialogContent className="sm:max-w-[420px] border-(--border-default)">
           <DialogHeader>
-            <div className="w-10 h-10 rounded flex items-center justify-center mb-[var(--s3)] bg-[#FFF0F0]">
+            <div className="w-10 h-10 rounded flex items-center justify-center mb-(--s3) bg-[#FFF0F0]">
               <Trash2 className="h-5 w-5 text-(--error)" />
             </div>
             <DialogTitle className="text-(--ink-900) font-display tracking-[-0.02em]">
@@ -175,7 +175,7 @@ export function ClientDetailPageClient({ id }: { id: string }) {
               retained.
             </DialogDescription>
           </DialogHeader>
-          <DialogFooter className="gap-[var(--s2)]">
+          <DialogFooter className="gap-(--s2)">
             <Button
               variant="outline"
               onClick={() => setDeleteOpen(false)}

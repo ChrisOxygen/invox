@@ -82,8 +82,7 @@ export function BrandingForm({ defaultValues, businessName }: BrandingFormProps)
       {/* ── Right: preview stage ── */}
       <div className="mt-8 lg:mt-0 lg:w-auto">
         <div
-          className="rounded border border-(--border-default) flex flex-col"
-          style={{ backgroundColor: 'var(--surface-overlay)' }}
+          className="rounded border border-(--border-default) flex flex-col bg-(--surface-overlay)"
         >
           {/* Stage header */}
           <div className="flex items-center justify-between px-4 py-3 border-b border-(--border-default)">

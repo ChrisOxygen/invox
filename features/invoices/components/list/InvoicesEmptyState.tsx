@@ -82,11 +82,7 @@ export function InvoicesEmptyState({ status, hasFilters, onClearFilters }: Invoi
     return (
       <div className="flex flex-col items-center justify-center py-20 text-center">
         <div
-          className="flex items-center justify-center rounded-full mb-5 w-14 h-14"
-          style={{
-            backgroundColor: isOverdue ? '#EDFAF3' : 'var(--surface-overlay)',
-            color: isOverdue ? '#0A8F52' : 'var(--ink-400)',
-          }}
+          className={`flex items-center justify-center rounded-full mb-5 w-14 h-14 ${isOverdue ? 'bg-[#EDFAF3] text-[#0A8F52]' : 'bg-(--surface-overlay) text-(--ink-400)'}`}
         >
           <FileText className="w-6 h-6" />
         </div>

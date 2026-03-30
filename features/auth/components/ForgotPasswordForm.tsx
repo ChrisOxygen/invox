@@ -58,9 +58,7 @@ export function ForgotPasswordForm() {
       {/* Back link */}
       <Link
         href="/login"
-        className="inline-flex items-center gap-1.5 font-[family-name:var(--font-body)] text-[13px] text-(--ink-400) no-underline transition-colors w-fit"
-        onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = 'var(--ink-900)')}
-        onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = 'var(--ink-400)')}
+        className="inline-flex items-center gap-1.5 font-[family-name:var(--font-body)] text-[13px] text-(--ink-400) no-underline transition-colors w-fit hover:text-(--ink-900)"
       >
         <ArrowLeft size={13} strokeWidth={2} />
         Back to sign in
@@ -80,7 +78,7 @@ export function ForgotPasswordForm() {
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5" noValidate>
         {serverError && (
           <div className="rounded-md bg-[color-mix(in_srgb,var(--error)_10%,transparent)] border border-[color-mix(in_srgb,var(--error)_30%,transparent)] px-4 py-3">
-            <p className="text-[13px] font-[family-name:var(--font-body)] text-[var(--error)]">{serverError}</p>
+            <p className="text-[13px] font-[family-name:var(--font-body)] text-(--error)">{serverError}</p>
           </div>
         )}
         <div className="flex flex-col gap-1.5">
@@ -96,10 +94,7 @@ export function ForgotPasswordForm() {
             placeholder="you@company.com"
             autoComplete="email"
             aria-invalid={!!errors.email}
-            className="font-[family-name:var(--font-body)] text-[14px] text-(--ink-900) h-10.5 rounded-md pl-3.5 pr-3.5"
-            style={{
-              borderColor: errors.email ? 'var(--error)' : 'var(--border-default)',
-            }}
+            className="font-[family-name:var(--font-body)] text-[14px] text-(--ink-900) h-10.5 rounded-md pl-3.5 pr-3.5 border-(--border-default) aria-[invalid=true]:border-(--error)"
             {...register('email')}
           />
           {errors.email && (

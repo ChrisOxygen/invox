@@ -30,7 +30,7 @@ const StatusDonutChart = dynamic(
 
 function EmptyDashboard() {
   return (
-    <div className="flex flex-col items-center justify-center gap-[var(--s4)] py-[var(--s20)] px-[var(--s4)] text-center">
+    <div className="flex flex-col items-center justify-center gap-(--s4) py-(--s20) px-(--s4) text-center">
       <div className="w-16 h-16 rounded bg-(--blue-50) flex items-center justify-center">
         <FileText className="h-7 w-7 text-(--blue-600)" />
       </div>

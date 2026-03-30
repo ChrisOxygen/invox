@@ -125,7 +125,7 @@ export function ActionsToolbar({ invoice, onRecordPayment }: ActionsToolbarProps
   const isMarkingSent = updateStatusMutation.isPending
 
   return (
-    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-[var(--s3)]">
+    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-(--s3)">
       {/* Left: status + overdue label */}
       <div className="flex flex-col gap-1">
         <InvoiceStatusBadge status={invoice.status} />
@@ -137,7 +137,7 @@ export function ActionsToolbar({ invoice, onRecordPayment }: ActionsToolbarProps
       </div>
 
       {/* Right: actions */}
-      <div className="flex items-center gap-[var(--s2)]">
+      <div className="flex items-center gap-(--s2)">
         {/* Edit — DRAFT only */}
         {invoice.status === 'DRAFT' && (
           <Link href={`/invoices/${invoice.id}/edit`}>
@@ -208,8 +208,7 @@ export function ActionsToolbar({ invoice, onRecordPayment }: ActionsToolbarProps
             variant="outline"
             size="sm"
             onClick={handleWhatsApp}
-            className="h-8 gap-1.5 font-display text-[13px] rounded"
-            style={{ borderColor: '#25D366', color: '#25D366' }}
+            className="h-8 gap-1.5 font-display text-[13px] rounded border-(--color-whatsapp) text-(--color-whatsapp)"
           >
             <MessageCircle className="h-3.5 w-3.5" />
             WhatsApp

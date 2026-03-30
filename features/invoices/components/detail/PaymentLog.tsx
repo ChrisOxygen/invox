@@ -103,7 +103,7 @@ export function PaymentLog({ invoice, onRecordPayment }: PaymentLogProps) {
       {invoice.payments.length > 0 && (
         <div className="px-(--s5) py-(--s4) border-t border-(--border-default) bg-(--surface-raised)">
           {/* Progress bar */}
-          <div className="w-full rounded-full mb-(--s3) bg-(--border-default) h-px" style={{ height: '4px' }}>
+          <div className="w-full rounded-full mb-(--s3) bg-(--border-default) h-[4px]">
             <div
               className="h-full rounded-full bg-(--blue-600)"
               style={{

@@ -78,13 +78,7 @@ function NavButton({ label, icon: Icon, onClick }: NavButtonProps) {
     <button
       type="button"
       onClick={onClick}
-      className="flex h-9 w-full items-center gap-3 rounded px-3 text-[13.5px] font-semibold transition-colors duration-100 font-display text-(--ink-400)"
-      onMouseEnter={(e) => {
-        (e.currentTarget as HTMLButtonElement).style.color = "var(--blue-600)";
-      }}
-      onMouseLeave={(e) => {
-        (e.currentTarget as HTMLButtonElement).style.color = "var(--ink-400)";
-      }}
+      className="flex h-9 w-full items-center gap-3 rounded px-3 text-[13.5px] font-semibold transition-colors duration-100 font-display text-(--ink-400) hover:text-(--blue-600)"
     >
       <Icon className="size-4 shrink-0" />
       <span>{label}</span>

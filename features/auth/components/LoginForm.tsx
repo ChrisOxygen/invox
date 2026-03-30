@@ -53,13 +53,12 @@ export function LoginForm() {
       {/* Heading */}
       <div className="mb-8">
         <h1
-          className="text-[32px] font-[family-name:var(--font-display)] font-extrabold text-[var(--ink-900)] leading-tight mb-2"
-          style={{ letterSpacing: '-0.03em' }}
+          className="text-[32px] font-[family-name:var(--font-display)] font-extrabold text-(--ink-900) leading-tight mb-2 tracking-[-0.03em]"
         >
           Welcome back
         </h1>
         <p
-          className="text-[14px] font-[family-name:var(--font-body)] font-normal text-[var(--ink-400)]"
+          className="text-[14px] font-[family-name:var(--font-body)] font-normal text-(--ink-400)"
         >
           Sign in to your Invox account
         </p>
@@ -69,7 +68,7 @@ export function LoginForm() {
       <button
         type="button"
         onClick={handleGoogleSignIn}
-        className="w-full flex items-center justify-center gap-3 h-11 rounded-md border border-[var(--border-strong)] bg-[var(--surface-base)] text-[14px] font-[family-name:var(--font-body)] font-medium text-[var(--ink-700)] transition-colors duration-[200ms] hover:bg-[var(--surface-overlay)] hover:border-[var(--ink-300)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--blue-600)] focus-visible:ring-offset-2"
+        className="w-full flex items-center justify-center gap-3 h-11 rounded-md border border-(--border-strong) bg-(--surface-base) text-[14px] font-[family-name:var(--font-body)] font-medium text-(--ink-700) transition-colors duration-[200ms] hover:bg-(--surface-overlay) hover:border-(--ink-300) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--blue-600) focus-visible:ring-offset-2"
       >
         {/* Google G SVG */}
         <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">
@@ -95,26 +94,26 @@ export function LoginForm() {
 
       {/* Divider */}
       <div className="flex items-center gap-3 my-6">
-        <div className="flex-1 h-px bg-[var(--border-default)]" />
+        <div className="flex-1 h-px bg-(--border-default)" />
         <span
-          className="text-[12px] font-[family-name:var(--font-body)] text-[var(--ink-300)] px-1"
+          className="text-[12px] font-[family-name:var(--font-body)] text-(--ink-300) px-1"
         >
           or
         </span>
-        <div className="flex-1 h-px bg-[var(--border-default)]" />
+        <div className="flex-1 h-px bg-(--border-default)" />
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-5">
         {serverError && (
           <div className="rounded-md bg-[color-mix(in_srgb,var(--error)_10%,transparent)] border border-[color-mix(in_srgb,var(--error)_30%,transparent)] px-4 py-3 mb-5">
-            <p className="text-[13px] font-[family-name:var(--font-body)] text-[var(--error)]">{serverError}</p>
+            <p className="text-[13px] font-[family-name:var(--font-body)] text-(--error)">{serverError}</p>
           </div>
         )}
         {/* Email */}
         <div className="space-y-1.5">
           <Label
             htmlFor="login-email"
-            className="text-[12px] font-[family-name:var(--font-display)] font-semibold text-[var(--ink-700)] uppercase tracking-[0.06em]"
+            className="text-[12px] font-[family-name:var(--font-display)] font-semibold text-(--ink-700) uppercase tracking-[0.06em]"
           >
             Email address
           </Label>
@@ -124,12 +123,12 @@ export function LoginForm() {
             autoComplete="email"
             placeholder="you@example.com"
             aria-invalid={!!errors.email}
-            className="h-11 rounded-md border-[var(--border-default)] bg-[var(--surface-base)] px-3.5 text-[14px] font-[family-name:var(--font-body)] text-[var(--ink-900)] placeholder:text-[var(--ink-300)] focus-visible:ring-[var(--blue-600)] focus-visible:border-[var(--blue-600)] transition-colors duration-[100ms]"
+            className="h-11 rounded-md border-(--border-default) bg-(--surface-base) px-3.5 text-[14px] font-[family-name:var(--font-body)] text-(--ink-900) placeholder:text-(--ink-300) focus-visible:ring-(--blue-600) focus-visible:border-(--blue-600) transition-colors duration-[100ms]"
             {...register('email')}
           />
           {errors.email && (
             <p
-              className="text-[11px] font-[family-name:var(--font-body)] text-[var(--error)]"
+              className="text-[11px] font-[family-name:var(--font-body)] text-(--error)"
             >
               {errors.email.message}
             </p>
@@ -141,13 +140,13 @@ export function LoginForm() {
           <div className="flex items-center justify-between">
             <Label
               htmlFor="login-password"
-              className="text-[12px] font-[family-name:var(--font-display)] font-semibold text-[var(--ink-700)] uppercase tracking-[0.06em]"
+              className="text-[12px] font-[family-name:var(--font-display)] font-semibold text-(--ink-700) uppercase tracking-[0.06em]"
             >
               Password
             </Label>
             <Link
               href="/forgot-password"
-              className="text-[12px] font-[family-name:var(--font-body)] text-[var(--blue-600)] hover:text-[var(--blue-700)] transition-colors duration-[100ms]"
+              className="text-[12px] font-[family-name:var(--font-body)] text-(--blue-600) hover:text-(--blue-700) transition-colors duration-[100ms]"
             >
               Forgot password?
             </Link>
@@ -159,14 +158,14 @@ export function LoginForm() {
               autoComplete="current-password"
               placeholder="••••••••"
               aria-invalid={!!errors.password}
-              className="h-11 rounded-md border-[var(--border-default)] bg-[var(--surface-base)] px-3.5 pr-10 text-[14px] font-[family-name:var(--font-body)] text-[var(--ink-900)] placeholder:text-[var(--ink-300)] focus-visible:ring-[var(--blue-600)] focus-visible:border-[var(--blue-600)] transition-colors duration-[100ms]"
+              className="h-11 rounded-md border-(--border-default) bg-(--surface-base) px-3.5 pr-10 text-[14px] font-[family-name:var(--font-body)] text-(--ink-900) placeholder:text-(--ink-300) focus-visible:ring-(--blue-600) focus-visible:border-(--blue-600) transition-colors duration-[100ms]"
               {...register('password')}
             />
             <button
               type="button"
               aria-label={showPassword ? 'Hide password' : 'Show password'}
               onClick={() => setShowPassword((v) => !v)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--ink-300)] hover:text-[var(--ink-500)] transition-colors duration-[100ms]"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-(--ink-300) hover:text-(--ink-500) transition-colors duration-[100ms]"
             >
               {showPassword ? (
                 <EyeOff className="w-4 h-4" />
@@ -177,7 +176,7 @@ export function LoginForm() {
           </div>
           {errors.password && (
             <p
-              className="text-[11px] font-[family-name:var(--font-body)] text-[var(--error)]"
+              className="text-[11px] font-[family-name:var(--font-body)] text-(--error)"
             >
               {errors.password.message}
             </p>
@@ -188,7 +187,7 @@ export function LoginForm() {
         <button
           type="submit"
           disabled={isSubmitting || isPending}
-          className="w-full h-11 rounded-md bg-[var(--blue-600)] hover:bg-[var(--blue-700)] text-white text-[14px] font-[family-name:var(--font-display)] font-semibold transition-colors duration-[200ms] disabled:opacity-60 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--blue-600)] focus-visible:ring-offset-2"
+          className="w-full h-11 rounded-md bg-(--blue-600) hover:bg-(--blue-700) text-white text-[14px] font-[family-name:var(--font-display)] font-semibold transition-colors duration-[200ms] disabled:opacity-60 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--blue-600) focus-visible:ring-offset-2"
         >
           {isSubmitting ? (
             <span className="flex items-center justify-center gap-2">
@@ -222,12 +221,12 @@ export function LoginForm() {
 
       {/* Bottom link */}
       <p
-        className="mt-8 text-center text-[13px] font-[family-name:var(--font-body)] text-[var(--ink-400)]"
+        className="mt-8 text-center text-[13px] font-[family-name:var(--font-body)] text-(--ink-400)"
       >
         Don&apos;t have an account?{' '}
         <Link
           href="/register"
-          className="font-semibold text-[var(--blue-600)] hover:text-[var(--blue-700)] transition-colors duration-[100ms]"
+          className="font-semibold text-(--blue-600) hover:text-(--blue-700) transition-colors duration-[100ms]"
         >
           Sign up
         </Link>

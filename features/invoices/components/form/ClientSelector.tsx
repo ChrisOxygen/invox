@@ -73,15 +73,9 @@ export function ClientSelector({ value, onChange, disabled }: ClientSelectorProp
           type="button"
           onClick={() => !disabled && setOpen((v) => !v)}
           disabled={disabled}
-          className="flex w-full items-center justify-between rounded border px-3 py-2.5 text-sm transition-colors font-body bg-(--surface-base) min-h-10.5"
-          style={{
-            borderColor: open ? 'var(--blue-600)' : 'var(--border-default)',
-            color: selectedClient ? 'var(--ink-900)' : 'var(--ink-300)',
-            outline: open ? `2px solid var(--blue-100)` : 'none',
-            outlineOffset: '0px',
-            cursor: disabled ? 'not-allowed' : 'pointer',
-            opacity: disabled ? 0.6 : 1,
-          }}
+          data-open={open}
+          data-selected={!!selectedClient}
+          className="flex w-full items-center justify-between rounded border border-(--border-default) px-3 py-2.5 text-sm transition-colors font-body bg-(--surface-base) min-h-10.5 text-(--ink-300) cursor-pointer disabled:cursor-not-allowed disabled:opacity-60 data-[open=true]:border-(--blue-600) data-[open=true]:outline data-[open=true]:outline-2 data-[open=true]:outline-(--blue-100) data-[open=true]:outline-offset-0 data-[selected=true]:text-(--ink-900)"
         >
           <span className="truncate">
             {selectedClient ? (
@@ -135,8 +129,7 @@ export function ClientSelector({ value, onChange, disabled }: ClientSelectorProp
                 >
                   <Check
                     size={13}
-                    className="text-(--blue-600) shrink-0"
-                    style={{ opacity: value === client.id ? 1 : 0 }}
+                    className={`text-(--blue-600) shrink-0 ${value === client.id ? 'opacity-100' : 'opacity-0'}`}
                   />
                   <div className="min-w-0">
                     <p className="truncate text-sm font-medium text-(--ink-900) font-body">

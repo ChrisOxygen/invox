@@ -14,33 +14,11 @@ export type DownloadButtonProps = {
 export function DownloadButton({ invoice, variant = 'default', size = 'md' }: DownloadButtonProps) {
   const filename = `INVOX-${invoice.invoiceNumber}-${invoice.client.name.replace(/[^a-zA-Z0-9]/g, '-')}.pdf`
 
-  const baseStyle: React.CSSProperties = {
-    display: 'inline-flex',
-    alignItems: 'center',
-    gap: '6px',
-    borderRadius: '4px',
-    fontFamily: 'var(--font-display)',
-    fontWeight: 600,
-    cursor: 'pointer',
-    textDecoration: 'none',
-    border: '1px solid transparent',
-    transition: 'background 200ms ease, border-color 200ms ease, color 200ms ease',
-    fontSize: size === 'sm' ? '13px' : '14px',
-    padding: size === 'sm' ? '6px 12px' : '8px 16px',
-  }
-
-  const variantStyle: React.CSSProperties =
+  const sizeClasses = size === 'sm' ? 'text-[13px] px-3 py-1.5' : 'text-[14px] px-4 py-2'
+  const variantClasses =
     variant === 'default'
-      ? {
-          background: 'var(--blue-600)',
-          color: '#ffffff',
-          borderColor: 'var(--blue-600)',
-        }
-      : {
-          background: 'transparent',
-          color: 'var(--ink-900)',
-          borderColor: 'var(--border-strong)',
-        }
+      ? 'bg-(--blue-600) text-white border-(--blue-600)'
+      : 'bg-transparent text-(--ink-900) border-(--border-strong)'
 
   return (
     <PDFDownloadLink
@@ -49,11 +27,13 @@ export function DownloadButton({ invoice, variant = 'default', size = 'md' }: Do
       style={{ textDecoration: 'none' }}
     >
       {({ loading }) => (
-        <span style={{ ...baseStyle, ...variantStyle }}>
+        <span
+          className={`inline-flex items-center gap-1.5 rounded font-[family-name:var(--font-display)] font-semibold border cursor-pointer transition-[background,border-color,color] duration-[200ms] ease-[ease] ${sizeClasses} ${variantClasses}`}
+        >
           {loading ? (
-            <Loader2 style={{ width: '14px', height: '14px', animation: 'spin 1s linear infinite' }} />
+            <Loader2 className="w-[14px] h-[14px] animate-spin" />
           ) : (
-            <Download style={{ width: '14px', height: '14px' }} />
+            <Download className="w-[14px] h-[14px]" />
           )}
           {loading ? 'Preparing...' : 'Download PDF'}
         </span>

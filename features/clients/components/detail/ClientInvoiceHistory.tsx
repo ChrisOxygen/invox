@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import React, { useState, useMemo } from 'react'
 import Link from 'next/link'
 import { FileText, Plus, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react'
 import { Button } from '@/shared/components/ui/button'
@@ -36,10 +36,10 @@ function InvoiceStatusBadge({ status }: { status: InvoiceStatus }) {
   const config = STATUS_CONFIG[status] ?? STATUS_CONFIG.DRAFT
   return (
     <span
-      className="inline-flex items-center gap-1.5 px-2.5 py-0.5 text-xs font-semibold font-display rounded-full"
-      style={{ background: config.bg, color: config.text }}
+      className="inline-flex items-center gap-1.5 px-2.5 py-0.5 text-xs font-semibold font-display rounded-full bg-(--bg) text-(--text)"
+      style={{ '--bg': config.bg, '--text': config.text } as React.CSSProperties}
     >
-      <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: config.dot }} />
+      <span className="w-1.5 h-1.5 rounded-full shrink-0 bg-(--dot)" style={{ '--dot': config.dot } as React.CSSProperties} />
       {config.label}
     </span>
   )
@@ -70,7 +70,7 @@ function EmptyState({ clientId }: { clientId: string }) {
       <p className="font-semibold mb-1 text-(--ink-900) font-display text-[15px]">
         No invoices yet
       </p>
-      <p className="text-sm mb-[var(--s5)] max-w-xs text-(--ink-400) font-body">
+      <p className="text-sm mb-(--s5) max-w-xs text-(--ink-400) font-body">
         Create your first invoice for this client to start tracking your billing history.
       </p>
       <Link
@@ -125,9 +125,8 @@ export function ClientInvoiceHistory({ invoices, isLoading, clientId }: {
   const SortableHead = ({ col, children }: { col: SortKey; children: React.ReactNode }) => (
     <TableHead className={thClassName}>
       <button
-        className="flex items-center cursor-pointer opacity-80 hover:opacity-100 transition-opacity"
+        className={`flex items-center cursor-pointer opacity-80 hover:opacity-100 transition-opacity ${sortKey === col ? 'text-(--ink-900)' : 'text-(--ink-400)'}`}
         onClick={() => handleSort(col)}
-        style={{ color: sortKey === col ? 'var(--ink-900)' : 'var(--ink-400)' }}
       >
         {children}
         <SortIcon active={sortKey === col} dir={sortDir} />
@@ -137,7 +136,7 @@ export function ClientInvoiceHistory({ invoices, isLoading, clientId }: {
 
   return (
     <div className="rounded border overflow-hidden bg-(--surface-base) border-(--border-default)">
-      <div className="px-[var(--s5)] py-[var(--s4)] border-b border-(--border-default) flex items-center justify-between">
+      <div className="px-(--s5) py-(--s4) border-b border-(--border-default) flex items-center justify-between">
         <div>
           <h3 className="font-bold text-(--ink-900) font-display text-[15px] tracking-[-0.02em]">
             Invoice History

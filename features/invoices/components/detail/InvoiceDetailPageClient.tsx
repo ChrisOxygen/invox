@@ -13,18 +13,18 @@ import { MarkPaidModal } from "./MarkPaidModal";
 
 function DetailSkeleton() {
   return (
-    <div className="space-y-[var(--s5)]">
+    <div className="space-y-(--s5)">
       {/* Toolbar skeleton */}
       <div className="flex items-center justify-between">
         <Skeleton className="h-6 w-24 rounded-full" />
-        <div className="flex gap-[var(--s2)]">
+        <div className="flex gap-(--s2)">
           <Skeleton className="h-8 w-28 rounded" />
           <Skeleton className="h-8 w-24 rounded" />
           <Skeleton className="h-8 w-8 rounded" />
         </div>
       </div>
       {/* Two-column skeleton */}
-      <div className="grid grid-cols-1 lg:grid-cols-5 gap-[var(--s5)]">
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-(--s5)">
         <div className="lg:col-span-3 space-y-3">
           <Skeleton className="h-[480px] w-full rounded" />
         </div>
@@ -45,7 +45,7 @@ function NotFound() {
       <h2 className="text-xl font-bold mb-2 text-(--ink-900) font-display tracking-[-0.025em]">
         Invoice not found
       </h2>
-      <p className="text-sm mb-[var(--s6)] text-center max-w-xs text-(--ink-400) font-body">
+      <p className="text-sm mb-(--s6) text-center max-w-xs text-(--ink-400) font-body">
         This invoice may have been deleted or does not belong to your account.
       </p>
       <Link
@@ -79,7 +79,7 @@ export function InvoiceDetailPageClient({ id }: { id: string }) {
         </div>
 
         {/* Two-column layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-[var(--s5)]">
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-(--s5)">
           {/* Left: invoice details (~60%) */}
           <div className="lg:col-span-3">
             <InvoiceInfoCard invoice={invoice} />

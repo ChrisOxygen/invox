@@ -54,7 +54,7 @@ export function ResetPasswordForm() {
     <div className="flex flex-col gap-7">
       {/* Header */}
       <div className="flex flex-col gap-2">
-        <h1 className="font-display text-[30px] font-[800] tracking-h2 text-(--ink-900) leading-[1.15]">
+        <h1 className="font-display text-[30px] font-extrabold tracking-h2 text-(--ink-900) leading-[1.15]">
           Set new password
         </h1>
         <p className="font-sans text-[15px] text-(--ink-400) leading-[1.6]">

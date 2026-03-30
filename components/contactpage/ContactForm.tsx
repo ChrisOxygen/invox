@@ -88,7 +88,7 @@ export function ContactForm() {
           </span>
           <div className="flex-1 h-px bg-(--border-default)" />
         </div>
-        <h2 className="font-display font-extrabold text-2xl sm:text-3xl text-(--ink-900) tracking-[-0.03em] leading-tight">
+        <h2 className="font-display font-extrabold text-2xl sm:text-3xl text-(--ink-900) tracking-snug leading-tight">
           Send us a message
         </h2>
         <p className="text-sm text-(--ink-400) font-body">
@@ -98,7 +98,7 @@ export function ContactForm() {
 
       {/* Topic chips */}
       <div className="flex flex-col gap-3">
-        <label className="text-[10px] font-semibold text-(--ink-400) font-display uppercase tracking-[0.08em]">
+        <label className="text-[10px] font-semibold text-(--ink-400) font-display uppercase tracking-mono">
           What&apos;s this about? <span className="text-(--error)">*</span>
         </label>
         <div className="flex flex-wrap gap-2">
@@ -121,7 +121,7 @@ export function ContactForm() {
 
       {/* Who are you chips */}
       <div className="flex flex-col gap-3">
-        <label className="text-[10px] font-semibold text-(--ink-400) font-display uppercase tracking-[0.08em]">
+        <label className="text-[10px] font-semibold text-(--ink-400) font-display uppercase tracking-mono">
           Best describes you
         </label>
         <div className="flex flex-wrap gap-2">
@@ -145,7 +145,7 @@ export function ContactForm() {
       {/* Name + Email — underline inputs */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
         <div className="flex flex-col gap-1.5">
-          <label className="text-[10px] font-semibold text-(--ink-400) font-display uppercase tracking-[0.08em]">
+          <label className="text-[10px] font-semibold text-(--ink-400) font-display uppercase tracking-mono">
             Full Name <span className="text-(--error)">*</span>
           </label>
           <div className="relative flex items-center">
@@ -163,7 +163,7 @@ export function ContactForm() {
         </div>
 
         <div className="flex flex-col gap-1.5">
-          <label className="text-[10px] font-semibold text-(--ink-400) font-display uppercase tracking-[0.08em]">
+          <label className="text-[10px] font-semibold text-(--ink-400) font-display uppercase tracking-mono">
             Email Address <span className="text-(--error)">*</span>
           </label>
           <div className="relative flex items-center">
@@ -183,7 +183,7 @@ export function ContactForm() {
 
       {/* Organization */}
       <div className="flex flex-col gap-1.5">
-        <label className="text-[10px] font-semibold text-(--ink-400) font-display uppercase tracking-[0.08em]">
+        <label className="text-[10px] font-semibold text-(--ink-400) font-display uppercase tracking-mono">
           Organization{" "}
           <span className="normal-case tracking-normal font-normal text-(--ink-300) text-[10px]">
             — optional
@@ -205,7 +205,7 @@ export function ContactForm() {
       {/* Message with char counter */}
       <div className="flex flex-col gap-1.5">
         <div className="flex items-center justify-between">
-          <label className="text-[10px] font-semibold text-(--ink-400) font-display uppercase tracking-[0.08em]">
+          <label className="text-[10px] font-semibold text-(--ink-400) font-display uppercase tracking-mono">
             Message <span className="text-(--error)">*</span>
           </label>
           <span

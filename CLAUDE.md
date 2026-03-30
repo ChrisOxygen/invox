@@ -189,6 +189,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
 - Run `npx prisma generate` after **every** schema or config change — the client will silently be out of sync otherwise
 - MongoDB is not supported in Prisma 7 — PostgreSQL only (Supabase)
 - Prisma model types import from `@/shared/lib/generated/prisma/models`
+- Prisma enums import from `@/prisma/generated/client/enums` (e.g. `import type { InvoiceStatus } from '@/prisma/generated/client/enums'`)
 - `DATABASE_URL` = Supabase pooled connection (for app queries); `DIRECT_URL` = Supabase direct connection (for migrations only)
 
 ```typescript

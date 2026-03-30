@@ -33,14 +33,14 @@ export default function NotFound() {
           href="/"
           className="inline-flex items-center gap-[var(--s2)] no-underline mb-[var(--s4)]"
         >
-          <span className="font-display font-bold text-[18px] text-(--ink-100) tracking-[-0.02em]">
+          <span className="font-display font-bold text-[18px] text-(--ink-100) tracking-h3">
             invox
           </span>
         </Link>
 
         {/* 404 number */}
         <div
-          className="font-mono font-medium leading-none tracking-[-0.04em] select-none"
+          className="font-mono font-medium leading-none tracking-display select-none"
           style={{
             fontSize: 'clamp(96px, 18vw, 160px)',
             color: 'transparent',
@@ -57,7 +57,7 @@ export default function NotFound() {
         <div className="w-10 h-0.5 bg-(--blue-600) rounded-full" />
 
         {/* Heading */}
-        <h1 className="font-display font-bold text-(--ink-50) tracking-[-0.025em] m-0" style={{ fontSize: 'clamp(20px, 4vw, 28px)' }}>
+        <h1 className="font-display font-bold text-(--ink-50) tracking-h2 m-0" style={{ fontSize: 'clamp(20px, 4vw, 28px)' }}>
           Page not found
         </h1>
 
@@ -86,7 +86,7 @@ export default function NotFound() {
         </div>
 
         {/* Footer note */}
-        <p className="font-mono text-[11px] text-(--ink-500) tracking-[0.08em] uppercase mt-[var(--s4)]">
+        <p className="font-mono text-[11px] text-(--ink-500) tracking-mono uppercase mt-[var(--s4)]">
           Error 404 · Page not found
         </p>
       </div>

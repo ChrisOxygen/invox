@@ -49,7 +49,7 @@ export function InvoicesEmptyState({ status, hasFilters, onClearFilters }: Invoi
           <SearchX className="w-6 h-6" />
         </div>
 
-        <h3 className="font-display text-[16px] font-bold text-(--ink-900) tracking-[-0.02em] mb-1.5">
+        <h3 className="font-display text-[16px] font-bold text-(--ink-900) tracking-h3 mb-1.5">
           No invoices match your filters
         </h3>
 
@@ -87,7 +87,7 @@ export function InvoicesEmptyState({ status, hasFilters, onClearFilters }: Invoi
           <FileText className="w-6 h-6" />
         </div>
 
-        <h3 className="font-display text-[16px] font-bold text-(--ink-900) tracking-[-0.02em] mb-1.5">
+        <h3 className="font-display text-[16px] font-bold text-(--ink-900) tracking-h3 mb-1.5">
           {copy?.heading ?? `No ${status.toLowerCase()} invoices`}
           {isOverdue ? ' 🎉' : ''}
         </h3>
@@ -116,7 +116,7 @@ export function InvoicesEmptyState({ status, hasFilters, onClearFilters }: Invoi
         <FileText className="w-6 h-6" />
       </div>
 
-      <h3 className="font-display text-[16px] font-bold text-(--ink-900) tracking-[-0.02em] mb-1.5">
+      <h3 className="font-display text-[16px] font-bold text-(--ink-900) tracking-h3 mb-1.5">
         Create your first invoice
       </h3>
 

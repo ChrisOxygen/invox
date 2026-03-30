@@ -53,7 +53,7 @@ export function LoginForm() {
       {/* Heading */}
       <div className="mb-8">
         <h1
-          className="text-[32px] font-display font-extrabold text-(--ink-900) leading-tight mb-2 tracking-[-0.03em]"
+          className="text-[32px] font-display font-extrabold text-(--ink-900) leading-tight mb-2 tracking-snug"
         >
           Welcome back
         </h1>
@@ -113,7 +113,7 @@ export function LoginForm() {
         <div className="space-y-1.5">
           <Label
             htmlFor="login-email"
-            className="text-[12px] font-display font-semibold text-(--ink-700) uppercase tracking-[0.06em]"
+            className="text-[12px] font-display font-semibold text-(--ink-700) uppercase tracking-label"
           >
             Email address
           </Label>
@@ -140,7 +140,7 @@ export function LoginForm() {
           <div className="flex items-center justify-between">
             <Label
               htmlFor="login-password"
-              className="text-[12px] font-display font-semibold text-(--ink-700) uppercase tracking-[0.06em]"
+              className="text-[12px] font-display font-semibold text-(--ink-700) uppercase tracking-label"
             >
               Password
             </Label>

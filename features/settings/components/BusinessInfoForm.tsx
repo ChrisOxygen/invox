@@ -24,7 +24,7 @@ function FieldError({ message }: { message?: string }) {
 function SubsectionLabel({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex items-center gap-3 pt-2">
-      <span className="text-[11px] font-semibold uppercase tracking-[0.08em] text-(--ink-300) font-display whitespace-nowrap">
+      <span className="text-[11px] font-semibold uppercase tracking-mono text-(--ink-300) font-display whitespace-nowrap">
         {children}
       </span>
       <div className="h-px flex-1 bg-(--border-default)" />

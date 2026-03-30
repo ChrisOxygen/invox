@@ -86,7 +86,7 @@ export function BrandingForm({ defaultValues, businessName }: BrandingFormProps)
         >
           {/* Stage header */}
           <div className="flex items-center justify-between px-4 py-3 border-b border-(--border-default)">
-            <span className="text-[11px] font-semibold uppercase tracking-[0.08em] text-(--ink-400) font-display">
+            <span className="text-[11px] font-semibold uppercase tracking-mono text-(--ink-400) font-display">
               Preview
             </span>
             <span className="flex items-center gap-1.5 text-[11px] text-(--ink-300) font-body">

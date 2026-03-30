@@ -111,7 +111,7 @@ export function ClientSheet({ open, onOpenChange, client = null, onSuccess }: Cl
         <SheetHeader
           className="border-b px-6 py-5 border-(--border-default)"
         >
-          <SheetTitle className="font-display text-(--ink-900) tracking-[-0.02em]">
+          <SheetTitle className="font-display text-(--ink-900) tracking-h3">
             {isEditing ? 'Edit Client' : 'Add Client'}
           </SheetTitle>
           <SheetDescription className="font-body text-(--ink-400)">
@@ -144,7 +144,7 @@ export function ClientSheet({ open, onOpenChange, client = null, onSuccess }: Cl
                   name="name"
                   render={({ field }) => (
                     <FormItem className="space-y-1.5">
-                      <FormLabel className="text-xs font-semibold uppercase font-display text-(--ink-400) tracking-[0.08em]">
+                      <FormLabel className="text-xs font-semibold uppercase font-display text-(--ink-400) tracking-mono">
                         Name *
                       </FormLabel>
                       <FormControl>
@@ -160,7 +160,7 @@ export function ClientSheet({ open, onOpenChange, client = null, onSuccess }: Cl
                   name="company"
                   render={({ field }) => (
                     <FormItem className="space-y-1.5">
-                      <FormLabel className="text-xs font-semibold uppercase font-display text-(--ink-400) tracking-[0.08em]">
+                      <FormLabel className="text-xs font-semibold uppercase font-display text-(--ink-400) tracking-mono">
                         Company
                       </FormLabel>
                       <FormControl>
@@ -177,7 +177,7 @@ export function ClientSheet({ open, onOpenChange, client = null, onSuccess }: Cl
                     name="email"
                     render={({ field }) => (
                       <FormItem className="space-y-1.5">
-                        <FormLabel className="text-xs font-semibold uppercase font-display text-(--ink-400) tracking-[0.08em]">
+                        <FormLabel className="text-xs font-semibold uppercase font-display text-(--ink-400) tracking-mono">
                           Email
                         </FormLabel>
                         <FormControl>
@@ -201,7 +201,7 @@ export function ClientSheet({ open, onOpenChange, client = null, onSuccess }: Cl
                     name="phone"
                     render={({ field }) => (
                       <FormItem className="space-y-1.5">
-                        <FormLabel className="text-xs font-semibold uppercase font-display text-(--ink-400) tracking-[0.08em]">
+                        <FormLabel className="text-xs font-semibold uppercase font-display text-(--ink-400) tracking-mono">
                           Phone
                         </FormLabel>
                         <FormControl>
@@ -239,7 +239,7 @@ export function ClientSheet({ open, onOpenChange, client = null, onSuccess }: Cl
                       name="address"
                       render={({ field }) => (
                         <FormItem className="space-y-1.5">
-                          <FormLabel className="text-xs font-semibold uppercase font-display text-(--ink-400) tracking-[0.08em]">
+                          <FormLabel className="text-xs font-semibold uppercase font-display text-(--ink-400) tracking-mono">
                             Street Address
                           </FormLabel>
                           <FormControl>
@@ -255,7 +255,7 @@ export function ClientSheet({ open, onOpenChange, client = null, onSuccess }: Cl
                         name="city"
                         render={({ field }) => (
                           <FormItem className="space-y-1.5">
-                            <FormLabel className="text-xs font-semibold uppercase font-display text-(--ink-400) tracking-[0.08em]">
+                            <FormLabel className="text-xs font-semibold uppercase font-display text-(--ink-400) tracking-mono">
                               City
                             </FormLabel>
                             <FormControl>
@@ -270,7 +270,7 @@ export function ClientSheet({ open, onOpenChange, client = null, onSuccess }: Cl
                         name="state"
                         render={({ field }) => (
                           <FormItem className="space-y-1.5">
-                            <FormLabel className="text-xs font-semibold uppercase font-display text-(--ink-400) tracking-[0.08em]">
+                            <FormLabel className="text-xs font-semibold uppercase font-display text-(--ink-400) tracking-mono">
                               State
                             </FormLabel>
                             <FormControl>
@@ -286,7 +286,7 @@ export function ClientSheet({ open, onOpenChange, client = null, onSuccess }: Cl
                       name="country"
                       render={({ field }) => (
                         <FormItem className="space-y-1.5">
-                          <FormLabel className="text-xs font-semibold uppercase font-display text-(--ink-400) tracking-[0.08em]">
+                          <FormLabel className="text-xs font-semibold uppercase font-display text-(--ink-400) tracking-mono">
                             Country
                           </FormLabel>
                           <FormControl>

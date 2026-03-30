@@ -19,7 +19,7 @@ export function ClientsEmptyState({ variant, onAdd, onClear }: ClientsEmptyState
           <SearchX className="w-6 h-6" />
         </div>
 
-        <h3 className="font-display text-[16px] font-bold text-(--ink-900) tracking-[-0.02em] mb-[6px]">
+        <h3 className="font-display text-[16px] font-bold text-(--ink-900) tracking-h3 mb-[6px]">
           No results found
         </h3>
 
@@ -50,7 +50,7 @@ export function ClientsEmptyState({ variant, onAdd, onClear }: ClientsEmptyState
         <Users className="w-6 h-6" />
       </div>
 
-      <h3 className="font-display text-[16px] font-bold text-(--ink-900) tracking-[-0.02em] mb-[6px]">
+      <h3 className="font-display text-[16px] font-bold text-(--ink-900) tracking-h3 mb-[6px]">
         No clients yet
       </h3>
 

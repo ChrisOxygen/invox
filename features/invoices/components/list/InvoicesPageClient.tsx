@@ -205,7 +205,7 @@ export function InvoicesPageClient() {
         >
           <DialogContent className="bg-(--surface-base) border border-(--border-default) rounded max-w-105">
             <DialogHeader>
-              <DialogTitle className="font-display text-[18px] font-bold text-(--ink-900) tracking-[-0.02em]">
+              <DialogTitle className="font-display text-[18px] font-bold text-(--ink-900) tracking-h3">
                 Delete invoice?
               </DialogTitle>
               <DialogDescription className="font-body text-[14px] text-(--ink-400) leading-normal mt-1.5">

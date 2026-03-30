@@ -84,7 +84,7 @@ export default function AboutPage() {
 
           {/* Big editorial headline */}
           <RevealOnScroll delay={120}>
-            <h1 className="font-display font-bold leading-none tracking-[-0.04em] text-(--ink-900)">
+            <h1 className="font-display font-bold leading-none tracking-display text-(--ink-900)">
               <span className="text-4xl sm:text-6xl ">Built from</span>
               <span className=" text-4xl sm:text-6xl  text-(--blue-600) italic">
                 lived
@@ -125,7 +125,7 @@ export default function AboutPage() {
                 className="flex flex-col gap-1 py-7 px-6 first:pl-0 last:pr-0"
               >
                 <span
-                  className="font-extrabold text-2xl sm:text-3xl text-(--ink-900) leading-none tracking-[-0.03em]"
+                  className="font-extrabold text-2xl sm:text-3xl text-(--ink-900) leading-none tracking-snug"
                   style={{
                     fontFamily: mono
                       ? "var(--font-mono)"
@@ -164,7 +164,7 @@ export default function AboutPage() {
 
               {/* Content */}
               <div className="flex flex-col gap-4 flex-1">
-                <h3 className="font-display font-bold text-2xl sm:text-3xl lg:text-[2.25rem] text-(--ink-900) leading-tight tracking-[-0.025em] max-w-2xl">
+                <h3 className="font-display font-bold text-2xl sm:text-3xl lg:text-[2.25rem] text-(--ink-900) leading-tight tracking-h2 max-w-2xl">
                   Eliminate the frustration of invoicing for{" "}
                   <span className="text-(--blue-600)">
                     small businesses everywhere.
@@ -197,7 +197,7 @@ export default function AboutPage() {
 
               {/* Content */}
               <div className="flex flex-col gap-4 flex-1">
-                <h3 className="font-display font-bold text-2xl sm:text-3xl lg:text-[2.25rem] text-(--ink-900) leading-tight tracking-[-0.025em] max-w-2xl">
+                <h3 className="font-display font-bold text-2xl sm:text-3xl lg:text-[2.25rem] text-(--ink-900) leading-tight tracking-h2 max-w-2xl">
                   A world where small business owners{" "}
                   <span className="text-(--blue-600)">
                     never chase payments again.
@@ -223,7 +223,7 @@ export default function AboutPage() {
             <span className="text-xs font-semibold text-(--blue-600) uppercase tracking-widest font-display">
               Founder &amp; Developer of Invox
             </span>
-            <h2 className="font-display font-extrabold text-5xl sm:text-7xl lg:text-[88px] xl:text-[104px] text-(--ink-900) leading-none tracking-[-0.04em]">
+            <h2 className="font-display font-extrabold text-5xl sm:text-7xl lg:text-[88px] xl:text-[104px] text-(--ink-900) leading-none tracking-display">
               Christopher <span className="text-(--blue-600)">Okafor.</span>
             </h2>
             <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-1">

@@ -71,7 +71,7 @@ function SkeletonRows() {
   )
 }
 
-const thClassName = "text-(--ink-400) font-display text-[11px] font-semibold tracking-[0.08em] uppercase py-3"
+const thClassName = "text-(--ink-400) font-display text-[11px] font-semibold tracking-mono uppercase py-3"
 
 export function ClientsTable({ clients, isLoading, onEdit, onDelete }: ClientsTableProps) {
   return (
@@ -99,7 +99,7 @@ export function ClientsTable({ clients, isLoading, onEdit, onDelete }: ClientsTa
                 <TableCell>
                   <Link href={`/clients/${client.id}`} className="flex items-center gap-3 no-underline">
                     <ClientAvatar name={client.name} />
-                    <p className="truncate font-display text-[14px] font-semibold text-(--ink-900) tracking-[-0.01em]">
+                    <p className="truncate font-display text-[14px] font-semibold text-(--ink-900) tracking-tight-xs">
                       {client.name}
                     </p>
                   </Link>

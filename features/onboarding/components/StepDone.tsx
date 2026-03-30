@@ -53,7 +53,7 @@ export function StepDone() {
       </div>
 
       {/* Heading */}
-      <h2 className="font-display font-extrabold text-[28px] text-(--ink-900) tracking-[-0.025em] mb-2">
+      <h2 className="font-display font-extrabold text-[28px] text-(--ink-900) tracking-h2 mb-2">
         {firstName ? `You're all set, ${firstName}! 🎉` : "You're all set! 🎉"}
       </h2>
 

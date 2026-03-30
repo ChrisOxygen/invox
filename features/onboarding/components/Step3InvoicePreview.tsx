@@ -14,7 +14,7 @@ export function Step3InvoicePreview() {
     <div className="flex flex-col gap-6">
       {/* Header */}
       <div className="flex flex-col gap-1">
-        <h2 className="font-display font-extrabold text-[24px] text-(--ink-900) tracking-[-0.02em]">
+        <h2 className="font-display font-extrabold text-[24px] text-(--ink-900) tracking-h3">
           Here&apos;s your first invoice
         </h2>
         <p className="font-body text-[14px] text-(--ink-400)">
@@ -52,7 +52,7 @@ export function Step3InvoicePreview() {
 
             {/* Right: INVOICE label + number */}
             <div className="flex flex-col items-end gap-1">
-              <span className="font-display font-extrabold text-[18px] text-(--blue-600) tracking-[0.08em]">
+              <span className="font-display font-extrabold text-[18px] text-(--blue-600) tracking-mono">
                 INVOICE
               </span>
               <span className="font-mono text-[12px] text-(--ink-400)">
@@ -66,7 +66,7 @@ export function Step3InvoicePreview() {
 
           {/* Bill to */}
           <div className="flex flex-col gap-1">
-            <span className="font-display font-semibold uppercase text-[10px] text-(--ink-300) tracking-[0.08em]">
+            <span className="font-display font-semibold uppercase text-[10px] text-(--ink-300) tracking-mono">
               Bill To
             </span>
             <span className="font-body text-[14px] text-(--ink-700)">
@@ -83,7 +83,7 @@ export function Step3InvoicePreview() {
               {(['Description', 'Qty', 'Unit Price', 'Total'] as const).map((h) => (
                 <span
                   key={h}
-                  className={`font-display font-semibold uppercase text-[10px] text-(--ink-300) tracking-[0.08em] ${h === 'Description' ? 'text-left' : 'text-right'}`}
+                  className={`font-display font-semibold uppercase text-[10px] text-(--ink-300) tracking-mono ${h === 'Description' ? 'text-left' : 'text-right'}`}
                 >
                   {h}
                 </span>

@@ -93,7 +93,7 @@ function SortIcon({ active, dir }: { active: boolean; dir: SortDir }) {
   return <ArrowDown className="ml-1.5 h-3.5 w-3.5" />
 }
 
-const thClassName = "text-(--ink-400) font-display text-[11px] font-bold tracking-[0.08em] uppercase"
+const thClassName = "text-(--ink-400) font-display text-[11px] font-bold tracking-mono uppercase"
 
 export function ClientInvoiceHistory({ invoices, isLoading, clientId }: {
   invoices: InvoiceHistoryItem[]; isLoading: boolean; clientId: string
@@ -138,7 +138,7 @@ export function ClientInvoiceHistory({ invoices, isLoading, clientId }: {
     <div className="rounded border overflow-hidden bg-(--surface-base) border-(--border-default)">
       <div className="px-(--s5) py-(--s4) border-b border-(--border-default) flex items-center justify-between">
         <div>
-          <h3 className="font-bold text-(--ink-900) font-display text-[15px] tracking-[-0.02em]">
+          <h3 className="font-bold text-(--ink-900) font-display text-[15px] tracking-h3">
             Invoice History
           </h3>
           {!isLoading && (

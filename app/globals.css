@@ -147,7 +147,10 @@
   --tracking-h2:      -0.025em;
   --tracking-h3:      -0.02em;
   --tracking-h4:      -0.02em;
+  --tracking-snug:    -0.03em;
+  --tracking-tight-xs:-0.01em;
   --tracking-mono:     0.08em;
+  --tracking-label:    0.06em;
   --duration-fast:       100ms;
   --duration-base:       200ms;
   --duration-deliberate: 350ms;

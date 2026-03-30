@@ -69,7 +69,7 @@ function ChangePasswordSection() {
           <KeyRound className="h-4 w-4 text-(--ink-500)" />
         </div>
         <div>
-          <h2 className="text-[15px] font-bold tracking-[-0.02em] text-(--ink-900) font-display">
+          <h2 className="text-[15px] font-bold tracking-h3 text-(--ink-900) font-display">
             Change Password
           </h2>
           <p className="text-[12px] text-(--ink-400) font-body">
@@ -192,7 +192,7 @@ function DeleteAccountSection() {
         </div>
 
         <div className="flex-1 min-w-0">
-          <h2 className="text-[15px] font-bold tracking-[-0.02em] text-(--ink-900) font-display">
+          <h2 className="text-[15px] font-bold tracking-h3 text-(--ink-900) font-display">
             Delete Account
           </h2>
           <p className="mt-1 text-[13px] text-(--ink-400) font-body leading-relaxed">
@@ -207,7 +207,7 @@ function DeleteAccountSection() {
 
               <AlertDialogContent className="rounded border border-(--border-default) bg-(--surface-base) max-w-105">
                 <AlertDialogHeader>
-                  <AlertDialogTitle className="text-[18px] font-bold tracking-[-0.02em] text-(--ink-900) font-display">
+                  <AlertDialogTitle className="text-[18px] font-bold tracking-h3 text-(--ink-900) font-display">
                     Are you absolutely sure?
                   </AlertDialogTitle>
                   <AlertDialogDescription className="text-[14px] text-(--ink-500) font-body leading-relaxed">

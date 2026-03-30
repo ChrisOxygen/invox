@@ -59,7 +59,7 @@ export function RegisterForm() {
           <Mail className="w-7 h-7 text-(--blue-600)" />
         </div>
         <div>
-          <h2 className="text-[24px] font-display font-bold text-(--ink-900) mb-2 tracking-[-0.02em]">
+          <h2 className="text-[24px] font-display font-bold text-(--ink-900) mb-2 tracking-h3">
             Check your inbox
           </h2>
           <p className="text-[14px] font-sans text-(--ink-400) leading-relaxed">
@@ -85,7 +85,7 @@ export function RegisterForm() {
     <div className="w-full">
       {/* Heading */}
       <div className="mb-8">
-        <h1 className="text-[32px] font-display font-extrabold text-(--ink-900) leading-tight mb-2 tracking-[-0.03em]">
+        <h1 className="text-[32px] font-display font-extrabold text-(--ink-900) leading-tight mb-2 tracking-snug">
           Create your account
         </h1>
         <p className="text-[14px] font-sans font-normal text-(--ink-400)">
@@ -140,7 +140,7 @@ export function RegisterForm() {
         <div className="space-y-1.5">
           <Label
             htmlFor="register-name"
-            className="text-[12px] font-display font-semibold text-(--ink-700) uppercase tracking-[0.06em]"
+            className="text-[12px] font-display font-semibold text-(--ink-700) uppercase tracking-label"
           >
             Full name
           </Label>
@@ -164,7 +164,7 @@ export function RegisterForm() {
         <div className="space-y-1.5">
           <Label
             htmlFor="register-email"
-            className="text-[12px] font-display font-semibold text-(--ink-700) uppercase tracking-[0.06em]"
+            className="text-[12px] font-display font-semibold text-(--ink-700) uppercase tracking-label"
           >
             Email address
           </Label>
@@ -188,7 +188,7 @@ export function RegisterForm() {
         <div className="space-y-1.5">
           <Label
             htmlFor="register-password"
-            className="text-[12px] font-display font-semibold text-(--ink-700) uppercase tracking-[0.06em]"
+            className="text-[12px] font-display font-semibold text-(--ink-700) uppercase tracking-label"
           >
             Password
           </Label>

@@ -36,7 +36,7 @@ export default async function PublicInvoicePage({
       {/* Top bar */}
       <div className="no-print bg-(--surface-base) border-b border-(--border-default) px-6 py-3 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <span className="font-display text-base font-extrabold text-(--ink-900) tracking-[-0.03em]">
+          <span className="font-display text-base font-extrabold text-(--ink-900) tracking-snug">
             invox
           </span>
           <span className="w-px h-4 bg-(--border-default) mx-1 inline-block" />
@@ -68,7 +68,7 @@ export default async function PublicInvoicePage({
             ) : (
               <p
                 style={{ color: 'var(--brand)' }}
-                className="font-display text-xl font-extrabold tracking-[-0.03em] mb-2"
+                className="font-display text-xl font-extrabold tracking-snug mb-2"
               >
                 {profile.businessName ?? 'Your Business'}
               </p>
@@ -108,7 +108,7 @@ export default async function PublicInvoicePage({
 
           {/* Invoice meta */}
           <div className="text-right">
-            <p className="font-display text-[28px] font-extrabold text-(--ink-900) tracking-[-0.04em] leading-none mb-1.5">
+            <p className="font-display text-[28px] font-extrabold text-(--ink-900) tracking-display leading-none mb-1.5">
               INVOICE
             </p>
             <p
@@ -149,10 +149,10 @@ export default async function PublicInvoicePage({
         {/* Bill from / Bill to */}
         <div className="px-10 py-6 grid grid-cols-2 gap-8">
           <div>
-            <p className="font-display text-[11px] font-semibold text-(--ink-300) tracking-[0.08em] uppercase mb-2">
+            <p className="font-display text-[11px] font-semibold text-(--ink-300) tracking-mono uppercase mb-2">
               From
             </p>
-            <p className="font-display text-sm font-bold text-(--ink-900) tracking-[-0.01em] mb-1">
+            <p className="font-display text-sm font-bold text-(--ink-900) tracking-tight-xs mb-1">
               {profile.businessName ?? '—'}
             </p>
             {profile.website && (
@@ -162,10 +162,10 @@ export default async function PublicInvoicePage({
             )}
           </div>
           <div>
-            <p className="font-display text-[11px] font-semibold text-(--ink-300) tracking-[0.08em] uppercase mb-2">
+            <p className="font-display text-[11px] font-semibold text-(--ink-300) tracking-mono uppercase mb-2">
               Bill To
             </p>
-            <p className="font-display text-sm font-bold text-(--ink-900) tracking-[-0.01em] mb-1">
+            <p className="font-display text-sm font-bold text-(--ink-900) tracking-tight-xs mb-1">
               {client.name}
             </p>
             {client.company && (
@@ -205,7 +205,7 @@ export default async function PublicInvoicePage({
                 {(['Description', 'Qty', 'Unit Price', 'Amount'] as const).map((h, i) => (
                   <th
                     key={h}
-                    className={`font-display text-[11px] font-semibold text-white tracking-[0.06em] uppercase px-3 py-2.5 ${i === 0 ? 'text-left' : 'text-right'}`}
+                    className={`font-display text-[11px] font-semibold text-white tracking-label uppercase px-3 py-2.5 ${i === 0 ? 'text-left' : 'text-right'}`}
                   >
                     {h}
                   </th>
@@ -279,7 +279,7 @@ export default async function PublicInvoicePage({
               style={{ backgroundColor: 'var(--brand)' }}
               className="flex justify-between items-center px-4 py-3.5 rounded-(--r-md) mt-2"
             >
-              <span className="font-display text-[13px] font-bold text-white tracking-[-0.01em]">
+              <span className="font-display text-[13px] font-bold text-white tracking-tight-xs">
                 Total Due
               </span>
               <span className="font-mono text-[18px] font-medium text-white whitespace-nowrap">
@@ -294,7 +294,7 @@ export default async function PublicInvoicePage({
           <>
             <div className="h-px bg-(--border-default) mx-10" />
             <div className="px-10 pt-5 pb-6">
-              <p className="font-display text-[11px] font-semibold text-(--ink-300) tracking-[0.08em] uppercase mb-2">
+              <p className="font-display text-[11px] font-semibold text-(--ink-300) tracking-mono uppercase mb-2">
                 Notes
               </p>
               <p className="font-sans text-[13px] text-(--ink-500) leading-[1.6] whitespace-pre-line">
@@ -342,7 +342,7 @@ export default async function PublicInvoicePage({
         </p>
         <a
           href="/"
-          className="font-display text-sm font-extrabold text-(--blue-600) no-underline tracking-[-0.03em] inline-block mb-2"
+          className="font-display text-sm font-extrabold text-(--blue-600) no-underline tracking-snug inline-block mb-2"
         >
           invox
         </a>

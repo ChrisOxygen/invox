@@ -70,7 +70,7 @@ function StatCard({ config, value, isPending, currency }: StatCardProps) {
   return (
     <div className="bg-(--surface-base) border border-(--border-default) rounded p-(--s5)">
       <div className="flex items-start justify-between mb-3">
-        <p className="font-display text-[11px] font-semibold text-(--ink-400) tracking-[0.08em] uppercase">
+        <p className="font-display text-[11px] font-semibold text-(--ink-400) tracking-mono uppercase">
           {config.label}
         </p>
         <Icon
@@ -83,7 +83,7 @@ function StatCard({ config, value, isPending, currency }: StatCardProps) {
         <Skeleton className="h-8 w-36 mb-2" />
       ) : (
         <p
-          className={`font-mono font-medium leading-none tracking-[-0.02em] mb-2 text-(--value-color) ${config.isCount ? 'text-[36px]' : 'text-[26px]'}`}
+          className={`font-mono font-medium leading-none tracking-h3 mb-2 text-(--value-color) ${config.isCount ? 'text-[36px]' : 'text-[26px]'}`}
           style={{ '--value-color': config.valueColor } as React.CSSProperties}
         >
           {config.isCount

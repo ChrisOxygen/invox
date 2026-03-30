@@ -60,7 +60,7 @@ export function InvoiceDefaultsForm({ defaultValues }: InvoiceDefaultsFormProps)
   }
 
   const labelClass =
-    'text-[12px] font-semibold uppercase tracking-[0.06em] text-(--ink-700) font-display'
+    'text-[12px] font-semibold uppercase tracking-label text-(--ink-700) font-display'
   const inputClass =
     'h-11 w-full rounded border border-(--border-default) bg-(--surface-base) px-3.5 text-[14px] text-(--ink-900) placeholder:text-(--ink-300) transition-colors duration-200 focus:border-(--blue-600) focus:outline-none focus:ring-2 focus:ring-(--blue-600)/20'
 

@@ -17,7 +17,7 @@ function InfoRow({ icon, label, value }: { icon: React.ReactNode; label: string;
     <div className="flex items-start gap-(--s3)">
       <div className="mt-0.5 shrink-0 text-(--ink-300)">{icon}</div>
       <div className="min-w-0 flex-1">
-        <p className="text-xs font-semibold uppercase mb-0.5 text-(--ink-300) font-display tracking-[0.08em]">
+        <p className="text-xs font-semibold uppercase mb-0.5 text-(--ink-300) font-display tracking-mono">
           {label}
         </p>
         {value ? (
@@ -39,11 +39,11 @@ export function ClientInfoCard({ client, onEdit, onDelete }: {
     <div className="rounded border overflow-hidden bg-(--surface-base) border-(--border-default)">
       <div className="p-(--s5) border-b border-(--border-default) flex items-start justify-between gap-(--s3)">
         <div className="flex items-center gap-(--s4)">
-          <div className="w-12 h-12 rounded flex items-center justify-center shrink-0 text-sm font-bold bg-(--blue-50) text-(--blue-600) font-display tracking-[-0.02em]">
+          <div className="w-12 h-12 rounded flex items-center justify-center shrink-0 text-sm font-bold bg-(--blue-50) text-(--blue-600) font-display tracking-h3">
             {getInitials(client.name)}
           </div>
           <div>
-            <h3 className="font-bold leading-tight text-(--ink-900) font-display text-[17px] tracking-[-0.02em]">
+            <h3 className="font-bold leading-tight text-(--ink-900) font-display text-[17px] tracking-h3">
               {client.name}
             </h3>
             {client.company && (

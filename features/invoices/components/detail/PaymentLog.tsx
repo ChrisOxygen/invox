@@ -73,7 +73,7 @@ export function PaymentLog({ invoice, onRecordPayment }: PaymentLogProps) {
     <div className="rounded border overflow-hidden bg-(--surface-base) border-(--border-default)">
       {/* Header */}
       <div className="px-(--s5) py-(--s4) border-b border-(--border-default) flex items-center justify-between">
-        <h3 className="font-display text-[15px] font-bold text-(--ink-900) tracking-[-0.02em]">
+        <h3 className="font-display text-[15px] font-bold text-(--ink-900) tracking-h3">
           Payment History
         </h3>
         <Button

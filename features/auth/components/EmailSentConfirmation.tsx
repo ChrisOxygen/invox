@@ -21,7 +21,7 @@ export function EmailSentConfirmation({ email, onResend }: EmailSentConfirmation
 
       {/* Heading + body */}
       <div className="flex flex-col gap-2">
-        <h1 className="font-display text-[30px] font-[800] tracking-[-0.025em] text-(--ink-900) leading-[1.15]">
+        <h1 className="font-display text-[30px] font-[800] tracking-h2 text-(--ink-900) leading-[1.15]">
           Check your inbox
         </h1>
         <p className="font-sans text-[15px] text-(--ink-400) leading-[1.6]">

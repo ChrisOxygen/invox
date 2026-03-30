@@ -48,7 +48,7 @@ function DetailSkeleton() {
 function NotFound() {
   return (
     <div className="flex flex-col items-center justify-center min-h-[400px] rounded border p-(--s10) bg-(--surface-base) border-(--border-default)">
-      <h2 className="text-xl font-bold mb-2 text-(--ink-900) font-display tracking-[-0.025em]">
+      <h2 className="text-xl font-bold mb-2 text-(--ink-900) font-display tracking-h2">
         Client not found
       </h2>
       <p className="text-sm mb-(--s6) text-center max-w-xs text-(--ink-400) font-body">
@@ -104,7 +104,7 @@ export function ClientDetailPageClient({ id }: { id: string }) {
             Clients
           </Link>
           <span className="text-(--border-strong)">/</span>
-          <h1 className="font-bold truncate max-w-[200px] sm:max-w-none text-(--ink-900) font-display text-[20px] tracking-[-0.025em]">
+          <h1 className="font-bold truncate max-w-[200px] sm:max-w-none text-(--ink-900) font-display text-[20px] tracking-h2">
             {client.name}
           </h1>
         </div>
@@ -167,7 +167,7 @@ export function ClientDetailPageClient({ id }: { id: string }) {
             <div className="w-10 h-10 rounded flex items-center justify-center mb-(--s3) bg-[#FFF0F0]">
               <Trash2 className="h-5 w-5 text-(--error)" />
             </div>
-            <DialogTitle className="text-(--ink-900) font-display tracking-[-0.02em]">
+            <DialogTitle className="text-(--ink-900) font-display tracking-h3">
               Delete {client.name}?
             </DialogTitle>
             <DialogDescription className="text-(--ink-400) font-body text-[14px]">

@@ -111,7 +111,7 @@ export function MarkPaidModal({ open, onOpenChange, invoice }: MarkPaidModalProp
         className="rounded sm:max-w-115 bg-(--surface-base) border-(--border-default)"
       >
         <DialogHeader>
-          <DialogTitle className="font-display text-[17px] font-bold text-(--ink-900) tracking-[-0.02em]">
+          <DialogTitle className="font-display text-[17px] font-bold text-(--ink-900) tracking-h3">
             Record Payment
           </DialogTitle>
           <p className="font-mono text-[12px] text-(--ink-400) mt-0.5">
@@ -124,7 +124,7 @@ export function MarkPaidModal({ open, onOpenChange, invoice }: MarkPaidModalProp
           <p className="font-body text-[12px] text-(--ink-400)">
             Outstanding balance
           </p>
-          <p className="font-mono text-[22px] text-(--ink-900) tracking-[-0.03em] mt-0.5">
+          <p className="font-mono text-[22px] text-(--ink-900) tracking-snug mt-0.5">
             {formatCurrency(remaining, invoice.currency)}
           </p>
           <p className="font-body text-[12px] text-(--ink-400) mt-1">
@@ -136,7 +136,7 @@ export function MarkPaidModal({ open, onOpenChange, invoice }: MarkPaidModalProp
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-(--s4)">
           {/* Amount */}
           <div className="space-y-(--s1)">
-            <Label className="font-display text-[12px] font-semibold text-(--ink-900) tracking-[-0.01em]">
+            <Label className="font-display text-[12px] font-semibold text-(--ink-900) tracking-tight-xs">
               Amount
             </Label>
             <div className="relative">
@@ -158,7 +158,7 @@ export function MarkPaidModal({ open, onOpenChange, invoice }: MarkPaidModalProp
 
           {/* Date Paid */}
           <div className="space-y-(--s1)">
-            <Label className="font-display text-[12px] font-semibold text-(--ink-900) tracking-[-0.01em]">
+            <Label className="font-display text-[12px] font-semibold text-(--ink-900) tracking-tight-xs">
               Date Paid
             </Label>
             <Input
@@ -173,7 +173,7 @@ export function MarkPaidModal({ open, onOpenChange, invoice }: MarkPaidModalProp
 
           {/* Payment Method */}
           <div className="space-y-(--s1)">
-            <Label className="font-display text-[12px] font-semibold text-(--ink-900) tracking-[-0.01em]">
+            <Label className="font-display text-[12px] font-semibold text-(--ink-900) tracking-tight-xs">
               Payment Method
             </Label>
             <Select
@@ -204,7 +204,7 @@ export function MarkPaidModal({ open, onOpenChange, invoice }: MarkPaidModalProp
 
           {/* Note */}
           <div className="space-y-(--s1)">
-            <Label className="font-display text-[12px] font-semibold text-(--ink-900) tracking-[-0.01em]">
+            <Label className="font-display text-[12px] font-semibold text-(--ink-900) tracking-tight-xs">
               Note{' '}
               <span className="font-normal text-(--ink-300)">(optional)</span>
             </Label>

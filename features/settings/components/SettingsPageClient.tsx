@@ -178,7 +178,7 @@ function SettingsCard({
     <div className="rounded border border-(--border-default) bg-(--surface-base) overflow-hidden">
       {/* Header */}
       <div className="border-b border-(--border-default) px-6 py-5">
-        <h2 className="text-[16px] font-bold tracking-[-0.02em] text-(--ink-900) font-display">
+        <h2 className="text-[16px] font-bold tracking-h3 text-(--ink-900) font-display">
           {title}
         </h2>
         <p className="mt-1 text-[13px] text-(--ink-400) font-body leading-relaxed">

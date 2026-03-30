@@ -45,7 +45,7 @@ function InvoxLogo() {
           className="w-5 h-5 object-contain"
         />
       </div>
-      <span className="text-[17px] font-bold tracking-[-0.03em] font-display text-(--ink-900)">
+      <span className="text-[17px] font-bold tracking-snug font-display text-(--ink-900)">
         Inv
         <span className="text-(--blue-600)">ox</span>
       </span>
@@ -92,7 +92,7 @@ function NavButton({ label, icon: Icon, onClick }: NavButtonProps) {
 
 function NavGroupLabel({ children }: { children: React.ReactNode }) {
   return (
-    <p className="mb-1 px-3 text-[10px] font-semibold uppercase tracking-[0.08em] text-(--ink-300) font-display">
+    <p className="mb-1 px-3 text-[10px] font-semibold uppercase tracking-mono text-(--ink-300) font-display">
       {children}
     </p>
   );

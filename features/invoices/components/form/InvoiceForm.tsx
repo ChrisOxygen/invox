@@ -187,7 +187,7 @@ export function InvoiceForm({ invoice, onSuccess }: InvoiceFormProps) {
                   Invoice Details
                 </p>
                 <div className="flex items-center gap-2">
-                  <span className="text-xs font-semibold uppercase font-display text-(--ink-400) tracking-[0.08em]">
+                  <span className="text-xs font-semibold uppercase font-display text-(--ink-400) tracking-mono">
                     Invoice #
                   </span>
                   <span
@@ -207,7 +207,7 @@ export function InvoiceForm({ invoice, onSuccess }: InvoiceFormProps) {
                     name="issueDate"
                     render={({ field }) => (
                       <FormItem className="space-y-1.5">
-                        <FormLabel className="text-xs font-semibold uppercase font-display text-(--ink-400) tracking-[0.08em]">
+                        <FormLabel className="text-xs font-semibold uppercase font-display text-(--ink-400) tracking-mono">
                           Issue Date
                         </FormLabel>
                         <FormControl>
@@ -229,7 +229,7 @@ export function InvoiceForm({ invoice, onSuccess }: InvoiceFormProps) {
                     name="dueDate"
                     render={({ field }) => (
                       <FormItem className="space-y-1.5">
-                        <FormLabel className="text-xs font-semibold uppercase font-display text-(--ink-400) tracking-[0.08em]">
+                        <FormLabel className="text-xs font-semibold uppercase font-display text-(--ink-400) tracking-mono">
                           Due Date
                         </FormLabel>
                         <FormControl>
@@ -272,7 +272,7 @@ export function InvoiceForm({ invoice, onSuccess }: InvoiceFormProps) {
                 name="clientId"
                 render={({ field }) => (
                   <FormItem className="space-y-1.5">
-                    <FormLabel className="text-xs font-semibold uppercase font-display text-(--ink-400) tracking-[0.08em]">
+                    <FormLabel className="text-xs font-semibold uppercase font-display text-(--ink-400) tracking-mono">
                       Client *
                     </FormLabel>
                     <FormControl>
@@ -292,16 +292,16 @@ export function InvoiceForm({ invoice, onSuccess }: InvoiceFormProps) {
             <div className="rounded border border-(--border-default) bg-(--surface-base)">
               {/* Table header */}
               <div className="flex items-center gap-2 border-b px-4 py-3 border-(--border-default)">
-                <span className="flex-1 text-xs font-semibold uppercase text-(--ink-400) font-display tracking-[0.08em]">
+                <span className="flex-1 text-xs font-semibold uppercase text-(--ink-400) font-display tracking-mono">
                   Description
                 </span>
-                <span className="text-xs font-semibold uppercase text-center text-(--ink-400) font-display tracking-[0.08em]" style={{ width: '72px' }}>
+                <span className="text-xs font-semibold uppercase text-center text-(--ink-400) font-display tracking-mono" style={{ width: '72px' }}>
                   Qty
                 </span>
-                <span className="text-xs font-semibold uppercase text-right text-(--ink-400) font-display tracking-[0.08em]" style={{ width: '110px' }}>
+                <span className="text-xs font-semibold uppercase text-right text-(--ink-400) font-display tracking-mono" style={{ width: '110px' }}>
                   Unit Price
                 </span>
-                <span className="text-xs font-semibold uppercase text-right text-(--ink-400) font-display tracking-[0.08em] pr-2" style={{ width: '110px' }}>
+                <span className="text-xs font-semibold uppercase text-right text-(--ink-400) font-display tracking-mono pr-2" style={{ width: '110px' }}>
                   Amount
                 </span>
                 <div style={{ width: '28px' }} />
@@ -368,7 +368,7 @@ export function InvoiceForm({ invoice, onSuccess }: InvoiceFormProps) {
                   name="notes"
                   render={({ field }) => (
                     <FormItem className="space-y-1.5">
-                      <FormLabel className="text-xs font-semibold uppercase font-display text-(--ink-400) tracking-[0.08em]">
+                      <FormLabel className="text-xs font-semibold uppercase font-display text-(--ink-400) tracking-mono">
                         Notes to Client
                       </FormLabel>
                       <FormControl>
@@ -392,7 +392,7 @@ export function InvoiceForm({ invoice, onSuccess }: InvoiceFormProps) {
                   name="internalNotes"
                   render={({ field }) => (
                     <FormItem className="space-y-1.5">
-                      <FormLabel className="text-xs font-semibold uppercase font-display text-(--ink-400) tracking-[0.08em]">
+                      <FormLabel className="text-xs font-semibold uppercase font-display text-(--ink-400) tracking-mono">
                         Internal Notes
                       </FormLabel>
                       <FormControl>
@@ -457,14 +457,14 @@ export function InvoiceForm({ invoice, onSuccess }: InvoiceFormProps) {
           {/* ── Right column: live summary ── */}
           <div className="hidden lg:block">
             <div className="sticky top-6 rounded border p-5 border-(--border-default) bg-(--surface-raised)">
-              <p className="mb-4 text-xs font-semibold uppercase font-display text-(--ink-400) tracking-[0.08em]">
+              <p className="mb-4 text-xs font-semibold uppercase font-display text-(--ink-400) tracking-mono">
                 Summary
               </p>
 
               {/* Total amount */}
               <div className="mb-4">
                 <div
-                  className="font-mono text-(--ink-900) tracking-[-0.04em] text-[28px]"
+                  className="font-mono text-(--ink-900) tracking-display text-[28px]"
                 >
                   {formatCurrency(totals.total, watchedCurrency ?? 'NGN')}
                 </div>

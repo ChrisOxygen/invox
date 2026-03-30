@@ -165,7 +165,7 @@ export function ClientsPageClient() {
         >
           <DialogContent className="bg-(--surface-base) border-(--border-default) max-w-[420px] rounded">
             <DialogHeader>
-              <DialogTitle className="font-display text-[18px] font-bold text-(--ink-900) tracking-[-0.02em]">
+              <DialogTitle className="font-display text-[18px] font-bold text-(--ink-900) tracking-h3">
                 Delete client?
               </DialogTitle>
               <DialogDescription className="font-body text-[14px] text-(--ink-400) leading-[1.5] mt-[6px]">

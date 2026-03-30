@@ -110,7 +110,7 @@ function DueDateCell({ dueDate, status }: { dueDate: string; status: InvoiceList
 const columnHelper = createColumnHelper<InvoiceListItem>()
 
 const thClassName =
-  'text-(--ink-400) font-display text-[11px] font-semibold tracking-[0.08em] uppercase py-3'
+  'text-(--ink-400) font-display text-[11px] font-semibold tracking-mono uppercase py-3'
 
 export function InvoicesTable({ invoices, isPending, onDuplicate, onDelete }: InvoicesTableProps) {
   const router = useRouter()
@@ -134,7 +134,7 @@ export function InvoicesTable({ invoices, isPending, onDuplicate, onDelete }: In
         const client = info.getValue()
         return (
           <div>
-            <p className="font-display text-[14px] font-semibold text-(--ink-900) tracking-[-0.01em] leading-[1.3]">
+            <p className="font-display text-[14px] font-semibold text-(--ink-900) tracking-tight-xs leading-[1.3]">
               {client.name}
             </p>
             {client.company && (

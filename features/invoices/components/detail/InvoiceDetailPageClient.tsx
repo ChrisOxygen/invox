@@ -42,7 +42,7 @@ function NotFound() {
       <div className="w-12 h-12 rounded flex items-center justify-center mb-(--s4) bg-(--surface-overlay)">
         <FileX className="h-6 w-6 text-(--ink-300)" />
       </div>
-      <h2 className="text-xl font-bold mb-2 text-(--ink-900) font-display tracking-[-0.025em]">
+      <h2 className="text-xl font-bold mb-2 text-(--ink-900) font-display tracking-h2">
         Invoice not found
       </h2>
       <p className="text-sm mb-(--s6) text-center max-w-xs text-(--ink-400) font-body">

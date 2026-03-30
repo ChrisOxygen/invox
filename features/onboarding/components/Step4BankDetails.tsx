@@ -36,7 +36,7 @@ export function Step4BankDetails() {
     <div className="flex flex-col gap-6">
       {/* Header */}
       <div className="flex flex-col gap-2">
-        <h2 className="font-display font-extrabold text-[24px] text-(--ink-900) tracking-[-0.02em]">
+        <h2 className="font-display font-extrabold text-[24px] text-(--ink-900) tracking-h3">
           Add your bank details
         </h2>
         <p className="font-body text-[14px] text-(--ink-400)">
@@ -56,7 +56,7 @@ export function Step4BankDetails() {
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
         {/* Bank name */}
         <div className="flex flex-col gap-1.5">
-          <Label className="font-display font-semibold uppercase text-[12px] text-(--ink-700) tracking-[0.06em]">
+          <Label className="font-display font-semibold uppercase text-[12px] text-(--ink-700) tracking-label">
             Bank Name
           </Label>
           <Input {...register('bankName')} placeholder="Guaranty Trust Bank" className="font-body h-11 rounded-md px-3.5 text-[14px]" />
@@ -64,7 +64,7 @@ export function Step4BankDetails() {
 
         {/* Account name */}
         <div className="flex flex-col gap-1.5">
-          <Label className="font-display font-semibold uppercase text-[12px] text-(--ink-700) tracking-[0.06em]">
+          <Label className="font-display font-semibold uppercase text-[12px] text-(--ink-700) tracking-label">
             Account Name
           </Label>
           <Input {...register('accountName')} placeholder="Chidi Okeke Design Studio" className="font-body h-11 rounded-md px-3.5 text-[14px]" />
@@ -72,7 +72,7 @@ export function Step4BankDetails() {
 
         {/* Account number */}
         <div className="flex flex-col gap-1.5">
-          <Label className="font-display font-semibold uppercase text-[12px] text-(--ink-700) tracking-[0.06em]">
+          <Label className="font-display font-semibold uppercase text-[12px] text-(--ink-700) tracking-label">
             Account Number
           </Label>
           <Input {...register('accountNumber')} placeholder="0123456789" inputMode="numeric" maxLength={10} className="font-mono h-11 rounded-md px-3.5 text-[14px]" />

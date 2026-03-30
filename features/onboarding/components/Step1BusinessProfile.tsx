@@ -115,7 +115,7 @@ export function Step1BusinessProfile() {
   return (
     <div>
       {/* Heading block */}
-      <h1 className="text-[24px] font-extrabold leading-[1.2] tracking-[-0.025em] text-(--ink-900) font-display">
+      <h1 className="text-[24px] font-extrabold leading-[1.2] tracking-h2 text-(--ink-900) font-display">
         Tell us about your business
       </h1>
       <p className="mt-1.5 text-[14px] text-(--ink-400) font-body">
@@ -206,7 +206,7 @@ export function Step1BusinessProfile() {
         <div className="mt-6 flex flex-col gap-1.5">
           <label
             htmlFor="businessName"
-            className="text-[12px] font-semibold uppercase tracking-[0.06em] text-(--ink-700) font-display"
+            className="text-[12px] font-semibold uppercase tracking-label text-(--ink-700) font-display"
           >
             Business name
           </label>

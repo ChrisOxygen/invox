@@ -6,7 +6,7 @@ import type { InvoiceDetail } from '../../types'
 import { formatCurrency, formatDate } from '@/shared/lib/utils'
 
 const thClassName =
-  'font-display text-[11px] font-bold tracking-[0.08em] uppercase text-(--ink-400) pb-2'
+  'font-display text-[11px] font-bold tracking-mono uppercase text-(--ink-400) pb-2'
 
 export type InvoiceInfoCardProps = {
   invoice: InvoiceDetail
@@ -20,10 +20,10 @@ export function InvoiceInfoCard({ invoice }: InvoiceInfoCardProps) {
       {/* ── Invoice header ── */}
       <div className="px-(--s5) py-(--s5) border-b border-(--border-default) flex flex-col sm:flex-row sm:items-center sm:justify-between gap-(--s3)">
         <div>
-          <p className="font-body text-[11px] font-semibold tracking-[0.08em] uppercase text-(--ink-300) mb-1">
+          <p className="font-body text-[11px] font-semibold tracking-mono uppercase text-(--ink-300) mb-1">
             Invoice
           </p>
-          <span className="font-mono text-[22px] text-(--blue-600) tracking-[-0.03em]">
+          <span className="font-mono text-[22px] text-(--blue-600) tracking-snug">
             {invoice.invoiceNumber}
           </span>
         </div>
@@ -33,7 +33,7 @@ export function InvoiceInfoCard({ invoice }: InvoiceInfoCardProps) {
       {/* ── Dates ── */}
       <div className="grid grid-cols-2 divide-x px-(--s5) py-(--s4) border-b border-(--border-default)">
         <div className="pr-(--s5)">
-          <p className="font-display text-[11px] font-bold tracking-[0.08em] uppercase text-(--ink-400) mb-1">
+          <p className="font-display text-[11px] font-bold tracking-mono uppercase text-(--ink-400) mb-1">
             Issued
           </p>
           <p className="font-body text-[14px] text-(--ink-900)">
@@ -41,7 +41,7 @@ export function InvoiceInfoCard({ invoice }: InvoiceInfoCardProps) {
           </p>
         </div>
         <div className="pl-(--s5)">
-          <p className="font-display text-[11px] font-bold tracking-[0.08em] uppercase text-(--ink-400) mb-1">
+          <p className="font-display text-[11px] font-bold tracking-mono uppercase text-(--ink-400) mb-1">
             Due
           </p>
           <p
@@ -54,10 +54,10 @@ export function InvoiceInfoCard({ invoice }: InvoiceInfoCardProps) {
 
       {/* ── Bill To ── */}
       <div className="px-(--s5) py-(--s4) border-b border-(--border-default)">
-        <p className="font-display text-[11px] font-bold tracking-[0.08em] uppercase text-(--ink-400) mb-2">
+        <p className="font-display text-[11px] font-bold tracking-mono uppercase text-(--ink-400) mb-2">
           Bill To
         </p>
-        <p className="font-display text-[15px] font-bold text-(--ink-900) tracking-[-0.02em]">
+        <p className="font-display text-[15px] font-bold text-(--ink-900) tracking-h3">
           {client.name}
         </p>
         {client.company && (
@@ -164,10 +164,10 @@ export function InvoiceInfoCard({ invoice }: InvoiceInfoCardProps) {
 
           {/* Total */}
           <div className="flex items-center gap-(--s8) min-w-55 justify-between">
-            <span className="font-display text-[15px] font-bold text-(--ink-900) tracking-[-0.02em]">
+            <span className="font-display text-[15px] font-bold text-(--ink-900) tracking-h3">
               Total
             </span>
-            <span className="font-mono text-[20px] text-(--ink-900) tracking-[-0.03em]">
+            <span className="font-mono text-[20px] text-(--ink-900) tracking-snug">
               {formatCurrency(invoice.total, invoice.currency)}
             </span>
           </div>
@@ -177,7 +177,7 @@ export function InvoiceInfoCard({ invoice }: InvoiceInfoCardProps) {
       {/* ── Notes ── */}
       {invoice.notes && (
         <div className="px-(--s5) py-(--s4) border-t border-(--border-default) bg-(--surface-raised)">
-          <p className="font-display text-[11px] font-bold tracking-[0.08em] uppercase text-(--ink-400) mb-1.5">
+          <p className="font-display text-[11px] font-bold tracking-mono uppercase text-(--ink-400) mb-1.5">
             Notes
           </p>
           <p className="font-body text-[13px] text-(--ink-400) whitespace-pre-wrap">

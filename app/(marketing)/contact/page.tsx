@@ -87,7 +87,7 @@ export default function ContactPage() {
               </RevealOnScroll>
 
               <RevealOnScroll delay={100}>
-                <h1 className="font-display font-extrabold text-4xl sm:text-5xl lg:text-[3.5rem] leading-[1.05] tracking-[-0.04em] text-(--ink-900)">
+                <h1 className="font-display font-extrabold text-4xl sm:text-5xl lg:text-[3.5rem] leading-[1.05] tracking-display text-(--ink-900)">
                   Let&apos;s have a{" "}
                   <span className="text-(--blue-600) italic">
                     real conversation.
@@ -142,7 +142,7 @@ export default function ContactPage() {
               {/* Contact channels — numbered directory */}
               <RevealOnScroll>
                 <div className="flex flex-col">
-                  <span className="text-[10px] font-semibold text-(--ink-300) uppercase tracking-[0.08em] font-display mb-5">
+                  <span className="text-[10px] font-semibold text-(--ink-300) uppercase tracking-mono font-display mb-5">
                     Reach us directly
                   </span>
                   {CONTACT_CHANNELS.map(
@@ -161,7 +161,7 @@ export default function ContactPage() {
                               className="w-3.5 h-3.5 text-(--blue-500) shrink-0"
                               strokeWidth={1.5}
                             />
-                            <span className="text-sm font-semibold text-(--ink-900) font-display tracking-[-0.01em]">
+                            <span className="text-sm font-semibold text-(--ink-900) font-display tracking-tight-xs">
                               {label}
                             </span>
                           </div>
@@ -185,7 +185,7 @@ export default function ContactPage() {
               {/* What to expect — numbered steps */}
               <RevealOnScroll delay={100}>
                 <div className="flex flex-col -mx-3 gap-4 p-5 bg-(--surface-base) border border-(--border-default)">
-                  <span className="text-[10px] font-semibold text-(--ink-300) uppercase tracking-[0.08em] font-display">
+                  <span className="text-[10px] font-semibold text-(--ink-300) uppercase tracking-mono font-display">
                     What happens next
                   </span>
                   <div className="flex flex-col gap-3.5">

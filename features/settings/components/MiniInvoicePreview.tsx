@@ -77,8 +77,8 @@ export function MiniInvoicePreview({
 
         {/* Line items header */}
         <div className="flex items-center justify-between">
-          <span className="text-[10px] font-semibold uppercase tracking-[0.06em] text-(--ink-300) font-display">Description</span>
-          <span className="text-[10px] font-semibold uppercase tracking-[0.06em] text-(--ink-300) font-display">Amount</span>
+          <span className="text-[10px] font-semibold uppercase tracking-label text-(--ink-300) font-display">Description</span>
+          <span className="text-[10px] font-semibold uppercase tracking-label text-(--ink-300) font-display">Amount</span>
         </div>
 
         {/* Line items */}
@@ -119,7 +119,7 @@ export function MiniInvoicePreview({
           className="rounded border px-4 py-3 mt-1"
           style={{ borderColor: `${color}30`, backgroundColor: `${color}08` }}
         >
-          <p className="text-[10px] font-semibold uppercase tracking-[0.06em] font-display" style={{ color }}>
+          <p className="text-[10px] font-semibold uppercase tracking-label font-display" style={{ color }}>
             Payment Details
           </p>
           <p className="text-[11px] text-(--ink-400) font-body mt-1">

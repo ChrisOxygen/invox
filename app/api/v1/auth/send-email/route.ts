@@ -74,7 +74,8 @@ export async function POST(request: Request) {
   const { email_action_type, token_hash, redirect_to, site_url } = email_data
 
   // URL-encode redirect_to so special chars (?, &, etc.) don't corrupt the URL
-  const actionUrl = `${site_url}/auth/v1/verify?token=${token_hash}&type=${email_action_type}&redirect_to=${encodeURIComponent(redirect_to)}`
+  // site_url from the hook payload is already "https://<project>.supabase.co/auth/v1"
+  const actionUrl = `${site_url}/verify?token=${token_hash}&type=${email_action_type}&redirect_to=${encodeURIComponent(redirect_to)}`
 
   const name = user.user_metadata?.full_name?.split(' ')[0] ?? 'there'
 

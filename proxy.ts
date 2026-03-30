@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createMiddlewareClient } from '@/shared/lib/supabase/middleware'
 
 const PROTECTED_ROUTES = ['/dashboard', '/invoices', '/clients', '/settings', '/onboarding']
-const AUTH_ROUTES = ['/login', '/register', '/forgot-password', '/reset-password']
+const AUTH_ROUTES = ['/login', '/register', '/forgot-password']
 
 export async function proxy(request: NextRequest) {
   const { supabase, supabaseResponse } = createMiddlewareClient(request)

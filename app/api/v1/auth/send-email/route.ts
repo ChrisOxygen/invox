@@ -52,11 +52,16 @@ export async function POST(request: Request) {
   }
 
   const authHeader = request.headers.get('authorization')
-  const secret = authHeader?.replace('Bearer ', '')
+  const secret = authHeader?.replace(/^Bearer\s+/i, '')
 
   if (!secret || secret !== configuredSecret) {
     // Log the mismatch but return 200 — a non-200 here causes Supabase retries
-    console.warn('[auth/send-email] Invalid hook secret — skipping email send')
+    console.warn('[auth/send-email] Invalid hook secret — skipping email send', {
+      hasAuthHeader: !!authHeader,
+      authHeaderPrefix: authHeader?.slice(0, 20),
+      secretLength: secret?.length,
+      configuredLength: configuredSecret.length,
+    })
     return NextResponse.json({ success: false })
   }
 

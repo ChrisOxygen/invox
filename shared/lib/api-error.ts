@@ -44,3 +44,15 @@ export class ForbiddenError extends AppError {
     super('forbidden', message, 403)
   }
 }
+
+export class ValidationError extends AppError {
+  constructor(message = 'Validation error') {
+    super('validation_error', message, 422)
+  }
+}
+
+/** Extracts a user-facing message from any thrown value */
+export function toErrorMessage(err: unknown, fallback = 'Something went wrong'): string {
+  if (err instanceof Error) return err.message
+  return fallback
+}

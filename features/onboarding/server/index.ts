@@ -3,7 +3,7 @@
 import { createClient } from '@/shared/lib/supabase/server'
 import { prisma } from '@/shared/lib/prisma'
 import { redirect } from 'next/navigation'
-import { UnauthorizedError, toErrorMessage } from '@/shared/lib/errors'
+import { UnauthorizedError, toErrorMessage } from '@/shared/lib/api-error'
 
 export async function _saveOnboardingStep(data: {
   businessName?: string

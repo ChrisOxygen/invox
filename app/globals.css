@@ -175,6 +175,12 @@
   background-color: var(--ink-200);
 }
 
+@media print {
+  .no-print { display: none !important; }
+  body { background: white !important; }
+  .invoice-card { box-shadow: none !important; border: none !important; }
+}
+
 [data-slot="scroll-area-thumb"]:hover {
   background-color: var(--ink-300);
 }

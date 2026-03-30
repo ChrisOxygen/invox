@@ -33,9 +33,11 @@ export function LoginForm() {
 
   async function onSubmit(data: ZLogin) {
     setServerError(null)
-    const result = await _signIn(data.email, data.password)
-    if (result?.error) {
-      setServerError(result.error)
+    try {
+      const result = await _signIn(data.email, data.password)
+      if (result?.error) setServerError(result.error)
+    } catch {
+      setServerError('Connection problem. Please check your internet and try again.')
     }
   }
 

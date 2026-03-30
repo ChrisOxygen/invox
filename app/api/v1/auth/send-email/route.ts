@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server'
+import { Webhook } from 'standardwebhooks'
 import { resend } from '@/shared/lib/resend'
 import { env } from '@/shared/lib/env'
 import { VerifyEmail } from '@/emails/VerifyEmail'
@@ -10,7 +11,9 @@ import { ResetPasswordEmail } from '@/emails/ResetPasswordEmail'
  * Supabase POSTs here instead of sending its own emails.
  * Configured in: Supabase Dashboard → Authentication → Hooks → Send Email
  *
- * Security: verified via Authorization: Bearer <SUPABASE_HOOK_SECRET>
+ * Security: verified via Standard Webhooks (webhook-id, webhook-timestamp, webhook-signature headers).
+ * The hook secret in the Supabase dashboard has the format: v1,whsec_<base64>
+ * Strip the "v1,whsec_" prefix — the Webhook class expects only the base64 portion.
  *
  * IMPORTANT: This endpoint always returns 200. Non-200 responses cause Supabase
  * to retry the hook, which can block auth flows or trigger duplicate emails.
@@ -51,25 +54,19 @@ export async function POST(request: Request) {
     return NextResponse.json({ success: false })
   }
 
-  const authHeader = request.headers.get('authorization')
-  const secret = authHeader?.replace(/^Bearer\s+/i, '')
+  // Supabase uses Standard Webhooks — read the raw body for signature verification
+  const rawBody = await request.text()
+  const headers = Object.fromEntries(request.headers)
 
-  if (!secret || secret !== configuredSecret) {
-    // Log the mismatch but return 200 — a non-200 here causes Supabase retries
-    console.warn('[auth/send-email] Invalid hook secret — skipping email send', {
-      hasAuthHeader: !!authHeader,
-      authHeaderPrefix: authHeader?.slice(0, 20),
-      secretLength: secret?.length,
-      configuredLength: configuredSecret.length,
-    })
-    return NextResponse.json({ success: false })
-  }
+  // The secret from Supabase dashboard is "v1,whsec_<base64>" — strip the prefix
+  const base64Secret = configuredSecret.replace(/^v1,whsec_/, '')
+  const wh = new Webhook(base64Secret)
 
   let payload: HookPayload
   try {
-    payload = await request.json()
-  } catch {
-    console.error('[auth/send-email] Invalid JSON payload')
+    payload = wh.verify(rawBody, headers) as HookPayload
+  } catch (err) {
+    console.warn('[auth/send-email] Webhook signature verification failed:', err)
     return NextResponse.json({ success: false })
   }
 
@@ -87,7 +84,6 @@ export async function POST(request: Request) {
         from: env.RESEND_FROM_EMAIL,
         to: user.email,
         subject: 'Confirm your email to activate your Invox account',
-        // Use react prop directly — Resend renders it server-side (no manual render() needed)
         react: VerifyEmail({ name, verificationUrl: actionUrl }),
         text: [
           `Hi ${name},`,

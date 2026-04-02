@@ -4,7 +4,6 @@ import { useState } from "react";
 import Link from "next/link";
 import { ArrowLeft, FileX } from "lucide-react";
 import { Skeleton } from "@/shared/components/ui/skeleton";
-import { ScrollArea } from "@/shared/components/ui/scroll-area";
 import { useInvoice } from "../../hooks/use-invoice";
 import { ActionsToolbar } from "./ActionsToolbar";
 import { InvoiceInfoCard } from "./InvoiceInfoCard";
@@ -68,8 +67,7 @@ export function InvoiceDetailPageClient({ id }: { id: string }) {
   if (isError || !invoice) return <NotFound />;
 
   return (
-    <ScrollArea className="h-[calc(100vh-90px)]">
-      <div className="space-y-(--s5) py-4 pr-4">
+    <div className="space-y-(--s5) px-4 py-4 md:px-6">
         {/* Actions toolbar */}
         <div className="rounded border px-(--s5) py-(--s4) bg-(--surface-base) border-(--border-default)">
           <ActionsToolbar
@@ -100,7 +98,6 @@ export function InvoiceDetailPageClient({ id }: { id: string }) {
           onOpenChange={setMarkPaidOpen}
           invoice={invoice}
         />
-      </div>
-    </ScrollArea>
+    </div>
   );
 }

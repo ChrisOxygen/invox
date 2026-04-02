@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { Building2, Palette, FileText, ShieldCheck } from "lucide-react";
 import { Skeleton } from "@/shared/components/ui/skeleton";
-import { ScrollArea } from "@/shared/components/ui/scroll-area";
 import { useProfile } from "@/features/settings/hooks/use-profile";
 import { BusinessInfoForm } from "./BusinessInfoForm";
 import { BrandingForm } from "./BrandingForm";
@@ -79,8 +78,7 @@ export function SettingsPageClient() {
   if (!profile) return null;
 
   return (
-    <ScrollArea className="h-[calc(100vh-90px)]">
-      <div className="flex gap-6 items-start pr-4 py-4">
+    <div className="flex gap-6 items-start px-4 py-4 md:px-6">
         {/* ── Sidebar nav ── */}
         <nav className="w-52 shrink-0 flex flex-col gap-1">
           {NAV.map(({ id, label, hint, icon: Icon }) => {
@@ -158,8 +156,7 @@ export function SettingsPageClient() {
 
           {active === "account" && <AccountTab />}
         </div>
-      </div>
-    </ScrollArea>
+    </div>
   );
 }
 

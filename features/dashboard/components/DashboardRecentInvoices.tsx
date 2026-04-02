@@ -1,27 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { format, parseISO } from "date-fns";
-import {
-  useReactTable,
-  getCoreRowModel,
-  flexRender,
-  createColumnHelper,
-} from "@tanstack/react-table";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/shared/components/ui/table";
+import { Eye } from "lucide-react";
 import { Skeleton } from "@/shared/components/ui/skeleton";
-import { formatCurrency } from "@/shared/lib/utils";
+import { cn, formatCurrency } from "@/shared/lib/utils";
+import { buttonVariants } from "@/shared/components/ui/button";
 import { InvoiceStatusBadge } from "@/features/invoices/components/list/InvoiceStatusBadge";
 import type { RecentInvoice } from "../server/_get-dashboard-stats";
-import type { InvoiceStatus } from "@/prisma/generated/client/enums";
 
 interface DashboardRecentInvoicesProps {
   invoices: RecentInvoice[];
@@ -36,49 +22,96 @@ function formatDisplayDate(iso: string): string {
   }
 }
 
-function DueDateCell({
-  dueDate,
-  status,
-}: {
-  dueDate: string;
-  status: InvoiceStatus;
-}) {
-  const isOverdue = status === "OVERDUE";
+function SkeletonCards() {
   return (
-    <span className={`font-body text-[13px] ${isOverdue ? "text-(--error)" : "text-(--ink-400)"}`}>
-      {formatDisplayDate(dueDate)}
-    </span>
+    <div className="space-y-3">
+      {Array.from({ length: 5 }).map((_, i) => (
+        <div
+          key={i}
+          className="bg-(--surface-base) border border-(--border-default) rounded-xl p-4 space-y-3"
+        >
+          <div className="flex items-center justify-between">
+            <Skeleton className="h-3.5 w-28" />
+            <Skeleton className="h-5 w-16 rounded-full" />
+          </div>
+          <div className="space-y-1.5">
+            <Skeleton className="h-4 w-36" />
+            <Skeleton className="h-3 w-24" />
+          </div>
+          <Skeleton className="h-6 w-32" />
+          <div className="flex items-center justify-between pt-1 border-t border-(--border-default)">
+            <div className="space-y-1">
+              <Skeleton className="h-2.5 w-8" />
+              <Skeleton className="h-3.5 w-20" />
+            </div>
+            <Skeleton className="h-8 w-20 rounded" />
+          </div>
+        </div>
+      ))}
+    </div>
   );
 }
 
-const columnHelper = createColumnHelper<RecentInvoice>();
+function InvoiceCard({ invoice }: { invoice: RecentInvoice }) {
+  const isOverdue = invoice.status === "OVERDUE";
 
-const thClassName =
-  "text-(--ink-400) font-display text-[11px] font-semibold tracking-mono uppercase py-3";
-
-function SkeletonRows() {
   return (
-    <>
-      {Array.from({ length: 5 }).map((_, i) => (
-        <TableRow key={i} className="border-b border-(--border-default)">
-          <TableCell>
-            <Skeleton className="h-3.5 w-24" />
-          </TableCell>
-          <TableCell>
-            <Skeleton className="h-3.5 w-28" />
-          </TableCell>
-          <TableCell>
-            <Skeleton className="h-3.5 w-20" />
-          </TableCell>
-          <TableCell className="text-right">
-            <Skeleton className="h-3.5 w-20 ml-auto" />
-          </TableCell>
-          <TableCell>
-            <Skeleton className="h-5 w-14 rounded-full" />
-          </TableCell>
-        </TableRow>
-      ))}
-    </>
+    <div className="bg-(--surface-base) border border-(--border-default) rounded-xl p-4 space-y-3">
+      {/* Top: invoice # + status */}
+      <div className="flex items-center justify-between gap-2">
+        <Link
+          href={`/invoices/${invoice.id}`}
+          className="font-mono text-[13px] font-medium text-(--blue-600) no-underline shrink-0"
+        >
+          {invoice.invoiceNumber}
+        </Link>
+        <InvoiceStatusBadge status={invoice.status} size="sm" />
+      </div>
+
+      {/* Client */}
+      <div>
+        <p className="font-display text-[15px] font-semibold text-(--ink-900) tracking-tight leading-[1.3]">
+          {invoice.client.name}
+        </p>
+        {invoice.client.company && (
+          <p className="font-body text-[12px] text-(--ink-400) mt-0.5 leading-[1.2]">
+            {invoice.client.company}
+          </p>
+        )}
+      </div>
+
+      {/* Amount */}
+      <p
+        className="font-mono text-[22px] font-medium text-(--ink-900)"
+        style={{ fontFamily: "var(--font-mono)" }}
+      >
+        {formatCurrency(invoice.total, invoice.currency)}
+      </p>
+
+      {/* Footer: due date + view */}
+      <div className="flex items-end justify-between pt-3 border-t border-(--border-default)">
+        <div>
+          <p className="font-display text-[10px] font-semibold text-(--ink-300) uppercase tracking-widest mb-0.5">
+            Due
+          </p>
+          <span
+            className={`font-body text-[13px] ${isOverdue ? "text-(--error)" : "text-(--ink-400)"}`}
+          >
+            {formatDisplayDate(invoice.dueDate)}
+          </span>
+        </div>
+        <Link
+          href={`/invoices/${invoice.id}`}
+          className={cn(
+            buttonVariants({ variant: "outline", size: "sm" }),
+            "font-display font-semibold text-[12px] border-(--border-default) text-(--ink-700) rounded h-8 shrink-0 no-underline",
+          )}
+        >
+          <Eye className="h-3.5 w-3.5 mr-1.5" />
+          View
+        </Link>
+      </div>
+    </div>
   );
 }
 
@@ -86,118 +119,21 @@ export function DashboardRecentInvoices({
   invoices,
   isPending,
 }: DashboardRecentInvoicesProps) {
-  const router = useRouter();
+  if (isPending) return <SkeletonCards />;
 
-  const columns = [
-    columnHelper.accessor("invoiceNumber", {
-      header: "Invoice #",
-      cell: (info) => (
-        <Link
-          href={`/invoices/${info.row.original.id}`}
-          onClick={(e) => e.stopPropagation()}
-          className="font-mono text-[13px] font-medium text-(--blue-600) no-underline"
-        >
-          {info.getValue()}
-        </Link>
-      ),
-    }),
-    columnHelper.accessor("client", {
-      header: "Client",
-      cell: (info) => {
-        const client = info.getValue();
-        return (
-          <div>
-            <p className="font-display text-[14px] font-semibold text-(--ink-900) tracking-tight-xs leading-[1.3]">
-              {client.name}
-            </p>
-            {client.company && (
-              <p className="font-body text-[12px] text-(--ink-400) mt-0.5 leading-[1.2]">
-                {client.company}
-              </p>
-            )}
-          </div>
-        );
-      },
-    }),
-    columnHelper.accessor("dueDate", {
-      header: "Due Date",
-      cell: (info) => (
-        <DueDateCell
-          dueDate={info.getValue()}
-          status={info.row.original.status}
-        />
-      ),
-    }),
-    columnHelper.accessor("total", {
-      header: "Amount",
-      cell: (info) => (
-        <span className="font-mono text-[13px] font-medium text-(--ink-900)">
-          {formatCurrency(info.getValue(), info.row.original.currency)}
-        </span>
-      ),
-    }),
-    columnHelper.accessor("status", {
-      header: "Status",
-      cell: (info) => <InvoiceStatusBadge status={info.getValue()} size="sm" />,
-    }),
-  ];
-
-  const table = useReactTable({
-    data: invoices,
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-  });
+  if (invoices.length === 0) {
+    return (
+      <div className="bg-(--surface-base) border border-(--border-default) rounded-xl py-10 text-center">
+        <p className="font-body text-[13px] text-(--ink-300)">No invoices yet</p>
+      </div>
+    );
+  }
 
   return (
-    <div className="bg-(--surface-base) border border-(--border-default) rounded overflow-hidden">
-      <Table>
-        <TableHeader>
-          <TableRow className="bg-(--surface-raised) border-b border-(--border-default)">
-            {table.getHeaderGroups().map((hg) =>
-              hg.headers.map((header) => (
-                <TableHead key={header.id} className={thClassName}>
-                  {header.isPlaceholder
-                    ? null
-                    : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext(),
-                      )}
-                </TableHead>
-              )),
-            )}
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {isPending ? (
-            <SkeletonRows />
-          ) : invoices.length === 0 ? (
-            <TableRow>
-              <TableCell colSpan={5} className="text-center py-[40px]">
-                <p className="font-body text-[13px] text-(--ink-300)">
-                  No invoices yet
-                </p>
-              </TableCell>
-            </TableRow>
-          ) : (
-            table.getRowModel().rows.map((row, idx) => (
-                <TableRow
-                  key={row.id}
-                  className="group cursor-pointer transition-colors duration-100 hover:bg-(--surface-raised) [&:not(:last-child)]:border-b [&:not(:last-child)]:border-(--border-default)"
-                  onClick={() => router.push(`/invoices/${row.original.id}`)}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext(),
-                      )}
-                    </TableCell>
-                  ))}
-                </TableRow>
-            ))
-          )}
-        </TableBody>
-      </Table>
+    <div className="space-y-3">
+      {invoices.map((invoice) => (
+        <InvoiceCard key={invoice.id} invoice={invoice} />
+      ))}
     </div>
   );
 }

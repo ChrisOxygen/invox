@@ -5,7 +5,6 @@ import Link from "next/link";
 import { Plus, FileText } from "lucide-react";
 import { buttonVariants } from "@/shared/components/ui/button";
 import { Skeleton } from "@/shared/components/ui/skeleton";
-import { ScrollArea } from "@/shared/components/ui/scroll-area";
 import { useDashboardStats } from "../hooks/use-dashboard-stats";
 import { StatsCards } from "./StatsCards";
 import { DashboardRecentInvoices } from "./DashboardRecentInvoices";
@@ -60,8 +59,7 @@ export function DashboardPageClient() {
   const isEmpty = !isPending && (stats?.totalInvoices ?? 0) === 0;
 
   return (
-    <ScrollArea className="h-[calc(100vh-90px)]">
-      <div className="flex flex-col gap-(--s6) py-5 pr-4">
+    <div className="flex flex-col gap-(--s6) px-4 py-5 md:px-6">
         {/* Page header */}
 
         {/* Stats cards */}
@@ -126,7 +124,6 @@ export function DashboardPageClient() {
             </div>
           </>
         )}
-      </div>
-    </ScrollArea>
+    </div>
   );
 }

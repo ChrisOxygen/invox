@@ -14,7 +14,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/shared/components/ui/dialog";
-import { ScrollArea } from "@/shared/components/ui/scroll-area";
 import { useInvoices } from "../../hooks/use-invoices";
 import type { InvoiceFilters } from "../../types";
 import { InvoiceFilters as InvoiceFiltersComponent } from "./InvoiceFilters";
@@ -121,8 +120,7 @@ export function InvoicesPageClient() {
   const endAt = Math.min(page * PAGE_SIZE, total);
 
   return (
-    <ScrollArea className="h-[calc(100vh-90px)]">
-      <div className=" pr-4">
+    <div className="flex flex-col flex-1 px-4 py-5 md:px-6 md:py-6">
         {/* Filters */}
         <div className="mb-5">
           <InvoiceFiltersComponent
@@ -240,7 +238,6 @@ export function InvoicesPageClient() {
             </DialogFooter>
           </DialogContent>
         </Dialog>
-      </div>
-    </ScrollArea>
+    </div>
   );
 }

@@ -12,7 +12,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/shared/components/ui/dialog";
-import { ScrollArea } from "@/shared/components/ui/scroll-area";
 import { useClients } from "../../hooks/use-clients";
 import { useDeleteClient } from "../../hooks/use-delete-client";
 import type { ClientWithStats } from "../../types";
@@ -77,8 +76,7 @@ export function ClientsPageClient() {
   const isEmpty = !isPending && clients.length === 0;
 
   return (
-    <ScrollArea className="h-[calc(100vh-90px)]">
-      <div className="pr-4 py-4">
+    <div className="px-4 py-4 md:px-6">
         {/* Filters */}
         <div className="mb-4">
           <ClientFilters
@@ -200,7 +198,6 @@ export function ClientsPageClient() {
             </DialogFooter>
           </DialogContent>
         </Dialog>
-      </div>
-    </ScrollArea>
+    </div>
   );
 }

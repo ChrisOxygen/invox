@@ -6,7 +6,6 @@ import { ArrowLeft } from "lucide-react";
 import { InvoiceStatusBadge } from "@/features/invoices/components/list/InvoiceStatusBadge";
 import { InvoiceInfoCard } from "@/features/invoices/components/detail/InvoiceInfoCard";
 import type { InvoiceDetail } from "@/features/invoices/types";
-import { ScrollArea } from "@/shared/components/ui/scroll-area";
 
 // dynamic imports must live in a Client Component
 const PDFPreview = dynamic(
@@ -49,8 +48,7 @@ export function InvoicePreviewPageClient({
       <style>{`
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
       `}</style>
-      <ScrollArea className="h-[calc(100vh-90px)]">
-        <div className="flex flex-col h-full min-h-0 pr-4 py-4">
+      <div className="flex flex-col min-h-0 px-4 py-4 md:px-6">
           {/* ── Top bar ──────────────────────────────────────────────── */}
           <div className="flex items-center justify-between gap-(--s3) pb-(--s4) border-b border-(--border-default) mb-(--s5) flex-wrap">
             <div className="flex items-center gap-(--s3)">
@@ -90,8 +88,7 @@ export function InvoicePreviewPageClient({
               <PDFPreview invoice={invoice} />
             </div>
           </div>
-        </div>
-      </ScrollArea>
+      </div>
 
       <style>{`
         @media (max-width: 768px) {

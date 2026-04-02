@@ -15,7 +15,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/shared/components/ui/dialog";
-import { ScrollArea } from "@/shared/components/ui/scroll-area";
 import { useClient } from "../../hooks/use-client";
 import { useDeleteClient } from "../../hooks/use-delete-client";
 import { ClientSheet } from "../ClientSheet";
@@ -91,8 +90,7 @@ export function ClientDetailPageClient({ id }: { id: string }) {
   if (isError || !client) return <NotFound />;
 
   return (
-    <ScrollArea className="h-[calc(100vh-90px)]">
-      <div className="space-y-(--s6) p-(--s6)">
+    <div className="space-y-(--s6) p-(--s6)">
       {/* Top bar */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-(--s4)">
         <div className="flex items-center gap-(--s3)">
@@ -204,7 +202,6 @@ export function ClientDetailPageClient({ id }: { id: string }) {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-      </div>
-    </ScrollArea>
+    </div>
   );
 }

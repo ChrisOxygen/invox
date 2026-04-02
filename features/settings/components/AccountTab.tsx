@@ -64,7 +64,7 @@ function ChangePasswordSection() {
   return (
     <div className="rounded border border-(--border-default) bg-(--surface-base) overflow-hidden">
       {/* Header */}
-      <div className="flex items-center gap-3 border-b border-(--border-default) px-6 py-5">
+      <div className="flex items-center gap-3 border-b border-(--border-default) px-4 py-4 md:px-6 md:py-5">
         <div className="flex h-8 w-8 items-center justify-center rounded bg-(--surface-overlay) border border-(--border-default) shrink-0">
           <KeyRound className="h-4 w-4 text-(--ink-500)" />
         </div>
@@ -80,7 +80,7 @@ function ChangePasswordSection() {
 
       {/* Form body */}
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
-        <div className="px-6 py-6 flex flex-col gap-4">
+        <div className="px-4 py-4 md:px-6 md:py-6 flex flex-col gap-4">
 
           <div className="flex flex-col gap-1.5">
             <label htmlFor="currentPassword" className={labelClass}>Current Password</label>
@@ -152,11 +152,11 @@ function ChangePasswordSection() {
         </div>
 
         {/* Footer */}
-        <div className="flex justify-end border-t border-(--border-default) px-6 py-4">
+        <div className="flex justify-end border-t border-(--border-default) px-4 py-4 md:px-6">
           <button
             type="submit"
             disabled={isPending}
-            className="flex h-9 items-center justify-center gap-2 rounded bg-(--blue-600) px-5 text-[13px] font-semibold text-white transition-colors duration-200 hover:bg-(--blue-700) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--blue-600) focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 font-display"
+            className="flex h-9 w-full sm:w-auto items-center justify-center gap-2 rounded bg-(--blue-600) px-5 text-[13px] font-semibold text-white transition-colors duration-200 hover:bg-(--blue-700) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--blue-600) focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 font-display"
           >
             {isPending && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
             Update password
@@ -186,7 +186,7 @@ function DeleteAccountSection() {
       {/* Red top bar */}
       <div className="h-1 w-full bg-(--error)" />
 
-      <div className="px-6 py-5 flex items-start gap-4">
+      <div className="px-4 py-4 md:px-6 md:py-5 flex items-start gap-4">
         <div className="flex h-8 w-8 items-center justify-center rounded bg-(--error)/10 border border-(--error)/20 shrink-0 mt-0.5">
           <TriangleAlert className="h-4 w-4 text-(--error)" />
         </div>

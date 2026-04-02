@@ -71,7 +71,7 @@ export function BrandingForm({ defaultValues, businessName }: BrandingFormProps)
             type="button"
             onClick={handleSave}
             disabled={isPending}
-            className="flex h-9 items-center justify-center gap-2 rounded bg-(--blue-600) px-5 text-[13px] font-semibold text-white transition-colors duration-200 hover:bg-(--blue-700) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--blue-600) focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 font-display"
+            className="flex h-9 w-full sm:w-auto items-center justify-center gap-2 rounded bg-(--blue-600) px-5 text-[13px] font-semibold text-white transition-colors duration-200 hover:bg-(--blue-700) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--blue-600) focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 font-display"
           >
             {isPending && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
             Save changes
@@ -80,10 +80,8 @@ export function BrandingForm({ defaultValues, businessName }: BrandingFormProps)
       </div>
 
       {/* ── Right: preview stage ── */}
-      <div className="mt-8 lg:mt-0 lg:w-auto">
-        <div
-          className="rounded border border-(--border-default) flex flex-col bg-(--surface-overlay)"
-        >
+      <div className="mt-6 lg:mt-0 lg:w-auto">
+        <div className="rounded border border-(--border-default) flex flex-col bg-(--surface-overlay)">
           {/* Stage header */}
           <div className="flex items-center justify-between px-4 py-3 border-b border-(--border-default)">
             <span className="text-[11px] font-semibold uppercase tracking-mono text-(--ink-400) font-display">
@@ -96,7 +94,7 @@ export function BrandingForm({ defaultValues, businessName }: BrandingFormProps)
           </div>
 
           {/* Preview stage area */}
-          <div className="flex items-start justify-center p-6">
+          <div className="flex items-start justify-center p-4 md:p-6 overflow-x-auto">
             <MiniInvoicePreview
               brandColor={brandColor}
               logoUrl={logoUrl}

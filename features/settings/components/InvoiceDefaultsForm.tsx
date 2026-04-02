@@ -137,7 +137,7 @@ export function InvoiceDefaultsForm({ defaultValues }: InvoiceDefaultsFormProps)
           <button
             type="submit"
             disabled={isPending}
-            className="flex h-11 items-center justify-center gap-2 rounded bg-(--blue-600) px-6 text-[14px] font-semibold text-white transition-colors duration-200 hover:bg-(--blue-700) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--blue-600) focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 font-display"
+            className="flex h-11 w-full sm:w-auto items-center justify-center gap-2 rounded bg-(--blue-600) px-6 text-[14px] font-semibold text-white transition-colors duration-200 hover:bg-(--blue-700) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--blue-600) focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 font-display"
           >
             {isPending && <Loader2 className="h-4 w-4 animate-spin" />}
             Save changes

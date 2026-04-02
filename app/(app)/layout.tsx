@@ -34,10 +34,10 @@ export default async function AppLayout({
 
   return (
     <QueryProvider>
-      {/* Page canvas — padded background */}
-      <div className="min-h-screen p-3 bg-(--surface-page)">
+      {/* Page canvas — padded on md+, full bleed on mobile */}
+      <div className="min-h-dvh bg-(--surface-page) md:p-3">
         {/* Floating app shell — sidebar + content as separate panels */}
-        <div className="flex h-[calc(100vh-24px)] gap-5">
+        <div className="flex h-dvh md:h-[calc(100dvh-24px)] md:gap-5">
           <AppSidebar
             user={{
               name: displayName,
@@ -47,9 +47,9 @@ export default async function AppLayout({
           />
 
           {/* Main area */}
-          <div className="flex flex-1 flex-col overflow-hidden  rounded-lg bg-(--surface-page)">
+          <div className="flex flex-1 flex-col overflow-hidden md:rounded-lg bg-(--surface-page)">
             <AppHeader />
-            <main className="flex flex-1 flex-col overflow-hidden bg-(--surface-page)">
+            <main className="flex flex-1 flex-col overflow-y-auto bg-(--surface-page)">
               {children}
             </main>
           </div>

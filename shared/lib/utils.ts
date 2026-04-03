@@ -5,6 +5,15 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
+export function getCurrencySymbol(currency = 'NGN'): string {
+  if (currency === 'NGN') return '₦'
+  return (
+    new Intl.NumberFormat('en-US', { style: 'currency', currency })
+      .formatToParts(0)
+      .find((part) => part.type === 'currency')?.value ?? currency
+  )
+}
+
 export function formatCurrency(amount: number, currency = 'NGN'): string {
   if (currency === 'NGN') {
     return `₦${amount.toLocaleString('en-NG', {

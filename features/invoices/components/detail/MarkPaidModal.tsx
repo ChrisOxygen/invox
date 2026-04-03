@@ -26,7 +26,7 @@ import { Textarea } from '@/shared/components/ui/textarea'
 import { ZCreatePaymentSchema, type ZCreatePayment } from '../../schemas'
 import type { InvoiceDetail } from '../../types'
 import { useMarkInvoicePaid } from '../../hooks/use-mark-invoice-paid'
-import { formatCurrency } from '@/shared/lib/utils'
+import { formatCurrency, getCurrencySymbol } from '@/shared/lib/utils'
 
 const PAYMENT_METHOD_LABELS: Record<string, string> = {
   BANK_TRANSFER: 'Bank Transfer',
@@ -141,7 +141,7 @@ export function MarkPaidModal({ open, onOpenChange, invoice }: MarkPaidModalProp
             </Label>
             <div className="relative">
               <span className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none select-none font-mono text-[14px] text-(--ink-400)">
-                ₦
+                {getCurrencySymbol(invoice.currency)}
               </span>
               <Input
                 type="number"

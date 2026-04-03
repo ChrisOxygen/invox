@@ -4,6 +4,7 @@ import type { Control } from 'react-hook-form'
 import { Controller, useWatch } from 'react-hook-form'
 import type { ZInvoiceFormInput } from '../../schemas'
 import { formatCurrency } from '@/shared/lib/calculate-totals'
+import { getCurrencySymbol } from '@/shared/lib/utils'
 
 type TotalsPanelProps = {
   control: Control<ZInvoiceFormInput>
@@ -18,10 +19,12 @@ function TypeToggle({
   value,
   onChange,
   disabled,
+  currency,
 }: {
   value: 'PERCENTAGE' | 'FIXED'
   onChange: (v: 'PERCENTAGE' | 'FIXED') => void
   disabled?: boolean
+  currency: string
 }) {
   return (
     <div className="flex rounded overflow-hidden border border-(--border-default) h-6.5">
@@ -39,7 +42,7 @@ function TypeToggle({
               : 'bg-(--surface-base) text-(--ink-400)'
           }`}
         >
-          {opt === 'PERCENTAGE' ? '%' : '₦'}
+          {opt === 'PERCENTAGE' ? '%' : getCurrencySymbol(currency)}
         </button>
       ))}
     </div>
@@ -98,7 +101,7 @@ export function TotalsPanel({
             control={control}
             name="discountType"
             render={({ field }) => (
-              <TypeToggle value={field.value ?? 'PERCENTAGE'} onChange={field.onChange} />
+              <TypeToggle value={field.value ?? 'PERCENTAGE'} onChange={field.onChange} currency={currency} />
             )}
           />
         </div>
@@ -135,7 +138,7 @@ export function TotalsPanel({
             control={control}
             name="taxType"
             render={({ field }) => (
-              <TypeToggle value={field.value ?? 'PERCENTAGE'} onChange={field.onChange} />
+              <TypeToggle value={field.value ?? 'PERCENTAGE'} onChange={field.onChange} currency={currency} />
             )}
           />
         </div>

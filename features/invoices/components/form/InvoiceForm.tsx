@@ -34,6 +34,7 @@ import { TotalsPanel } from './TotalsPanel'
 
 type InvoiceFormProps = {
   invoice?: InvoiceDetail
+  defaultCurrency?: string
   onSuccess?: (data: { id: string; invoiceNumber: string }) => void
 }
 
@@ -49,7 +50,7 @@ function toDateInput(date: Date | string): string {
   return d.toISOString().split('T')[0]
 }
 
-export function InvoiceForm({ invoice, onSuccess }: InvoiceFormProps) {
+export function InvoiceForm({ invoice, defaultCurrency = 'NGN', onSuccess }: InvoiceFormProps) {
   const router = useRouter()
   const isEditing = Boolean(invoice)
 
@@ -88,7 +89,7 @@ export function InvoiceForm({ invoice, onSuccess }: InvoiceFormProps) {
           clientId: '',
           issueDate: defaultDates.current.today,
           dueDate: defaultDates.current.dueDate,
-          currency: 'NGN',
+          currency: defaultCurrency,
           taxRate: 0,
           taxType: 'PERCENTAGE',
           discount: 0,

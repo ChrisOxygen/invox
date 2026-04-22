@@ -7,17 +7,17 @@ import { redis } from './redis'
 const limiters = {
   // Standard write mutations — create invoice, create client, etc.
   writes: redis
-    ? new Ratelimit({ redis, limiter: Ratelimit.slidingWindow(30, '1 m'), prefix: 'rl:writes' })
+    ? new Ratelimit({ redis, limiter: Ratelimit.slidingWindow(30, '1 m'), prefix: 'invox:rl:writes' })
     : null,
 
   // PDF generation is CPU-intensive — tighter limit.
   pdf: redis
-    ? new Ratelimit({ redis, limiter: Ratelimit.slidingWindow(10, '1 m'), prefix: 'rl:pdf' })
+    ? new Ratelimit({ redis, limiter: Ratelimit.slidingWindow(10, '1 m'), prefix: 'invox:rl:pdf' })
     : null,
 
   // Auth sync is called once per login — allow bursts but cap abuse.
   auth: redis
-    ? new Ratelimit({ redis, limiter: Ratelimit.slidingWindow(10, '1 m'), prefix: 'rl:auth' })
+    ? new Ratelimit({ redis, limiter: Ratelimit.slidingWindow(10, '1 m'), prefix: 'invox:rl:auth' })
     : null,
 } as const
 

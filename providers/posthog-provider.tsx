@@ -30,6 +30,7 @@ export function PHProvider({ children }: { children: React.ReactNode }) {
       capture_pageview: false,
       capture_pageleave: true,
     })
+    posthog.register({ site: 'invox' })
   }, [])
 
   return (

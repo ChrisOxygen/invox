@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@/shared/lib/supabase/server'
 import { apiError, apiValidationError, AppError } from '@/shared/lib/api-error'
+import { rateLimit } from '@/shared/lib/rate-limit'
 import { ZCreateInvoiceSchema } from '@/features/invoices/schemas'
 import { _getInvoices, _createInvoice, _markOverdueInvoices } from '@/features/invoices/server'
 import type { InvoiceStatus } from '@/features/invoices/types'
@@ -30,6 +31,9 @@ export async function POST(request: Request) {
   const supabase = await createClient()
   const { data: { user }, error } = await supabase.auth.getUser()
   if (error || !user) return apiError('unauthorized', 'Unauthorized', 401)
+
+  const limited = await rateLimit('writes', user.id)
+  if (limited) return limited
 
   const body = await request.json()
   const parsed = ZCreateInvoiceSchema.safeParse(body)

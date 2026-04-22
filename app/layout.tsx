@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans, DM_Sans, JetBrains_Mono } from "next/font/google";
+import { PHProvider } from "@/providers/posthog-provider";
 import "./globals.css";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
@@ -37,7 +38,7 @@ export default function RootLayout({
         suppressHydrationWarning
         className={`${plusJakartaSans.variable} ${dmSans.variable} ${jetbrainsMono.variable}`}
       >
-        {children}
+        <PHProvider>{children}</PHProvider>
       </body>
     </html>
   );

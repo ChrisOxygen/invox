@@ -5,6 +5,7 @@ import type { DocumentProps } from '@react-pdf/renderer'
 import { createClient } from '@/shared/lib/supabase/server'
 import { createAdminClient } from '@/shared/lib/supabase/admin'
 import { apiError, AppError } from '@/shared/lib/api-error'
+import { rateLimit } from '@/shared/lib/rate-limit'
 import { _getInvoiceById } from '@/features/invoices/server/_get-invoice-by-id'
 import { InvoicePDF } from '@/features/invoices/components/pdf/InvoicePDF'
 
@@ -23,6 +24,9 @@ export async function GET(
     error: authError,
   } = await supabase.auth.getUser()
   if (authError || !user) return apiError('unauthorized', 'Unauthorized', 401)
+
+  const limited = await rateLimit('pdf', user.id)
+  if (limited) return limited
 
   try {
     const invoice = await _getInvoiceById(user.id, id)
